@@ -1,0 +1,318 @@
+﻿:root {
+    --clr-dark: #000000; /* Black */
+    --clr-light: #FFFFFF; /* White */
+
+    --clr-accent: #ABB3FF; /* Light bluish-purple */
+    --clr-accent-dark: #565A7F;
+    --clr-accent-transparent: rgba(171, 179, 255, 0.2);
+
+    --clr-pop: #FF8000; /* Dark orange */
+    --clr-pop-light: #FFA000;
+
+    --clr-transparent-1: rgba(0, 0, 0, 0.25);
+    --clr-transparent-2: rgba(0, 0, 0, 0.65);
+    --clr-transparent-3: rgba(0, 0, 0, 0.85);
+
+    --clr-dark-2: #161616;
+    --clr-gray: #343A40;
+
+    --etc-clr-lt: #340080;
+    --etc-clr-dk: #1C0B2F;
+}
+
+html {
+    font-size: 20px;
+    line-height: 1.5;
+}
+body {
+    background-image: url("../images/background.jpg");
+    background-repeat: repeat;
+    background-attachment: fixed;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+a, a:hover {
+    text-decoration: none;
+    color: unset;
+}
+.link {
+    color: dodgerblue;
+}
+.link:hover {
+    color: deepskyblue;
+}
+.gradient-background {
+    background-image: url("../images/gradient-top.png"), url("../images/gradient-bottom.png");
+    background-position: top, bottom;
+    background-repeat: repeat-x, repeat-x;
+    padding: 7rem 0 10rem 0;
+}
+
+
+#title-banner {
+    background-color: var(--clr-accent-transparent);
+    border-bottom: 2px solid var(--clr-accent);
+    padding: 1rem;
+}
+#title-banner h1 {
+    color: var(--clr-light);
+    filter: drop-shadow(0 0 5px var(--clr-dark));
+    letter-spacing: .15rem;
+    text-align: center;
+}
+
+
+/* Icons */
+.icon {
+    width: 2rem;
+}
+.path-light {
+    fill: var(--clr-light);
+}
+.path-dark {
+    fill: var(--clr-dark);
+}
+
+
+/* header and navbar */
+header {
+    background-color: var(--clr-transparent-3);
+    border-bottom: 2px solid var(--clr-accent);
+    padding: 0;
+    margin: 0;
+}
+.logo {
+    text-decoration: none;
+    color: var(--clr-accent);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+#navbar-items a {
+    /*text-decoration: none;*/
+    color: var(--clr-light);
+    font-size: 1rem; /* 20px */
+    text-transform: uppercase;
+    padding-top: 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 3px solid rgba(0, 0, 0, 0);
+}
+#navbar-items a:hover {
+    color: var(--clr-accent);
+}
+#navbar-items a:after {
+    display: block;
+    content: '';
+    border-bottom: solid 3px var(--clr-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 250ms ease-in-out;
+}
+#navbar-items a:hover::after {
+    transform: scaleX(1);
+}
+
+
+/* hero */
+#hero {
+    height: 45rem;
+    background-image: url("../images/hero.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    background-position-y: bottom;
+    border-bottom: 2px solid var(--clr-accent);
+}
+#hero-banner {
+    background-color: var(--clr-transparent-2);
+    position: absolute;
+    top: 250px;
+    padding: 2rem 1.5rem 2rem 5%;
+}
+#hero-text {
+    color: var(--clr-light);
+    text-align: left;
+}
+#hero-text h1 {
+    border-bottom: 3px solid var(--clr-accent);
+    padding-bottom: 3rem;
+}
+#hero-text p {
+    font-size: 1.25rem; /* 25px */
+    margin: 3rem 0;
+    padding: 0;
+}
+.btn-custom {
+    display: inline-block;
+    color: var(--clr-dark);
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: .25rem;
+    font-weight: bold;
+    vertical-align: middle;
+    background: linear-gradient(var(--clr-pop-light) 50%, var(--clr-pop) 50%);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 10px 30px;
+    transform: none;
+    transition: none;
+}
+.btn-custom:hover {
+    
+}
+
+
+/* Home/About */
+article {
+    display: block;
+    color: var(--clr-light);
+    border: 1px solid var(--gray);
+    border-top: 3px solid var(--clr-accent);
+    border-bottom-left-radius: .75rem;
+    border-bottom-right-radius: .75rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+.about-article {
+    background-color: var(--clr-dark-2);
+}
+.about-article h3 {
+    text-align: center;
+    border-bottom: 2px solid var(--clr-accent-dark);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+}
+.about-article p {
+    margin: 2rem 0;
+}
+/*.footnote {
+    margin-top: 2rem;
+}*/
+
+
+/* Product/Search */
+.data-article {
+    background: linear-gradient(-50deg, var(--clr-gray) 40%, var(--clr-dark-2) 45%);
+    line-height: 1rem;
+}
+.data-article h3 {
+    margin-bottom: 2rem;
+}
+.data-article p {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.data-article span {
+    text-align: right;
+    color: var(--clr-accent);
+    text-transform: uppercase;
+    font-size: 2.5rem;
+    font-style: italic;
+    opacity: .85;
+}
+.data-article:hover {
+    border-top-color: var(--clr-pop-light);
+}
+.data-article ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.data-article ul li {
+    display: inline;
+}
+.data-article ul li:after {
+    content: ", ";
+}
+.data-article ul li:last-child:after {
+    content: "";
+}
+
+.control-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--clr-light);
+    color: var(--clr-accent-dark);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    z-index: 1;
+}
+.control {
+    margin: 0 0.5rem 0 0.5rem;
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: var(--clr-light);
+    color: var(--clr-accent-dark);
+    overflow-x: hidden;
+}
+.control-shadow {
+    filter: drop-shadow(0 3px 3px var(--clr-dark-2));
+}
+
+#controls-layout {
+    background-color: var(--clr-accent-dark);
+    background-image: url("../images/flare-left.png");
+    background-position: bottom left;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    padding: 2rem 1rem;
+    margin-bottom: 5rem;
+}
+
+
+/* footer */
+footer {
+    background-color: var(--clr-transparent-3);
+    border-top: 2px solid var(--clr-accent);
+    text-align: center;
+    padding: 5rem 0;
+}
+#author-name {
+    /*font-family: 'Ramabhadra', sans-serif;*/
+    color: var(--clr-light);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+#copyright {
+    color: var(--clr-accent);
+    font-style: italic;
+}
+
+
+/* Media queries */
+@media screen and (max-width: 992px) {
+    #hero {
+        background-position: bottom right;
+    }
+    #hero-banner {
+        top: 150px;
+        padding: 1rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .data-article {
+        /*background: var(--clr-dark-2);*/
+        background: linear-gradient(var(--clr-dark-2) 80%, var(--clr-gray));
+    }
+    .data-article span {
+        display: none;
+    }
+
+    #controls-layout {
+        border-radius: 0;
+    }
+}

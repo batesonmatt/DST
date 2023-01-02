@@ -1,0 +1,109 @@
+﻿BUGS:
+
+- Sort by: Brightness
+  Should be inversely proportional to the magnitude.
+  Ascending - Should sort from lowest to highest, darkest to brightest, magnitude.
+  Descending - Should sort from highest to lowest, brightest to darkest, magnitude.
+
+- Coalsack Nebula (Dark Nebula, Magnitude - null)
+  Treated as the lowest magnitude, thus the "brightest" object.
+
+___________________________________________________________
+
+Navigation heirarchy:
+
+Home		(Home/Index)
+- About		(Home/About)
+- Contact	(Home/Contact)
+- Search	(Search/Index)
+  ... Consider (Search/Index), then selecting an objects leads to (Search/id/details), then to (Search/id/track), then maybe (Search/id/track/Results)
+  ... Use crumbs!
+
+Home -> "Start tracking" -> Search -> Select an object -> Object Details -> Observation Data Form -> Track Results
+
+___________________________________________________________
+
+Next:
+
+- Provide temporary blueprint for filtering/sorting by location-dependent values
+  Add DsoModel.GetVisibility() and DsoModel.GetRiseTime()
+  Query these methods in SearchQueryOptions
+
+- Finish back-end code and incorporate into this project
+
+- Finish DTO implementations and paging/filtering/sorting support.
+
+- Finish designing Search controls
+
+- Revise class="btn-custom" and control-wrapper divs
+    Use the outline style, no borders for control-wrapper
+    Consider using <button> and overriding btn-primary and btn-secondary
+    Consider introducing btn-control or btn-form id
+
+- Edit the Search controls BG image, and design new images for the articles
+
+- Add validation messages to GeoLocation properties, and any others if necessary.
+
+- Incorporate aria, title, and name (etc.) attributes in the markups
+___________________________________________________________
+
+Search View:
+
+- Change the asp-action of the Search form to "Filter", and implement the Filter() GET and POST methods in CatalogController
+	[HttpGet] Filter() should store the filering/sorting options in the ViewBag
+
+- Fix:
+	Pressing the "Use my location" button after submitting the Search form does nothing.
+	Try clearing the properties upon submitting the form ??
+
+	Try reformatting as a radio selection and add two new input fields with the "hidden" attribute. Send the data to these hidden fields.
+	
+		<input type="hidden" asp-for="GeoLocation.Latitude" />
+		
+		or
+
+		<input hidden asp-for="GeoLocation.Latitude" />
+
+___________________________________________________________
+
+Sort by:
+- Id                (CatalogName, then by Id)
+- Name              (Common - Name)
+- Type              (Type, then by description)
+- Constellation     (ConstellationName)
+- Magnitude
+- Distance
+- Visibility (based on hemisphere, season, location, etc.)
+
+Filter:
+- Catalog (Messier or Caldwell)
+- Type (Nebula, galaxy, star cluster, other)
+- Constellation?
+- Visibility (based on hemisphere, season, location, etc.)
+
+_____________________________________________________________
+
+<!--<form asp-action="Index" method="post">
+        <div class="form-group">
+            <button onclick="getLocation()">Use my location</button>
+
+            <div>
+                <label asp-for="GeoLocation.Latitude">Latitude:</label>
+                <input id="input-latitude" asp-for="GeoLocation.Latitude" />
+            </div>
+            <div>
+                <label asp-for="GeoLocation.Longitude">Longitude:</label>
+                <input id="input-longitude" asp-for="GeoLocation.Longitude" />
+            </div>-->
+    @* Change to a label *@
+    <!--<div>
+        <input value="@ViewBag.LAT.ToString(), @ViewBag.LON.ToString()" readonly />
+    </div>-->
+    @* Enable after changes are made *@
+    <!--<button type="submit">Submit</button>
+        </div>
+    </form>-->
+
+_______________________________________________________________________
+
+

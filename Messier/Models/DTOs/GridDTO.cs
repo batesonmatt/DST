@@ -1,0 +1,19 @@
+﻿using Messier.Models.DataLayer.Query;
+
+namespace Messier.Models.DTOs
+{
+    public class GridDTO
+    {
+        #region Properties
+
+        public int PageNumber { get; set; } = 1;
+
+        public int PageSize { get; set; } = 10;
+
+        public string SortField { get; set; }
+
+        public string SortDirection { get; set; } = OrderDirection.Default;
+
+        #endregion
+    }
+}

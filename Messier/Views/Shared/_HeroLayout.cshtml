@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "_HeaderFooterLayout";
+}
+
+<section id="hero">
+    <div class="container-fluid">
+        <div class="row">
+            <div id="hero-banner" class="col-lg-7 col-md-12 col-sm-12">
+                <div id="hero-text">
+                    <h1>Deep Sky Tracker</h1>
+                    <p>
+                        Welcome, explorer! This free web app helps you locate deep-space objects from anywhere around the world and track their location over time.
+                        Choose from over 200 celestial objects, including galaxies, nebulae, and more. See the <a class="link" asp-controller="Home" asp-action="About">About</a>
+                        page for more information.
+                        Click or tap the button below to begin using the app. The sky awaits!
+                    </p>
+                </div>
+                <a class="btn-custom float-lg-left col-md-auto" asp-controller="Search" asp-action="Index">Start tracking</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="gradient-background">
+    @RenderBody()
+</main>

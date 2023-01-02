@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+
+<div id="about" class="container">
+    @*<h2>H2 Heading</h2>*@
+
+    <article class="about-article">
+        @*<div class="about-img-content">
+                <img src="" alt="" />
+            </div>*@
+        <h3>What Is This?</h3>
+        <p>
+            This is a free web app designed for astronomers, star-gazers, and anyone interested in deep-space observations.
+            You will be able to locate anything&sup1; ranging from star clusters to nebulae to galaxies from a collection of over 200 deep-space objects.
+            This app includes astronomical objects from the Messier Catalog and the Caldwell Catalog, compiled by French astronomer Charles Messier and
+            English astronomer Patrick Moore, respectively.
+            Take a look at the <a class="link" href="/Search">Search</a> page to learn more about the various objects, such as their type, 
+            visibility, and best viewing conditions.
+            <br />
+            <div class="footnote row">
+                <span class="col-1">&sup1;</span>
+                <span class="col-11">
+                    Please note that some objects are only visible during certain seasons, and some objects may never be seen from 
+                    your location due to Earth's rotation about the sky.
+                </span>
+            </div>
+        </p>
+    </article>
+
+    <article class="about-article">
+        @*<div class="about-img-content">
+                <img src="" alt="" />
+            </div>*@
+        <h3>How Does Tracking Work?</h3>
+        <p>
+            You can track the location of any deep-sky object across time from a collection of over 200 objects, from anywhere around the world, with accurate results.
+            Upon choosing an object, you have a choice of tracking over a span of seconds, minutes, hours, days, weeks, months, and years.
+            The results will display the location of the object in the sky for each interval of the track (i.e., at hour 1, hour 2, hour 3, and so on).
+            This is perfect if you need to know where the object is ahead of time, or if you want to visualize the object's path relative to Earth's rotation.
+            In addition, you can also find out when and where an object will be at its highest point in your night-sky for better viewing.
+        </p>
+    </article>
+
+    <article class="about-article">
+        @*<div class="about-img-content">
+                <img src="" alt="" />
+            </div>*@
+        <h3>How to Read the Coordinates</h3>
+        <p>
+            Results are given in local (altazimuth) coordinates for easy spotting and for those who do not have an equatorial telescope mount.
+            An altazimuth coordinate is composed of an altitude, or <i>angle of elevation</i>, and an azimuth, or <i>angle of rotation</i>.
+            <br /><br />
+            The altitude component tells you how high to look upward from your horizon. For example, your horizon on Earth is at an altitude of 0&deg;
+            and the point located directly above you is at +90&deg;, which is known as your <i>zenith</i>. If you are tracking an object that has not
+            yet risen above your horizon, then it will have a negative altitude ranging from 0&deg; to the point directly beneath you at -90&deg;,
+            which is known as your <i>nadir</i>.
+            <br /><br />
+            The azimuth component tells you how far to look away from the direction of the geographic North Pole, traveling eastward from 0&deg; to 360&deg;.
+            For example, an azimuth of 0&deg; is located directly north of your location; 90&deg; is to the east; 180&deg; is to the south; and 270&deg; is to the west.
+            For observers located at or extremely close to either of Earth's poles, your azimuth will start from the Prime Meridian (longitude 0&deg;) and
+            travel eastward to a longitude of +180&deg;, or westward to -180&deg;. Most of you will not be at these locations and will not have to
+            worry about this.
+            <br /><br />
+            Finally, you may choose to display the results in either rounded form (45&deg;), decimal form (45.3&deg;), or in DMS form (45&deg;18&prime;0&Prime;).
+            The DMS form, or Degrees-Minutes-Seconds, may be helpful for those who are using specialized equipment, or for those who prefer this notation.
+        </p>
+    </article>
+
+    <article class="about-article">
+        @*<div class="about-img-content">
+                <img src="" alt="" />
+            </div>*@
+        <h3>Your Location and Privacy</h3>
+        <p>
+            With your permission, this site may use your current location to help you locate objects in the night sky.
+            If you deny this, then you will need to manually provide a geographic location when locating or tracking an object.
+            If cookies are enabled, then the location you provide will be remembered the next time you visit.
+            Your information will never be stored over the Internet or given to anyone.
+        </p>
+    </article>
+
+    <a class="btn-custom col-12" asp-controller="Home" asp-action="Index">Return to Home</a>
+</div>

@@ -1,0 +1,57 @@
+Altitude Type
+	Circumpolar	=> 1
+	RiseSet		=> 0.5
+	NeverRise	=> 0
+
+Latitudinal Range
+	If -S.Lat <= LAT <= N.Lat	=> 1
+	Else				=> 0
+
+Season (DT = DateTime)
+	If DT is within Constellation.SeasonTimeSpan => 1
+	If DT is within +- 1 month (30 days) of the SeasonTimeSpan.Min and Max	=> 0.5
+	Else	=> 0
+	
+LHA and Local Time
+	Time of day, Longitude, RA, LHA, and LST may be used to determine whether
+	the object is in the sky or even at its peak.
+
+	Negative hour angles (-180 < dso.LHA < 0) => object is approaching the meridian
+	Positive hour angles (0 < dso.LHA < 180) => object is moving away from the meridian
+	An hour angle of zero means the object is on the meridian.
+	An hour angle of -90 means the object has begun its ascent from the observer's horizon.
+	An hour angle of 90 means the object has just finished its descent to the observer's horizon.
+
+	The score should be higher if -90 < LHA < 90, or cos(LHA) > 0 (in the sky)
+	The score should not consider when !(-90 < LHA < 90), or cos(LHA) <= 0 (not in the sky)
+	An object rising should have a higher visibility score than when it is setting.
+	The score should be higher when the dso's LHA is within 
+		+-22.5 degrees of the meridian 			=> 1
+		+-30 degrees of the meridian			=> 0.6
+		+-45 degrees of the meridian			=> 0.3
+	The score should be higher when the current local time of day is from 9pm to 6am.
+	The score should be higher the closer the object is to the observer's zenith.
+		If the object is in the sky, cos(LHA) > 0, and DEC is within
+		+-22.5 degrees of the observer's latitude	=> 1
+		+-30 degrees of the observer's latitude		=> 0.6
+		+-45 degrees of the observer's latitude		=> 0.3
+
+* Apparent Magnitude (Visual Brightness)
+	This is relative to the apparent magnitude of the Sun (-26.74) and should be applied last.
+	M = apparent magnitude of the Sun
+	m = apparent magnitude of the dso
+	S = current score thus far
+
+	Use brightness factor, then relate to the range [0, 1] or as a percent
+
+	S += {10^[0.4(m-M)] % 100} / 100
+	
+
+
+
+
+
+
+
+
+
