@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Messier.Models.DataLayer.Query
+namespace DST.Models.DataLayer.Query
 {
     public class ListFilter : IFilter
     {

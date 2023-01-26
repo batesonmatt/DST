@@ -1,7 +1,7 @@
-﻿using Messier.Models.DataLayer.Query;
+﻿using DST.Models.DataLayer.Query;
 using Newtonsoft.Json;
 
-namespace Messier.Models.DTOs
+namespace DST.Models.DTOs
 {
     public class SearchGridDTO : GridDTO
     {

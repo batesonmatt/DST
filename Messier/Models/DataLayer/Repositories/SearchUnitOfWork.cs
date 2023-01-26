@@ -1,6 +1,6 @@
-﻿using Messier.Models.DomainModels;
+﻿using DST.Models.DomainModels;
 
-namespace Messier.Models.DataLayer.Repositories
+namespace DST.Models.DataLayer.Repositories
 {
     /// <summary>
     /// A unit of work providing repositories for a read-only DsoContext.

@@ -1,4 +1,4 @@
-﻿namespace Messier.Models.DataLayer.Query
+﻿namespace DST.Models.DataLayer.Query
 {
     public static class Sort
     {

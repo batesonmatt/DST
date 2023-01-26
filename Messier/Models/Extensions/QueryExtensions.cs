@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Messier.Models.Extensions
+namespace DST.Models.Extensions
 {
     public static class QueryExtensions
     {

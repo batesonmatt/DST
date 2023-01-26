@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 
-namespace Messier.Models.Extensions
+namespace DST.Models.Extensions
 {
     public static class StringExtensions
     {

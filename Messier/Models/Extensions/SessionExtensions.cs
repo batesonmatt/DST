@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
-namespace Messier.Models.Extensions
+namespace DST.Models.Extensions
 {
     public static class SessionExtensions
     {

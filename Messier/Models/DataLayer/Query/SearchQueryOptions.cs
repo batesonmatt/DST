@@ -1,12 +1,12 @@
-﻿using Messier.Models.DomainModels;
-using Messier.Models.Extensions;
-using Messier.Models.Grid;
+﻿using DST.Models.DomainModels;
+using DST.Models.Extensions;
+using DST.Models.Grid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Messier.Models.DataLayer.Query
+namespace DST.Models.DataLayer.Query
 {
     public class SearchQueryOptions : QueryOptions<DsoModel>
     {

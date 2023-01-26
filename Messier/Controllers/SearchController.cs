@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 //using Microsoft.EntityFrameworkCore;
-using Messier.Models.DomainModels;
-using Messier.Models.DataLayer;
-using Messier.Models.DataLayer.Repositories;
-using Messier.Models.DTOs;
-using Messier.Models.Grid;
-using Messier.Models.DataLayer.Query;
-using Messier.Models.ViewModels;
+using DST.Models.DomainModels;
+using DST.Models.DataLayer;
+using DST.Models.DataLayer.Repositories;
+using DST.Models.DTOs;
+using DST.Models.Grid;
+using DST.Models.DataLayer.Query;
+using DST.Models.ViewModels;
 
-namespace Messier.Controllers
+namespace DST.Controllers
 {
     public class SearchController : Controller
     {

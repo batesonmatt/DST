@@ -1,6 +1,6 @@
-﻿using Messier.Models.DataLayer.Query;
+﻿using DST.Models.DataLayer.Query;
 
-namespace Messier.Models.DTOs
+namespace DST.Models.DTOs
 {
     public class GridDTO
     {

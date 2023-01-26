@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Messier.Models.DataLayer.Query
+namespace DST.Models.DataLayer.Query
 {
     public class QueryOptions<T>
     {

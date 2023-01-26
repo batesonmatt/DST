@@ -1,4 +1,4 @@
-﻿namespace Messier.Models.DomainModels
+﻿namespace DST.Models.DomainModels
 {
     public class ObservationModel
     {

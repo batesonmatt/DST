@@ -1,8 +1,8 @@
-﻿using Messier.Models.DomainModels;
+﻿using DST.Models.DomainModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Messier.Models.DataLayer.DataStore
+namespace DST.Models.DataLayer.DataStore
 {
     internal class DsoStore : IEntityTypeConfiguration<DsoModel>
     {

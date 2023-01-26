@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Messier.Models.DomainModels;
+using DST.Models.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Messier.Controllers
+namespace DST.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,7 +1,7 @@
-﻿using Messier.Models.DomainModels;
+﻿using DST.Models.DomainModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace Messier.Models.DataLayer
+namespace DST.Models.DataLayer
 {
     public class DsoContext : DbContext
     {

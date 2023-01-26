@@ -1,10 +1,10 @@
-﻿using Messier.Models.DataLayer.Query;
-using Messier.Models.Extensions;
+﻿using DST.Models.DataLayer.Query;
+using DST.Models.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Messier.Models.DataLayer.Repositories
+namespace DST.Models.DataLayer.Repositories
 {
     public class Repository<T> : IRepository<T> 
         where T : class

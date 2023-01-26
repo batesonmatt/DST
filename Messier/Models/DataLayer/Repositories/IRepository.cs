@@ -1,7 +1,7 @@
-﻿using Messier.Models.DataLayer.Query;
+﻿using DST.Models.DataLayer.Query;
 using System.Collections.Generic;
 
-namespace Messier.Models.DataLayer.Repositories
+namespace DST.Models.DataLayer.Repositories
 {
     public interface IRepository<T> 
         where T : class

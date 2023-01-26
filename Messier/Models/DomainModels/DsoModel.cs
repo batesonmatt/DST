@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Messier.Models.DomainModels
+namespace DST.Models.DomainModels
 {
     public class DsoModel
     {

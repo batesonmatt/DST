@@ -1,9 +1,9 @@
-﻿using Messier.Models.DomainModels;
-using Messier.Models.Grid;
-using Messier.Models.DataLayer.Query;
+﻿using DST.Models.DomainModels;
+using DST.Models.Grid;
+using DST.Models.DataLayer.Query;
 using System.Collections.Generic;
 
-namespace Messier.Models.ViewModels
+namespace DST.Models.ViewModels
 {
     public class SearchListViewModel
     {

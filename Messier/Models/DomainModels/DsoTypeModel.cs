@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Messier.Models.DomainModels
+namespace DST.Models.DomainModels
 {
     public class DsoTypeModel
     {
