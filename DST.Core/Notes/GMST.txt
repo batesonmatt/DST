@@ -1,0 +1,305 @@
+﻿The Astronomical Almanac gives an expression for approximate Greenwich mean sidereal time, in hours:
+	
+	GMST = G + 0.06570982441908(𝐷0) + 1.0027379093507951(𝐻) + 0.000026(𝑇^2)
+
+	GMST is the mean sidereal time in hours
+	G = 100.460618369 (GMST at 0h UT on January 1, 2000, using the constants from the IAU 1982 GMST expression)
+	𝐻 is the universal time at the time in question (total decimal hours)
+	𝐷0 is the Julian date on the previous midnight of the time in question less than 2451545.0
+	𝐷 is the Julian date at the time in question (including fractional days) less than 2451545.0
+	1.0027379093507951 is the number of sidereal days in one mean solar day (ratio of mean solar days to sidereal days)
+	𝑇 = 𝐷 / 36525
+	𝐷0 = 𝐷 − (𝐻 / 24)
+
+Higher order precision may not be necessary, so we may focus on the first three terms.
+Simplify the expression (note that 1.0027379093507951 - 0.065709824419082352 / 24 "should" equal 1)
+
+	GMST = 6.697374558 + 0.065709824419082352(𝐷0) + 1.0027379093507951(𝐻)
+    GMST = 6.697374558 + 0.065709824419082352(𝐷 − (𝐻 / 24)) + 1.0027379093507951(𝐻)
+	GMST = 6.697374558 + 0.065709824419082352(𝐷) + 𝐻
+
+Multiplying by 15 yields the GMST in decimal degrees:
+
+	GMSTdeg = 100.460618369 + 0.9856473662862(𝐷) + 15(𝐻)
+
+__________________________________________________________________
+
+The GMST expression, or specifically the sidereal time model, had been deprecated in favor of the Earth rotation model.
+The Earth Rotation Angle (ERA) is a simpler polynomial expression, in radians, that produces more accurate values.
+
+	ERA = 2pi(0.7790572732640 + 1.00273781191135448 * D)
+
+0.7790572732640 * 2pi was the ERA in radians at noon on January 1st 2000 (the J2000 epoch) = 280.46061837504 (degrees)
+1.00273781191135448 * 2pi is how much the earth rotates, in radians, relative to the fixed stars in 1 stellar day = 360.98561228808768 (degrees)
+
+	Not to be confused with 1.0027379093507949 * 2pi = 6.30038809898489 radians = 360.98564736628615535 degrees for a sidereal day.
+	(See the worked out expression for GMST below)
+
+D is the number of days, including fractional days, since the epoch J2000
+
+__________________________________________________________________
+
+It seems that the ratio of sidereal days to solar days is not precise in the original GMST formula.
+Rewrite the GMST formula using new constants, then run some tests
+
+Solar-to-Sidereal ratio:
+	
+	Mean solar day / sidereal day
+
+	= 24 hours / 23.934469591898029 hours = 1.0027379093507949
+
+Thus, 1.0027379093507949 * 2pi = 6.30038809898489 radians = 360.98564736628617 degrees
+
+Truncating 360.98564736628617 becomes 0.98564736628617, which is Earth's excess rotation per solar day in sidereal time.
+
+So, 0.98564736628617 (actually 0.98564736628615535, see below) is more accurate than 0.9856473662862:
+
+	GMST = G + 0.065709824419082352(𝐷0) + 1.0027379093507951(𝐻)
+
+	becomes:
+
+	GMST = G + 0.065709824419082352(𝐷0) + 1.0027379093507949(𝐻)
+
+	And:
+
+	1.0027379093507951 - 0.065709824419082352 / 24 = 1
+
+	Becomes:
+
+	1.0027379093507949 - 0.065709824419082352 / 24 = 1
+
+	Substitute x for 0.065709824419082352, then solve for the new value of x:
+
+	1.0027379093507949 - x / 24 = 1
+	1 + x / 24 = 1.0027379093507949
+	x/24 = 1.0027379093507949 - 1
+	x = (1.0027379093507949 - 1) * 24.0
+	x = 0.065709824419077023
+
+	Thus, 0.065709824419077023 is more accurate than 0.065709824419082352
+
+	Now we get:
+
+	GMST = G + 0.065709824419077023(𝐷0) + 1.0027379093507949(𝐻)
+	GMST = G + 0.065709824419077023(𝐷 − (𝐻 / 24)) + 1.0027379093507949(𝐻)
+	GMST = 6.697374558 + 0.065709824419077023(𝐷 − (𝐻 / 24)) + 1.0027379093507949(𝐻)
+	GMST = 6.697374558 + 0.065709824419077023(𝐷) + (𝐻)
+
+	Multiply both sides by 15 (Degrees per hour):
+
+	GMSTdeg = 100.460618369 + 0.98564736628615535(𝐷) + 15(𝐻)
+
+Now to find a more accurate value for the first term:
+
+	The ERA formula for Jan 1, 2000 at 12h UT yields 280.46061837504 degrees.
+	The total days from the epoch J2000 is 0 days.
+	The total hours of the day is 12.
+
+	GMST = 280.46061837504 degrees
+	𝐷 = 0 days
+	𝐻 = 12 hours
+	Set x for the first term, then solve for x:
+
+	280.46061837504 = x + 0.98561228808764945(0) + 15(12)
+	280.46061837504 = x + 0 + 180
+	x = 100.46061837503999
+
+	Thus, 100.46061837503999 is more accurate than 100.4606184
+
+Final GMST formula with accurate constants:
+
+	GMSTdeg = 100.46061837503999 + 0.98564736628615535(𝐷) + 15(𝐻)
+		
+
+Comparing the ERA, new GMST (GMST_2), and old GMST (GMST_1):
+
+	Jan 1, 2017 at 0h UT:
+	ERA		= 100.62012125505134
+	GMST_2	= 100.83793932892149
+	GMST_1	= 100.83793935415906
+
+	Jan 1, 2000 at 12h UT:
+	ERA		= 280.46061837504
+	GMST_2	= 279.96779469189693
+	GMST_1	= 279.96779471685693
+
+__________________________________________________________________
+
+A more accurate Solar-to-Sidereal ratio value:
+
+(https://gssc.esa.int/navipedia/index.php/CEP_to_ITRF)
+The ratio of universal to sidereal times 1.002737909350795 can be approximately computed as 
+the ratio between 24h and 24h − 3m 56s. A very accurate value is:
+
+ratio = 1.0027379093507949 + [5.9006 * 10^-11(t)] - [5.9 * 10^-15(t^2)]
+	  = 1.0027379093507949 + 1.6154962354551678E-15(d) - 4.4225378902339212E-24(d^2)
+
+Where t is the julian centuries since 12h TT(terrestrial time) on January 1, 2000
+
+	t = d / 36525
+
+__________________________________________________________________
+
+One article (https://www.astro.umd.edu/~jph/GST_eqn.pdf) described that the first term of 
+the GMST expression is not constant, but is rather based on 0h UT of Jan 1 for the current year.
+Though, I could not find any evidence to back this claim.
+
+Finding the first term:
+
+The updated expression for GMST (GMST = ERA - Accumulated Precession) for the beginning of the current year (0h UT on Jan 1, 2022) produces:
+
+	100.65548948840755 degrees
+
+	Or (using the accurate GMST formula):
+
+	100.63003016744187
+
+If:
+	
+	GMST = 100.46061837503999 + 0.98564736628615535(𝐷) + 15(𝐻)
+
+	Let GMST = 100.65548948840755
+	Let x = 100.46061837503999
+
+Then:
+
+	100.65548948840755 = x + 0.98564736628615535(𝐷) + 15(𝐻)
+
+Solve for x at 0h UT on Jan 1, 2022:
+
+	𝐷 = 8035.5 days
+	𝐻 = 0 hours
+
+	100.65548948840755 = x + 0.98564736628615535(𝐷) + 15(𝐻)
+	100.65548948840755 = x + 0.98564736628615535(8035.5) + 15(0)
+	100.65548948840755 = x + 7920.1694117924017 + 0
+	x = 100.65548948840755 - 7920.1694117924017
+	x = -7819.5139223039941
+	
+Relating this angle onto the interval [0, 360) degrees gives us:
+
+	x = 100.48607769600585
+
+Thus, our new expression for the entire year of 2022 should be:
+
+	GMST = 100.48607769600585 + 0.98564736628615535(𝐷) + 15(𝐻)
+
+__________________________________________________________________
+
+Some C# method examples of the various expressions:
+
+// Greenwich Mean Sidereal Time, without higher order terms, without accumulated precession.
+public Angle GetGMST(AstronomicalDateTime dateTime)
+{
+	double totalDays = dateTime.GetTotalTimeFromEpoch().TotalDays;
+	
+	// GMSTdeg = 100.4606184 + 0.9856473662862(𝐷) + 15(𝐻)
+	double gmst =
+		Physics.InitialGmst +
+		(Physics.MeanSolarDayRotation * totalDays) +
+		(Physics.RotationPerHour * dateTime.Value.TimeOfDay.TotalHours);
+		
+	gmst = Physics.Coterminal(gmst);
+		
+	return new Angle(gmst);
+}
+
+// This GMST formula produces more precise results compared to the original GMST formula as documented (need citation).
+public Angle GetGMST_Accurate(AstronomicalDateTime dateTime)
+{
+	double totalDays = dateTime.GetTotalTimeFromEpoch().TotalDays;
+	
+	// GMSTdeg = 100.46061837503999 + 0.98564736628615535(𝐷) + 15(𝐻)
+	double gmst =
+		100.46061837503999 +
+		(0.98564736628615535 * totalDays) +
+		(Physics.RotationPerHour * dateTime.Value.TimeOfDay.TotalHours);
+	
+	// Add 15.041068640261926 degrees (Earth rotation per sidereal hour) if DST is in effect.
+	if (dateTime.ToLocalDateTime().IsDaylightSavingTime())
+	{
+		gmst += RotationPerSiderealHour;
+	}
+
+	gmst = Physics.Coterminal(gmst);
+		
+	return new Angle(gmst);
+}
+
+// Earth Rotation angle.
+public Angle GetERA(AstronomicalDateTime dateTime)
+{
+	// In radians
+	double era = 
+		2 * Math.PI * 
+		(0.7790572732640 + 1.00273781191135448 * dateTime.GetTotalTimeFromEpoch().TotalDays);
+		
+	era = Physics.ToDegrees(era);
+
+	// Add 15.041067178670318 degrees (Earth rotation per stellar hour) if DST is in effect.
+	if (dateTime.ToLocalDateTime().IsDaylightSavingTime())
+	{
+		era += (1296000.0 / StellarDay);
+	}
+
+	era = Physics.Coterminal(era);
+
+	return new Angle(era);
+}
+
+// The updated formula for GMST (GMST = ERA - Accumulated Precession)
+public Angle GetGMST_Updated(AstronomicalDateTime dateTime)
+{
+	Angle era = GetERA(dateTime);
+		
+	double totalDays = dateTime.GetTotalTimeFromEpoch().TotalDays;
+	double precession = (3.8244704502243518E-05 * (totalDays)) + (2.3017077627980967E-13 * (Math.Pow(totalDays, 2.0)));
+		
+	double gmst = Physics.Coterminal(era.TotalDegrees - precession);
+		
+	return new Angle(gmst);
+}
+
+__________________________________________________________________
+
+Accumulated precession
+
+	5028.796195 arcseconds per century
+
+	P = 5028.796195(T) + 1.1054348(T^2) + higher order terms
+      = 5028.796195(D / 36525) + 1.1054348((D / 36525)^2)
+	  = 3.8244704502243518E-05(D) + 2.3017077627980967E-13(D^2)
+
+	Where P is measured in arcseconds
+	Where T = julian centuries since J2000.0 (1 julian year = 36525 days)
+	Where D = total decimal days since the J2000.0 epoch (Jan 1, 2000 at 12h UT)
+
+Rate of axial precession
+
+	= Derivative of accumulated precession
+	= 5028.796195 + 2.2108696(T) + higher order terms
+	= 5028.796195 + 2.2108696(D / 36525)
+	= 5028.796195 + 6.0530310746064343E-05(D)
+
+Precession of the Equinoxes (General precession)
+
+	5028.796195 arcseconds per century = 50.28796195 arcseconds per year
+
+	One full circle of 360 degrees / 50.28796195 arcseconds per year 
+	
+	= 36000 arcseconds / 50.28796195 arcseconds per year
+	= 71.587709272835227 years per degree
+
+	71.587709272835227 years * 360.0 degrees
+	= 25771.575338220682 years for a full precession circle
+
+	Or,
+
+	= 360.0 degrees / 0.013968878319444445 degrees per year
+	= 25771.575338220679 years for a full precession circle
+
+Sidereal year
+
+	= Mean Tropical year + (Mean Tropical year / general precession)
+	= 365.24218733160313 + (365.24218733160313 / 25771.575338220679)
+	= 365.25635961958079 days

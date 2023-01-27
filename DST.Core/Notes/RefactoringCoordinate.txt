@@ -1,0 +1,190 @@
+﻿Plan:
+
+	Refactor Coordinate and its subtypes
+
+Ideas:
+
+	Create new namespace, "Coordinate", and move types here
+	Rename Coordinate to BaseCoordinate, or etc.
+	Extract interfaces for each *Coordinate type
+	Remove ICoordinate
+	Remove TargetedFieldAttribute
+
+________________________________________________________________________________
+
+Existing types:
+
+	abstract Coordinate
+		public enum FormatType
+		protected Angle _azimuth
+		protected Angle _inclination
+		protected Coordinate()
+		protected void SetCoordinate(Angle, Angle)
+		public string override ToString()
+		public abstract string ToString(FormatType)
+
+	EclipticCoordinate : Coordinate
+		public Angle Longitude => _azimuth
+		public Angle Latitude => _inclination
+		protected EclipticCoordinate()
+		public EclipticCoordinate(Angle, Angle)
+		public EquatorialCoordinate ToEquatorial(AstronomicalDateTime dateTime)
+		public override string ToString(FormatType format)
+
+	EquatorialCoordinate : Coordinate
+		public Angle RightAscension => _azimuth
+		public Angle Declination => _inclination
+		protected EquatorialCoordinate()
+		public EquatorialCoordinate(Angle, Angle)
+		public EquatorialCoordinate GetNutation(AstronomicalDateTime dateTime)
+		public Angle GetIntermediateRightAscension(AstronomicalDateTime dateTime)
+		public EclipticCoordinate ToEcliptic(AstronomicalDateTime dateTime)
+		public override string ToString(FormatType format)
+
+	GeographicCoordinate : Coordinate
+		public Angle Longitude => _azimuth
+		public Angle Latitude => _inclination
+		public double GeographicPole { get; }
+		public bool IsAxial { get; }
+		protected GeographicCoordinate()
+		public GeographicCoordinate(Angle, Angle)
+		public override string ToString(FormatType format)
+
+	HorizontalCoordinate : Coordinate
+		public Angle Azimuth => _azimuth
+		public Angle Altitude => _inclination
+		protected HorizontalCoordinate()
+		public HorizontalCoordinate(Angle, Angle)
+		public override string ToString(FormatType format)
+
+	IRMHorizontalCoordinate : HorizontalCoordinate
+		protected IRMHorizontalCoordinate()
+		public IRMHorizontalCoordinate(Angle, Angle)
+		public override string ToString(FormatType format)
+
+________________________________________________________________________________
+
+
+namespace Coordinate ...
+
+public enum FormatType { ... }
+
+
+
+interface IFormattableCoordinate
+	string Format()
+	string Format(FormatType)
+
+abstract class FormattableCoordinate : IFormattableCoordinate
+	public string override ToString() => Format()
+	public string Format()
+	public abstract string Format(FormatType)
+
+	
+	
+interface IEclipticCoordinate
+	Angle Longitude { get; }
+	Angle Latitude { get; }
+	IEquatorialCoordinate ToEquatorial(AstronomicalDateTime dateTime)
+
+class EclipticCoordinate : FormattableCoordinate, IEclipticCoordinate
+	public Angle Longitude { get; }
+	public Angle Latitude { get; }
+	public EclipticCoordinate(Angle, Angle)
+	public IEquatorialCoordinate ToEquatorial(AstronomicalDateTime dateTime)
+	public override string Format(FormatType)
+
+class EclipticCoordinateFactory
+	public static IEclipticCoordinate Create(Angle longitude, Angle latitude)
+		return new EclipticCoordinate(longitude, latitude)
+
+
+
+interface IEquatorialCoordinate
+	Angle RightAscension { get; }
+	Angle Declination { get; }
+	IEquatorialCoordinate GetNutation(AstronomicalDateTime dateTime)
+	Angle GetIntermediateRightAscension(AstronomicalDateTime dateTime)
+	IEclipticCoordinate ToEcliptic(AstronomicalDateTime dateTime)
+
+class EquatorialCoordinate : FormattableCoordinate, IEquatorialCoordinate
+	public Angle RightAscension { get; }
+	public Angle Declination { get; }
+	public EquatorialCoordinate(Angle, Angle)
+	public IEquatorialCoordinate GetNutation(AstronomicalDateTime dateTime)
+	public Angle GetIntermediateRightAscension(AstronomicalDateTime dateTime)
+	public IEclipticCoordinate ToEcliptic(AstronomicalDateTime dateTime)
+	public override string Format(FormatType)
+
+class EquatorialCoordinateFactory
+	public static IEquatorialCoordinate Create(Angle rightAscension, Angle declination)
+		return new EquatorialCoordinate(rightAscension, declination)
+
+
+
+interface IGeographicCoordinate
+	Angle Longitude { get; }
+	Angle Latitude { get; }
+		
+class GeographicCoordinate : FormattableCoordinate, IGeographicCoordinate
+	public Angle Longitude { get; }
+	public Angle Latitude { get; }
+	public double GeographicPole { get; } // Remove
+	public bool IsAxial { get; } // Consider removing
+	public GeographicCoordinate(Angle, Angle)
+	public override string Format(FormatType)
+
+class GeographicCoordinateFactory
+	public static IGeographicCoordinate Create(Angle longitude, Angle latitude)
+		return new GeographicCoordinate(longitude, latitude)
+
+
+
+interface IHorizontalCoordinate
+	Angle Azimuth { get; }
+	Angle Altitude { get; }
+
+class HorizontalCoordinate : FormattableCoordinate, IHorizontalCoordinate
+	public Angle Azimuth { get; }
+	public Angle Altitude { get; }
+	public HorizontalCoordinate(Angle, Angle)
+	public override string ToString(FormatType format)
+
+class HorizontalIRMCoordinate : HorizontalCoordinate
+	public HorizontalCoordinate(Angle, Angle)
+	public override string ToString(FormatType format)	?
+
+class HorizontalCoordinateFactory
+	public static IHorizontalCoordinate Create(Angle azimuth, Angle altitude)
+		return Create(azimuth, altitude, false)
+
+	// Consider refactoring Angle with an interface and concrete types, so that the longitudinal angle
+	// may be checked directly, avoiding the need for a boolean value here.
+	public static IHorizontalCoordinate Create(Angle azimuth, Angle altitude, bool referencesIRM)
+		return referencesIRM ? 
+			new IRMHorizontalCoordinate(azimuth, altitude) : 
+			new HorizontalCoordinate(azimuth, altitude)
+
+
+
+interface IComponents : ITuple
+		Angle Rotation { get; }
+		Angle Inclination { get; }
+
+	internal class Components : Tuple<Angle, Angle>
+		Angle Rotation => Item1;
+		Angle Inclination => Item2;
+		public Components(Angle item1, Angle item2) : base(item1, item2) { }
+
+	internal class ComponentsFactory
+		public static IComponents Create(Angle rotation, Angle inclination)
+			return new Components(rotation, inclination)
+
+
+
+class CoordinateCalculator
+	public static IComponents Calculate(Angle rotation, Angle inclination)
+		// This contains the code from the original Coordinate.SetCoordinate(Angle, Angle)
+		// This should be called from the constructors of each concrete coordinate type.
+
+	// Consider other methods to calculate a coordinate whose longitudinal angle is on (-180°, 180°].

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DST", "Messier\DST.csproj", "{6B7F77B3-0C63-4A41-82EF-61E9F65B5A1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DST.Core", "DST.Core\DST.Core.csproj", "{DE576D14-6AD3-4CD9-BA8D-92F260B3BA3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6B7F77B3-0C63-4A41-82EF-61E9F65B5A1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B7F77B3-0C63-4A41-82EF-61E9F65B5A1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B7F77B3-0C63-4A41-82EF-61E9F65B5A1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE576D14-6AD3-4CD9-BA8D-92F260B3BA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE576D14-6AD3-4CD9-BA8D-92F260B3BA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE576D14-6AD3-4CD9-BA8D-92F260B3BA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE576D14-6AD3-4CD9-BA8D-92F260B3BA3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

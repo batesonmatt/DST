@@ -1,0 +1,59 @@
+﻿°
+This document represents a prioritized list of goals and descriptions, which should be
+read from top to bottom.
+____________________________________________________________________________________________________________________________
+
+To-do list:
+
+*** Code is Complete ***
+
+Consider another project in this solution - DST.Core.Tests
+- Add project reference to DST.Core in this test project
+- Add Unit Tests (See test methods in original Program.cs from ConsoleApp repo)
+
+________________________________________________________________________________________________________
+
+Web app project (DST):
+
+** BUG? - IDateTimeAdder and/or ITimeScalable
+
+When adding in seconds, minutes, and hours in sidereal time and stellar time, 
+the datetimes are all the same.
+
+This is actually due to the ITimeScalable implementations converting the ticks
+to total days, then truncating the fractional part.
+	
+Since each interval being added is less than a whole day, the value will almost always be 0.
+
+Test a 24 hour period for 1 hour intervals, where each interval is based on the 
+starting datetime. Only the last interval will be different, since it is 24 hours
+from the start, which is 1 whole day.
+Likewise, testing a 168 hour period for 12 hour intervals, every two datetimes are the same.
+
+Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time if
+			tracking in days, weeks, months, and years.
+			This will be accomplished in the front-end.
+
+			The user may, however, still choose the Earth-rotational algorithm, 
+			but can only track in mean solar time if using seconds, minutes, and hours.
+
+...........
+
+Using Tracker
+	Store results in a Dictionary<DateTime, HorizontalCoordinate>, where DateTime is computed by AstronomicalDateTime.ToLocalDateTime()
+
+Implement geo-positioning support
+	Resulting object is GeographicCoordinate
+
+Graphing support
+	Graph the trajectory of a tracked object as a sinosoidal wave (position over time)
+
+"Continuous" Tracking
+	After tracking over time, allow the user to click a button to continue tracking for the same period/interval, 
+	but starting at the last DateTime value.
+
+Implement Error Logging (Users report errors; developer looks over report)
+	Use a singleton, thread-safe logger class
+	Include serialized exception with complete stack-trace.
+
+________________________________________________________________________________________________________

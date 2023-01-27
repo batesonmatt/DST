@@ -26,4 +26,8 @@
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DST.Core\DST.Core.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,219 @@
+﻿Plan:
+
+Refactor DateTimes
+	Consider IAstronomicalDateTimeCollection
+	Then, (Solar)DateTimes, SiderealDateTimes, and StellarDateTimes
+	Then, DateTimesFactory and DateTimesCalculator
+
+Consider a new namespace, DateAndTime
+	AstronomicalDateTime
+	IAstronomicalDateTimeCollection
+	...
+
+	Drawback: This will result in a smaller Physics namespace
+
+_______________________________________________________________________________
+
+Existing type:
+
+internal sealed class DateTimes : IReadOnlyList<AstronomicalDateTime>
+	private readonly AstronomicalDateTime[] _dateTimes;
+	public AstronomicalDateTime this[int index] => _dateTimes[index];
+	public int Count => _dateTimes.Length;
+
+	private DateTimes()
+	private DateTimes(AstronomicalDateTime[] dateTimes)
+
+	private static int GetTimeRangePerUnit(string timeUnit)
+	private static double ToUniformTimeScale(string timeScale, double units)
+
+	private static double GetDays(AstronomicalDateTime start, string timeUnit, int units, out string outTimeUnit)
+
+	public static DateTimes Get(AstronomicalDateTime start, string timeUnit, int period, int interval)
+	public static DateTimes Get(AstronomicalDateTime start, string timeScale, string timeUnit, int period, int interval)
+
+	public IEnumerator<AstronomicalDateTime> GetEnumerator()
+	IEnumerator IEnumerable.GetEnumerator()
+
+
+_______________________________________________________________________________
+
+Ideas:
+
+**** 
+	A builder design might be needed, since I should not call the virtual method GetUniformUnits(double)
+	from the constructor.
+
+	Consider a IDateTimesBuilder interface with a Build(...) method.
+
+	In the Factory/Creator class, construct the IDateTimesBuilder with the given values, 
+	then call .Build() on the object.
+
+
+Consider encapsulating the timeScale, timeUnit, period, and interval.
+	Then use the Factory class to create the appropriate type, passing this data to the constructor
+	Then the type constructor will use the Calculator class to build the array
+
+	However, ToUniformTimeScale() would have to be moved to the Calculator class, which I don't like.
+
+	Consider a factory class for each type, and a base factory class with default implementations.
+
+If I use a Calculator and Factory class, then the collections do not need to be readonly.
+	Consider a Queue<AstronomicalDateTime>
+
+Consider using a DateTimesCalculator class in place of the DateTimes.Get(...) methods.
+	GetDays(), GetTimeRangePerUnit(), and ToUniformTimeScale() would need to be calculated privately in DateTimesCalculator
+
+Consider supplementing GetTimeRangePerUnit(string) with a class, TimeRange, containing public static properties
+	Also consider replacing GetTimeRangePerUnit(string) with a creator/calculator class
+
+The method DateTimes.ToUniformTimeScale(...) may be refactored for different implementations.
+
+When building the collection, do not return an empty collection, return a collection containing the start datetime.
+
+_______________________________________________________________________________
+
+Consider a factory design pattern:
+
+
+	class TimerInfo
+		string TimeScaleType { get; }
+		string TimeUnitType { get; }
+		AstronomicalDateTime Start { get; }
+		int Period { get; }
+		int Interval { get; }
+
+
+	interface IAstronomicalDateTimeCollection : IReadOnlyList<AstronomicalDateTime>
+		double Interval { get; }
+		double Period { get; }
+		string GetTimeScale()
+
+	interface IDateTimesBuilder
+		IAstronomicalDateTimeCollection Build(Timer timer);
+
+	abstract class BaseDateTimes : IAstronomicalDateTimeCollection, IDateTimesBuilder
+		private readonly AstronomicalDateTime[] _dateTimes;
+		public AstronomicalDateTime this[int index] => _dateTimes[index];
+		public int Count => _dateTimes.Length;
+
+		public double IntervalLength { get; }
+		public double PeriodLength { get; }
+
+		public BaseDateTimes()
+
+		public IAstronomicalDateTimeCollection Build(Timer timer) {...}
+
+		public virtual string GetTimeScale() => TimeScale.Default;
+
+		public IEnumerator<AstronomicalDateTime> GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
+
+		protected static int GetTimeRangePerUnit(string timeUnit)
+		protected static double GetDays(AstronomicalDateTime start, string timeUnit, int units, out string outTimeUnit)
+
+		// Needs to be overridden by SiderealDateTimes and StellarDateTimes
+		// This cannot be implemented from an interface, because it shouldn't be public.
+		protected virtual double GetUniformUnits(int units) => units;
+
+	class SolarDateTimes : BaseDateTimes
+		protected override double GetUniformUnits(double units) => base.GetUniformUnits(units);
+
+	class SiderealDateTimes : BaseDateTimes
+		protected override double GetUniformUnits(double units)
+			=> Math.Truncate(units * Constants.SolarToSiderealRatio) * Constants.SiderealToSolarRatio;
+
+	class StellarDateTimes : BaseDateTimes
+		protected override double GetUniformUnits(double units)
+			=> Math.Truncate(units * Constants.SolarToStellarRatio) * Constants.StellarToSolarRatio;
+
+	// Need to call IAstronomicalDateTimeCollection.Build
+	class DateTimesFactory
+		public static IAstronomicalDateTimeCollection Create(string timeScale, Timer timer)
+			return Create(timeScale).Build(timer)
+		
+		public static IAstronomicalDateTimeCollection Create(string timeScale)
+		{
+			return clock.TimeScaleType switch
+			{
+				TimeScale.MeanSolarTime => new SolarDateTimes(),
+				TimeScale.SiderealTime => new SiderealDateTimes(),
+				TimeScale.StellarTime => new StellarDateTimes()
+			};
+		}
+
+
+	// Ignore this.
+	// All creation methods belong in the concrete types.
+	class DateTimesCalculator
+		public static IAstronomicalDateTimeCollection Calculate(AstronomicalDateTime start, string timeUnit, int period, int interval)
+			// Uses MeanSolarTime
+
+		public static IAstronomicalDateTimeCollection Calculate(AstronomicalDateTime start, string timeScale, string timeUnit, int period, int interval)
+
+
+_______________________________________________________________________________
+
+Consider a non-collection type:
+
+
+interface IAstronomicalDateTimes: 
+	double Interval { get; }
+	double Period { get; }
+	string GetTimeScale()
+	IReadOnlyList<AstronomicalDateTime> GetList();
+
+interface ITimeScalable
+	double GetUniformUnits(double units)
+
+
+Consider:
+class BaseDateTimes : IAstronomicalDateTimes (not ITimeScalable)
+	...
+
+
+class SolarDateTimes : IAstronomicalDateTimes, ITimeScalable
+	double Interval { get; }
+	double Period { get; }
+
+	public SolarDateTimes()
+		
+
+	string GetTimeScale() => TimeScale.MeanSolarTime;
+
+	double ITimeScalable.GetUniformUnits(double units) => units;
+
+	public IReadOnlyList<AstronomicalDateTime> GetList()
+		return ticks.ToList();
+
+
+_________________________________________________________________________________
+
+DateTimes has been refactored.
+
+I'm also considering an option to add each datetime from either the start, or from the previous datetime.
+This will change the logic a bit so I may need different concrete types for the calculation.
+
+New logic:
+
+AstronomicalDateTime[] Get(AstronomicalDateTime start, IDateTimeAdder dateTimeAdder, int period, int interval) {...}
+bool IsReady(AstronomicalDateTime previous, int timeElapsed, int period, int interval) {...}
+
+Consider:
+
+interface IDateTimesBuilder
+	AstronomicalDateTime[] Build(AstronomicalDateTime start, int period, int interval)
+
+class BaseDateTimesBuilder
+	protected readonly IDateTimeAdder _dateTimeAdder { get; }
+	public abstract AstronomicalDateTime[] Build(AstronomicalDateTime start, int period, int interval);
+	protected virtual bool IsReady(AstronomicalDateTime previous, int timeElapsed, int period, int interval) {...}
+
+class ShortDateTimesBuilder
+	public override AstronomicalDateTime[] Build(AstronomicalDateTime start, int period, int interval) {...}
+
+class LongDateTimesBuilder
+	public override AstronomicalDateTime[] Build(AstronomicalDateTime start, int period, int interval) {...}
+
+class DateTimesBuilderFactory
+	IAstronomicalDateTimesBuilder Create(IDateTimeAdder dateTimeAdder, bool fromStart) {...}

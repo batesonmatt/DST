@@ -1,0 +1,228 @@
+﻿Plan:
+
+
+Fixed tracking - Support tracking in sidereal time and stellar time.
+
+Existing tracking algorithms: GMST, GAST, and ERA.
+
+Allow for tracking in sidereal time when using GMST or GAST.
+
+Allow for tracking in stellar time when using ERA.
+
+By default, mean solar time is used for either algorithm.
+
+
+
+__________________________________________________________________________________
+
+Reason:
+
+When using GMST/GAST, a full sidereal day will bring the algorithm back to approx. 
+the same angle.
+
+When using ERA, a full stellar day will bring the algorithm back to approx.
+the same angle.
+
+This is useful when the user wants the target to appear in the same azimuthal
+point at every individual datetime when tracking over time.
+
+Especially useful when the user gets the 'apex' position and datetime of the target 
+(when the target's local hour angle is on their meridian), then wishes to perform 
+fixed tracking on the target over time, starting at the datetime of its apex position.
+This could work for other local hour angles, too.
+
+
+
+__________________________________________________________________________________
+
+Requirements:
+
+Adding in sidereal/stellar time should be virtually as simple as adding normally,
+which is in mean solar time.
+
+The user should be presented with an option upon tracking an object to allow for
+tracking in either sidereal or stellar time, depending on the type of algorithm
+they chose, when tracking for periods of days, weeks, months, and years.
+
+Tracking in months and years should not use average values for the number of days
+per month or per year, but rather the exact number of whole 24-hour days for the
+given period to be added. In other words, if the user wants to track over a period 
+of 10 months from a given start date and time, then we need to determine the total
+number of days, including fractional days, within this 10-month period, which may 
+then be converted to whole sidereal days (if using GMST or GAST) or whole stellar 
+days (if using ERA).
+
+When tracking in sidereal or stellar time over periods of days, weeks, months and
+years, the entire period should be converted to whole sidereal or stellar days, 
+truncating the remaining fractional day. The tracker should then increment/decrement
+in intervals composed of whole sidereal or stellar days at the same time of day.
+
+Examples:
+
+Tracking in mean solar time for seconds, minutes, hours, and days:
+- DateTimes.Get() performs exactly as is
+
+Tracking in mean solar time for weeks, months, and years:
+- DateTimes.Get() must convert the period and interval to days to get the duration in days.
+
+
+
+__________________________________________________________________________________
+
+Problems:
+
+The usefuleness of fixed tracking is surrounded by the fact that only a full day, whether
+sidereal for GMST/GAST or stellar for ERA, will bring the algorithm to a complete cycle.
+
+Fixed tracking in time units less than a day (e.g., seconds, minutes, and hours) is
+not very useful, but may be done.
+
+Fixed tracking in months and years might require more work to determine how long
+a 'month' and 'year' should be in sidereal and stellar time scales.
+Determining the length of a month or year using instance methods on the Calendar 
+class will not work because the tracker may not always start on the first day of the month/year.
+
+Fixed tracking in weeks will work fine because a 'week' is defined as seven full days,
+which may then be converted to seven full sidereal or stellar days.
+
+Currently, using DateTime to add in units of seconds, minutes, hours, and days may be 
+performed in decimal values (i.e., whole days with fractional days.). However, weeks, 
+months, and years can only be added in whole units and in mean solar time.
+
+The Calendar class contains support for adding in these units, but can only do
+so in whole integer units and it does not preserve the DateTime.Kind value (Utc).
+
+The DateTime value type contains support for adding directly in months and years, but
+not weeks, and can only add in units of whole integers.
+
+AstronomicalDateTime.AddTime(string, double) does not support adding weeks, months, 
+and years. 
+
+
+
+__________________________________________________________________________________
+
+Design:
+
+
+Resolving the problems and meeting requirements:
+
+For months, consider using GetDayOfMonth or DateTime.AddMonths() to determine the TimeSpan 
+length in days, then using the same technique for Physics.UniformSiderealYear and 
+.UniformStellarYear, we can calculate the total whole sidereal/stellar days.
+
+However, I don't like how those properties are using SiderealYear.
+
+Instead, I would prefer instance methods in AstronomicalDateTime to calculate the whole
+number of days using AddMonths() or AddYears(), then convert to whole sidereal/stellar days.
+
+For AstronomicalDateTime.AddTime(...), if 'timeUnit' is Weeks, Months, or Years, then
+I could convert 'units' to days then use TimeUnit.Days to get the appropriate DateTime 
+add function (DateTime.AddDays()). 
+- This does not yet account for adding in sidereal/stellar time.
+- I could add a new parameter, string timeScale (default to TimeScale.MeanSolarTime)
+- Or, I could implement overloads, AddSiderealTime() and AddStellarTime(), but 
+  this would take extra conditional checks after the user selects a time scale, 
+  instead of binding a TimeScale (string) property to the form, and passing the result
+  directly to the AddTime() method.
+- Consider a single overload for which 'units' is an integer.
+
+Consider keeping AstronomicalDateTime.AddTime() and .GetDateTimeAddFunction() the same
+- If 'timeUnit' is Weeks, Months, or Years, convert to Days
+- If 'timeScale' is StellarTime or SiderealTime, convert the days to stellar/sidereal days, truncate, then convert back to mean solar days.
+- call AddTime(TimeUnit.Days, ...)
+
+
+__________________________________________________________________________________
+
+Implementation:
+
+
+/* Remove 'direction' and allow 'count' to be negative. */
+/* This prevents adding up to the min or max month due to the >= operators.
+ * However, this is necessary for the min value because sidereal and stellar times are always less than mean solar time.
+ */
+double GetUniformSiderealMonths(DateTime dateTime, int count, int direction)
+{
+    switch (direction)
+    {
+        case 1:
+            // Get the total future time from 'dateTime'
+            int future = 12 - dateTime.Month + ((DateTime.MaxValue.Year - dateTime.Year) * 12);
+            if (count >= future) return 0.0;
+            break;
+
+        case -1:
+            // Get the total past time from 'dateTime'
+            int past = dateTime.Month - 1 + ((dateTime.Year - DateTime.MinValue.Year) * 12);
+            if (Math.Abs(count) >= past) return 0.0;
+            break;
+
+        default:
+            return 0.0;
+    }
+
+    DateTime next = dateTime.AddMonths(direction * count);
+
+    TimeSpan timeSpan = next - dateTime;
+
+    double days = timeSpan.TotalDays;
+
+    double siderealDays = Math.Truncate(days * (86400.0 / 86164.09053083288)) * (86164.09053083288 / 86400.0);
+
+    return siderealDays;
+}
+
+double GetUniformSiderealMonth(DateTime dateTime, int direction)
+{
+    switch (direction)
+    {
+        case 1:
+            if (dateTime.Month == DateTime.MaxValue.Month) return 0.0;
+            break;
+
+        case -1:
+            if (dateTime.Month == DateTime.MinValue.Month) return 0.0;
+            break;
+
+        default:
+            return 0.0;
+    }
+
+    DateTime next = dateTime.AddMonths(direction);
+
+    TimeSpan timeSpan = next - dateTime;
+
+    double days = timeSpan.TotalDays;
+
+    double siderealDays = Math.Truncate(days * (86400.0 / 86164.09053083288)) * (86164.09053083288 / 86400.0);
+
+    return siderealDays;
+}
+
+double GetUniformSiderealYear(DateTime dateTime, int direction)
+{
+    switch (direction)
+    {
+        case 1:
+            if (dateTime.Year == DateTime.MaxValue.Year) return 0.0;
+            break;
+
+        case -1:
+            if (dateTime.Year == DateTime.MinValue.Year) return 0.0;
+            break;
+
+        default:
+            return 0.0;
+    }
+
+    DateTime next = dateTime.AddYears(direction);
+
+    TimeSpan timeSpan = next - dateTime;
+
+    double days = timeSpan.TotalDays;
+
+    double siderealDays = Math.Truncate(days * (86400.0 / 86164.09053083288)) * (86164.09053083288 / 86400.0);
+
+    return siderealDays;
+}

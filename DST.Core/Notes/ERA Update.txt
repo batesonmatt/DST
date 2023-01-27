@@ -1,0 +1,94 @@
+﻿(Mean Solar Day)
+SolarDay = 86400.0
+SiderealDay = 86164.09053083288
+StellarDay = 86164.098903690348
+
+// Note that the SolarToSiderealRatio (1.0027379093507949) has a more accurate expression, but T is in terrestrial time.
+SolarToSiderealRatio = SolarDay / SiderealDay
+
+// revolutions per UT1 day, and Rate of advance of ERA
+SolarToStellarRatio = SolarDay / StellarDay
+
+ArcsecondsPerCycle = 1296000.0
+
+RotationPerHour = 15.0
+RotationPerSiderealHour = ArcsecondsPerCycle / SiderealDay
+
+// GMST = G + 0.065709824419077023(𝐷0) + 1.0027379093507949(𝐻)
+// This is derived from the fact that 1.0027379093507949 - 0.065709824419077023 / 24 = 1,
+// which is used to convert the GMST expression from hours to degrees.
+//
+// SolarToSiderealRatio - MeanSolarDayOffsetHours / 24 = 1
+MeanSolarDayOffsetHours = (SolarToSiderealRatio - 1.0) * 24.0
+MeanSolarDayOffsetDegrees = MeanSolarDayOffsetHours * RotationPerHour
+
+// In arc-seconds per year
+PrecessionSpeed = 50.28796195
+PrecessionPeriod = ArcsecondsPerCycle / PrecessionSpeed		(Precession of the equinoxes, or "General Precession" -- Number of years for a full precession cycle)
+
+SolarYear = 360.0 / MeanSolarDayOffsetDegrees
+SiderealYear = SolarYear + (SolarYear / PrecessionPeriod)
+
+// The initial GMST relative to the March equinox in decimal degrees on January 1, 2000 at 12h UT
+GMST0 = 100.46061837503999
+
+// The initial rotation of the Earth from the Celestial Intermediate Origin (CIO) on January 1, 2000 at 12h UT
+EpochalRotation = 0.7790572732640
+
+// The initial Earth Rotation Angle (ERA) relative to the Celestial Intermediate Origin (CIO) in decimal degrees on January 1, 2000 at 12h UT
+// Represents the constant term of the ERA polynomial expression, converted to degrees.
+// This is equivalent to 2 * pi * 0.7790572732640 * (180 / pi)
+ERA0 = 360.0 * EpochalRotation
+
+// The amount the Earth rotates, in decimal degrees, relative to the fixed stars in 1 stellar day.
+// Represents the linear coefficient of the ERA polynomial expression, converted to degrees.
+// This is equivalent to 2 * pi * SolarToStellarRatio * (180 / pi)
+StellarDayRotation = 360.0 * SolarToStellarRatio
+
+
+// Earth Rotation angle (ERA) -- Expressed in degrees.
+public Angle GetEarthRotationAngle(AstronomicalDateTime dateTime)
+{
+	// The original expression for the ERA is given by:
+	//		
+	//		ERA = 2pi[0.7790572732640 + 1.00273781191135448(D)]
+	//
+	// Where ERA is in radians, and D is the number of days since the J2000 epoch.
+	//
+	// The following code resembles the ERA expression rewritten in degrees.
+
+	double era = ERA0 + StellarDayRotation * dateTime.GetTotalTimeFromEpoch().TotalDays;
+
+	era = Physics.Coterminal(era);
+
+	return new Angle(era);
+}
+
+// Greenwich Mean Sidereal Time (GMST)
+public Angle GetSiderealTime(AstronomicalDateTime dateTime)
+{
+	// The original expression for the GMST is given by:
+	//
+	//		GMST = G + 0.06570982441908(D0) + 1.00273790935(H) + 0.000026(T^2)
+	//
+	// Where GMST is in hours, 
+	// G is the GMST at 0h UT on January 1, 2000, using the constants from the IAU 1982 GMST expression,
+	// D0 is the Julian date on the previous midnight,
+	// H is the universal time in total decimal hours,
+	// D0 is equivalent to D − (H / 24), where D is the total number of decimal days since the J2000 epoch,
+	// T is the total number of Julian centuries since the J2000 epoch, equivalent to D / 36525.
+	//
+	// The following code resembles the GMST expression simplified, rewritten in degrees, recalculated
+	// with precise constants, and ignoring the higher order terms.
+
+	double totalDays = dateTime.GetTotalTimeFromEpoch().TotalDays;
+
+	double gmst =
+		GMST0 +
+		(MeanSolarDayOffsetDegrees * totalDays) +
+		(Physics.RotationPerHour * dateTime.Value.TimeOfDay.TotalHours);
+		
+	gmst = Physics.Coterminal(gmst);
+		
+	return new Angle(gmst);
+}

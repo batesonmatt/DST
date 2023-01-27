@@ -1,0 +1,473 @@
+﻿Tracker
+	string _algorithm;
+	Dictionary<Angle, Angle> _nutations;
+
+	GeographicCoordinate Location { get; }
+	EquatorialCoordinate Target { get; }
+	
+	string TrajectoryType { get; }
+
+	Tracker(GeographicCoordinate location, EquatorialCoordinate target);
+	Tracker(GeographicCoordinate location, EquatorialCoordinate target, string algorithm);
+
+	void StoreNutation(Angle key, Angle value);
+	Angle GetNutation(Angle key);
+	void ClearNutations();
+
+	Angle GetLocal(Angle original);
+	Angle GetLocalEarthRotationAngle(AstronomicalDateTime dateTime);
+	Angle GetLocalMeanSiderealTime(AstronomicalDateTime dateTime);
+	Angle GetLocalSiderealTime(AstronomicalDateTime dateTime);
+
+	GetLocalHourAngle(AstronomicalDateTime dateTime, bool storeNutation = true);
+	Angle GetLocalHourAngle(AstronomicalDateTime dateTime);
+	AstronomicalDateTime GetLocalHourAngleDateTime(AstronomicalDateTime startDateTime, Angle localHourAngle, bool forceNext);
+	Angle GetZeroAltitudeHourAngle(int middayDelta = -1);
+
+	KeyValuePair<AstronomicalDateTime, HorizontalCoordinate> GetVector(
+            AstronomicalDateTime startDateTime, Angle localHourAngle, bool forceNext = false);
+	KeyValuePair<AstronomicalDateTime, HorizontalCoordinate> GetApex();
+	KeyValuePair<AstronomicalDateTime, HorizontalCoordinate> GetApex(AstronomicalDateTime startDateTime);
+	KeyValuePair<AstronomicalDateTime, HorizontalCoordinate> GetRise();
+	KeyValuePair<AstronomicalDateTime, HorizontalCoordinate> GetRise(AstronomicalDateTime startDateTime);
+	KeyValuePair<AstronomicalDateTime, HorizontalCoordinate> GetSet();
+	KeyValuePair<AstronomicalDateTime, HorizontalCoordinate> GetSet(AstronomicalDateTime startDateTime);
+
+	string GetTrajectory();
+
+	bool IsAboveHorizon();
+	bool IsAboveHorizon(AstronomicalDateTime dateTime);
+
+	HorizontalCoordinate Track(Angle localHourAngle);
+	HorizontalCoordinate Track();
+	HorizontalCoordinate Track(AstronomicalDateTime dateTime);
+	HorizontalCoordinate[] Track(DateTimes dateTimes);
+
+______________________________________________________________________________________________________________________________
+
+// Consider factory design pattern for Coordinates, Trajectories, and Algorithms (TimeKeepers)
+// Keep the const string classes to use as args for the creater classes.
+
+_____________________________________________________________________________________________________________
+
+// Can get GMST, GAST, and ERA
+interface ITimeKeeper
+	Angle Calculate(AstronomicalDateTime)
+
+// This might need to inherit from MeanSiderealTimeKeeper, 
+// call base.Calculate(), then modify it by the EE
+class SiderealTimeKeeper : ITimeKeeper
+	Angle Calculate(AstronomicalDateTime)
+		Returns the GAST for the specified datetime value
+
+class MeanSiderealTimeKeeper : ITimeKeeper
+	Angle Calculate(AstronomicalDateTime)
+		Returns the GMST for the specified datetime value
+
+class StellarTimeKeeper : ITimeKeeper
+	Angle Calculate(AstronomicalDateTime)
+		Returns the ERA for the specified datetime value
+
+class TimeKeeperFactory
+{
+    public static ITimeKeeper Create(string algorithmName) 
+		=> algorithmName switch
+    {
+        Algorithm.MeanSiderealTime => new MeanSiderealTimeKeeper(),
+        Algorithm.ApparentSiderealTime => new SiderealTimeKeeper(),
+        Algorithm.EarthRotationAngle => new StellarTimeKeeper(),
+        _ => throw new NotSupportedException($"Algorithm name {algorithmName} is not supported.")
+    };
+}
+ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.EarthRotationAngle);
+
+
+_____________________________________________________________________________________________________________
+
+
+interface IVariableRightAscension
+	Angle GetRightAscension(AstronomicalDateTime dateTime);
+
+interface IVariableDeclination
+	Angle GetDeclination(AstronomicalDateTime dateTime);
+
+interface IObserver 
+	GeographicCoordinate Location
+	EquatorialCoordinate Target
+
+class BaseObserver : IObserver
+	GeographicCoordinate Location
+	EquatorialCoordinate Target
+
+	public BaseObserver(GeographicCoordinate location, EquatorialCoordinate target)
+	{
+		Location = location ?? throw new ArgumentNullException(nameof(location));
+		Target = target ?? throw new ArgumentNullException(nameof(target));
+	}
+
+class MeanSiderealObserver : BaseObserver
+	public MeanSiderealObserver(GeographicCoordinate location, EquatorialCoordinate target)
+		: base(location, target)
+	{ }
+
+class SiderealObserver : BaseObserver, IVariableRightAscension, IVariableDeclination
+	public SiderealObserver(GeographicCoordinate location, EquatorialCoordinate target)
+		: base(location, target)
+	{ }
+	Angle GetRightAscension(AstronomicalDateTime)
+		=> Target.GetNutatedRightAscension(dateTime);
+	Angle GetDeclination(AstronomicalDateTime)
+		=> Target.GetNutatedDeclination(dateTime);
+
+class StellarObserver : BaseObserver, IVariableRightAscension
+	public StellarObserver(GeographicCoordinate location, EquatorialCoordinate target)
+		: base(location, target)
+	{ }
+	Angle GetRightAscension(AstronomicalDateTime)
+		=> Target.GetIntermediateRightAscension(dateTime)
+
+class ObserverFactory
+	public static IObserver Create(GeographicCoordinate location, EquatorialCoordinate target, string algorithm)
+		=> algorithm switch
+    {
+        MeanSiderealTimeKeeper => new MeanSiderealObserver(location, target),
+        SiderealTimeKeeper => new SiderealObserver(location, target),
+        StellarTimeKeeper => new StellarObserver(location, target),
+        _ => throw new NotSupportedException($"Algorithm name '{algorithm}' is not supported.")
+    };
+
+
+_____________________________________________________________________________________________________________
+
+
+// Can get LMST, LST, and LERA
+interface ILocalTimeKeeper
+	Angle Calculate(IObserver, AstronomicalDateTime)
+
+abstract class BaseLocalTimeKeeper : ILocalTimeKeeper
+	protected readonly ITimeKeeper _timeKeeper
+
+	public ITimeKeeper TimeKeeper => _timeKeeper;
+
+	BaseLocalTimeKeeper(ITimeKeeper timeKeeper) { _timeKeeper = timeKeeper }
+
+	public virtual Angle Calculate(IObserver observer, AstronomicalDateTime dateTime)
+		Angle lst = timeKeeper.Calculate(dateTime)
+		return Calculate(observer, lst)
+
+	protected static Angle Calculate(IObserver, Angle original)
+		Returns the localized longitudinal angle using the observer's Location.
+
+class LocalSiderealTimeKeeper : BaseLocalTimeKeeper
+	LocalSiderealTimeKeeper(ITimeKeeper timeKeeper) : base(timeKeeper) {}
+
+	public override Angle Calculate(IObserver, AstronomicalDateTime)
+		return base.Calculate(observer, dateTime)
+		Returns the LST for the specified observer and datetime values.
+
+class LocalMeanSiderealTimeKeeper : BaseLocalTimeKeeper
+	LocalSiderealTimeKeeper(ITimeKeeper timeKeeper) : base(timeKeeper) {}
+
+	public override Angle Calculate(IObserver, AstronomicalDateTime)
+		return base.Calculate(observer, dateTime)
+		Returns the LMST for the specified observer and datetime values.
+
+class LocalStellarTimeKeeper : BaseLocalTimeKeeper
+	LocalSiderealTimeKeeper(ITimeKeeper timeKeeper) : base(timeKeeper) {}
+
+	public override Angle Calculate(IObserver, AstronomicalDateTime)
+		return base.Calculate(observer, dateTime)
+		Returns the LERA for the specified observer and datetime values.
+
+class LocalTimeKeeperFactory
+{
+    public static ILocalTimeKeeper Create(ITimeKeeper timeKeeper) 
+    {
+		if (timeKeeper == null)
+		{
+			throw new ArgumentNullException(nameof(timeKeeper));
+		}
+
+        return timeKeeper switch
+        {
+            SiderealTimeKeeper => new LocalSiderealTimeKeeper(timeKeeper),
+            MeanSiderealTimeKeeper => new LocalMeanSiderealTimeKeeper(timeKeeper),
+            StellarTimeKeeper => new LocalStellarTimeKeeper(timeKeeper)
+        };
+    }
+}
+ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.EarthRotationAngle);
+ILocalTimeKeeper localTimeKeeper = LocalTimeKeeperFactory.Create(timeKeeper);
+
+
+
+Consider:
+
+ILocalTimeKeeper
+	Angle Calculate(IObserver, AstronomicalDateTime)
+
+BaseLocalTimeKeeper : ILocalTimeKeeper
+	private readonly ITimeKeeper _timeKeeper
+
+	BaseLocalTimeKeeper(ITimeKeeper timeKeeper) => _timeKeeper = timeKeeper;
+
+	Angle Calculate(IObserver observer, AstronomicalDateTime dateTime)
+		Angle original = _timeKeeper.Calculate(dateTime)
+		return GetLocal(observer, original)
+
+	private Angle GetLocal(IObserver observer, Angle original)
+		Returns the localized longitudinal angle using the observer's Location.
+
+LocalTimeKeeperFactory
+	public static ILocalTimeKeeper Create(ITimeKeeper timeKeeper)
+		return new BaseLocalTimeKeeper(timeKeeper)
+
+ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.EarthRotationAngle)
+ILocalTimeKeeper localTimeKeeper = LocalTimeKeeperFactory.Create(timeKeeper)
+
+
+_____________________________________________________________________________________________________________
+
+
+interface ILocalHourAngle
+	Angle Calculate(IObserver, AstronomicalDateTime)
+
+abstract class BaseLocalHourAngle : ILocalHourAngle
+	protected readonly ILocalTimeKeeper _localTimeKeeper;
+
+	public ILocalTimeKeeper LocalTimeKeeper => _localTimeKeeper;
+
+	BaseLocalHourAngle(ILocalTimeKeeper localTimeKeeper) { _localTimeKeeper = localTimeKeeper; }
+
+	public Angle Calculate(IObserver observer, AstronomicalDateTime dateTime)
+		Angle localTime = _localTimeKeeper.Calculate(dateTime);
+		Angle alpha;
+		if (observer is IVariableRightAscension variableObserver)
+			alpha = variableObserver.GetRightAscension(dateTime);
+		else
+			alpha = observer.Target.RightAscension;
+		return Calculate(localTime, alpha);
+
+	protected static Angle Calculate(Angle localTime, Angle rightAscension)
+		return Coterminal(localTime - rightAscension)
+
+class LocalSiderealHourAngle : BaseLocalHourAngle
+	LocalSiderealHourAngle(ILocalTimeKeeper localTimeKeeper) : base (localTimeKeeper) {}
+
+class LocalMeanSiderealHourAngle : BaseLocalHourAngle
+	LocalMeanSiderealHourAngle(ILocalTimeKeeper localTimeKeeper) : base (localTimeKeeper) {}
+
+class LocalStellarHourAngle : BaseLocalHourAngle
+	LocalStellarHourAngle(ILocalTimeKeeper localTimeKeeper) : base (localTimeKeeper) {}
+
+class LocalHourAngleFactory
+{
+    public static ILocalHourAngle Create(ILocalTimeKeeper localTimeKeeper)
+    {
+		if (localTimeKeeper == null)
+		{
+			throw new ArgumentNullException(nameof(localTimeKeeper));
+		}
+
+        return localTimeKeeper switch
+        {
+            LocalSiderealTimeKeeper => new LocalSiderealHourAngle(localTimeKeeper),
+            LocalMeanSiderealTimeKeeper => new LocalMeanSiderealHourAngle(localTimeKeeper),
+            LocalStellarTimeKeeper => new LocalStellarHourAngle(localTimeKeeper)
+        };
+    }
+}
+ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.EarthRotationAngle);
+ILocalTimeKeeper localTimeKeeper = LocalTimeKeeperFactory.Create(timeKeeper);
+ILocalHourAngle lha = LocalHourAngleFactory.Create(localTimeKeeper);
+
+_____________________________________________________________________________________________________________
+
+
+interface ILocalHourAngleDateTime
+	AstronomicalDateTime Calculate(Angle lhaTarget, AstronomicalDateTime start)
+	AstronomicalDateTime CalculateNext(Angle lhaTarget, AstronomicalDateTime start)
+
+abstract class BaseLocalHourAngleDateTime : ILocalHourAngleDateTime
+	protected readonly ILocalHourAngle _localHourAngle;
+
+	public ILocalHourAngle LocalHourAngle => _localHourAngle;
+
+	BaseLocalHourAngleDateTime(ILocalHourAngle localHourAngle) { _localHourAngle = localHourAngle; }
+	
+	// Returns the datetime for the specified ILocalHourAngle and starting datetime value.
+	public virtual AstronomicalDateTime Calculate(Angle lhaTarget, AstronomicalDateTime start)
+		Angle lhaCurrent = _localHourAngle.Calculate(start)
+		...
+
+class LocalSiderealHourAngleDateTime : BaseLocalHourAngleDateTime
+	LocalSiderealHourAngleDateTime(ILocalHourAngle localHourAngle) : base(localHourAngle) {}
+	
+	public override AstronomicalDateTime Calculate(Angle lhaTarget, AstronomicalDateTime start)
+		return base.Calculate(Angle lhaTarget, AstronomicalDateTime start)
+
+class LocalMeanSiderealHourAngleDateTime : BaseLocalHourAngleDateTime
+	LocalMeanSiderealHourAngleDateTime(ILocalHourAngle localHourAngle) : base(localHourAngle) {}
+
+	public override AstronomicalDateTime Calculate(Angle lhaTarget, AstronomicalDateTime start)
+		return base.Calculate(Angle lhaTarget, AstronomicalDateTime start)
+
+class LocalStellarHourAngleDateTime : BaseLocalHourAngleDateTime
+	LocalStellarHourAngleDateTime(ILocalHourAngle localHourAngle) : base(localHourAngle) {}
+
+	public override AstronomicalDateTime Calculate(Angle lhaTarget, AstronomicalDateTime start)
+		return base.Calculate(Angle lhaTarget, AstronomicalDateTime start)
+
+class LocalHourAngleDateTimeFactory
+{
+	public static ILocalHourAngleDateTime Create(ILocalHourAngle localHourAngle)
+    {
+		if (localHourAngle == null)
+		{
+			throw new ArgumentNullException(nameof(localHourAngle));
+		}
+
+        return localHourAngle switch
+        {
+            LocalSiderealHourAngle => new LocalSiderealHourAngleDateTime(localHourAngle),
+            LocalMeanSiderealHourAngle => new LocalMeanSiderealHourAngleDateTime(localHourAngle),
+            LocalStellarHourAngle => new LocalStellarHourAngleDateTime(localHourAngle)
+        };
+    }
+}
+ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.EarthRotationAngle);
+ILocalTimeKeeper localTimeKeeper = LocalTimeKeeperFactory.Create(timeKeeper);
+ILocalHourAngle lha = LocalHourAngleFactory.Create(localTimeKeeper);
+ILocalHourAngleDateTime lhaDatetime = LocalHourAngleDateTimeFactory.Create(lha);
+
+_____________________________________________________________________________________________________________
+
+
+class Vector
+	public AstronomicalDateTime DateTime { get; }
+	public HorizontalCoordinate Position { get; }
+	public KeyValuePair<AstronomicalDateTime, HorizontalCoordinate> Pair
+		=> new(DateTime, Position);
+
+	public Vector(AstronomicalDateTime dateTime, HorizontalCoordinate)
+	...
+
+
+// Don't use this.
+// Create the Vector in the Trajectory classes.
+class VectorCalculator
+	// The lha should be the expected angle; do not calculate it using the start datetime.
+	public static Vector Calculate(ILocalHourAngleDateTime lhaDateTime, Angle lhaTarget, AstronomicalDateTime start, bool next)
+	{
+		AstronomicalDateTime dateTime = lhaDateTime.Calculate(start, next)
+
+        // Although calling Track(Angle) on localHourAngle is more accurate, it will not store nutation.
+        // Call Track(AstronomicalDateTime) to ensure that nutation, if any, gets stored.
+        HorizontalCoordinate position = Track(dateTime);
+
+        return new Vector(dateTime, position);
+	}
+
+
+_____________________________________________________________________________________________________________
+
+
+// A Trajectory should have an IObserver
+
+// Re-consider a single interface design to avoid being forced to check which interface(s) the type implements.
+
+interface ITrajectory
+	bool IsAboveHorizon() 
+		=> Always true for CircumpolarTrajectory
+		=> Always false for NeverRiseTrajectory
+		=> Else, call IsAboveHorizon(AstronomicalDateTime.Now)
+
+
+interface IVisibleTrajectory
+	bool IsAboveHorizon(AstronomicalDateTime)								* Needs ILocalHourAngle
+		Use BaseTrajectory._lhaDateTime.LocalHourAngle.Calculate(...)
+	
+	Vector GetApex()							* Needs IObserver and Tracker
+	Vector GetApex(AstronomicalDateTime)		* Needs IObserver and Tracker
+
+
+interface IVariableTrajectory
+	// Omit these in the interface
+	Angle GetRiseHourAngle()					* Needs IObserver and ILocalHourAngleDateTime
+	Angle GetSetHourAngle()						* Needs IObserver and ILocalHourAngleDateTime
+
+	Vector GetRise()							* Needs Tracker, IObserver, and ILocalHourAngleDateTime, calls GetRiseHourAngle()
+	Vector GetSet()								* Needs Tracker, IObserver, and ILocalHourAngleDateTime, calls GetSetHourAngle()
+
+	Vector GetRise(AstronomicalDateTime)		* Needs Tracker, IObserver, and ILocalHourAngleDateTime, calls GetRiseHourAngle()
+	Vector GetSet(AstronomicalDateTime)			* Needs Tracker, IObserver, and ILocalHourAngleDateTime, calls GetSetHourAngle()
+
+
+abstract class BaseTrajectory : ITrajectory
+	protected readonly IObserver _observer;
+
+	BaseTrajectory(IObserver observer) { _observer = observer; }
+
+	public abstract bool IsAboveHorizon();
+
+class CircumpolarTrajectory : BaseTrajectory, IVisibleTrajectory
+	...
+
+class RiseSetTrajectory : BaseTrajectory, IVisibleTrajectory, IVariableTrajectory
+	...
+
+class NeverRiseTrajectory : BaseTrajectory
+	...
+
+
+class TrajectoryFactory
+{
+	// Check observer for null first
+	public static ITrajectory Create(IObserver observer, string trajectoryName)
+		=> trajectoryName switch
+	{
+		Trajectory.Circumpolar => new CircumpolarTrajectory(observer),
+        Trajectory.RiseSet => new RiseSetTrajectory(observer),
+        Trajectory.NeverRise => new NeverRiseTrajectory(observer),
+        _ => throw new NotSupportedException($"Trajectory name {trajectoryName} is not supported.")
+	};
+}
+
+
+class TrajectoryCalculator
+{
+	public static ITrajectory Calculate(IObserver observer)
+    {
+        ...
+    }
+}
+
+
+_____________________________________________________________________________________________________________
+
+
+public class Tracker
+	private readonly ILocalHourAngle _localHourAngle;
+
+	public Tracker(ILocalHourAngle localHourAngle)
+	{
+		_localHourAngle = localHourAngle;
+	}
+
+	public HorizontalCoordinate Track(IObserver observer)
+		// Calls Track(observer, AstronomicalDateTime.Now)
+
+	public HorizontalCoordinate Track(IObserver observer, DateTimes dateTimes)
+		// Calls Track(observer, d) for each value in dateTimes
+
+	public HorizontalCoordinate Track(IObserver observer, AstronomicalDateTime dateTime)
+		// Tracks the actual local hour angle
+		// Calls _localHourAngle.Calculate(dateTime) to get the lha
+		// If observer is IVariableDeclination, call GetDeclination(dateTime)
+
+	// Need private helper methods for the calculations.
+	// Consider re-including a public Track(Angle)
+
+
+
+

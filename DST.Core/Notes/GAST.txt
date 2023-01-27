@@ -1,0 +1,243 @@
+﻿T = Total days since J2000.0 / 36525
+
+Ecliptic longitude of the ascending node of the Moon's orbit, in degrees
+
+	Omega = 125.04452 - 1934.136261(T)
+
+	=  Coterminal(125.04452 - 1934.136261 * T + 0.0020708 * T2 + T3 / 450000.0);
+
+Eccentricity of Earth's orbit
+
+	e = Coterminal(0.016708634 - (0.000042037 * T) - (0.0000001267 * T2));
+
+Mean anomaly of the Sun
+
+	Initial anomaly of the mean Sun on J2000.0, in decimal degrees.
+	
+		357.52910
+	
+	M = Coterminal(357.52910 + (35999.05030 * T) - (0.0001559 * T2) - (0.00000048 * T3));
+
+Sun's equation of center (simplified)
+
+	C = (1.914602 - (0.004817 * T) - (0.000014 * T2)) * Math.Sin(M.ToRadians())
+		+ (0.019993 - (0.000101 * T)) * Math.Sin(M.ToRadians() * 2.0)
+		+ (0.000289 * Math.Sin(M.ToRadians() * 3.0));
+
+Mean longitude of the Sun, in degrees
+
+	Initial longitude of the mean Sun on J2000.0, in decimal degrees
+
+		280.4664611
+
+	Ls = Coterminal(280.4664611 + (36000.76983 * T) + (0.0003032 * T2));
+
+True geometric longitude of the Sun, in degrees
+
+	L_true = Coterminal(Ls + C)
+
+Mean longitude of the moon, in degrees
+
+	Initial longitude of the moon on J2000.0, in decimal degrees
+	
+		218.31654591
+
+	Lm = Coterminal(218.31654591 + (481267.88134236 * T) - (0.00163 * T2) + (T3 / 5388410.0) - (T4 / 65194000.0));
+
+Mean obliquity of the ecliptic, or Earth's axial tilt, in arcseconds
+
+	The obliquity of the ecliptic at epoch J2000.0 with respect to the mean equator at epoch J2000.0:
+	
+	Epsilon0 = 84381.448 arcseconds
+
+	Epsilon = Epsilon0 − 46.8150(T) − 0.00059(T^2) + 0.001813(T^3)
+
+Nutation in longitude in arcseconds
+
+	DeltaPsi = -17.2sin(Omega) - 1.32sin(2 * Ls) - 0.23sin(2 * Lm) + 0.21sin(2 * Omega)
+
+Nutation in obliquity, in arcseconds
+
+	DeltaEpsilon = 9.2cos(Omega) + 0.57cos(2 * Ls) + 0.10cos(2 * Lm) - 0.09cos(2 * Omega)
+
+Greenwich Apparent Sidereal Time
+
+	GAST = GMST + Equation of the equinoxes
+	GAST = GMST + (DeltaPsi / 3600.0) * cos((Epsilson + DeltaEpsilon) / 3600.0)
+	
+	Restrict onto the interval [0°, 360°):
+
+	GAST = Coterminal(GAST)
+
+Alternatively:
+
+	EO = Equation of the origins
+
+	GAST = ERA - EO
+
+	EO = ERA - GAST
+
+Transforming equinoctial right ascensions to/from the intermediate variant:
+
+    Note: 
+        The EO is the CIO right ascension, or the "intermediate right ascension" of the equinox
+        The EO is the angular distance between the CIO and the equinox along the CIP equator, 
+        measured westward from the CIO.
+
+	RAe = RAi - EO
+	RAi = RAe + EO
+
+The adjustments in the targeting object's equatorial coordinates:
+
+	RA		= equinoctial right ascension
+	DEC		= equinoctial declination
+
+	// delta_ra = [(cos(Epsilon) + sin(Epsilon)sin(RA)tan(DEC)) * DeltaPsi] - [cos(RA)tan(DEC) * DeltaEpsilon]
+	// delta_dec = (cos(RA)sin(Epsilon) * DeltaPsi) + (sin(RA) * DeltaEpsilon)
+
+    Ecliptical to equatorial:
+    lambda = lambda*PI/180.;
+    beta = beta*PI/180.;
+    eps = MeanObliquity()*PI/180;  
+    ra_out = atan2(sin(lambda)*cos(eps) - tan(beta)*sin(eps), cos(lambda));
+    ra_out = Map24(ra_out*12./PI);
+    dec_out = asin(sin(beta)*cos(eps) + cos(beta)*sin(eps)*sin(lambda));
+    dec_out = Map180(dec_out*180./PI);
+
+	...
+
+	// dir = 1 for dates on or after J2000.0
+	// dir = -1 for dates before J2000.0
+
+	// If the object is close to a celestial pole, convert to an ecliptical coordinate
+	if(fabs(dec_in) > (double) 85.)
+	{
+		CelestialToEcliptical(ra_in, dec_in, &lambda, &beta);
+  
+		elong = lambda;
+		elat = beta;
+
+		dlong = dir*NLongitude(); // dir * dPsi
+		elong = elong + dlong;
+
+		EclipticalToCelestial(elong, elat, &ra_out, &dec_out);
+	}
+	else
+	{
+		dpsi = dir*NLongitude();
+		eps0 = MeanObliquity();
+		deps = dir*NObliquity();
+
+		dra = (cos(eps0*PI/180.) + 
+		  sin(eps0*PI/180.)*sin(ra_in*PI/12.)*tan(dec_in*PI/180.))*dpsi -
+		  cos(ra_in*PI/12.)*tan(dec_in*PI/180.)*deps;
+		dra = dra/15.;
+
+		ddec = sin(eps0*PI/180.)*cos(ra_in*PI/12.)*dpsi +
+		  sin(ra_in*PI/12.)*deps;
+	}
+
+...
+
+public Angle GetGAST(AstronomicalDateTime dateTime)
+{
+    double days = dateTime.GetTotalTimeFromEpoch().TotalDays;
+    double T = days / 36525.0;
+    double T2 = T * T;
+    double T3 = T2 * T;
+    double T4 = T3 * T;
+
+    double Omega = Physics.Coterminal(125.04452 - (1934.136261 * T) + (0.0020708 * T2) + (T3 / 450000.0));
+    double Ls = Physics.Coterminal(280.4664611 + (36000.76983 * T) + (0.0003032 * T2));
+    double Lm = Physics.Coterminal(218.31654591 + (481267.88134236 * T) - (0.00163 * T2) + (T3 / 5388410.0) - (T4 / 65194000.0));
+
+    double Epsilon = 84381.448 - (46.8150 * T) - (0.00059 * T2) + (0.001813 * T3);
+    Epsilon = Physics.Coterminal(Epsilon / 3600.0);
+
+    Omega = Physics.ToRadians(Omega);
+    Ls = Physics.ToRadians(Ls);
+    Lm = Physics.ToRadians(Lm);
+    Epsilon = Physics.ToRadians(Epsilon);
+
+    double DeltaPsi_arcsec =
+        (-17.2 * Math.Sin(Omega)) -
+        (1.32 * Math.Sin(2.0 * Ls)) -
+        (0.23 * Math.Sin(2.0 * Lm)) +
+        (0.21 * Math.Sin(2.0 * Omega));
+
+    Angle DeltaPsi = new Angle(DeltaPsi_arcsec / 3600.0);
+
+    double DeltaEpsilon_arcsec =
+        (9.2 * Math.Cos(Omega)) +
+        (0.57 * Math.Cos(2.0 * Ls)) +
+        (0.10 * Math.Cos(2.0 * Lm)) -
+        (0.09 * Math.Cos(2.0 * Omega));
+
+    Angle DeltaEpsilon = new Angle(DeltaEpsilon_arcsec / 3600.0);
+
+    double EqEq = DeltaPsi.TotalDegrees * Math.Cos(Epsilon + DeltaEpsilon.TotalRadians);
+
+    Console.WriteLine(
+        $"dPsi: {DeltaPsi.TotalDegrees} ({DeltaPsi_arcsec})\n" +
+        $"dEps: {DeltaEpsilon.TotalDegrees} ({DeltaEpsilon_arcsec})\n" +
+        $"EqEq: {EqEq}\n");
+
+    double GAST = Physics.Coterminal(GetGMST(dateTime).TotalDegrees + EqEq);
+
+    return new Angle(GAST);
+}
+
+__________________________________________________________________________
+
+public Angle GetGAST(AstronomicalDateTime dateTime)
+{
+    double days = dateTime.GetTotalTimeFromEpoch().TotalDays;
+    double T = days / 36525.0;
+    double T2 = T * T;
+    double T3 = T2 * T;
+    double T4 = T3 * T;
+
+    double Omega = Physics.Coterminal(125.04452 - (1934.136261 * T) + (0.0020708 * T2) + (T3 / 450000.0));
+    double Ls = Physics.Coterminal(280.4664611 + (36000.76983 * T) + (0.0003032 * T2));
+    double Lm = Physics.Coterminal(218.31654591 + (481267.88134236 * T) - (0.00163 * T2) + (T3 / 5388410.0) - (T4 / 65194000.0));
+
+    double Epsilon = 84381.448 - (46.8150 * T) - (0.00059 * T2) + (0.001813 * T3);
+    Epsilon = Physics.Coterminal(Epsilon / 3600.0);
+
+    double n = Physics.Coterminal(357.52910 + (35999.05030 * T) - (0.0001559 * T2) - (0.00000048 * T3));
+    n = Physics.ToRadians(n);
+
+    double c =
+        ((1.914602 - (0.004817 * T) - (0.000014 * T2)) * Math.Sin(n)) +
+        ((0.019993 - (0.000101 * T)) * Math.Sin(n * 2.0)) +
+        (0.000289 * Math.Sin(n * 3.0));
+
+    Ls = Physics.Coterminal(Ls + c);
+
+    Omega = Physics.ToRadians(Omega);
+    Ls = Physics.ToRadians(Ls);
+    Lm = Physics.ToRadians(Lm);
+    Epsilon = Physics.ToRadians(Epsilon);
+    
+    double DeltaPsi_arcsec =
+        (-17.2 * Math.Sin(Omega)) -
+        (1.32 * Math.Sin(2.0 * Ls)) -
+        (0.23 * Math.Sin(2.0 * Lm)) +
+        (0.21 * Math.Sin(2.0 * Omega));
+
+    Angle DeltaPsi = new Angle(DeltaPsi_arcsec / 3600.0);
+
+    double DeltaEpsilon_arcsec =
+        (9.2 * Math.Cos(Omega)) +
+        (0.57 * Math.Cos(2.0 * Ls)) +
+        (0.10 * Math.Cos(2.0 * Lm)) -
+        (0.09 * Math.Cos(2.0 * Omega));
+
+    Angle DeltaEpsilon = new Angle(DeltaEpsilon_arcsec / 3600.0);
+
+    double EqEq = DeltaPsi.TotalDegrees * Math.Cos(Epsilon + DeltaEpsilon.TotalRadians);
+
+    double GAST = Physics.Coterminal(GetGMST_Accurate(dateTime).TotalDegrees + EqEq);
+
+    return new Angle(GAST);
+}

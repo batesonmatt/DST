@@ -1,0 +1,252 @@
+﻿_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*
+
+
+Issue:
+
+
+The existing Angle type is a readonly value type (struct).
+
+If I wish to keep this as a struct, then it will not be able to inherit from a base type, only interfaces.
+
+I will instead extract an interface for formatting the Angle (IFormattableAngle), and make the enums global.
+
+
+_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*
+
+Plan:
+
+Refactor Angle
+
+	Consider IAngle, IFormattableAngle, abstract FormattableAngle, and AngleFactory
+	
+	BaseAngle		=> defaults to (-360°, 360°)	or just FullAngle, or CyclicAngle
+	LatitudeAngle	=> [-90°, 90°]
+	LongitudeAngle	=> (-180°, 180°]
+	CoterminalAngle	=> [0°, 360°)
+
+	Consider:
+
+	class AngleConverter
+		public static IAngle Convert<T>(IAngle angle) where T : IAngle
+
+
+	Or, extract an interface for each concrete type, thn provide a separate factory creator method
+	for each type.
+
+
+	IFullAngle			=> (-360°, 360°)
+	ILatitudeAngle		=> [-90°, 90°]
+	ILongitudeAngle		=> (-180°, 180°]
+	ICoterminalAngle	=> [0°, 360°)
+
+
+_________________________________________________________________________________________________________
+
+
+Goal:
+
+
+This should allow the creation of Coordinate types without the need for checking/fixing bounds on the
+individual angle values.
+
+This should also avoid many unnecessary conversions to fix an angle onto a specific interval.
+
+
+_________________________________________________________________________________________________________
+
+
+Existing Angle definition:
+
+Angle
+^   public enum FormatType { ... }
+^   public enum FormatModifierType { ... }
+
+~   private static readonly double[] _millisecondsPerUnitComponent
+
+*   public static Angle Zero
+
+B   public double TotalDegrees
+B   public double TotalRadians
+B   public double TotalHours
+
+B   public int Degrees
+B   public int Minutes
+B   public int Seconds
+B   public int Milliseconds
+
+X	private Angle(double degrees, bool allowNegative)
+B	public Angle(double degrees)
+*	public Angle(int degrees)
+*	public Angle(int degrees, int minutes)
+*	public Angle(int degrees, int minutes, int seconds)
+*	public Angle(int degrees, int minutes, int seconds, int milliseconds)
+*	public Angle(TimeSpan time)
+
+B	public static bool operator !=(Angle left, Angle right)
+B   public static bool operator ==(Angle left, Angle right)
+B   public static bool operator <(Angle left, Angle right)
+B   public static bool operator >(Angle left, Angle right)
+B   public static bool operator <=(Angle left, Angle right)
+B   public static bool operator >=(Angle left, Angle right)
+
+B   public static Angle operator +(Angle left, Angle right)
+B   public static Angle operator -(Angle left, Angle right)
+B   public static Angle operator -(Angle angle)
+B   public static Angle operator *(Angle left, Angle right)
+B   public static Angle operator /(Angle left, Angle right)
+
+B   public static implicit operator double(Angle angle)
+B   public static explicit operator Angle(double degrees)
+
+*	public static Angle FromRadians(double radians)
+*   private static double GetCoterminal(double degrees)
+*   public static Angle Coterminal(double degrees)
+*   private static double GetAdjustedTotalDegrees(double totalDegrees, bool allowNegative = true)
+
+B   public Angle Coterminal()
+B   public Angle Flipped()
+B   public Angle Reference()
+
+~   public IEnumerable<int> GetComponents(int precision = 4)
+~   private int GetComponent(int index)
+
+B   private double ToRadians()
+B   public TimeSpan ToTime()
+
+X   public override bool Equals(object? obj)
+X   public override int GetHashCode()
+
+^   public override string ToString()
+^   public string ToString(FormatType format, FormatModifierType modifier)
+
+
+Legend:
+
+	^	Make its own type, or move to a new type
+	~	Refactor, redesign, or work to remove
+	*	Belongs in a factory creator class
+	B	Belongs in Base class
+	X	Remove
+
+
+_________________________________________________________________________________________________________
+
+
+namespace Angle ...
+
+
+
+internal enum FormatType { ... }
+
+internal enum FormatModifierType { ... }
+
+
+
+interface IFormattableAngle
+    string Format()
+    string Format(FormatType)
+	string Format(FormatType, FormatModifierType)
+
+abstract class FormattableAngle : IFormattableAngle
+    public string override ToString() => Format()
+	public string Format()
+	public string Format(FormatType)
+    public abstract string Format(FormatType, FormatModifierType)
+
+
+
+interface IAngle
+	double TotalDegrees { get; }
+	double TotalRadians { get; }
+	double TotalHours { get; }
+	int Degrees { get; }
+    int Minutes { get; }
+    int Seconds { get; }
+    int Milliseconds { get; }
+
+abstract class BaseAngle : IAngle, IFormattableAngle
+	public double TotalDegrees => _totalDegrees
+	public double TotalRadians
+	public double TotalHours
+	public int Degrees
+    public int Minutes
+    public int Seconds
+    public int Milliseconds
+	public BaseAngle(double degrees)
+
+	// Consider private helper methods for the concrete constructors, if necessary
+	public Angle Coterminal()
+    public Angle Flipped()
+    public Angle Reference()
+
+	private double ToRadians()
+    public TimeSpan ToTime()
+
+	public static bool operator !=(IAngle left, IAngle right)
+    public static bool operator ==(IAngle left, IAngle right)
+    public static bool operator <(IAngle left, IAngle right)
+    public static bool operator >(IAngle left, IAngle right)
+    public static bool operator <=(IAngle left, IAngle right)
+    public static bool operator >=(IAngle left, IAngle right)
+	public static IAngle operator +(IAngle left, IAngle right)
+    public static IAngle operator -(IAngle left, IAngle right)
+    public static IAngle operator -(IAngle angle)
+    public static IAngle operator *(IAngle left, IAngle right)
+    public static IAngle operator /(IAngle left, IAngle right)
+    public static implicit operator double(IAngle angle)
+    public static explicit operator IAngle(double degrees)
+
+	public string override ToString() => Format()
+	public string Format()
+	public string Format(FormatType)
+    public abstract string Format(FormatType, FormatModifierType)
+
+
+
+
+interface IFullAngle
+
+class FullAngle : BaseAngle, IFullAngle
+
+class FullAngleFactory
+    public static IFullAngle Create()
+
+
+
+ILatitudeAngle
+
+class LatitudeAngle : BaseAngle, ILatitudeAngle
+
+ILongitudeAngle
+
+class LongitudeAngle : BaseAngle, ILongitudeAngle
+
+ICoterminalAngle
+
+class CoterminalAngle : BaseAngle, ICoterminalAngle
+
+
+
+Consider:
+
+class AngleFactory
+	public static IFormattableAngle GetFormattableAngle(IAngle angle)
+		if (angle is IFormattable formattable)
+			return formattable
+		return null
+
+
+_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*
+
+
+Issue:
+
+
+The existing Angle type is a readonly value type (struct).
+
+If I wish to keep this as a struct, then it will not be able to inherit from a base type, only interfaces.
+
+I will instead extract an interface for formatting the Angle (IFormattableAngle), and make the enums global.
+
+
+_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*

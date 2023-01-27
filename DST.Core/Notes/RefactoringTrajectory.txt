@@ -1,0 +1,354 @@
+﻿BUG:
+
+The current implementation for RiseSetTrajectory.IsAboveHorizon(AstronomicalDateTime) looks wrong.
+
+Cos(LHA) > 0 does not indicate the object is above the observer's horizon.
+
+Instead, do something like:
+
+	If GetRiseLocalHourAngle() < LHA < GetSetLocalHourAngle() => Above Horizon
+
+	Careful - I need to do a little math to determine the < and > ranges.
+
+__________________________________________________________________________
+Problem:
+
+...
+
+Concepts for GetRise, GetSet, and GetApex methods is confusing.
+
+These methods have two overloads each:
+1. Calculates the Rise, Set, or Apex vector at the current datetime
+2. Calculates the Rise, Set, or Apex vector at a specified datetime
+
+...
+
+These methods make a call to BaseTrajectory.CalculateVector.
+
+This method takes a boolean arg 'next'.
+
+This method makes a call to BaseLocalHourAngleDateTime.Calculate.
+
+This method takes the same boolean arg 'next' passed into BaseTrajectory.CalculateVector.
+
+This arg determines whether to:
+1. Start from the exact time on the given date (true).
+2. Start from midnight on the given date (false).
+
+...
+
+I do not like this, and it currently does not always work as intended.
+
+-------------------------------------------------
+
+Front-end UI design plan:
+
+...
+
+User chooses an object to track, locate, or otherwise get info.
+
+If the ITrajectory for this object is IVisibleTrajectory or IVariableTrajectory, 
+then the user may have the option to track the object at various LHA positions.
+
+These positions are the Rise, Set, and Apex positions.
+
+If the object is IVisibleTrajectory, the user may get the Apex info.
+
+If the object is also IVariableTrajectory, the user may get the Rise and Set info.
+
+...
+
+Upon initially selecting an object, I would like to display info for the Rise, Set, and Apex
+for the object's current/next cycle, if possible for the given object and user's location.
+
+[Display info for Rise, Set, and/or Apex IN THAT ORDER]
+
+So:
+
+If the object is IVariableTrajectory:
+	If the object is above the horizon:
+		"Object is in your sky now"
+		
+		If the object is also IRiseSetTrajectory:
+			Get previous Rise vector
+			Get next Set vector
+
+		If the object is rising/approaching apex:
+			Get next Apex vector
+		Else
+			Get previous Apex vector
+
+	Else
+		"Object is not yet in your sky"
+		
+		If the object is also IRiseSetTrajectory:
+			Get next Rise vector
+			Get next Set vector
+
+		Get next Apex vector
+
+...
+
+I would also like to allow the user to track the object at these LHA positions over time.
+
+Upon selecting an object and viewing any info about it, the user may choose to "Track" this object.
+
+In addition to normal tracking support, the user can also track Rise, Set, and/or Apex positions,
+only if this object is IVisibleTrajectory (Apex) and/or IVariableTrajectory (Rise and Set).
+
+So:
+
+If object is IVisibleTrajectory:
+
+	If object is also IVariableTrajectory:
+		Enable checkbox options for tracking at Rise and Set.
+
+	Enable checkbox option for tracking at Apex.
+
+
+I would like the algorithm for actually tracking at LHA positions to be similar to the initial 
+info display from above, but iterative.
+
+The user will provide the following:
+- Options (Rise, Set, and/or Apex)
+- Starting datetime
+- Number of cycles
+- Tracking Algorithm (MeanSiderealTime, ApparentSiderealTime, or EarthRotationAngle)
+
+Create a new ITimeKeeper and IObserver if the chosen algorithm is different from the default (MeanSiderealTime).
+
+Try to start with the Rise vector first by default.
+
+Since there's no way to differentiate the types of vectors (Rise, Set, Apex),
+Consider returning a 2D array.
+- IVector[,] => where the first dimension is the number of cycles, the second is the number of options.
+- The options will always be in order by Rise, Set, and/or Apex.
+
+Also consider an overload if a single option is given:
+- IVector Track(start, cycles, option)
+
+// Consider revising this through a factory design.
+// May need to use IDateTimeAdder to make sure the days are added in the correct timescale.
+For the number of cycles:
+	If Rise option specified
+		If object is IVariableTrajectory
+			Get Rise vector and add to appropriate cycle index and column in list
+	If Set option specified
+		If object is IVariableTrajectory
+			Get Set vector and add to appropriate cycle index and column in list
+	If Apex option specified
+		If object is IVisibleTrajectory
+			Get Apex vector and add to appropriate cycle index and column in list
+
+-------------------------------------------------
+
+Current design:
+
+ITrajectory
+	bool IsAboveHorizon()
+
+IVisibleTrajectory
+    bool IsAboveHorizon(AstronomicalDateTime dateTime)
+    IVector GetApex()
+    IVector GetApex(AstronomicalDateTime dateTime)
+
+IVariableTrajectory
+    IVector GetRise()
+    IVector GetRise(AstronomicalDateTime dateTime)
+    IVector GetSet()
+    IVector GetSet(AstronomicalDateTime dateTime)
+
+abstract BaseTrajectory : ITrajectory
+    ILocalObserver _localObserver;
+    ITracker _tracker;
+    BaseTrajectory(ILocalObserver localObserver)
+    IVector CalculateVector(Angle lhaTarget, AstronomicalDateTime start, bool next)
+    abstract bool IsAboveHorizon()
+
+abstract class BaseVisibleTrajectory : BaseTrajectory, IVisibleTrajectory
+    BaseVisibleTrajectory(ILocalObserver localObserver) : base(localObserver)
+    IVector GetApex()
+    IVector GetApex(AstronomicalDateTime dateTime)
+    abstract bool IsAboveHorizon(AstronomicalDateTime dateTime)
+
+CircumpolarTrajectory : BaseVisibleTrajectory, IVisibleTrajectory
+    CircumpolarTrajectory(ILocalObserver localObserver) : base(localObserver)
+    bool IsAboveHorizon()
+    bool IsAboveHorizon(AstronomicalDateTime dateTime)
+    string ToString()
+
+RiseSetTrajectory : BaseVisibleTrajectory, IVariableTrajectory
+    RiseSetTrajectory(ILocalObserver localObserver) : base(localObserver)
+    IVector GetRise()
+    IVector GetRise(AstronomicalDateTime dateTime)
+    IVector GetSet()
+    IVector GetSet(AstronomicalDateTime dateTime)
+    bool IsAboveHorizon()
+    bool IsAboveHorizon(AstronomicalDateTime dateTime)
+    string ToString()
+    Angle GetSetHourAngle()
+    Angle GetRiseHourAngle()
+    Angle GetZeroAltitudeHourAngle()
+
+NeverRiseTrajectory : BaseTrajectory
+    NeverRiseTrajectory(ILocalObserver localObserver) : base(localObserver)
+    bool IsAboveHorizon()
+    string ToString()
+
+TrajectoryFactory
+    ITrajectory Create(IObserver observer, string trajectoryName)
+    ITrajectory Create(ILocalObserver localObserver, string trajectoryName)
+
+TrajectoryCalculator
+    ITrajectory Calculate(IObserver observer)
+    ITrajectory Calculate(ILocalObserver localObserver)
+
+-------------------------------------------------
+
+Redesign:
+
+
+*** Consider: ***
+    
+CircumpolarOffsetTrajectory : BaseTrajectory, ITrajectory, IVisibleTrajectory, IVariableTrajectory
+
+CircumpolarTrajectory : BaseTrajectory, ITrajectory, IVisibleTrajectory
+    => where observer.Location.IsAxial()
+
+    This check will go in TrajectoryCalculator.Calculate(...)
+        
+    ...
+    else if (Math.Abs(phi + delta) > 90.0)
+    {
+        trajectoryName = localObserver.Location.IsAxial() ? DiurnalArc.Circumpolar : DiurnalArc.CircumpolarOffset;
+    }
+
+*****************
+
+
+bool IsRising(AstronomicalDateTime dateTime)
+- For NeverRiseTrajectory           => return false
+* For RiseSetTrajectory             => return GetRiseHourAngle() < LHA < 0
+- For CircumpolarTrajectory         => return false
+- For CircumpolarOffsetTrajectory   => return sin(LHA) < 0 ... 180 < LHA < 360
+
+
+bool IsSetting(AstronomicalDateTime dateTime)
+- For NeverRiseTrajectory           => return false
+* For RiseSetTrajectory             => return 0 < LHA < GetSetHourAngle()
+- For CircumpolarTrajectory         => return false
+- For CircumpolarOffsetTrajectory   => return sin(LHA) >= 0 ... 0 <= LHA <= 180
+
+
+bool IsAboveHorizon(AstronomicalDateTime dateTime)
+- For NeverRiseTrajectory           => return false
+- For RiseSetTrajectory             => return GetRiseHourAngle() < LHA < 360 || 0 <= LHA <= GetSetHourAngle()
+                                    => Or, return NOT [GetSetHourAngle() <= LHA && LHA <= GetRiseHourAngle()]
+- For CircumpolarTrajectory         => return true
+- For CircumpolarOffsetTrajectory   => return true
+
+enum HourAngleCycle
+    Previous
+    Next
+
+// This implementation is only for CircumpolarOffsetTrajectory
+IVector GetApex(AstronomicalDateTime dateTime)
+    return CalculateVector(dateTime, Angle.Zero, HourAngleCycle.Next)
+
+// This implementation is only for RiseSetTrajectory
+IVector GetApex(AstronomicalDateTime dateTime)
+    If IsAboveHorizon(dateTime)
+        If IsRising(dateTime)
+            return CalculateVector(dateTime, Angle.Zero, HourAngleCycle.Next)
+        Else
+            return CalculateVector(dateTime, Angle.Zero, HourAngleCycle.Previous)
+    Else
+        return CalculateVector(dateTime, Angle.Zero, HourAngleCycle.Next)
+
+// This implementation is only for RiseSetTrajectory
+IVector GetRise(AstronomicalDateTime dateTime)
+    If IsAboveHorizon(dateTime)
+        If IsRising(dateTime)
+            return CalculateVector(dateTime, GetRiseHourAngle(), HourAngleCycle.Previous)
+        Else
+            return CalculateVector(dateTime, GetRiseHourAngle(), HourAngleCycle.Next)
+    Else
+        return CalculateVector(dateTime, GetRiseHourAngle(), HourAngleCycle.Next)
+
+// This implementation is only for RiseSetTrajectory
+IVector GetSet(AstronomicalDateTime dateTime)
+    return CalculateVector(dateTime, GetSetHourAngle(), HourAngleCycle.Next)
+
+
+IVector CalculateVector(AstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle) ...
+
+...
+
+Note:
+
+If is NOT IVariableTrajectory, and IsAboveHorizon(...) == true
+    This is a CircumpolarTrajectory and is always visible
+
+If is NOT IVariableTrajectory, and IsAboveHorizon(...) == false
+    This is a NeverRiseTrajectory and is never visible
+
+If is IVariableTrajectory
+    Tracking Apex is permitted.
+
+If is IRiseSetTrajectory
+    Tracking Rise, Set, and Apex is permitted.
+
+...
+
+ITrajectory
+	bool IsAboveHorizon(AstronomicalDateTime dateTime)
+
+IVariableTrajectory : ITrajectory
+    IVector GetApex(AstronomicalDateTime dateTime)
+
+IRiseSetTrajectory : IVariableTrajectory, ITrajectory
+    bool IsRising(AstronomicalDateTime dateTime)
+    bool IsSetting(AstronomicalDateTime dateTime)
+    IVector GetRise(AstronomicalDateTime dateTime)
+    IVector GetSet(AstronomicalDateTime dateTime)
+
+abstract BaseTrajectory : ITrajectory
+    ILocalObserver _localObserver;
+    ITracker _tracker;
+    BaseTrajectory(ILocalObserver localObserver)
+    IVector CalculateVector(AstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle)
+    abstract bool IsAboveHorizon(AstronomicalDateTime dateTime)
+
+abstract BaseVariableTrajectory : BaseTrajectory, ITrajectory, IVariableTrajectory
+    BaseVariableTrajectory(ILocalObserver localObserver) : base (localObserver)
+    public abstract override bool IsAboveHorizon(AstronomicalDateTime dateTime);
+    abstract IVector GetApex(AstronomicalDateTime dateTime)
+
+NeverRiseTrajectory : BaseTrajectory, ITrajectory
+    NeverRiseTrajectory(ILocalObserver localObserver) : base (localObserver)
+    override bool IsAboveHorizon(AstronomicalDateTime dateTime) => false;
+    override string ToString() => DiurnalArc.NeverRise;
+
+CircumpolarTrajectory : BaseTrajectory, ITrajectory
+    CircumpolarTrajectory(ILocalObserver localObserver) : base (localObserver)
+    override bool IsAboveHorizon(AstronomicalDateTime dateTime) => true;
+    override string ToString() => DiurnalArc.Circumpolar;
+
+CircumpolarOffsetTrajectory : BaseVariableTrajectory, ITrajectory, IVariableTrajectory
+    CircumpolarOffsetTrajectory(ILocalObserver localObserver) : base (localObserver)
+    override bool IsAboveHorizon(AstronomicalDateTime dateTime) => true;
+    override IVector GetApex(AstronomicalDateTime dateTime) ...
+    override string ToString() => DiurnalArc.CircumpolarOffset;
+
+RiseSetTrajectory : BaseVariableTrajectory, ITrajectory, IVariableTrajectory, IRiseSetTrajectory
+    RiseSetTrajectory(ILocalObserver localObserver) : base (localObserver)
+    override bool IsAboveHorizon(AstronomicalDateTime dateTime) ...
+    override IVector GetApex(AstronomicalDateTime dateTime) ...
+    bool IsRising(AstronomicalDateTime dateTime) ...
+    bool IsSetting(AstronomicalDateTime dateTime) ...
+    IVector GetRise(AstronomicalDateTime dateTime) ...
+    IVector GetSet(AstronomicalDateTime dateTime) ...
+    private Angle GetZeroAltitudeHourAngle() ...
+    private Angle GetRiseHourAngle() ...
+    private Angle GetSetHourAngle() ...
+    override string ToString() => DiurnalArc.RiseSet;
