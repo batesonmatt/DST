@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DST.Models.DataLayer
 {
-    public class DsoContext : DbContext
+    public class MainDbContext : DbContext
     {
         #region Properties
 
@@ -17,7 +17,7 @@ namespace DST.Models.DataLayer
 
         #region Constructors
 
-        public DsoContext(DbContextOptions<DsoContext> options)
+        public MainDbContext(DbContextOptions<MainDbContext> options)
             : base(options)
         { }
 

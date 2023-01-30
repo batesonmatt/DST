@@ -22,7 +22,7 @@ namespace DST.Controllers
 
         #region Constructors
 
-        public SearchController(DsoContext context)
+        public SearchController(MainDbContext context)
         {
             _data = new SearchUnitOfWork(context);
         }

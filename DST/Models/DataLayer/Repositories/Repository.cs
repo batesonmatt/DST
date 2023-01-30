@@ -21,7 +21,7 @@ namespace DST.Models.DataLayer.Repositories
 
         #region Fields
         
-        protected DsoContext _context;
+        protected MainDbContext _context;
 
         private readonly DbSet<T> _dbset;
 
@@ -31,7 +31,7 @@ namespace DST.Models.DataLayer.Repositories
 
         #region Constructors
 
-        public Repository(DsoContext context)
+        public Repository(MainDbContext context)
         {
             _context = context;
             _dbset = _context.Set<T>();

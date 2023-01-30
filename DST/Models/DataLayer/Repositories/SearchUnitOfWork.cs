@@ -3,7 +3,7 @@
 namespace DST.Models.DataLayer.Repositories
 {
     /// <summary>
-    /// A unit of work providing repositories for a read-only DsoContext.
+    /// A unit of work providing repositories for a read-only MainDbContext.
     /// </summary>
     public class SearchUnitOfWork
     {
@@ -78,7 +78,7 @@ namespace DST.Models.DataLayer.Repositories
 
         #region Fields
 
-        private readonly DsoContext _context;
+        private readonly MainDbContext _context;
 
         private Repository<DsoModel> _dsoData;
         private Repository<DsoTypeModel> _typeData;
@@ -90,7 +90,7 @@ namespace DST.Models.DataLayer.Repositories
 
         #region Constructors
 
-        public SearchUnitOfWork(DsoContext context)
+        public SearchUnitOfWork(MainDbContext context)
             => _context = context;
 
         #endregion

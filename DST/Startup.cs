@@ -31,8 +31,8 @@ namespace DST
             services.AddControllersWithViews().AddNewtonsoftJson();
 
             // Enable dependency injection for DbContext objects.
-            services.AddDbContext<DsoContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DsoContext")));
+            services.AddDbContext<MainDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("MainDbContext")));
 
             // Make URLs lowercase and end with a trailing slash.
             services.AddRouting(options =>

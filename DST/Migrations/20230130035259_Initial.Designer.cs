@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DST.Migrations
 {
-    [DbContext(typeof(DsoContext))]
-    [Migration("20211011220139_Initial")]
+    [DbContext(typeof(MainDbContext))]
+    [Migration("20230130035259_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace DST.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Messier.Models.DomainModels.CatalogModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.CatalogModel", b =>
                 {
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
@@ -41,7 +41,7 @@ namespace DST.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.ConstellationModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.ConstellationModel", b =>
                 {
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
@@ -680,7 +680,7 @@ namespace DST.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.DsoModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.DsoModel", b =>
                 {
                     b.Property<string>("CatalogName")
                         .HasColumnType("nvarchar(450)");
@@ -3461,7 +3461,7 @@ namespace DST.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.DsoTypeModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.DsoTypeModel", b =>
                 {
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(450)");
@@ -3497,7 +3497,7 @@ namespace DST.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.SeasonModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.SeasonModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3543,9 +3543,9 @@ namespace DST.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.ConstellationModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.ConstellationModel", b =>
                 {
-                    b.HasOne("Messier.Models.DomainModels.SeasonModel", "Season")
+                    b.HasOne("DST.Models.DomainModels.SeasonModel", "Season")
                         .WithMany("Children")
                         .HasForeignKey("SeasonId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -3554,21 +3554,21 @@ namespace DST.Migrations
                     b.Navigation("Season");
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.DsoModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.DsoModel", b =>
                 {
-                    b.HasOne("Messier.Models.DomainModels.CatalogModel", "Catalog")
+                    b.HasOne("DST.Models.DomainModels.CatalogModel", "Catalog")
                         .WithMany("Children")
                         .HasForeignKey("CatalogName")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Messier.Models.DomainModels.ConstellationModel", "Constellation")
+                    b.HasOne("DST.Models.DomainModels.ConstellationModel", "Constellation")
                         .WithMany("Children")
                         .HasForeignKey("ConstellationName")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Messier.Models.DomainModels.DsoTypeModel", "DsoType")
+                    b.HasOne("DST.Models.DomainModels.DsoTypeModel", "DsoType")
                         .WithMany("Children")
                         .HasForeignKey("Type")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -3581,22 +3581,22 @@ namespace DST.Migrations
                     b.Navigation("DsoType");
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.CatalogModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.CatalogModel", b =>
                 {
                     b.Navigation("Children");
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.ConstellationModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.ConstellationModel", b =>
                 {
                     b.Navigation("Children");
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.DsoTypeModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.DsoTypeModel", b =>
                 {
                     b.Navigation("Children");
                 });
 
-            modelBuilder.Entity("Messier.Models.DomainModels.SeasonModel", b =>
+            modelBuilder.Entity("DST.Models.DomainModels.SeasonModel", b =>
                 {
                     b.Navigation("Children");
                 });
