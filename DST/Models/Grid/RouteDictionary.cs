@@ -37,55 +37,55 @@ namespace DST.Models.Grid
 
         public ListFilter TypeFilter
         {
-            get => new ListFilter(FilterKeys[0], Get(FilterKeys[0]));
+            get => new(FilterKeys[0], Get(FilterKeys[0]));
             set => this[FilterKeys[0]] = value.Value;
         }
 
         public ListFilter CatalogFilter
         {
-            get => new ListFilter(FilterKeys[1], Get(FilterKeys[1]));
+            get => new(FilterKeys[1], Get(FilterKeys[1]));
             set => this[FilterKeys[1]] = value.Value;
         }
 
         public ListFilter ConstellationFilter
         {
-            get => new ListFilter(FilterKeys[2], Get(FilterKeys[2]));
+            get => new(FilterKeys[2], Get(FilterKeys[2]));
             set => this[FilterKeys[2]] = value.Value;
         }
 
         public ListFilter SeasonFilter
         {
-            get => new ListFilter(FilterKeys[3], Get(FilterKeys[3]));
+            get => new(FilterKeys[3], Get(FilterKeys[3]));
             set => this[FilterKeys[3]] = value.Value;
         }
 
         public ToggleFilter LocalFilter
         {
-            get => new ToggleFilter(FilterKeys[4], Get(FilterKeys[4]));
+            get => new(FilterKeys[4], Get(FilterKeys[4]));
             set => this[FilterKeys[4]] = value.Value;
         }
 
         public ToggleFilter HasNameFilter
         {
-            get => new ToggleFilter(FilterKeys[5], Get(FilterKeys[5]));
+            get => new(FilterKeys[5], Get(FilterKeys[5]));
             set => this[FilterKeys[5]] = value.Value;
         }
 
         public ToggleFilter VisibilityFilter
         {
-            get => new ToggleFilter(FilterKeys[6], Get(FilterKeys[6]));
+            get => new(FilterKeys[6], Get(FilterKeys[6]));
             set => this[FilterKeys[6]] = value.Value;
         }
 
         public ToggleFilter RiseTimeFilter
         {
-            get => new ToggleFilter(FilterKeys[7], Get(FilterKeys[7]));
+            get => new(FilterKeys[7], Get(FilterKeys[7]));
             set => this[FilterKeys[7]] = value.Value;
         }
 
         public ListFilter TrajectoryFilter
         {
-            get => new ListFilter(FilterKeys[8], Get(FilterKeys[8]));
+            get => new(FilterKeys[8], Get(FilterKeys[8]));
             set => this[FilterKeys[8]] = value.Value;
         }
 
@@ -123,19 +123,19 @@ namespace DST.Models.Grid
 
         private string Get(string key)
         {
-            if (Keys == null || key == null)
+            if (Keys is null || key is null)
             {
-                return null;
+                return string.Empty;
             }
 
-            return Keys.Contains(key) ? this[key] : null;
+            return TryGetValue(key, out string value) ? value : string.Empty;
         }
 
         private void Set(string key, string value)
         {
-            if (Keys != null && key != null)
+            if (Keys is not null && key is not null)
             {
-                if (Keys.Contains(key))
+                if (ContainsKey(key))
                 {
                     this[key] = value;
                 }
@@ -170,7 +170,7 @@ namespace DST.Models.Grid
 
         public RouteDictionary Clone()
         {
-            RouteDictionary clone = new RouteDictionary();
+            RouteDictionary clone = new();
 
             if (Keys != null)
             {

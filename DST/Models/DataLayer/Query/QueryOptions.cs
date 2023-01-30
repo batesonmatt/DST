@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace DST.Models.DataLayer.Query
@@ -20,10 +19,7 @@ namespace DST.Models.DataLayer.Query
         {
             set
             {
-                if (OrderByAll == null)
-                {
-                    OrderByAll = new OrderClauses<T>();
-                }
+                OrderByAll ??= new OrderClauses<T>();
 
                 OrderByAll.Add(value);
             }
@@ -35,10 +31,7 @@ namespace DST.Models.DataLayer.Query
         {
             set
             {
-                if (WhereAll == null)
-                {
-                    WhereAll = new WhereClauses<T>();
-                }
+                WhereAll ??= new WhereClauses<T>();
 
                 WhereAll.Add(value);
             }
@@ -66,12 +59,10 @@ namespace DST.Models.DataLayer.Query
         #region Methods
 
         public string[] GetIncludes()
-            => _includes ?? new string[0];
+        {
+            return _includes ?? Array.Empty<string>();
+        }
 
         #endregion
     }
 }
-
-public class OrderClauses<T> : List<Expression<Func<T, object>>> { }
-
-public class WhereClauses<T> : List<Expression<Func<T, bool>>> { }

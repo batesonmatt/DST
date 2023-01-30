@@ -13,10 +13,7 @@ namespace DST.Models.DataLayer.Repositories
         {
             get
             {
-                if (_dsoData == null)
-                {
-                    _dsoData = new Repository<DsoModel>(_context);
-                }
+                _dsoData ??= new Repository<DsoModel>(_context);
 
                 return _dsoData;
             }
@@ -26,10 +23,7 @@ namespace DST.Models.DataLayer.Repositories
         {
             get
             {
-                if (_typeData == null)
-                {
-                    _typeData = new Repository<DsoTypeModel>(_context);
-                }
+                _typeData ??= new Repository<DsoTypeModel>(_context);
 
                 return _typeData;
             }
@@ -39,10 +33,7 @@ namespace DST.Models.DataLayer.Repositories
         {
             get
             {
-                if (_catalogData == null)
-                {
-                    _catalogData = new Repository<CatalogModel>(_context);
-                }
+                _catalogData ??= new Repository<CatalogModel>(_context);
 
                 return _catalogData;
             }
@@ -52,10 +43,7 @@ namespace DST.Models.DataLayer.Repositories
         {
             get
             {
-                if (_constellationData == null)
-                {
-                    _constellationData = new Repository<ConstellationModel>(_context);
-                }
+                _constellationData ??= new Repository<ConstellationModel>(_context);
 
                 return _constellationData;
             }
@@ -65,10 +53,7 @@ namespace DST.Models.DataLayer.Repositories
         {
             get
             {
-                if (_seasonData == null)
-                {
-                    _seasonData = new Repository<SeasonModel>(_context);
-                }
+                _seasonData ??= new Repository<SeasonModel>(_context);
 
                 return _seasonData;
             }

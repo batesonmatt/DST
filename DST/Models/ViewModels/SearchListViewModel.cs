@@ -21,7 +21,7 @@ namespace DST.Models.ViewModels
         public IEnumerable<SeasonModel> Seasons { get; set; }
 
         public Dictionary<string, string> Trajectories
-            => new Dictionary<string, string>
+            => new()
             {
                 { nameof(Trajectory.RiseSet), Trajectory.RiseSet },
                 { nameof(Trajectory.Circumpolar), Trajectory.Circumpolar },

@@ -36,7 +36,7 @@ namespace DST.Models.Extensions
                 return string.Empty;
             }
 
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
 
             foreach (char c in value)
             {

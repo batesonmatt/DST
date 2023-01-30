@@ -12,20 +12,11 @@ namespace DST.Models.DataLayer.Query
         {
             get => _value;
 
-            set
+            set => _value = value switch
             {
-                switch (value)
-                {
-                    case _on:
-                    case _off:
-                        _value = value;
-                        break;
-
-                    default:
-                        _value = Off;
-                        break;
-                }
-            }
+                _on or _off => value,
+                _ => Off,
+            };
         }
 
         public static string On { get; } = _on;

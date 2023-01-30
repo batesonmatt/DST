@@ -42,9 +42,9 @@ namespace DST.Controllers
         public ViewResult List(SearchGridDTO values)
         {
             // Get GridBuilder object, load route segments, and store in session.
-            SearchGridBuilder builder = new SearchGridBuilder(HttpContext.Session, values);
+            SearchGridBuilder builder = new(HttpContext.Session, values);
 
-            SearchQueryOptions options = new SearchQueryOptions
+            SearchQueryOptions options = new()
             {
                 // Include = "Constellation",
                 PageNumber = builder.CurrentRoute.PageNumber,
@@ -54,7 +54,7 @@ namespace DST.Controllers
 
             options.SortFilter(builder, _geoLocation);
 
-            SearchListViewModel viewModel = new SearchListViewModel
+            SearchListViewModel viewModel = new()
             {
                 GeoLocation = _geoLocation,
 
@@ -100,7 +100,7 @@ namespace DST.Controllers
         [HttpPost]
         public RedirectToActionResult Filter(string[] filterIds, string[] filters, string[] options, bool clear = false)
         {
-            SearchGridBuilder builder = new SearchGridBuilder(HttpContext.Session);
+            SearchGridBuilder builder = new(HttpContext.Session);
 
             if (clear)
             {
@@ -108,7 +108,7 @@ namespace DST.Controllers
             }
             else
             {
-                List<IFilter> form = new List<IFilter>();
+                List<IFilter> form = new();
 
                 if (filters?.Length <= filterIds?.Length)
                 {
