@@ -172,7 +172,7 @@ namespace DST.Models.Grid
         {
             RouteDictionary clone = new();
 
-            if (Keys != null)
+            if (Keys is not null)
             {
                 foreach (string key in Keys)
                 {
@@ -185,7 +185,7 @@ namespace DST.Models.Grid
 
         public void ClearFilters()
         {
-            if (Keys != null)
+            if (Keys is not null)
             {
                 string[] keys = FilterKeys;
                 IFilter[] filters = Filters;
@@ -201,10 +201,7 @@ namespace DST.Models.Grid
 
         public void SetFilters(IFilter[] filters)
         {
-            if (filters == null)
-            {
-                throw new ArgumentNullException(nameof(filters));
-            }
+            _ = filters ?? throw new ArgumentNullException(nameof(filters));
 
             foreach (IFilter filter in filters)
             {

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace DST.Models.DTOs
 {
+    /* Consider renaming since the page using this DTO does not use a grid. */
     public class SearchGridDTO : GridDTO
     {
         #region Properties

@@ -1,5 +1,6 @@
 ﻿namespace DST.Models.DataLayer.Query
 {
+    /* Revise this concept, now that the DST.Core library has been added. */
     public static class Trajectory
     {
         #region Properties

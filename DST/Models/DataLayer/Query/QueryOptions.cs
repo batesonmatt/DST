@@ -37,9 +37,9 @@ namespace DST.Models.DataLayer.Query
             }
         }
 
-        public bool HasWhere => WhereAll != null;
+        public bool HasWhere => WhereAll is not null;
 
-        public bool HasOrderBy => OrderByAll != null;
+        public bool HasOrderBy => OrderByAll is not null;
 
         public bool HasPaging => PageNumber > 0 && PageSize > 0;
 

@@ -12,7 +12,7 @@ namespace DST.Models.Extensions
         {
             string value = session.GetString(key);
 
-            return value == null ? default : JsonConvert.DeserializeObject<T>(value);
+            return value is null ? default : JsonConvert.DeserializeObject<T>(value);
         }
     }
 }

@@ -1,0 +1,273 @@
+﻿This document outlines all important aspects for this project.
+_________________________________________________________________________________
+
+
+Program.cs
+
+Builds the web host and specifies the startup type for the web host.
+
+
+_________________________________________________________________________________
+
+
+Startup.cs
+
+Configures runtime services for the application, including dependency injection for 
+DbContext objects, and routing options like lowercase urls.
+
+Configures the middleware for the HTTP/HTTPS request pipeline at runtime.
+
+Defines endpoint routes for filtering and sorting, paging, and more.
+
+
+_________________________________________________________________________________
+
+
+Properties\launchSettings.json
+
+Defines the local, development settings for the IIS Express and Kestrel (Project) environments.
+
+Is only used on the local development machine.
+Is not deployed.
+Contains profile settings.
+
+
+_________________________________________________________________________________
+
+
+wwwroot\
+
+Contains static files such as css definitions, images, JavaScript, and designer 
+libraries used by the application front-end during runtime.
+
+
+_________________________________________________________________________________
+
+
+Controllers\
+
+These classes contain code that receives requests from the users, gets the appropriate
+data, stores the data in the model, and passes the model to the appropriate view.
+
+The default controller is "Home" (HomeController), as defined in the default route
+in the Startup type.
+
+
+_________________________________________________________________________________
+
+
+Migrations\
+
+Generated files that contains code for creating, modifying, or deleting database objects.
+
+Contains an Up() method that implements a migration, and a Down() method that rolls
+back a migration.
+
+This project uses a code-first approach using EF Core to build the database.
+
+Use the Package Manager Console (PMC) to add or revert migrations and update the
+database using the migrations.
+
+Make sure the connection string and dependency injection are set up properly.
+
+
+_________________________________________________________________________________
+
+
+Models\
+
+Defines classes that model data for the app.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\
+
+Contains code that accesses, interacts with, or is related to the database.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\DataStore\
+
+Contains all the hard-coded data that used to create the migrations and build 
+the database.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\Query\
+
+Contains code that directly interacts with the database.
+
+Typically, data will be queried from the database, which may then be sorted, filtered, 
+or otherwise searched based on criteria.
+
+There will be no code that modifies or deletes data from the database.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\Repositories\
+
+Contains code that encapsulates data code within a data access layer to provide 
+a layer of abstraction.
+
+Basically, a repository exposes basic CRUD (Create, Read, Update, Delete) operations
+for each entity in the database.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\MainDbContext.cs
+
+This DbContext type is the primary class for communicating with the database.
+
+Defines DbSet objects, representing collections of model classes that map to 
+the databse tables.
+
+Uses the DataStore classes to seed the initial data for the database.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\DomainModels\
+
+Contains all the entity model code that corresponds to the tables in the database.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\DTOs\
+
+These are Data Transfer Object classes.
+
+Responsible for model-binding the route values.
+
+Contains code that binds the custom route values defined in the Startup class to
+an appropriate action method.
+
+The names of the properties must match the names of the route parameters, and must
+also be primitive data types, or types with ToString() implementations.
+
+The properties may define default values in place.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\Extensions\
+
+Contains extension methods for various types.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\Grid\
+
+Contains a RouteDictionary class responsible for storing and retrieving route 
+parameters for paging, sorting, and filtering.
+
+Contains a basic GridBuilder class that stores route parameters and retrieves them
+from session state.
+
+Contains a custom SearchGridBuilder class that adds functionality for filtering.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\Services\
+
+Serves as a placeholder where any third-party services may go.
+
+
+_________________________________________________________________________________
+
+
+Models\DataLayer\ViewModels\
+
+Contains lightweight classes that hold all the data a particular view needs.
+
+
+_________________________________________________________________________________
+
+
+Notes\
+
+Contains all the informational notes for this project.
+
+
+_________________________________________________________________________________
+
+
+Views\
+
+Contains all the viewable pages (Razor views) for the front-end design.
+
+
+_________________________________________________________________________________
+
+
+Views\Home\
+
+Contains all the pages for the Home controller.
+
+
+_________________________________________________________________________________
+
+
+Views\Search\
+
+Contains all the pages for the Search controller.
+
+
+_________________________________________________________________________________
+
+
+Views\Shared\
+
+Contains layout pages (partial views) that may be shared across other pages.
+
+
+_________________________________________________________________________________
+
+
+Views\_ViewImports.cshtml
+
+Imports all necessary models and tag helpers for the views.
+
+
+_________________________________________________________________________________
+
+
+Views\_ViewStart.cshtml
+
+Specifies the default layout for the views.
+
+
+_________________________________________________________________________________
+
+
+appsettings.json
+
+Stores configuration setting for the application.
+
+Contains the connection string for the database, which is used in the Startup class.
+
+
+_________________________________________________________________________________
+
+
+libman.json
+
+This is the library manager configuration file that contains the info for all installed
+third-party client-side libraries in the application.

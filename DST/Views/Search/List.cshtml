@@ -266,11 +266,11 @@
 
     @* Add else block, and also check if Model.DsoItems is empty. If null or empty, display message such as "No objects found that match your filters", etc. *@
     <div id="start">
-        @if (Model.DsoItems != null)
+        @if (Model.DsoItems is not null)
         {
             @foreach (DsoModel dso in Model.DsoItems)
             {
-                @if (dso != null)
+                @if (dso is not null)
                 {
                     //asp-route-slug="@dso.Name.Slug()"
                     <a asp-controller="Search" asp-action="Details" asp-route-cat="@dso.CatalogName" asp-route-id="@dso.Id">

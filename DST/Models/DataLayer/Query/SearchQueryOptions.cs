@@ -14,7 +14,7 @@ namespace DST.Models.DataLayer.Query
         /* builder property values are all default */
         public void SortFilter(SearchGridBuilder builder, GeoLocationModel geoLocation)
         {
-            if (builder != null)
+            if (builder is not null)
             {
                 if (builder.IsFilterByType)
                 {

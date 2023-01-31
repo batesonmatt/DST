@@ -86,7 +86,7 @@ namespace DST.Controllers
 
         /* Filter()
             
-           if (model?.GeoLocation != null)
+           if (model?.GeoLocation is not null)
            {
                ViewBag.LAT = model.GeoLocation.Latitude;
                ViewBag.LON = model.GeoLocation.Longitude;
@@ -123,7 +123,7 @@ namespace DST.Controllers
                     // The length of the array is variable since the input elements are posted only if they are checked.
                     foreach (string id in options)
                     {
-                        if (id != null)
+                        if (id is not null)
                         {
                             form.Add(new ToggleFilter(id, ToggleFilter.On));
                         }

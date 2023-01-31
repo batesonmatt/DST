@@ -49,10 +49,7 @@ namespace DST.Models.Grid
 
         public void LoadFilterSegments(IFilter[] filters)
         {
-            if (filters == null)
-            {
-                throw new ArgumentNullException(nameof(filters));
-            }
+            _ = filters ?? throw new ArgumentNullException(nameof(filters));
 
             _routes.SetFilters(filters);
         }
