@@ -1,0 +1,58 @@
+﻿Navigation heirarchy:
+
+
+Home/Index
+-> Search/List (redirected from Search/Index)
+	-> Search/Details
+-> Home/About
+
+
+Home		(Home/Index)
+- About		(Home/About)
+- Search	(Search/List)
+  
+  Consider (Search/List), then selecting an objects leads to (Search/id/details), 
+  then to (Search/id/track), then maybe (Search/id/track/Results)
+
+  Use crumbs?
+
+Home -> "Start tracking" -> Search -> Select an object -> Object Details -> Observation Data Form -> Track Results
+
+___________________________________________________________________________
+
+
+Home (Home/Index)
+-> Contains navbar header with links to Home (Logo), Search, and About pages.
+
+
+Contact (Home/About)
+-> Contains navbar header with links to Home (Logo), Search, and About pages.
+-> Contains a link at the bottom to return to the home page.
+
+___________________________________________________________________________
+
+
+Search (Search/List, redirected from Search/Index)
+-> Contains navbar header with links to Home (Logo), Search, and About pages.
+
+
+-> Retrieves data from database and lists with default sort and filter options, 50 items per page.
+-> Clicking an item will navigate to the Details page (Search/Details)
+-> Each item contains the CompoundId, Name (if any), Description, Type, Constellation, and CatalogName. 
+
+
+Sort options (Only one):
+- Id						(CatalogName, then by Id)		* Default
+- Name						(Common - Name)
+- Type						(Type, then by description)
+- Constellation				(ConstellationName)
+- Magnitude
+- Distance
+- Visibility				(based on hemisphere, season, location, etc.)
+
+
+Filter options:
+- Catalog					(Messier or Caldwell)
+- Type						(Nebula, galaxy, star cluster, other)
+- Constellation?
+- Visibility				(based on hemisphere, season, location, etc.)

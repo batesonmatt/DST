@@ -10,19 +10,6 @@
 
 ___________________________________________________________
 
-Navigation heirarchy:
-
-Home		(Home/Index)
-- About		(Home/About)
-- Contact	(Home/Contact)
-- Search	(Search/Index)
-  ... Consider (Search/Index), then selecting an objects leads to (Search/id/details), then to (Search/id/track), then maybe (Search/id/track/Results)
-  ... Use crumbs!
-
-Home -> "Start tracking" -> Search -> Select an object -> Object Details -> Observation Data Form -> Track Results
-
-___________________________________________________________
-
 Next:
 
 - Provide temporary blueprint for filtering/sorting by location-dependent values
@@ -49,7 +36,8 @@ ___________________________________________________________
 
 Search View:
 
-- Change the asp-action of the Search form to "Filter", and implement the Filter() GET and POST methods in CatalogController
+- Change the asp-action of the Search form to "Filter", and implement the 
+    Filter() GET and POST methods in CatalogController.
 	[HttpGet] Filter() should store the filering/sorting options in the ViewBag
 
 - Fix:
@@ -63,23 +51,6 @@ Search View:
 		or
 
 		<input hidden asp-for="GeoLocation.Latitude" />
-
-___________________________________________________________
-
-Sort by:
-- Id                (CatalogName, then by Id)
-- Name              (Common - Name)
-- Type              (Type, then by description)
-- Constellation     (ConstellationName)
-- Magnitude
-- Distance
-- Visibility (based on hemisphere, season, location, etc.)
-
-Filter:
-- Catalog (Messier or Caldwell)
-- Type (Nebula, galaxy, star cluster, other)
-- Constellation?
-- Visibility (based on hemisphere, season, location, etc.)
 
 _____________________________________________________________
 

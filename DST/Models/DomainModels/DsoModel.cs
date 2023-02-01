@@ -25,7 +25,7 @@ namespace DST.Models.DomainModels
         public int Id { get; set; }
 
         [NotMapped]
-        public string CompoundId => CatalogName[0] + Id.ToString();
+        public string CompoundId => $"{CatalogName[0]}{Id}";
 
         /// <summary>The common name(s) of this object, if any.</summary>
         /// <value>A list of one or more names, delimited by commas.</value>
