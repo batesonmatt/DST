@@ -14,53 +14,7 @@
 
 <div id="search-container" class="container">
 
-    <h2>Filter</h2>
-
-    <div class="list-group">
-        @foreach (var sortField in Sort.Fields)
-        {
-            routes.SetSort(sortField.Value);
-
-            @if (sortField.Value == current.SortField)
-            {
-                <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@sortField.Key</a>
-            }
-            else
-            {
-                <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@sortField.Key</a>
-            }
-        }
-    </div>
-
-    @*<div class="list-group">
-        <h3>Sort</h3>
-
-        @{ routes.SetSort(Sort.Id); }
-        <a asp-action="List" asp-all-route-data="@routes">Id</a>
-
-        @{ routes.SetSort(Sort.Name); }
-        <a asp-action="List" asp-all-route-data="@routes">Name</a>
-
-        @{ routes.SetSort(Sort.Type); }
-        <a asp-action="List" asp-all-route-data="@routes">Type</a>
-
-        @{ routes.SetSort(Sort.Constellation);}
-        <a asp-action="List" asp-all-route-data="@routes">Constellation</a>
-
-        @{ routes.SetSort(Sort.Distance); }
-        <a asp-action="List" asp-all-route-data="@routes">Distance</a>
-
-        @{ routes.SetSort(Sort.Brightness); }
-        <a asp-action="List" asp-all-route-data="@routes">Brightness</a>
-
-        @{ routes.SetSort(Sort.Visibility); }
-        <a asp-action="List" asp-all-route-data="@routes">Visibility</a>
-
-        @{ routes.SetSort(Sort.RiseTime); }
-        <a asp-action="List" asp-all-route-data="@routes">Rise Time</a>
-    </div>*@
-
-    @*<div id="filters-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div id="filters-modal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -253,14 +207,14 @@
                 </form>
             </div>
         </div>
-    </div>*@
+    </div>
 
-    @*<div id="controls-layout" class="row">
+    <div id="controls-layout" class="row">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-10">*@
+                <div class="col-md-10">
                     @* This should be inside a form that updates the results upon submitting the search *@
-                    @*<div class="control-wrapper form-control control-shadow">
+                    <div class="control-wrapper form-control control-shadow">
                         <input class="control" placeholder="Search" maxlength="50" />
                         <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false">
                             <path class="path-dark" d="M12.7 12L19.3 18.6L18.6 19.3L12 12.7L5.40001 19.3L4.70001 18.6L11.3 12L4.60001 5.4L5.30001 4.7L11.9 11.3L18.5 4.7L19.2 5.4L12.7 12Z" />
@@ -307,7 +261,7 @@
                 </div>
             </div>
         </div>
-    </div>*@
+    </div>
 
     @* Add else block, and also check if Model.DsoItems is empty. If null or empty, display message such as "No objects found that match your filters", etc. *@
     <div id="start">
@@ -319,7 +273,7 @@
                 {
                     //asp-route-slug="@dso.Name.Slug()"
                     <a asp-controller="Search" asp-action="Details" asp-route-cat="@dso.CatalogName" asp-route-id="@dso.Id">
-                        <div>
+                        <article class="data-article">
                             @if (string.IsNullOrWhiteSpace(dso.Name))
                             {
                                 <h3>@dso.CompoundId</h3>
@@ -328,29 +282,33 @@
                             {
                                 <h3>@dso.CompoundId - @dso.Name</h3>
                             }
-                            <p>
-                                @dso.CatalogName
-                                <br />
-                                @dso.Description
-                                <br />
-                                @dso.Type
-                                <br />
-                                @dso.ConstellationName
-                            </p>
-                            @*@if (dso.HasMultipleNames)
-                            {
-                                <p>
-                                    <strong>Other names: </strong>
-                                    <br />
-                                    <ul>
-                                        @foreach (string name in dso.GetOtherNames())
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    @* Consider using spans *@
+                                    <p>
+                                        @dso.Description (@dso.Type)
+                                        <br /><br />
+                                        @dso.ConstellationName
+                                    </p>
+
+                                    @*@if (dso.HasMultipleNames)
                                         {
-                                            <li>@name</li>
-                                        }
-                                    </ul>
-                                </p>
-                            }*@
-                        </div>
+                                            <p>
+                                                <strong>Other names: </strong>
+                                                <br />
+                                                <ul>
+                                                    @foreach (string name in dso.GetOtherNames())
+                                                    {
+                                                        <li>@name</li>
+                                                    }
+                                                </ul>
+                                            </p>
+                                        }*@
+                                </div>
+
+                                <span class="col-sm-6">@dso.CatalogName</span>
+                            </div>
+                        </article>
                     </a>
                 }
             }
@@ -364,15 +322,13 @@
             if (current.PageNumber > 1)
             {
                 routes.PageNumber = current.PageNumber - 1;
-                // class="btn text-white"
-                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start">Previous</a>
+                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start" class="btn text-white">Previous</a>
             }
 
             if (current.PageNumber < Model.TotalPages)
             {
                 routes.PageNumber = current.PageNumber + 1;
-                // class="btn text-white"
-                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start">Next</a>
+                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start" class="btn text-white">Next</a>
             }
         }
     </div>

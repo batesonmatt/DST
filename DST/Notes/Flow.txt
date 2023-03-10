@@ -41,18 +41,35 @@ Search (Search/List, redirected from Search/Index)
 -> Each item contains the CompoundId, Name (if any), Description, Type, Constellation, and CatalogName. 
 
 
-Sort options (Only one):
-- Id						(CatalogName, then by Id)		* Default
-- Name						(Common - Name)
-- Type						(Type, then by description)
-- Constellation				(ConstellationName)
-- Magnitude
-- Distance
-- Visibility				(based on hemisphere, season, location, etc.)
+* Search Bar
 
+* Filter:
+* Clear all
+* Apply
 
-Filter options:
-- Catalog					(Messier or Caldwell)
-- Type						(Nebula, galaxy, star cluster, other)
-- Constellation?
-- Visibility				(based on hemisphere, season, location, etc.)
+	Sort (Only one):
+	- Id						(CatalogName, then by Id)		* Default
+	- Name						(Common - Name)
+	- Type						(Type, then by description)
+	- Constellation				(ConstellationName)
+	- Magnitude
+	- Distance
+	- Visibility?				(based on hemisphere, season, location, etc.)
+	- Rise time?
+
+	Filter options (list of checkboxes?):
+	- Catalog					(Messier or Caldwell)
+	- Type						(Nebula, galaxy, star cluster, other)
+	- Constellation
+	- Visibility?				(based on hemisphere, season, location, etc.)
+
+* Number of results (# results)
+
+* List:
+
+	Article?:
+		CompoundId - Name
+		CatalogName
+		Description
+		Type
+		Constellation

@@ -25,9 +25,9 @@ html {
     line-height: 1.5;
 }
 body {
-    background-image: url("../images/background.jpg");
+    /*background-image: url("../images/background.jpg");
     background-repeat: repeat;
-    background-attachment: fixed;
+    background-attachment: fixed;*/
 }
 img {
     max-width: 100%;
@@ -193,7 +193,7 @@ article {
 
 
 /* Product/Search */
-.data-article {
+/*.data-article {
     background: linear-gradient(-50deg, var(--clr-gray) 40%, var(--clr-dark-2) 45%);
     line-height: 1rem;
 }
@@ -230,7 +230,7 @@ article {
 }
 .data-article ul li:last-child:after {
     content: "";
-}
+}*/
 
 .control-wrapper {
     display: flex;

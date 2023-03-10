@@ -1,4 +1,6 @@
-﻿namespace DST.Models.DataLayer.Query
+﻿using System.Collections.Generic;
+
+namespace DST.Models.DataLayer.Query
 {
     public static class Sort
     {
@@ -14,6 +16,19 @@
         public static string RiseTime { get; } = "rise-time";
 
         public static string Default { get; } = Id;
+
+        public static Dictionary<string, string> Fields
+            => new()
+            {
+                { nameof(Id), Id },
+                { nameof(Name), Name },
+                { nameof(Type), Type },
+                { nameof(Constellation), Constellation },
+                { nameof(Distance), Distance },
+                { nameof(Brightness), Brightness },
+                { nameof(Visibility), Visibility },
+                { nameof(RiseTime), RiseTime }
+            };
 
         #endregion
     }
