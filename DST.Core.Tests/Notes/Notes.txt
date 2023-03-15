@@ -1,0 +1,4 @@
+﻿To-do list:
+
+DST.Core.Tests
+- Add Tests (See test methods in original Program.cs from ConsoleApp repo)

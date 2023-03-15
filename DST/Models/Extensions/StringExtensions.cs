@@ -1,9 +1,11 @@
-﻿using System.Globalization;
+﻿using DST.Models.DataLayer.Query;
+using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace DST.Models.Extensions
 {
-    public static class StringExtensions
+    public static partial class StringExtensions
     {
         public static string Capitalize(this string value)
         {
@@ -29,34 +31,41 @@ namespace DST.Models.Extensions
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLower());
         }
 
-        public static string Slug(this string value)
+        public static string ToKebabCase(this string value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
                 return string.Empty;
             }
 
-            StringBuilder builder = new();
+            // Replace all non-alphanumeric characters with a dash
+            value = NonAlpha().Replace(value, "-");
 
-            foreach (char c in value)
-            {
-                if (char.IsPunctuation(c) == false || c == '-')
-                {
-                    builder.Append(c);
-                }
-            }
+            // Replace all subsequent dashes with a single dash
+            value = RepeatDash().Replace(value, "-");
 
-            return builder.ToString().Replace(' ', '-').ToLower();
+            // Remove any leading and trailing dashes
+            value = value.Trim('-');
+
+            // Lowercase and return
+            return value.ToLower();
         }
+
+        public static bool EqualsExact(this string a, string b)
+            => a == b;
 
         public static bool EqualsIgnoreCase(this string a, string b)
             => a?.ToLower() == b?.ToLower();
 
         public static int ToInt(this string value)
         {
-            int.TryParse(value, out int result);
-
-            return result;
+            return int.TryParse(value, out int result) ? result : default;
         }
+
+        [GeneratedRegex("[^0-9a-zA-Z]")]
+        private static partial Regex NonAlpha();
+
+        [GeneratedRegex("[-]{2,}")]
+        private static partial Regex RepeatDash();
     }
 }

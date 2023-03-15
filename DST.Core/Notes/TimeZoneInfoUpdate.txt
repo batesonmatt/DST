@@ -1,0 +1,100 @@
+﻿AstronomicalDateTime needs to be revised to support a given client's TimeZoneInfo.
+
+Currently, AstronomicalDateTime uses TimeZoneInfo.Local, which is incorrect for a 
+published web application, where the TimeZoneInfo is based on the server location.
+
+---------------------------------------------------------------
+
+Goal:
+
+1. I may retrieve the client's geolocation, local UTC offset and/or timezone name (IANA format)
+   using JavaScript, then store these values on server-side.
+
+2. The IANA timezone name will then be converted to the Windows timezone name using
+   TimeZoneInfo.FindSystemTimeZoneById(string).
+
+   In this case, the offset value is not necessary.
+
+3. I need to create a new type/design (AstronomicalTimeZone, ClientTimeZone, ObserverTimeZone, etc.)
+   I need to move certain properties and methods from AstronomicalDateTime to this new type.
+
+
+3. I should store this client TimeZoneInfo object in the ILocalObserver object (needs new property).
+
+4. AstronomicalDateTime should be revised to take a specified TimeZoneInfo where necessary.
+
+--------------------------------------------------------------
+
+AstronomicalDateTime members that rely on TimeZoneInfo:
+
+Static properties:
+- SupportsDaylightSavingTime
+- BaseUtcOffset
+- MinUtcDateTime
+- MaxUtcDateTime
+- MinValue
+- MaxValue
+- MinEpochTickSpan
+- MaxEpochTickSpan
+- Now
+- Today
+
+Constructors [Ultimately calls GetAdjustedDateTime]:
+- AstronomicalDateTime(DateTime)
+- AstronomicalDateTime(DateTime, UnspecifiedKind)
+
+Static methods:
+- GetAdjustedDateTime
+- FromStandardTime
+
+Instance properties:
+- UtcOffset
+- MinTickSpan 
+- MaxTickSpan
+- Date
+
+Instance methods:
+- IsMinOrMaxValue
+- GetTicksFromEpoch
+- AddSeconds
+- AddMinutes
+- AddHours
+- AddDays
+- AddWeeks
+- AddMonths
+- AddYears
+- AddTicks
+- ToLocalTime
+- ToStandardTime
+- GetEarthRotationAngle
+- GetMeanSiderealTime
+- GetSiderealTime
+- GetEclipticLongitude
+- GetMeanSolarLongitude
+- GetMeanLunarLongitude
+- GetMeanObliquity
+- GetNutationInLongitude
+- GetNutationInObliquity
+- GetEquationOfEquinoxes
+- GetEquationOfOrigins
+
+-------------------------------------------------
+
+interface IDateTime
+	DateTime Value { get; }
+
+partial class AstronomicalDateTime : IDateTime
+	...
+
+class AstronomicalTimeZone
+	_timeZoneInfo
+	SupportsDaylightSavingTime
+	BaseUtcOffset
+	MinUtcDateTime
+	MaxUtcDateTime				
+	MinAstronomicalDateTime
+	MaxAstronomicalDateTime
+	MinEpochTickSpan
+	MaxEpochTickSpan
+	Now
+	Today

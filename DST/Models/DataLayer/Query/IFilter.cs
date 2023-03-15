@@ -6,7 +6,7 @@
 
         string Id { get; }
 
-        string Value { get; set; }
+        string Value { get; }
 
         #endregion
 
@@ -15,6 +15,8 @@
         bool IsDefault();
 
         void Reset();
+
+        bool EqualsSeo(string value);
 
         #endregion
     }

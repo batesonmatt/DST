@@ -2,6 +2,7 @@
 
 namespace DST.Models.DataLayer.Query
 {
+    /* Consider revising */
     public static class Sort
     {
         #region Properties
@@ -20,14 +21,14 @@ namespace DST.Models.DataLayer.Query
         public static Dictionary<string, string> Fields
             => new()
             {
-                { nameof(Id), Id },
-                { nameof(Name), Name },
-                { nameof(Type), Type },
-                { nameof(Constellation), Constellation },
-                { nameof(Distance), Distance },
-                { nameof(Brightness), Brightness },
-                { nameof(Visibility), Visibility },
-                { nameof(RiseTime), RiseTime }
+                { "Id", Id },
+                { "Name", Name },
+                { "Type", Type },
+                { "Constellation", Constellation },
+                { "Distance", Distance },
+                { "Brightness", Brightness },
+                { "Visibility", Visibility },
+                { "Rise Time", RiseTime }
             };
 
         #endregion

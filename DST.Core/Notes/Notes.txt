@@ -5,11 +5,7 @@ ________________________________________________________________________________
 
 To-do list:
 
-*** Code is Complete ***
 
-Consider another project in this solution - DST.Core.Tests
-- Add project reference to DST.Core in this test project
-- Add Unit Tests (See test methods in original Program.cs from ConsoleApp repo)
 
 ________________________________________________________________________________________________________
 

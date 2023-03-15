@@ -68,7 +68,7 @@ namespace DST
             app.UseSession();
 
             //app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 // Filtering route

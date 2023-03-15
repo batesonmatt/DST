@@ -1,10 +1,6 @@
 ﻿using DST.Models.DomainModels;
 using DST.Models.Extensions;
 using DST.Models.Grid;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DST.Models.DataLayer.Query
 {
@@ -18,17 +14,21 @@ namespace DST.Models.DataLayer.Query
             {
                 if (builder.IsFilterByType)
                 {
-                    Where = model => model.Type.EqualsIgnoreCase(builder.CurrentRoute.TypeFilter.Value);
+                    Where = model => builder.CurrentRoute.TypeFilter.EqualsSeo(model.Type);
                 }
                 if (builder.IsFilterByCatalog)
                 {
-                    Where = model => model.CatalogName.EqualsIgnoreCase(builder.CurrentRoute.CatalogFilter.Value);
+                    Where = model => builder.CurrentRoute.CatalogFilter.EqualsSeo(model.CatalogName);
                 }
                 if (builder.IsFilterByConstellation)
                 {
-                    Where = model => model.ConstellationName.EqualsIgnoreCase(builder.CurrentRoute.ConstellationFilter.Value);
+                    Where = model => builder.CurrentRoute.ConstellationFilter.EqualsSeo(model.ConstellationName);
                 }
                 if (builder.IsFilterBySeason)
+                {
+                    /* Needs geolocation */
+                }
+                if (builder.IsFilterByTrajectory)
                 {
                     /* Needs geolocation */
                 }
@@ -38,17 +38,13 @@ namespace DST.Models.DataLayer.Query
                 }
                 if (builder.IsFilterByHasName)
                 {
-                    Where = model => model.Name != null;
+                    Where = model => !string.IsNullOrWhiteSpace(model.Name);
                 }
                 if (builder.IsFilterByVisibility)
                 {
                     /* Needs geolocation */
                 }
                 if (builder.IsFilterByRiseTime)
-                {
-                    /* Needs geolocation */
-                }
-                if (builder.IsFilterByTrajectory)
                 {
                     /* Needs geolocation */
                 }

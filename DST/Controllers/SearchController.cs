@@ -44,6 +44,11 @@ namespace DST.Controllers
             // Get GridBuilder object, load route segments, and store in session.
             SearchGridBuilder builder = new(HttpContext.Session, values);
 
+            // if clear filters:
+            // builder.ClearFilterSegments();
+            // else:
+            builder.SaveRouteSegments();
+
             SearchQueryOptions options = new()
             {
                 // Include = "Constellation",

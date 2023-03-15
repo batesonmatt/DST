@@ -1,4 +1,27 @@
-﻿BUGS:
+﻿To Do:
+
+Consider new fields for Seasons table (StartMonth, EndMonth).
+Then create methods to build and get the DateTime values.
+
+Northern hemisphere		Southern hemisphere		Start date      StartMonth (>=)     EndMonth (<)
+Winter					Summer					1 December      12                  3
+Spring					Autumn					1 March         3                   6
+Summer					Winter					1 June          6                   9
+Autumn					Spring					1 September     9                   12
+
+Make a note file explaining the current steps to build the database.
+
+Rebuild the local database on all dev machines.
+
+Consider partial view for the filters. (Lot of code)
+
+Consider partial view for the results
+
+Consider form for the search
+
+___________________________________________________________
+
+BUGS:
 
 - Sort by: Brightness
   Should be inversely proportional to the magnitude.
@@ -9,8 +32,6 @@
   Treated as the lowest magnitude, thus the "brightest" object.
 
 ___________________________________________________________
-
-Next:
 
 - Provide temporary blueprint for filtering/sorting by location-dependent values
   Add DsoModel.GetVisibility() and DsoModel.GetRiseTime()

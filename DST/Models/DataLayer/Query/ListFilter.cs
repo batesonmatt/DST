@@ -1,19 +1,15 @@
-﻿using System;
+﻿using DST.Models.Extensions;
+using System;
 
 namespace DST.Models.DataLayer.Query
 {
-    public class ListFilter : IFilter
+    public class ListFilter : BaseFilter
     {
         #region Properties
 
-        public string Id { get; }
+        public override string Id { get; }
 
-        public string Value
-        {
-            get => _value;
-
-            set => _value = value ?? All;
-        }
+        public override string Value => _value;
 
         public static string All { get; } = "all";
 
@@ -27,36 +23,27 @@ namespace DST.Models.DataLayer.Query
 
         #region Constructors
 
-        public ListFilter()
-        {
-            Id = Guid.NewGuid().ToString();
-
-            _value = All;
-        }
+        public ListFilter() 
+            : this(string.Empty, All)
+        { }
 
         public ListFilter(string value)
-        {
-            Id = Guid.NewGuid().ToString();
-
-            _value = value ?? All;
-        }
+            : this(string.Empty, value)
+        { }
 
         public ListFilter(string id, string value)
         {
             Id = string.IsNullOrWhiteSpace(id) ? Guid.NewGuid().ToString() : id;
-
-            _value = value ?? All;
+            _value = string.IsNullOrWhiteSpace(value) ? All : value.ToKebabCase();
         }
 
         #endregion
 
         #region Methods
 
-        public override string ToString() => Value;
+        public override bool IsDefault() => _value == All;
 
-        public bool IsDefault() => _value == All;
-
-        public void Reset() => _value = All;
+        public override void Reset() => _value = All;
 
         #endregion
     }

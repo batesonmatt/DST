@@ -12,9 +12,15 @@
 <script src="~/js/location.js"></script>
 <script src="~/js/toggle.js"></script>
 
-<div id="search-container" class="container">
+<style>
+    .list-group {
+        max-height: 300px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+</style>
 
-    <h2>Filter</h2>
+<div id="search-container" class="container">
 
     <div class="list-group">
         @foreach (var sortField in Sort.Fields)
@@ -32,33 +38,218 @@
         }
     </div>
 
-    @*<div class="list-group">
-        <h3>Sort</h3>
+    <div class="list-group">
+        @{
+            routes = Model.CurrentRoute.Clone();
 
-        @{ routes.SetSort(Sort.Id); }
-        <a asp-action="List" asp-all-route-data="@routes">Id</a>
+            foreach (var type in Model.Types)
+            {
+                routes.TypeFilter = new ListFilter(nameof(SearchGridDTO.Type), type.Type);
 
-        @{ routes.SetSort(Sort.Name); }
-        <a asp-action="List" asp-all-route-data="@routes">Name</a>
+                if (current.TypeFilter.EqualsSeo(type.Type))
+                {
+                    <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@type.Type</a>
+                }
+                else
+                {
+                    <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@type.Type</a>
+                }
+            }
+        }
+    </div>
 
-        @{ routes.SetSort(Sort.Type); }
-        <a asp-action="List" asp-all-route-data="@routes">Type</a>
+    <div class="list-group">
+        @{
+            routes = Model.CurrentRoute.Clone();
 
-        @{ routes.SetSort(Sort.Constellation);}
-        <a asp-action="List" asp-all-route-data="@routes">Constellation</a>
+            foreach (var catalog in Model.Catalogs)
+            {
+                routes.CatalogFilter = new ListFilter(nameof(SearchGridDTO.Catalog), catalog.Name);
 
-        @{ routes.SetSort(Sort.Distance); }
-        <a asp-action="List" asp-all-route-data="@routes">Distance</a>
+                if (current.CatalogFilter.EqualsSeo(catalog.Name))
+                {
+                    <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@catalog.Name</a>
+                }
+                else
+                {
+                    <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@catalog.Name</a>
+                }
+            }
+        }
+    </div>
 
-        @{ routes.SetSort(Sort.Brightness); }
-        <a asp-action="List" asp-all-route-data="@routes">Brightness</a>
+    <div class="list-group">
+        @{
+            routes = Model.CurrentRoute.Clone();
 
-        @{ routes.SetSort(Sort.Visibility); }
-        <a asp-action="List" asp-all-route-data="@routes">Visibility</a>
+            foreach (var constellation in Model.Constellations)
+            {
+                routes.ConstellationFilter = new ListFilter(nameof(SearchGridDTO.Constellation), constellation.Name);
 
-        @{ routes.SetSort(Sort.RiseTime); }
-        <a asp-action="List" asp-all-route-data="@routes">Rise Time</a>
-    </div>*@
+                if (current.ConstellationFilter.EqualsSeo(constellation.Name))
+                {
+                    <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@constellation.Name</a>
+                }
+                else
+                {
+                    <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@constellation.Name</a>
+                }
+            }
+        }
+    </div>
+
+    @*<form asp-action="Filter" method="post">
+        <div>
+            <div>
+                <input name="filterIds" value="@nameof(SearchGridDTO.Type)" type="hidden" />
+                <select name="filters" class="control-wrapper form-control control-shadow"
+                        asp-items="@(new SelectList(Model.Types, "Type", "Type", current.TypeFilter.Value))">
+                    <option value="@ListFilter.All" class="text-nowrap">All</option>
+                </select>
+            </div>
+            <div>
+                <input name="filterIds" value="@nameof(SearchGridDTO.Catalog)" type="hidden" />
+                <select name="filters" class="control-wrapper form-control control-shadow"
+                        asp-items="@(new SelectList(Model.Catalogs, "Name", "Name", current.CatalogFilter.Value))">
+                    <option value="@ListFilter.All" class="text-nowrap">All</option>
+                </select>
+            </div>
+            <div>
+                <input name="filterIds" value="@nameof(SearchGridDTO.Constellation)" type="hidden" />
+                <select name="filters" class="control-wrapper form-control control-shadow"
+                        asp-items="@(new SelectList(Model.Constellations, "Name", "Name", current.ConstellationFilter.Value))">
+                    <option value="@ListFilter.All" class="text-nowrap">All</option>
+                </select>
+            </div>
+            <div>
+                <input name="filterIds" value="@nameof(SearchGridDTO.Season)" type="hidden" />
+                <select name="filters" class="control-wrapper form-control control-shadow"
+                        asp-items="@(new SelectList(Model.Seasons, "Id", "North", current.SeasonFilter.Value))">
+                    <option value="@ListFilter.All" class="text-nowrap">All</option>
+                </select>
+            </div>
+            <div>
+                <input name="filterIds" value="@nameof(SearchGridDTO.Trajectory)" type="hidden" />
+                <select name="filters" class="control-wrapper form-control control-shadow"
+                        asp-items="@(new SelectList(Model.Trajectories, "Key", "Value", current.TrajectoryFilter.Value))">
+                    <option value="@ListFilter.All" class="text-nowrap">All</option>
+                </select>
+            </div>
+            <div>
+                <input name="options" class="control-toggle" value="@nameof(SearchGridDTO.Local)" type="checkbox" />
+            </div>
+            <div>
+                <input name="options" class="control-toggle" value="@nameof(SearchGridDTO.HasName)" type="checkbox" />
+            </div>
+            <div>
+                <input name="options" class="control-toggle" value="@nameof(SearchGridDTO.Visibility)" type="checkbox" />
+            </div>
+            <div>
+                <input name="options" class="control-toggle" value="@nameof(SearchGridDTO.RiseTime)" type="checkbox" />
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <label>Latitude</label>
+                </div>
+                <div class="col-8">
+                    <input class="w-100" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <label>Longitude</label>
+                </div>
+                <div class="col-8">
+                    <input class="w-100" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <label>Use my location</label>
+                </div>
+                <div class="col-8">
+                    <label>Toggle</label>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button type="submit">Apply</button>
+            <button type="submit" name="clear" value="true">Clear</button>
+        </div>
+    </form>*@
+
+    <hr />
+
+    @* Add else block, and also check if Model.DsoItems is empty. If null or empty, display message such as "No objects found that match your filters", etc. *@
+    <div id="start">
+        @if (Model.DsoItems is not null)
+        {
+            @foreach (DsoModel dso in Model.DsoItems)
+            {
+                @if (dso is not null)
+                {
+                    //asp-route-slug="@dso.Name.Slug()"
+                    <a asp-controller="Search" asp-action="Details" asp-route-cat="@dso.CatalogName" asp-route-id="@dso.Id">
+                        <div>
+                            @if (string.IsNullOrWhiteSpace(dso.Name))
+                            {
+                                <h3>@dso.CompoundId</h3>
+                            }
+                            else
+                            {
+                                <h3>@dso.CompoundId - @dso.Name</h3>
+                            }
+                            <p>
+                                @dso.CatalogName
+                                <br />
+                                @dso.Description
+                                <br />
+                                @dso.Type
+                                <br />
+                                @dso.ConstellationName
+                            </p>
+                            @*@if (dso.HasMultipleNames)
+                {
+                <p>
+                <strong>Other names: </strong>
+                <br />
+                <ul>
+                @foreach (string name in dso.GetOtherNames())
+                {
+                <li>@name</li>
+                }
+                </ul>
+                </p>
+                }*@
+                        </div>
+                    </a>
+                }
+            }
+        }
+    </div>
+
+    <hr />
+
+    <div>
+        @{
+            routes = Model.CurrentRoute.Clone();
+
+            if (current.PageNumber > 1)
+            {
+                routes.PageNumber = current.PageNumber - 1;
+                // class="btn text-white"
+                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start">Previous</a>
+            }
+
+            if (current.PageNumber < Model.TotalPages)
+            {
+                routes.PageNumber = current.PageNumber + 1;
+                // class="btn text-white"
+                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start">Next</a>
+            }
+        }
+    </div>
+</div>
 
     @*<div id="filters-modal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
@@ -119,6 +310,7 @@
                             </div>
                             <hr />
 
+****************************These are radio groups that support a single choice (just like the sort options above ^):
                             <div class="row">
                                 <div class="col-4">
                                     <label>Type</label>
@@ -169,6 +361,8 @@
                                     </select>
                                 </div>
                             </div>
+
+****************************These are toggle options. Use the bootstrap toggle/switch design:
                             <div class="row">
                                 <div class="col-4">
                                     <label>Local</label>
@@ -202,6 +396,8 @@
                                     <input name="options" class="control-toggle" value="@nameof(SearchGridDTO.RiseTime)" type="checkbox" />
                                 </div>
                             </div>
+
+                            Move this up before the toggle options ^
                             <div class="row">
                                 <div class="col-4">
                                     <label>Trajectory</label>
@@ -215,6 +411,8 @@
                                 </div>
                             </div>
                             <hr />
+                            
+****************************Geolocation:
                             <div class="row">
                                 <div class="col-4">
                                     <label>Latitude</label>
@@ -239,6 +437,7 @@
                                     <label>Toggle</label>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -308,73 +507,3 @@
             </div>
         </div>
     </div>*@
-
-    @* Add else block, and also check if Model.DsoItems is empty. If null or empty, display message such as "No objects found that match your filters", etc. *@
-    <div id="start">
-        @if (Model.DsoItems is not null)
-        {
-            @foreach (DsoModel dso in Model.DsoItems)
-            {
-                @if (dso is not null)
-                {
-                    //asp-route-slug="@dso.Name.Slug()"
-                    <a asp-controller="Search" asp-action="Details" asp-route-cat="@dso.CatalogName" asp-route-id="@dso.Id">
-                        <div>
-                            @if (string.IsNullOrWhiteSpace(dso.Name))
-                            {
-                                <h3>@dso.CompoundId</h3>
-                            }
-                            else
-                            {
-                                <h3>@dso.CompoundId - @dso.Name</h3>
-                            }
-                            <p>
-                                @dso.CatalogName
-                                <br />
-                                @dso.Description
-                                <br />
-                                @dso.Type
-                                <br />
-                                @dso.ConstellationName
-                            </p>
-                            @*@if (dso.HasMultipleNames)
-                            {
-                                <p>
-                                    <strong>Other names: </strong>
-                                    <br />
-                                    <ul>
-                                        @foreach (string name in dso.GetOtherNames())
-                                        {
-                                            <li>@name</li>
-                                        }
-                                    </ul>
-                                </p>
-                            }*@
-                        </div>
-                    </a>
-                }
-            }
-        }
-    </div>
-
-    <div>
-        @{
-            routes = Model.CurrentRoute.Clone();
-
-            if (current.PageNumber > 1)
-            {
-                routes.PageNumber = current.PageNumber - 1;
-                // class="btn text-white"
-                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start">Previous</a>
-            }
-
-            if (current.PageNumber < Model.TotalPages)
-            {
-                routes.PageNumber = current.PageNumber + 1;
-                // class="btn text-white"
-                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start">Next</a>
-            }
-        }
-    </div>
-
-</div>
