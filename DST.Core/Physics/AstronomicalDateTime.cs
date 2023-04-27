@@ -1,88 +1,46 @@
-﻿using System.Globalization;
+﻿using System;
 
 namespace DST.Core.Physics
 {
-    // Represents a DateTime value in Universal Time, for the current system time zone, on the Gregorian calendar.
-    public readonly partial struct AstronomicalDateTime
+    // Represents a DateTime value in Universal Time, for a given client time zone, on the Gregorian calendar.
+    public partial class AstronomicalDateTime : IDateTime
     {
-        // Gets the calendar on which the underlying DateTime value lies.
-        public static Calendar Calendar { get; } = new GregorianCalendar(GregorianCalendarTypes.Localized);
-
-        // Gets the most recent epoch date and time, represented as the Gregorian date in universal time.
-        // This resembles the Julian date in Terrestrial Time (TT), which may be proved by Epoch.ToOADate() + 2415018.5 = 2451545.0.
-        // A DateTimeKind of Utc is necessary for the +0h offset.
-        public static DateTime Epoch { get; } = new(2000, 1, 1, 12, 0, 0, 0, Calendar, DateTimeKind.Utc);
-
-        // Gets a value indicating whether the time zone has any daylight saving time rules.
-        // This returns true if the time zone supports daylight saving time; otherwise, false.
-        public static bool SupportsDaylightSavingTime { get; } = TimeZoneInfo.Local.SupportsDaylightSavingTime;
-
-        // Gets the Coordinated Universal Time (UTC) offset for the standard local time zone.
-        public static TimeSpan BaseUtcOffset { get; } = TimeZoneInfo.Local.BaseUtcOffset;
-
-        // Gets the minimum allowable UTC DateTime for the current local time zone.
-        public static DateTime MinUtcDateTime { get; }
-            = BaseUtcOffset < TimeSpan.Zero ? Calendar.MinSupportedDateTime.Subtract(BaseUtcOffset) : Calendar.MinSupportedDateTime;
-
-        // Gets the maximum allowable UTC DateTime for the current local time zone.
-        public static DateTime MaxUtcDateTime { get; }
-            = BaseUtcOffset > TimeSpan.Zero ? Calendar.MaxSupportedDateTime.Subtract(BaseUtcOffset) : Calendar.MaxSupportedDateTime;
-
-        // Gets the minimum supported value for an AstronomicalDateTime.
-        public static AstronomicalDateTime MinValue { get; } = new(MinUtcDateTime);
-
-        // Gets the maximum supported value for an AstronomicalDateTime.
-        public static AstronomicalDateTime MaxValue { get; } = new(MaxUtcDateTime);
-
-        // Gets the total number of ticks from the epoch to MinUtcDateTime.
-        // This value is negative.
-        public static long MinEpochTickSpan { get; } = MinUtcDateTime.Ticks - Epoch.Ticks;
-
-        // Gets the total number of ticks from the epoch to MaxUtcDateTime.
-        // This value is positive.
-        public static long MaxEpochTickSpan { get; } = MaxUtcDateTime.Ticks - Epoch.Ticks;
-
-        // Gets a new AstronomicalDateTime instance resembling the current UTC date and time.
-        public static AstronomicalDateTime Now { get; } = new(DateTime.UtcNow);
-
-        // Gets a new AstronomicalDateTime instance resembling the current UTC date with the time value set to midnight (00:00:00).
-        public static AstronomicalDateTime Today { get; } = new(DateTime.UtcNow.Date);
-
         // Gets the underlying date and time value, represented in universal time.
         public DateTime Value { get; }
+
+        // Gets the underlying DateTimeInfo object.
+        public DateTimeInfo Info { get; }
 
         // Gets the number of ticks that represent the date and time of this AstronomicalDateTime instance.
         public long Ticks => Value.Ticks;
 
         // Gets the date component of the underlying UTC DateTime value.
-        public AstronomicalDateTime Date => new(Value.Date);
+        public AstronomicalDateTime Date => new(Value.Date, Info);
 
         // Gets the time of day of the underlying DateTime value, represented in universal time.
         public TimeSpan Time => Value.TimeOfDay;
 
-        // Gets the Coordinated Universal Time (UTC) offset for the current local time zone.
-        public TimeSpan UtcOffset => TimeZoneInfo.Local.GetUtcOffset(Value);
+        // Gets the Coordinated Universal Time (UTC) offset for the client time zone.
+        public TimeSpan UtcOffset => Info.ClientTimeZoneInfo.GetUtcOffset(Value);
 
-        // Gets the total number of ticks from the underlying DateTime value (Value) to MinUtcDateTime.
+        // Gets the total number of ticks from the underlying DateTime value (Value) to Info.MinUtcDateTime.
         // This value is negative.
-        public long MinTickSpan => MinUtcDateTime.Ticks - Ticks;
+        public long MinTickSpan => DateTimeInfo.MinUtcDateTime.Ticks - Ticks;
 
-        // Gets the total number of ticks from the underlying DateTime value (Value) to MaxUtcDateTime.
+        // Gets the total number of ticks from the underlying DateTime value (Value) to Info.MaxUtcDateTime.
         // This value is positive.
-        public long MaxTickSpan => MaxUtcDateTime.Ticks - Ticks;
+        public long MaxTickSpan => DateTimeInfo.MaxUtcDateTime.Ticks - Ticks;
 
-        // Creates a new AstronomicalDateTime with the specified DateTime value.
-        // If dateTime.Kind equals DateTimeKind.Unspecified, then this will assume local time.
-        public AstronomicalDateTime(DateTime dateTime)
-            : this(dateTime, UnspecifiedKind.IsLocal)
-        { }
-
-        // Creates a new AstronomicalDateTime with the specified DateTime value.
-        // If dateTime.Kind equals DateTimeKind.Unspecified, then this will assume the value of 'kind'.
-        public AstronomicalDateTime(DateTime dateTime, UnspecifiedKind kind)
+        // Creates a new AstronomicalDateTime with the specified DateTime and DateTimeInfo values.
+        // If dateTime.Kind is DateTimeKind.Local or DateTimeKind.Unspecified, then this converts
+        // dateTime to universal time using dateTimeInfo.ClientTimeZoneInfo.
+        public AstronomicalDateTime(DateTime dateTime, DateTimeInfo dateTimeInfo)
         {
+            Info = dateTimeInfo ?? throw new ArgumentNullException(nameof(dateTimeInfo));
+
             Value = default;
-            Value = GetAdjustedDateTime(dateTime, kind);
+            Info = dateTimeInfo;
+            Value = GetAdjustedDateTime(dateTime);
         }
 
         // Returns a value that indicates whether two specified AstronomicalDateTime values are not equal.
@@ -125,53 +83,62 @@ namespace DST.Core.Physics
             return left.Ticks >= right.Ticks;
         }
 
-        // Returns a new AstronomicalDateTime, converted from a local date and time value in the standard time zone.
+        // Returns a new AstronomicalDateTime, converted from a DateTime value in standard time for
+        // a given client time zone as defined by DateTimeIno.ClientTimeZoneInfo.
         // If dateTime.Kind already equals DateTimeKind.Utc, then this will not modify the date or time.
-        public static AstronomicalDateTime FromStandardTime(DateTime dateTime)
+        public static AstronomicalDateTime FromStandardTime(DateTime dateTime, DateTimeInfo dateTimeInfo)
         {
+            _ = dateTimeInfo ?? throw new ArgumentNullException(nameof(dateTimeInfo));
+
             if (dateTime.Kind != DateTimeKind.Utc)
             {
-                // If DST is in effect for the current local timezone, use the base UTC offset to get the universal time.
-                if (SupportsDaylightSavingTime && dateTime.IsDaylightSavingTime())
-                {
-                    // Verify that the local date and time will be in range when converted to universal time.
-                    // If this fails, then the resultant AstronomicalDateTime will have a value of either this.MinValue or this.MaxValue.
-                    if (dateTime >= MinUtcDateTime.ToLocalTime() && dateTime <= MaxUtcDateTime.ToLocalTime())
-                    {
-                        dateTime = dateTime.Subtract(BaseUtcOffset);
-                    }
-                }
+                /* Need to evaluate the Min and Max UTC DateTimes in standard time. */
+                /* We just need to check bounds a bit better, using the calendar min/max supported values. */
+                // Verify that the local date and time will be in range when converted to universal time.
+                // If this fails, then the resultant AstronomicalDateTime will have a value of either
+                // DateTimeInfo.MinAstronomicalDateTime or DateTimeInfo.MaxAstronomicalDateTime.
+                if (dateTime < DateTimeInfo.MinUtcDateTime) return dateTimeInfo.MinAstronomicalDateTime;
+                if (dateTime > DateTimeInfo.MaxUtcDateTime) return dateTimeInfo.MaxAstronomicalDateTime;
+                dateTime = DateTime.SpecifyKind(dateTime.Subtract(dateTimeInfo.BaseUtcOffset), DateTimeKind.Utc);
             }
 
-            return new(dateTime, UnspecifiedKind.IsUtc);
+            return new(dateTime, dateTimeInfo);
         }
 
-        // Restricts an instance of DateTime onto the Gregorian calendar in universal time.
-        // Converts argument 'dateTime' to UTC if dateTime.Kind equals DateTimeKind.Local, or if dateTime.Kind
-        // equals DateTimeKind.Unspecified and argument 'kind' equals UnspecifiedKind.IsLocal.
-        private static DateTime GetAdjustedDateTime(DateTime dateTime, UnspecifiedKind kind)
+        /* Might need to revise the bounds checking */
+        // Restricts an instance of DateTime onto the Gregorian calendar in universal time, for the underlying client time zone.
+        // Converts argument 'dateTime' to UTC if dateTime.Kind equals DateTimeKind.Local or DateTimeKind.Unspecified.
+        private DateTime GetAdjustedDateTime(DateTime dateTime)
         {
+            /* Apparently, DateTimeKind.Local is for the local timezone. 
+             * For timezones that are not UTC or Local, always use DateTimeKind.Unspecified.
+             * So, if dateTime.Kind == DateTimeKind.Local, then copy it but with DateTimeKind.Unspecified.
+             */
             if (dateTime.Kind == DateTimeKind.Unspecified && kind == UnspecifiedKind.IsLocal ||
                 dateTime.Kind == DateTimeKind.Local)
             {
                 // The date and time value is being treated as local time, so convert to universal time.
-                dateTime = dateTime.ToUniversalTime();
+                dateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, Info.ClientTimeZoneInfo);
             }
+
+            // Get the min and max allowable DateTime values in universal time.
+            DateTime max = DateTimeInfo.MaxUtcDateTime;
+            DateTime min = DateTimeInfo.MinUtcDateTime;
 
             // Set the year.
             int year = dateTime.Year;
             if (year < 1) year = 1;
-            if (year > MaxUtcDateTime.Year) year = MaxUtcDateTime.Year;
+            if (year > max.Year) year = max.Year;
 
             // Set the month.
             int month = dateTime.Month;
-            int monthsInYear = Calendar.GetMonthsInYear(year);
+            int monthsInYear = DateTimeInfo.Calendar.GetMonthsInYear(year);
             if (month < 1) month = 1;
             if (month > monthsInYear) month = monthsInYear;
 
             // Set the day.
             int day = dateTime.Day;
-            int daysInMonth = Calendar.GetDaysInMonth(year, month);
+            int daysInMonth = DateTimeInfo.Calendar.GetDaysInMonth(year, month);
             if (day < 1) day = 1;
             if (day > daysInMonth) day = daysInMonth;
 
@@ -182,18 +149,18 @@ namespace DST.Core.Physics
             TimeSpan time = dateTime.TimeOfDay;
 
             // Verify that the date's time of day is in range.
-            if (date == MinUtcDateTime.Date)
+            if (date == min.Date)
             {
-                if (time < MinUtcDateTime.TimeOfDay)
+                if (time < min.TimeOfDay)
                 {
-                    time = MinUtcDateTime.TimeOfDay;
+                    time = min.TimeOfDay;
                 }
             }
-            else if (date == MaxUtcDateTime.Date)
+            else if (date == max.Date)
             {
-                if (time > MaxUtcDateTime.TimeOfDay)
+                if (time > max.TimeOfDay)
                 {
-                    time = MaxUtcDateTime.TimeOfDay;
+                    time = max.TimeOfDay;
                 }
             }
 
@@ -206,7 +173,7 @@ namespace DST.Core.Physics
                 time.Minutes,
                 time.Seconds,
                 time.Milliseconds,
-                Calendar,
+                DateTimeInfo.Calendar,
                 DateTimeKind.Utc);
 
             return result;
@@ -216,7 +183,7 @@ namespace DST.Core.Physics
         // AstronomicalDateTime values.
         public bool IsMinOrMaxValue()
         {
-            return this == MinValue || this == MaxValue;
+            return this == Info.MinAstronomicalDateTime || this == Info.MaxAstronomicalDateTime;
         }
 
         // Returns the number of ticks between this current AstronomicalDateTime instance and the most recent epoch event.
@@ -224,8 +191,8 @@ namespace DST.Core.Physics
         public long GetTicksFromEpoch()
         {
             long value = Value.Ticks;
-            long epoch = Epoch.Ticks;
-            long bounds = value >= epoch ? MaxUtcDateTime.Ticks : MinUtcDateTime.Ticks;
+            long epoch = DateTimeInfo.Epoch.Ticks;
+            long bounds = value >= epoch ? DateTimeInfo.MaxUtcDateTime.Ticks : DateTimeInfo.MinUtcDateTime.Ticks;
 
             // Validate that the difference of the epoch from the adjusted date/time value may be computable.
             // Note that if a given DateTime value, dateTime, lies within MinUtcDateTime and MaxUtcDateTime, then both
@@ -239,7 +206,7 @@ namespace DST.Core.Physics
             else
             {
                 // The value is out of supported range.
-                return value >= epoch ? MaxEpochTickSpan : MinEpochTickSpan;
+                return value >= epoch ? DateTimeInfo.MaxEpochTickSpan : DateTimeInfo.MinEpochTickSpan;
             }
         }
 
@@ -248,11 +215,11 @@ namespace DST.Core.Physics
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
-            if (value <= MinTickSpan / Constants.TicksPerSecond) return MinValue;
-            if (value >= MaxTickSpan / Constants.TicksPerSecond) return MaxValue;
+            if (value <= MinTickSpan / Constants.TicksPerSecond) return Info.MinAstronomicalDateTime;
+            if (value >= MaxTickSpan / Constants.TicksPerSecond) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(Value.AddSeconds(value), UnspecifiedKind.IsUtc);
+            return new AstronomicalDateTime(Value.AddSeconds(value), Info, UnspecifiedKind.IsUtc);
         }
 
         // Returns a new AstronomicalDateTime that adds the specified number of minutes to the value of this instance.
@@ -260,11 +227,11 @@ namespace DST.Core.Physics
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
-            if (value <= MinTickSpan / Constants.TicksPerMinute) return MinValue;
-            if (value >= MaxTickSpan / Constants.TicksPerMinute) return MaxValue;
+            if (value <= MinTickSpan / Constants.TicksPerMinute) return Info.MinAstronomicalDateTime;
+            if (value >= MaxTickSpan / Constants.TicksPerMinute) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(Value.AddMinutes(value), UnspecifiedKind.IsUtc);
+            return new AstronomicalDateTime(Value.AddMinutes(value), Info, UnspecifiedKind.IsUtc);
         }
 
         // Returns a new AstronomicalDateTime that adds the specified number of hours to the value of this instance.
@@ -272,11 +239,11 @@ namespace DST.Core.Physics
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
-            if (value <= MinTickSpan / Constants.TicksPerHour) return MinValue;
-            if (value >= MaxTickSpan / Constants.TicksPerHour) return MaxValue;
+            if (value <= MinTickSpan / Constants.TicksPerHour) return Info.MinAstronomicalDateTime;
+            if (value >= MaxTickSpan / Constants.TicksPerHour) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(Value.AddHours(value), UnspecifiedKind.IsUtc);
+            return new AstronomicalDateTime(Value.AddHours(value), Info, UnspecifiedKind.IsUtc);
         }
 
         // Returns a new AstronomicalDateTime that adds the specified number of days to the value of this instance.
@@ -284,11 +251,11 @@ namespace DST.Core.Physics
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
-            if (value <= MinTickSpan / Constants.TicksPerDay) return MinValue;
-            if (value >= MaxTickSpan / Constants.TicksPerDay) return MaxValue;
+            if (value <= MinTickSpan / Constants.TicksPerDay) return Info.MinAstronomicalDateTime;
+            if (value >= MaxTickSpan / Constants.TicksPerDay) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(Value.AddDays(value), UnspecifiedKind.IsUtc);
+            return new AstronomicalDateTime(Value.AddDays(value), Info, UnspecifiedKind.IsUtc);
         }
 
         // Returns a new AstronomicalDateTime that adds the specified number of weeks to the value of this instance.
@@ -296,22 +263,22 @@ namespace DST.Core.Physics
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
-            if (value <= MinTickSpan / Constants.TicksPerWeek) return MinValue;
-            if (value >= MaxTickSpan / Constants.TicksPerWeek) return MaxValue;
+            if (value <= MinTickSpan / Constants.TicksPerWeek) return Info.MinAstronomicalDateTime;
+            if (value >= MaxTickSpan / Constants.TicksPerWeek) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(Value.AddDays(value * 7.0), UnspecifiedKind.IsUtc);
+            return new AstronomicalDateTime(Value.AddDays(value * 7.0), Info, UnspecifiedKind.IsUtc);
         }
 
         // Returns a new AstronomicalDateTime that adds the specified number of months to the value of this instance.
         public AstronomicalDateTime AddMonths(int value)
         {
             if (value == 0) return this;
-            if (value <= 1 - Value.Month + (Value.Year - MinUtcDateTime.Year) * -12) return MinValue;
-            if (value >= 12 - Value.Month + (MaxUtcDateTime.Year - Value.Year) * 12) return MaxValue;
+            if (value <= 1 - Value.Month + (Value.Year - DateTimeInfo.MinUtcDateTime.Year) * -12) return Info.MinAstronomicalDateTime;
+            if (value >= 12 - Value.Month + (DateTimeInfo.MaxUtcDateTime.Year - Value.Year) * 12) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(Value.AddMonths(value), UnspecifiedKind.IsUtc);
+            return new AstronomicalDateTime(Value.AddMonths(value), Info, UnspecifiedKind.IsUtc);
         }
 
         // Returns a new AstronomicalDateTime that adds the specified number of years to the value of this instance.
@@ -321,56 +288,51 @@ namespace DST.Core.Physics
 
             // MinUtcDateTime is the first date at 0h during the calendar year.
             // MaxUtcDateTime is the last date at 11:59:59 during the calendar year.
-            if (value <= MinUtcDateTime.Year - Value.Year) return MinValue;
-            if (value >= MaxUtcDateTime.Year - Value.Year) return MaxValue;
+            if (value <= DateTimeInfo.MinUtcDateTime.Year - Value.Year) return Info.MinAstronomicalDateTime;
+            if (value >= DateTimeInfo.MaxUtcDateTime.Year - Value.Year) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(Value.AddYears(value), UnspecifiedKind.IsUtc);
+            return new AstronomicalDateTime(Value.AddYears(value), Info, UnspecifiedKind.IsUtc);
         }
 
         // Returns a new AstronomicalDateTime that adds the specified number of ticks to the value of this instance.
         public AstronomicalDateTime AddTicks(long value)
         {
             if (value == 0) return this;
-            if (value <= MinTickSpan) return MinValue;
-            if (value >= MaxTickSpan) return MaxValue;
+            if (value <= MinTickSpan) return Info.MinAstronomicalDateTime;
+            if (value >= MaxTickSpan) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(Value.AddTicks(value), UnspecifiedKind.IsUtc);
+            return new AstronomicalDateTime(Value.AddTicks(value), Info, UnspecifiedKind.IsUtc);
         }
 
-        // Returns the localized date and time for the current time zone.
+        // Returns the localized DateTime value for the underlying client time zone.
         public DateTime ToLocalTime()
         {
             // The underlying DateTime value will never be less than MinUtcDateTime nor greater than MaxUtcDateTime,
-            // as determined by the static constructor, and thus calling DateTime.ToLocalTime() should always work.
-            return Value.ToLocalTime();
+            // thus the following should always work.
+            // Thi will have a Kind value of DateTimeKind.Unspecified.
+            return TimeZoneInfo.ConvertTimeFromUtc(Value, Info.ClientTimeZoneInfo);
         }
 
-        // Returns the localized date and time for the standard time zone, ignoring Daylight Saving Time.
+        // Returns the localized DateTime value for the underlying standard client time zone, ignoring Daylight Saving Time.
         public DateTime ToStandardTime()
         {
-            DateTime local = ToLocalTime();
+            // Note 1:
+            // If the standard time for this AstronomicalDateTime instance is during the switch into DST, then this 
+            // resultant DateTime will have an invalid time, as determined by Info.ClientTimeZoneInfo.IsInvalidTime(DateTime).
+            //
+            // Note 2:
+            // Converting back to universal time from this resultant DateTime will produce the incorrect time
+            // if DST is in effect for the client time zone.
+            // Use AstronomicalDateTime.FromStandardTime(DateTime) to get the corrected UTC time.
 
-            // If DST is in effect for the current local timezone, use the base UTC offset to get the standard local time.
-            if (SupportsDaylightSavingTime && local.IsDaylightSavingTime())
-            {
-                double delta = BaseUtcOffset.TotalHours - UtcOffset.TotalHours;
+            /* Use DateTime.SpecifyKind() */
+            // The DateTimeKind needs to be explicitly set to Unspecified.
+            // No need to check bounds here, since Min- and MaxUtcDateTime are built on the BaseUtcOffset values.
+            DateTime standard = new(Value.AddHours(Info.BaseUtcOffset.TotalHours).Ticks, DateTimeKind.Unspecified);
 
-                // Note 1:
-                // If the standard time for this AstronomicalDateTime instance is during the switch into DST, then this 
-                // resultant DateTime will have an invalid time, as determined by TimeZoneInfo.Local.IsInvalidTime(DateTime).
-                //
-                // Note 2:
-                // Converting back to universal time from this resultant DateTime will produce the incorrect time
-                // if DST is in effect for the current local time zone.
-                // Use AstronomicalDateTime.FromStandardTime(DateTime) to get the corrected UTC time.
-
-                // No need to check bounds here, since Min- and MaxUtcDateTime are built on the BaseUtcOffset values.
-                local = local.AddHours(delta);
-            }
-
-            return local;
+            return standard;
         }
 
         // Indicates whether this AstronomicalDateTime instance and the specified object are equal.

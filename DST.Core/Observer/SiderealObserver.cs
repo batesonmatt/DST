@@ -6,9 +6,10 @@ namespace DST.Core.Observer
 {
     public class SiderealObserver : BaseLocalObserver, IVariableDeclination, IVariableRightAscension
     {
-        // Creates a new SiderealObserver instance using the specified IGeographicCoordinate, IEquatorialCoordinate, and ITimeKeeper.
-        public SiderealObserver(IGeographicCoordinate location, IEquatorialCoordinate target, ITimeKeeper timeKeeper)
-            : base(location, target, timeKeeper)
+        // Creates a new SiderealObserver instance using the specified DateTimeInfo, IGeographicCoordinate,
+        // IEquatorialCoordinate, and ITimeKeeper.
+        public SiderealObserver(DateTimeInfo dateTimeInfo, IGeographicCoordinate location, IEquatorialCoordinate target, ITimeKeeper timeKeeper)
+            : base(dateTimeInfo, location, target, timeKeeper)
         { }
 
         // Returns the calculated declination angle at the specified AstronomicalDateTime value for this IObserver.Target.

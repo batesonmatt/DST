@@ -6,9 +6,10 @@ namespace DST.Core.Observer
 {
     public class StellarObserver : BaseLocalObserver, IVariableRightAscension
     {
-        // Creates a new StellarObserver instance using the specified IGeographicCoordinate, IEquatorialCoordinate, and ITimeKeeper.
-        public StellarObserver(IGeographicCoordinate location, IEquatorialCoordinate target, ITimeKeeper timeKeeper)
-            : base(location, target, timeKeeper)
+        // Creates a new StellarObserver instance using the specified DateTimeInfo, IGeographicCoordinate,
+        // IEquatorialCoordinate, and ITimeKeeper.
+        public StellarObserver(DateTimeInfo dateTimeInfo, IGeographicCoordinate location, IEquatorialCoordinate target, ITimeKeeper timeKeeper)
+            : base(dateTimeInfo, location, target, timeKeeper)
         { }
 
         // Returns the calculated right ascension angle at the specified AstronomicalDateTime value for this IObserver.Target.

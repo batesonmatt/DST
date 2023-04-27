@@ -17,7 +17,7 @@ namespace DST.Core.Tracker
         // at the current date and time.
         public ICoordinate Track()
         {
-            return Track(AstronomicalDateTime.Now);
+            return Track(_localObserver.DateTimeInfo.Now);
         }
 
         // Tracks the targeting object over a period of time at every specified interval given by 'dateTimes'.

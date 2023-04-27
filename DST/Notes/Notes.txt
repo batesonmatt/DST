@@ -21,6 +21,15 @@ Consider form for the search
 
 ___________________________________________________________
 
+Ideas:
+
+For the home page, consider using a random quote of the day pulled from the database.
+- These will be quotes from scifi books.
+- Consider a login page (to login as admin) to CRUD these in the Quotes table.
+- The login page must not be linked on the site.
+
+-----------------------------------------------------------
+
 BUGS:
 
 - Sort by: Brightness

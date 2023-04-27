@@ -87,14 +87,17 @@ partial class AstronomicalDateTime : IDateTime
 	...
 
 class AstronomicalTimeZone
-	_timeZoneInfo
-	SupportsDaylightSavingTime
-	BaseUtcOffset
-	MinUtcDateTime
-	MaxUtcDateTime				
-	MinAstronomicalDateTime
-	MaxAstronomicalDateTime
-	MinEpochTickSpan
-	MaxEpochTickSpan
-	Now
-	Today
+	Fields
+		_timeZoneInfo
+
+	Instance Properties
+		SupportsDaylightSavingTime
+		BaseUtcOffset
+		MinUtcDateTime
+		MaxUtcDateTime				
+		MinAstronomicalDateTime
+		MaxAstronomicalDateTime
+		MinEpochTickSpan
+		MaxEpochTickSpan
+		Now
+		Today
