@@ -75,10 +75,10 @@ namespace DST.Core.Tests
                 Console.WriteLine("----------------------------------------");
 
                 DateTimeInfo info = new(clientTimeZoneInfo);
-                AstronomicalDateTime d1 = new(clientDateTime, info, AstronomicalDateTime.UnspecifiedKind.IsLocal);
+                AstronomicalDateTime d1 = new(clientDateTime, info);
                 DateTime local = d1.ToLocalTime();
                 DateTime standard = d1.ToStandardTime();
-                AstronomicalDateTime d2 = AstronomicalDateTime.FromStandardTime(standard, info);
+                AstronomicalDateTime d2 = info.ConvertTimeFromStandard(standard);
 
                 Console.WriteLine("UTC Now: " + info.Now.ToString());
                 Console.WriteLine("UTC Today: " + info.Today.ToString());
@@ -92,24 +92,27 @@ namespace DST.Core.Tests
 
                 // March 12, 2:00 am
                 // November 5, 2:00 am
-                //local = new(2023, 3, 12, 0, 30, 0, DateTimeKind.Unspecified);
-                //d1 = new(local, info);
-                //for (int i = 0; i < 4; i++)
-                //{
-                //    d1 = d1.AddMinutes(30);
-                //    standard = d1.ToStandardTime();
-                //    Console.Write(standard.ToString() + " ... ");
-                    
-                //    if (info.ClientTimeZoneInfo.IsInvalidTime(standard))
-                //    {
-                //        Console.Write("Invalid");
-                //    }
+                local = new(2023, 3, 12, 0, 30, 0, DateTimeKind.Unspecified);
+                d1 = new(local, info);
+                for (int i = 0; i < 4; i++)
+                {
+                    d1 = d1.AddMinutes(30);
+                    standard = d1.ToStandardTime();
+                    Console.Write(standard.ToString() + " ... ");
 
-                //    Console.WriteLine();
-                //}
+                    if (info.ClientTimeZoneInfo.IsInvalidTime(standard))
+                    {
+                        Console.Write("Invalid");
+                    }
 
-                //d2 = AstronomicalDateTime.FromStandardTime(standard, info);
-                //Console.WriteLine(d2.ToString());
+                    Console.WriteLine();
+                }
+
+                d2 = new(standard, info);
+                Console.WriteLine(d2.ToString());
+
+                d2 = info.ConvertTimeFromStandard(standard);
+                Console.WriteLine(d2.ToString());
             }
             catch (Exception ex)
             {

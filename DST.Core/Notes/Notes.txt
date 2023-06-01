@@ -5,38 +5,105 @@ ________________________________________________________________________________
 
 To-do list:
 
-Will need to revise DateTimeInfo.Min- and MaxUtcDateTime so that they calculate correctly based on the client timezone.
-- Use instance methods
-- Might need to check whether BaseUtcOffset is less than the DST offset. (postive timezones go forward an hour)
-- Consider DateTimeInfo.MinLocalDateTime and .MaxLocalDateTime as Calendar.Min- and MaxSupportedDateTime,
-  then use these to check bounds on the standard datetime, convert to UTC, that way GetAdjustedDateTime
-  will use Min- or MaxAstronomicalDateTime for bounds-checking.
-  OR
-  Consider Min- and MaxStandardDateTime by padding the min and max supported values by the BaseUtcOffset.
-  This way, when converting to local or standard, we can still go beyond the min and max utc values.
-
-Consider using DateTime.SpecifyKind(DateTime, DateTimeKind)
-
-Consider public static DateTimeKind DateTimeInfo.StandardKind => DateTimeKind.Unspecified
-- Use this for the Standard conversions and where necessary.
-
-Consider public DateTimeKind AstronomicalDateTime.Kind => Value.Kind
-
-Revise UnspecifiedKind concept.
-- Only use DateTimeKind.Utc and DateTimeKind.Unspecified.
-- Don't worry about checking if the kind is unspecified or local, only if it's Utc.
-- Consider removing this enum and use DateTimeKind instead as an override when creating a new AstronomicalDateTime.
-
-
+Make new namespace, called DateAndTime
+- move all necessary code in here.
 
 Rebuild and test.
 - Add test code into DST.Core.Tests
 - Change system timezone and re-run tests (convert results to my actual local timezone and compare).
+- Be sure to test positive timezones (Base offset UTC+5; DST offset UTC+6)
 
 Commit changes.
 
-[Optional] Revise all references to AstronomicalDateTime to use IDateTime.
+[Optional]
+
+Revise all references to AstronomicalDateTime to reference the object by its implementing interface.
 - Use is or as operator where ever necessary.
+
+Consider also referencing instances of DateTimeInfo by its interface, IDateTimeInfo
+
+*** Expose all necessary members
+*** Might need to replace the static members, or use instance methods to retrieve the static properties.
+IDateTimeInfo
+- TimeZoneInfo ClientTimeZoneInfo
+- ...
+
+DateTimeInfo : IDateTimeInfo
+- ...
+
+IDateTime
+- DateTime Value
+- DateTimeKind Kind
+- long Ticks
+- IDateTime Date
+- TimeSpan Time
+- TimeSpan UtcOffset
+- long MinTickSpan
+- long MaxTickSpan
+
+IClientDateTime : IDateTime
+- IDateTimeInfo Info
+
+IAstronomicalDateTime
+- GetTicksFromEpoch
+- GetEarthRotationAngle
+- GetMeanSiderealTime
+- GetSiderealTime
+- GetEclipticLongitude
+- GetMeanSolarLongitude
+- GetMeanLunarLongitude
+- GetMeanObliquity
+- GetNutationInLongitude
+- GetNutationInObliquity
+- GetEquationOfEquinoxes
+- GetEquationOfOrigins
+
+IMutableDateTime
+- IMutableDateTime AddSeconds
+- IMutableDateTime AddMinutes
+- IMutableDateTime AddHours
+- IMutableDateTime AddDays
+- IMutableDateTime AddWeeks
+- IMutableDateTime AddMonths
+- IMutableDateTime AddYears
+- IMutableDateTime AddTicks
+- DateTime ToLocalTime
+- DateTime ToStandardTime
+- IMutableDateTime FromStandardTime
+- bool IsMinOrMaxValue
+
+AstronomicalDateTime : IDateTime, IClientDateTime, IAstronomicalDateTime, IMutableDateTime
+- ...
+
+DateTimeFactory
+- IDateTime Create(DateTime dateTime, IDateTimeInfo dateTimeInfo)
+	_ = dateTimeInfo ?? throw new ArgumentNullException(nameof(dateTimeInfo));
+    return new AstronomicalDateTime(dateTime, dateTimeInfo);
+
+LocalTracker
+	public ICoordinate[] Track(IDateTime[] dateTimes)
+        {
+            if (dateTimes is null)
+            {
+                return Array.Empty<IHorizontalCoordinate>();
+            }
+
+            ICoordinate[] positions = new ICoordinate[dateTimes.Length];
+
+            for (int i = 0; i < dateTimes.Length; i++)
+            {
+				if (dateTimes[i] is IAstronomicalDateTime)
+				{
+					positions[i] = Track(dateTimes[i]); // LocalTracker.Track(IAstronomicalDateTime dateTime)
+				}
+				else
+				{
+					positions[i] = null;
+				}
+            }
+
+            return positions;
+        }
 
 ________________________________________________________________________________________________________
 

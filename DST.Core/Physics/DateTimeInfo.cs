@@ -3,48 +3,31 @@
 namespace DST.Core.Physics
 {
     // Represents a client's time zone information and defines DateTime rules.
-    // Uses the Gregorian calendar and the J2000.0 epoch event.
     public class DateTimeInfo : IDateTimeInfo
     {
-        // Gets an instance of the GregorianCalendar.
-        public static Calendar Calendar { get; } = new GregorianCalendar(GregorianCalendarTypes.Localized);
-
-        // Gets the most recent epoch date and time, represented as the Gregorian date in universal time.
-        // This resembles the Julian date in Terrestrial Time (TT), which may be proved by Epoch.ToOADate() + 2415018.5 = 2451545.0.
-        // A DateTimeKind of Utc is necessary for the +0h offset.
-        public static DateTime Epoch { get; } = new(2000, 1, 1, 12, 0, 0, 0, Calendar, DateTimeKind.Utc);
-
-        // Gets the minimum allowable UTC DateTime for the underlying time zone.
-        public static DateTime MinUtcDateTime
-            => DateTime.SpecifyKind(Calendar.MinSupportedDateTime.AddDays(1), DateTimeKind.Utc);
-
-        // Gets the maximum allowable UTC DateTime for the underlying time zone.
-        public static DateTime MaxUtcDateTime
-            => DateTime.SpecifyKind(Calendar.MaxSupportedDateTime.AddDays(-1), DateTimeKind.Utc);
-
-        // Gets the total number of ticks from the epoch to MinUtcDateTime.
-        // This value is negative.
-        public static long MinEpochTickSpan => MinUtcDateTime.Ticks - Epoch.Ticks;
-
-        // Gets the total number of ticks from the epoch to MaxUtcDateTime.
-        // This value is positive.
-        public static long MaxEpochTickSpan => MaxUtcDateTime.Ticks - Epoch.Ticks;
-
+        /* Remove this and replace it with DateTimeInfoFactory.Default => IDateTimeInfo */
         public static DateTimeInfo Default { get; } = new(TimeZoneInfo.Utc);
 
+        // Gets the TimeZoneInfo object for this DateTimeInfo instance.
         public TimeZoneInfo ClientTimeZoneInfo { get; }
 
         // Gets a value indicating whether the underlying time zone has any daylight saving time rules.
         public bool SupportsDaylightSavingTime => ClientTimeZoneInfo.SupportsDaylightSavingTime;
 
-        // Gets the Coordinated Universal Time (UTC) offset for the underlying time zone.
+        // Gets the standardized Coordinated Universal Time (UTC) offset for the underlying time zone.
         public TimeSpan BaseUtcOffset => ClientTimeZoneInfo.BaseUtcOffset;
 
+        // Gets the minimum allowable DateTime in standardized local time for the underlying time zone.
+        public DateTime MinStandardDateTime => CalculateMinStandardDateTime();
+
+        // Gets the maximum allowable DateTime in standardized local time for the underlying time zone.
+        public DateTime MaxStandardDateTime => CalculateMaxStandardDateTime();
+
         // Gets the minimum supported value for an AstronomicalDateTime.
-        public AstronomicalDateTime MinAstronomicalDateTime => new(MinUtcDateTime, this);
+        public AstronomicalDateTime MinAstronomicalDateTime => new(DateTimeConstants.MinUtcDateTime, this);
 
         // Gets the maximum supported value for an AstronomicalDateTime.
-        public AstronomicalDateTime MaxAstronomicalDateTime => new(MaxUtcDateTime, this);
+        public AstronomicalDateTime MaxAstronomicalDateTime => new(DateTimeConstants.MaxUtcDateTime, this);
 
         // Gets a new AstronomicalDateTime instance resembling the current UTC date and time.
         public AstronomicalDateTime Now => new(DateTime.UtcNow, this);
@@ -52,9 +35,51 @@ namespace DST.Core.Physics
         // Gets a new AstronomicalDateTime instance resembling the current UTC date with the time value set to midnight (00:00:00).
         public AstronomicalDateTime Today => new(DateTime.UtcNow.Date, this);
 
+        // Creates a new DateTimeInfo instance given the specified TimeZoneInfo argument.
         public DateTimeInfo(TimeZoneInfo timeZoneInfo)
         {
             ClientTimeZoneInfo = timeZoneInfo ?? throw new ArgumentNullException(nameof(timeZoneInfo));
+        }
+
+        // Returns a new AstronomicalDateTime, converted from a specified DateTime value in standardized
+        // local time for the underlying client time zone.
+        // If dateTime.Kind already equals DateTimeKind.Utc, then this will not modify the date or time.
+        public AstronomicalDateTime ConvertTimeFromStandard(DateTime dateTime)
+        {
+            if (dateTime.Kind != DateTimeKind.Utc)
+            {
+                // Verify that the local date and time will be in range when converted to universal time.
+                // If this fails, then the resultant AstronomicalDateTime will have a value of either
+                // DateTimeInfo.MinAstronomicalDateTime or DateTimeInfo.MaxAstronomicalDateTime.
+                if (dateTime < MinStandardDateTime) return MinAstronomicalDateTime;
+                if (dateTime > MaxStandardDateTime) return MaxAstronomicalDateTime;
+
+                dateTime = DateTime.SpecifyKind(dateTime.Subtract(BaseUtcOffset), DateTimeKind.Utc);
+            }
+
+            return new(dateTime, this);
+        }
+
+        private DateTime CalculateMinStandardDateTime()
+        {
+            double baseOffsetHours = ClientTimeZoneInfo.BaseUtcOffset.TotalHours;
+
+            return Math.Sign(baseOffsetHours) switch
+            {
+                >= 0 => DateTimeConstants.MinUtcDateTime,
+                _ => DateTime.SpecifyKind(DateTimeConstants.MinUtcDateTime.AddHours(baseOffsetHours), DateTimeConstants.StandardKind)
+            };
+        }
+
+        private DateTime CalculateMaxStandardDateTime()
+        {
+            double baseOffsetHours = ClientTimeZoneInfo.BaseUtcOffset.TotalHours;
+
+            return Math.Sign(baseOffsetHours) switch
+            {
+                <= 0 => DateTimeConstants.MaxUtcDateTime,
+                _ => DateTime.SpecifyKind(DateTimeConstants.MaxUtcDateTime.AddHours(baseOffsetHours), DateTimeConstants.StandardKind)
+            };
         }
     }
 }

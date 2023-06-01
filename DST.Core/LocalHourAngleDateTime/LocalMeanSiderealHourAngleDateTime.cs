@@ -53,7 +53,7 @@ namespace DST.Core.LocalHourAngleDateTime
             // The total hours offset starts from midnight (00:00:00) on the specified date.
             // Use AstronomicalDateTime.Date to truncate the time component.
             // Convert the hours back to mean solar time before adding to the date.
-            AstronomicalDateTime result = AstronomicalDateTime.FromStandardTime(standardDateTime.Date, dateTime.Info)
+            AstronomicalDateTime result = localObserver.DateTimeInfo.ConvertTimeFromStandard(standardDateTime.Date)
                 .AddHours(totalHours * Constants.SiderealToSolarRatio);
 
             return result;
