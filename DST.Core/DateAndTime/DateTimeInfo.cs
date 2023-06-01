@@ -1,13 +1,8 @@
-﻿using System.Globalization;
-
-namespace DST.Core.Physics
+﻿namespace DST.Core.DateAndTime
 {
     // Represents a client's time zone information and defines DateTime rules.
     public class DateTimeInfo : IDateTimeInfo
     {
-        /* Remove this and replace it with DateTimeInfoFactory.Default => IDateTimeInfo */
-        public static DateTimeInfo Default { get; } = new(TimeZoneInfo.Utc);
-
         // Gets the TimeZoneInfo object for this DateTimeInfo instance.
         public TimeZoneInfo ClientTimeZoneInfo { get; }
 

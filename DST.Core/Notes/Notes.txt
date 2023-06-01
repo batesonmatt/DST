@@ -5,22 +5,7 @@ ________________________________________________________________________________
 
 To-do list:
 
-Make new namespace, called DateAndTime
-- move all necessary code in here.
-
-Rebuild and test.
-- Add test code into DST.Core.Tests
-- Change system timezone and re-run tests (convert results to my actual local timezone and compare).
-- Be sure to test positive timezones (Base offset UTC+5; DST offset UTC+6)
-
-Commit changes.
-
-[Optional]
-
-Revise all references to AstronomicalDateTime to reference the object by its implementing interface.
-- Use is or as operator where ever necessary.
-
-Consider also referencing instances of DateTimeInfo by its interface, IDateTimeInfo
+Revise AstronomicalDateTime design:
 
 *** Expose all necessary members
 *** Might need to replace the static members, or use instance methods to retrieve the static properties.
@@ -104,6 +89,11 @@ LocalTracker
 
             return positions;
         }
+
+Revise all references to AstronomicalDateTime to reference the object by its implementing interfaces.
+- Use is or as operator where ever necessary.
+
+Consider also referencing instances of DateTimeInfo by its interface, IDateTimeInfo
 
 ________________________________________________________________________________________________________
 

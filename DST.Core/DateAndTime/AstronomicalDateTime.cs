@@ -1,6 +1,6 @@
-﻿using System;
+﻿using DST.Core.Physics;
 
-namespace DST.Core.Physics
+namespace DST.Core.DateAndTime
 {
     // Represents a DateTime value in Universal Time, for a given client time zone, on the Gregorian calendar.
     public class AstronomicalDateTime : IDateTime
@@ -113,7 +113,7 @@ namespace DST.Core.Physics
             {
                 dateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, Info.ClientTimeZoneInfo);
             }
-             
+
             // Get the min and max allowable DateTime values in universal time.
             DateTime min = DateTimeConstants.MinUtcDateTime;
             DateTime max = DateTimeConstants.MaxUtcDateTime;
@@ -357,7 +357,7 @@ namespace DST.Core.Physics
             //
             // The following code resembles the ERA expression rewritten in degrees.
 
-            double era = Constants.ERA0 + (Constants.StellarDayRotation * (GetTicksFromEpoch() / Constants.TicksPerDay));
+            double era = Constants.ERA0 + Constants.StellarDayRotation * (GetTicksFromEpoch() / Constants.TicksPerDay);
 
             // Relate the angle onto the interval [0°, 360°).
             return Angle.Coterminal(era);
@@ -383,8 +383,8 @@ namespace DST.Core.Physics
 
             double gmst =
                 Constants.GMST0 +
-                (Constants.SolarToSiderealOffsetDegrees * (GetTicksFromEpoch() / Constants.TicksPerDay)) +
-                (Constants.RotationPerHour * (Value.TimeOfDay.Ticks / Constants.TicksPerHour));
+                Constants.SolarToSiderealOffsetDegrees * (GetTicksFromEpoch() / Constants.TicksPerDay) +
+                Constants.RotationPerHour * (Value.TimeOfDay.Ticks / Constants.TicksPerHour);
 
             // Relate the angle onto the interval [0°, 360°).
             return Angle.Coterminal(gmst);

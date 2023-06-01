@@ -1,123 +1,358 @@
 ﻿using DST.Core.Coordinate;
+using DST.Core.DateAndTime;
 using DST.Core.DateTimeAdder;
 using DST.Core.DateTimesBuilder;
 using DST.Core.Observer;
 using DST.Core.Physics;
 using DST.Core.TimeKeeper;
 using DST.Core.TimeScalable;
+using DST.Core.Tracker;
+using DST.Core.Trajectory;
+using DST.Core.Vector;
 
 namespace DST.Core.Tests
 {
-    public class AstronomicalTimeZone
-    {
-        private TimeZoneInfo _timeZoneInfo;
-
-        public AstronomicalTimeZone(TimeZoneInfo timeZoneInfo)
-        {
-            _timeZoneInfo = timeZoneInfo;
-        }
-
-        public static bool TryFindById(string id, out AstronomicalTimeZone result)
-        {
-            bool success = true;
-
-            try
-            {
-                result = new(TimeZoneInfo.FindSystemTimeZoneById(id));
-            }
-            catch
-            {
-                result = new(TimeZoneInfo.Utc);
-                success = false;
-            }
-
-            return success;
-        }
-    }
-
     internal class Program
     {
-        static void Main(string[] args)
+        private static void Test()
         {
-            // The current UTC datetime generated from the local system timezone info.
-            DateTime utcDateTime = DateTime.UtcNow;
+            // Visibility: Rise and Set
+            // Location: 52°30'00"N 1°55'00"W => 52.5°N 1.9167°W => 53°N 2°W
+            // Target: 16h 41m 42s, +36°28'00" => 16.695h, +36.4667° => 17h, +36°
+            // Period: 8 / 10 / 1998 6:10:00 PM
+            // Position: +49°10'07.927", 269°08'48.008" => +49.1689°, 269.1467° => +49°, 269°
 
-            // The client's UTC offset value generated on server-side.
-            TimeSpan clientUtcOffset;
+            // LAT: 52.5, LON: -1.9166667
+            IGeographicCoordinate location = GeographicCoordinateFactory.Create(
+                longitude: new Angle(-1.9166667), latitude: new Angle(52.5));
 
-            // The client's timezone name id (IANA format) retrieved at client-side.
-            string clientTzId_IANA = "America/New_York";
+            // RA: 16.695hr, DEC: 36°28'
+            IEquatorialCoordinate m13 = EquatorialCoordinateFactory.Create(
+                rightAscension: new Angle(TimeSpan.FromHours(16.695)), declination: new Angle(36, 28));
 
-            // The client's timezone converted to Windows format on server-side.
-            TimeZoneInfo clientTimeZoneInfo;
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo as DateTimeInfo, location, m13, timeKeeper);
 
-            // The client's current local datetime generated on server-side.
-            DateTime clientDateTime;
+            AstronomicalDateTime dateTime = new(new DateTime(1998, 8, 10, 23, 10, 0, DateTimeKind.Utc), dateTimeInfo as DateTimeInfo);
 
-            // The client's current datetime expressed in universal time generated on server-side.
-            DateTime clientUtcDateTime;
+            ITracker tracker = TrackerFactory.Create(observer);
 
-            try
+            ICoordinate position = tracker.Track(dateTime);
+
+            ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
+
+            // Display results to the user.
+            Console.WriteLine($"Visibility: {trajectory}");
+
+            if (observer.Origin is IFormattableCoordinate formattableLocation)
             {
-                /* Base UTC -5 hours, DST UTC -4 hours */
-                clientTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(clientTzId_IANA);
-                Console.WriteLine("Client time zone: " + clientTimeZoneInfo.DisplayName);
-                
-                clientUtcOffset = clientTimeZoneInfo.GetUtcOffset(utcDateTime);
-                Console.WriteLine("Client UTC offset: " + clientUtcOffset.ToString());
+                Console.WriteLine($"Location: {formattableLocation} => {formattableLocation.Format(FormatType.Decimal)} => {formattableLocation.Format(FormatType.Compact)}");
+            }
 
-                clientDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, clientTimeZoneInfo);
-                Console.WriteLine("Client local datetime: " + clientDateTime.ToString() + " " + clientDateTime.Kind);
+            if (observer.Destination is IFormattableCoordinate formattableTarget)
+            {
+                Console.WriteLine($"Target: {formattableTarget} => {formattableTarget.Format(FormatType.Decimal)} => {formattableTarget.Format(FormatType.Compact)}");
+            }
 
-                clientUtcDateTime = TimeZoneInfo.ConvertTimeToUtc(clientDateTime, clientTimeZoneInfo);
-                Console.WriteLine("Client UTC datetime: " + clientUtcDateTime.ToString() + " " + clientUtcDateTime.Kind);
+            if (position is IFormattableCoordinate formattablePosition)
+            {
+                Console.WriteLine($"Period: {dateTime.ToLocalTime()}");
+                Console.WriteLine($"Position: {formattablePosition} => {formattablePosition.Format(FormatType.Decimal)} => {formattablePosition.Format(FormatType.Compact)}");
+            }
+        }
 
-                Console.WriteLine("----------------------------------------");
+        private static void TestTrack()
+        {
+            // My location (LAT, LON): 29.4944768, -95.1123968
+            IGeographicCoordinate location = GeographicCoordinateFactory.Create(
+                longitude: new Angle(-95.1123968), latitude: new Angle(29.4944768));
+            //longitude: Angle.Zero, latitude: new Angle(90.0));
+            //longitude: Angle.Zero, latitude: new Angle(-80.0));
 
-                DateTimeInfo info = new(clientTimeZoneInfo);
-                AstronomicalDateTime d1 = new(clientDateTime, info);
-                DateTime local = d1.ToLocalTime();
-                DateTime standard = d1.ToStandardTime();
-                AstronomicalDateTime d2 = info.ConvertTimeFromStandard(standard);
+            // M42: Orion Diffuse Nebula
+            IEquatorialCoordinate m42 = EquatorialCoordinateFactory.Create(
+                rightAscension: new Angle(new TimeSpan(5, 35, 17)), declination: new Angle(-5, -23, -28));
 
-                Console.WriteLine("UTC Now: " + info.Now.ToString());
-                Console.WriteLine("UTC Today: " + info.Today.ToString());
-                Console.WriteLine("Date: " + d1.Date.ToString());
-                Console.WriteLine("UTC: " + d1.ToString());
-                Console.WriteLine("Local: " + local.ToString());
-                Console.WriteLine("Standard: " + standard.ToString());
-                Console.WriteLine("From Standard: " + d2.ToString());
+            // M31: Andromeda Galaxy
+            IEquatorialCoordinate m31 = EquatorialCoordinateFactory.Create(
+                rightAscension: new Angle(TimeSpan.FromMinutes(42.7383)), declination: new Angle(41, 16, 9));
 
-                Console.WriteLine("----------------------------------------");
+            // Polaris
+            IEquatorialCoordinate polaris = EquatorialCoordinateFactory.Create(
+                rightAscension: new Angle(new TimeSpan(2, 31, 49)), declination: new Angle(89, 15, 51));
 
-                // March 12, 2:00 am
-                // November 5, 2:00 am
-                local = new(2023, 3, 12, 0, 30, 0, DateTimeKind.Unspecified);
-                d1 = new(local, info);
-                for (int i = 0; i < 4; i++)
+            // Some point on the celestial equator
+            IEquatorialCoordinate eq = EquatorialCoordinateFactory.Create(
+                rightAscension: Angle.Zero, declination: Angle.Zero);
+
+            // Some northern point at RA 0
+            IEquatorialCoordinate ra = EquatorialCoordinateFactory.Create(
+                rightAscension: Angle.Zero, declination: new Angle(41, 16, 9));
+
+            // The North Celestial Pole, or Celestial Intermediate Pole (CIP)
+            IEquatorialCoordinate north = EquatorialCoordinateFactory.Create(
+                rightAscension: Angle.Zero, declination: new Angle(90.0));
+
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo as DateTimeInfo, location, m31, timeKeeper);
+            ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
+
+            Console.WriteLine($"Location: {observer.Origin}");
+            Console.WriteLine($"Target: {observer.Destination}");
+            Console.WriteLine($"Visibility: {trajectory}\n");
+
+            // For spring DST testing.
+            //AstronomicalDateTime start = 
+            //    new AstronomicalDateTime(new DateTime(2022, 3, 12, 18, 0, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
+
+            AstronomicalDateTime now = ((DateTimeInfo)dateTimeInfo).Now;
+            AstronomicalDateTime start = ((DateTimeInfo)dateTimeInfo).Now;
+
+            //AstronomicalDateTime start =
+            //    new(new DateTime(2022, 12, 13, 19, 32, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
+
+            if (trajectory is IVariableTrajectory variableTrajectory)
+            {
+                if (variableTrajectory.IsAboveHorizon(now))
                 {
-                    d1 = d1.AddMinutes(30);
-                    standard = d1.ToStandardTime();
-                    Console.Write(standard.ToString() + " ... ");
-
-                    if (info.ClientTimeZoneInfo.IsInvalidTime(standard))
-                    {
-                        Console.Write("Invalid");
-                    }
-
-                    Console.WriteLine();
+                    Console.WriteLine("This object is in your sky now!");
+                }
+                else
+                {
+                    Console.WriteLine("This object is not yet in your sky.");
                 }
 
-                d2 = new(standard, info);
-                Console.WriteLine(d2.ToString());
+                Console.WriteLine();
 
-                d2 = info.ConvertTimeFromStandard(standard);
-                Console.WriteLine(d2.ToString());
+                if (trajectory is IRiseSetTrajectory riseSetTrajectory)
+                {
+                    IVector rise = riseSetTrajectory.GetRise(now);
+                    IVector apex = riseSetTrajectory.GetApex(now);
+                    IVector set = riseSetTrajectory.GetSet(now);
+
+                    Console.WriteLine($"Rise: {rise.DateTime.ToLocalTime()}\tPosition: {rise.Coordinate}");
+                    Console.WriteLine($"Apex: {apex.DateTime.ToLocalTime()}\tPosition: {apex.Coordinate}");
+                    Console.WriteLine($"Set: {set.DateTime.ToLocalTime()}\tPosition: {set.Coordinate}");
+                }
+                else
+                {
+                    IVector apex = variableTrajectory.GetApex(now);
+                    Console.WriteLine($"Apex: {apex.DateTime.ToLocalTime()}\tPosition: {apex.Coordinate}");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine("Error: " + ex.Message);
+                if (trajectory.IsAboveHorizon(now))
+                {
+                    Console.WriteLine("This object is in your sky now!");
+                }
+                else
+                {
+                    Console.WriteLine("This object is never visible at your location.");
+                }
             }
+
+            Console.WriteLine();
+
+            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.MeanSolarTime);
+            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Hours);
+            IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, true);
+            AstronomicalDateTime[] dateTimes = dateTimesBuilder.Build(start, dateTimeAdder.Max, 1);
+
+            ITracker tracker = TrackerFactory.Create(observer);
+
+            ICoordinate[] positions = tracker.Track(dateTimes);
+            int results = 0;
+
+            for (int i = 0; i < positions.Length; i++)
+            {
+                if (positions[i] != null)
+                {
+                    if (positions[i] is IFormattableCoordinate formattablePosition)
+                    {
+                        Console.Write($"Period: {dateTimes[i].ToLocalTime()}\t");
+                        Console.Write($"Position: {formattablePosition.Format(FormatType.Decimal)}\t");
+                        Console.Write($"Visible: {trajectory.IsAboveHorizon(dateTimes[i])}\n");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("null");
+                }
+
+                results++;
+            }
+
+            Console.WriteLine($"\n{results} results");
+        }
+
+        private static void TestAdds()
+        {
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
+
+            AstronomicalDateTime start = ((DateTimeInfo)dateTimeInfo).Now;
+            Console.WriteLine($"Start: {start}");
+            Console.WriteLine("--------------------");
+
+            // GMST - Sidereal Time
+
+            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.SiderealTime);
+            IDateTimeAdder monthsAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Months);
+            IDateTimeAdder yearsAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Years);
+
+            AstronomicalDateTime next = monthsAdder.Add(start, 3);
+            Console.WriteLine($"Next: {next}");
+            Console.WriteLine($"GMST: {next.GetMeanSiderealTime().TotalDegrees}");
+
+            next = monthsAdder.Add(next, 3);
+            Console.WriteLine($"Next: {next}");
+            Console.WriteLine($"GMST: {next.GetMeanSiderealTime().TotalDegrees}");
+
+            next = yearsAdder.Add(start, 3);
+            Console.WriteLine($"Next: {next}");
+            Console.WriteLine($"GMST: {next.GetMeanSiderealTime().TotalDegrees}");
+
+            next = yearsAdder.Add(next, 3);
+            Console.WriteLine($"Next: {next}");
+            Console.WriteLine($"GMST: {next.GetMeanSiderealTime().TotalDegrees}");
+
+            Console.WriteLine("--------------------");
+
+            // ERA - Stellar Time
+
+            timeScalable = TimeScalableFactory.Create(TimeScale.StellarTime);
+            monthsAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Months);
+            yearsAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Years);
+
+            next = monthsAdder.Add(start, 3);
+            Console.WriteLine($"Next: {next}");
+            Console.WriteLine($"ERA: {next.GetEarthRotationAngle().TotalDegrees}");
+
+            next = monthsAdder.Add(next, 3);
+            Console.WriteLine($"Next: {next}");
+            Console.WriteLine($"ERA: {next.GetEarthRotationAngle().TotalDegrees}");
+
+            next = yearsAdder.Add(start, 3);
+            Console.WriteLine($"Next: {next}");
+            Console.WriteLine($"ERA: {next.GetEarthRotationAngle().TotalDegrees}");
+
+            next = yearsAdder.Add(next, 3);
+            Console.WriteLine($"Next: {next}");
+            Console.WriteLine($"ERA: {next.GetEarthRotationAngle().TotalDegrees}");
+        }
+
+        private static void TestDateTimes()
+        {
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
+            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.SiderealTime);
+            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Months);
+            IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, false);
+
+            AstronomicalDateTime start = new(new DateTime(2022, 11, 24, 12, 0, 0, DateTimeKind.Local), dateTimeInfo as DateTimeInfo);
+
+            AstronomicalDateTime[] dateTimes = dateTimesBuilder.Build(start, -10, 1);
+
+            foreach (AstronomicalDateTime dateTime in dateTimes)
+            {
+                Console.WriteLine($"{dateTime.Value}: \t{dateTime.GetMeanSiderealTime().TotalDegrees}°");
+            }
+        }
+
+        private static void TestTrackVectors()
+        {
+            // My location (LAT, LON): 29.4944768, -95.1123968
+            IGeographicCoordinate location = GeographicCoordinateFactory.Create(
+                longitude: new Angle(-95.1123968), latitude: new Angle(29.4944768));
+            //longitude: Angle.Zero, latitude: new Angle(90.0));
+            //longitude: Angle.Zero, latitude: new Angle(-80.0));
+
+            // M42: Orion Diffuse Nebula
+            IEquatorialCoordinate m42 = EquatorialCoordinateFactory.Create(
+                rightAscension: new Angle(new TimeSpan(5, 35, 17)), declination: new Angle(-5, -23, -28));
+
+            // M31: Andromeda Galaxy
+            IEquatorialCoordinate m31 = EquatorialCoordinateFactory.Create(
+                rightAscension: new Angle(TimeSpan.FromMinutes(42.7383)), declination: new Angle(41, 16, 9));
+
+            // Polaris
+            IEquatorialCoordinate polaris = EquatorialCoordinateFactory.Create(
+                rightAscension: new Angle(new TimeSpan(2, 31, 49)), declination: new Angle(89, 15, 51));
+
+            // Some point on the celestial equator
+            IEquatorialCoordinate eq = EquatorialCoordinateFactory.Create(
+                rightAscension: Angle.Zero, declination: Angle.Zero);
+
+            // Some northern point at RA 0
+            IEquatorialCoordinate ra = EquatorialCoordinateFactory.Create(
+                rightAscension: Angle.Zero, declination: new Angle(41, 16, 9));
+
+            // The North Celestial Pole, or Celestial Intermediate Pole (CIP)
+            IEquatorialCoordinate north = EquatorialCoordinateFactory.Create(
+                rightAscension: Angle.Zero, declination: new Angle(90.0));
+
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo as DateTimeInfo, location, m31, timeKeeper);
+            ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
+
+            Console.WriteLine($"Location: {observer.Origin}");
+            Console.WriteLine($"Target: {observer.Destination}");
+            Console.WriteLine($"Visibility: {trajectory}\n");
+
+            AstronomicalDateTime start = ((DateTimeInfo)dateTimeInfo).Now;
+
+            //AstronomicalDateTime start =
+            //    new(new DateTime(2022, 12, 13, 19, 32, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
+
+            int cycles = 10;
+
+            if (trajectory is IVariableTrajectory variableTrajectory)
+            {
+                if (trajectory is IRiseSetTrajectory riseSetTrajectory)
+                {
+                    IVector[] rise = riseSetTrajectory.GetRise(start, cycles);
+                    IVector[] apex = riseSetTrajectory.GetApex(start, cycles);
+                    IVector[] set = riseSetTrajectory.GetSet(start, cycles);
+
+                    for (int i = 0; i < cycles; i++)
+                    {
+                        if (rise[i] != null)
+                        {
+                            Console.WriteLine($"Rise {i}:\t\tDateTime: {rise[i].DateTime.ToLocalTime()}\t\tPosition: {rise[i].Coordinate}");
+                        }
+                        if (apex[i] != null)
+                        {
+                            Console.WriteLine($"Apex {i}:\t\tDateTime: {apex[i].DateTime.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
+                        }
+                        if (set[i] != null)
+                        {
+                            Console.WriteLine($"Set {i}:\t\tDateTime: {set[i].DateTime.ToLocalTime()}\t\tPosition: {set[i].Coordinate}");
+                        }
+                        Console.WriteLine("--------------------");
+                    }
+                }
+                else
+                {
+                    IVector[] apex = variableTrajectory.GetApex(start, cycles);
+
+                    for (int i = 0; i < cycles; i++)
+                    {
+                        if (apex[i] != null)
+                        {
+                            Console.WriteLine($"Apex {i}:\t\tDateTime: {apex[i].DateTime.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
+                        }
+                    }
+                }
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            Test();
+            //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
+            //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
         }
     }
 }

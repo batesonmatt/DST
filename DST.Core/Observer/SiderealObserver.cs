@@ -1,6 +1,7 @@
 ﻿using DST.Core.Coordinate;
 using DST.Core.TimeKeeper;
 using DST.Core.Physics;
+using DST.Core.DateAndTime;
 
 namespace DST.Core.Observer
 {

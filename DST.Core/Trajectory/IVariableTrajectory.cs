@@ -1,5 +1,5 @@
 ﻿using DST.Core.Vector;
-using DST.Core.Physics;
+using DST.Core.DateAndTime;
 
 namespace DST.Core.Trajectory
 {

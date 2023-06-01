@@ -1,8 +1,8 @@
 ﻿using DST.Core.Coordinate;
+using DST.Core.DateAndTime;
 using DST.Core.LocalHourAngle;
 using DST.Core.LocalHourAngleDateTime;
 using DST.Core.LocalTimeKeeper;
-using DST.Core.Physics;
 using DST.Core.TimeKeeper;
 
 namespace DST.Core.Observer

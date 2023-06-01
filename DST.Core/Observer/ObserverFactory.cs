@@ -1,5 +1,5 @@
 ﻿using DST.Core.Coordinate;
-using DST.Core.Physics;
+using DST.Core.DateAndTime;
 using DST.Core.TimeKeeper;
 
 namespace DST.Core.Observer

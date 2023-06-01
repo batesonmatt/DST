@@ -1,5 +1,5 @@
-﻿using DST.Core.Observer;
-using DST.Core.Physics;
+﻿using DST.Core.DateAndTime;
+using DST.Core.Observer;
 
 namespace DST.Core.Trajectory
 {

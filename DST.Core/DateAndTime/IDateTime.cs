@@ -1,4 +1,4 @@
-﻿namespace DST.Core.Physics
+﻿namespace DST.Core.DateAndTime
 {
     public interface IDateTime
     {

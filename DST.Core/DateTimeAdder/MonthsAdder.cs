@@ -1,5 +1,5 @@
 ﻿using DST.Core.TimeScalable;
-using DST.Core.Physics;
+using DST.Core.DateAndTime;
 
 namespace DST.Core.DateTimeAdder
 {

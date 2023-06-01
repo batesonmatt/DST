@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace DST.Core.Physics
+namespace DST.Core.DateAndTime
 {
     // Defines shared information relating to important DateTime values and supported ranges.
     public static class DateTimeConstants
