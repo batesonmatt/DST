@@ -5,6 +5,7 @@ namespace DST.Core.Coordinate
 {
     public class EquatorialCoordinateFactory
     {
+        [Obsolete("Use CoordinateFactory.CreateEquatorial instead.")]
         // Creates a new IEquatorialCoordinate object given the specified right ascension and declination Angle values.
         public static IEquatorialCoordinate Create(Angle rightAscension, Angle declination)
         {

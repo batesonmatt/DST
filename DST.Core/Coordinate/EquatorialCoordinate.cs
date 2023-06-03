@@ -99,7 +99,7 @@ namespace DST.Core.Coordinate
             Angle longitude = Angle.FromRadians(lambda);
             Angle latitude = Angle.FromRadians(beta);
 
-            return EclipticCoordinateFactory.Create(longitude, latitude);
+            return CoordinateFactory.CreateEcliptic(longitude, latitude);
         }
 
         // Calculates the nutation of this EquatorialCoordinate, for the specified date and time.
@@ -137,7 +137,7 @@ namespace DST.Core.Coordinate
             Angle dec = new(Declination + dDelta);
 
             // The final nutated equatorial components, in degrees.
-            return EquatorialCoordinateFactory.Create(ra, dec);
+            return CoordinateFactory.CreateEquatorial(ra, dec);
         }
 
         // Calculates the nutation of this EquatorialCoordinate as an IEclipticCoordinate, for the specified date and time.

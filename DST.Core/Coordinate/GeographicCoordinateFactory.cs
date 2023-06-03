@@ -5,6 +5,7 @@ namespace DST.Core.Coordinate
 {
     public class GeographicCoordinateFactory
     {
+        [Obsolete("Use CoordinateFactory.CreateGeographic instead.")]
         // Creates a new IGeographicCoordinate object given the specified longitude and latitude Angle values.
         public static IGeographicCoordinate Create(Angle longitude, Angle latitude)
         {

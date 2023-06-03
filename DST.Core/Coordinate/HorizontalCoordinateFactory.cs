@@ -5,6 +5,7 @@ namespace DST.Core.Coordinate
 {
     public class HorizontalCoordinateFactory
     {
+        [Obsolete("Use CoordinateFactory.CreateHorizontal instead.")]
         // Creates a new IHorizontalCoordinate object given the specified azimuth and altitude Angle values.
         // The argument for 'referencesIRM' indicates whether the azimuthal angle needs to be modified.
         public static IHorizontalCoordinate Create(Angle azimuth, Angle altitude, bool referencesIRM)

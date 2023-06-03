@@ -23,11 +23,11 @@ namespace DST.Core.Tests
             // Position: +49°10'07.927", 269°08'48.008" => +49.1689°, 269.1467° => +49°, 269°
 
             // LAT: 52.5, LON: -1.9166667
-            IGeographicCoordinate location = GeographicCoordinateFactory.Create(
+            IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
                 longitude: new Angle(-1.9166667), latitude: new Angle(52.5));
 
             // RA: 16.695hr, DEC: 36°28'
-            IEquatorialCoordinate m13 = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate m13 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(TimeSpan.FromHours(16.695)), declination: new Angle(36, 28));
 
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
@@ -47,54 +47,42 @@ namespace DST.Core.Tests
 
             // Display results to the user.
             Console.WriteLine($"Visibility: {trajectory}");
-
-            if (observer.Origin is IFormattableCoordinate formattableLocation)
-            {
-                Console.WriteLine($"Location: {formattableLocation} => {formattableLocation.Format(FormatType.Decimal)} => {formattableLocation.Format(FormatType.Compact)}");
-            }
-
-            if (observer.Destination is IFormattableCoordinate formattableTarget)
-            {
-                Console.WriteLine($"Target: {formattableTarget} => {formattableTarget.Format(FormatType.Decimal)} => {formattableTarget.Format(FormatType.Compact)}");
-            }
-
-            if (position is IFormattableCoordinate formattablePosition)
-            {
-                Console.WriteLine($"Period: {mutable.ToLocalTime()}");
-                Console.WriteLine($"Position: {formattablePosition} => {formattablePosition.Format(FormatType.Decimal)} => {formattablePosition.Format(FormatType.Compact)}");
-            }
+            Console.WriteLine($"Location: {observer.Origin} => {observer.Origin.Format(FormatType.Decimal)} => {observer.Origin.Format(FormatType.Compact)}");
+            Console.WriteLine($"Target: {observer.Destination} => {observer.Destination.Format(FormatType.Decimal)} => {observer.Destination.Format(FormatType.Compact)}");
+            Console.WriteLine($"Period: {mutable.ToLocalTime()}");
+            Console.WriteLine($"Position: {position} => {position.Format(FormatType.Decimal)} => {position.Format(FormatType.Compact)}");
         }
 
         private static void TestTrack()
         {
             // My location (LAT, LON): 29.4944768, -95.1123968
-            IGeographicCoordinate location = GeographicCoordinateFactory.Create(
+            IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
                 longitude: new Angle(-95.1123968), latitude: new Angle(29.4944768));
             //longitude: Angle.Zero, latitude: new Angle(90.0));
             //longitude: Angle.Zero, latitude: new Angle(-80.0));
 
             // M42: Orion Diffuse Nebula
-            IEquatorialCoordinate m42 = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate m42 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(new TimeSpan(5, 35, 17)), declination: new Angle(-5, -23, -28));
 
             // M31: Andromeda Galaxy
-            IEquatorialCoordinate m31 = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate m31 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(TimeSpan.FromMinutes(42.7383)), declination: new Angle(41, 16, 9));
 
             // Polaris
-            IEquatorialCoordinate polaris = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate polaris = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(new TimeSpan(2, 31, 49)), declination: new Angle(89, 15, 51));
 
             // Some point on the celestial equator
-            IEquatorialCoordinate eq = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate eq = CoordinateFactory.CreateEquatorial(
                 rightAscension: Angle.Zero, declination: Angle.Zero);
 
             // Some northern point at RA 0
-            IEquatorialCoordinate ra = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate ra = CoordinateFactory.CreateEquatorial(
                 rightAscension: Angle.Zero, declination: new Angle(41, 16, 9));
 
             // The North Celestial Pole, or Celestial Intermediate Pole (CIP)
-            IEquatorialCoordinate north = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate north = CoordinateFactory.CreateEquatorial(
                 rightAscension: Angle.Zero, declination: new Angle(90.0));
 
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
@@ -183,13 +171,10 @@ namespace DST.Core.Tests
             {
                 if (positions[i] != null)
                 {
-                    if (positions[i] is IFormattableCoordinate formattablePosition)
-                    {
-                        mutable = DateTimeFactory.ConvertToMutable(dateTimes[i]);
-                        Console.Write($"Period: {mutable.ToLocalTime()}\t");
-                        Console.Write($"Position: {formattablePosition.Format(FormatType.Decimal)}\t");
-                        Console.Write($"Visible: {trajectory.IsAboveHorizon(dateTimes[i])}\n");
-                    }
+                    mutable = DateTimeFactory.ConvertToMutable(dateTimes[i]);
+                    Console.Write($"Period: {mutable.ToLocalTime()}\t");
+                    Console.Write($"Position: {positions[i].Format(FormatType.Decimal)}\t");
+                    Console.Write($"Visible: {trajectory.IsAboveHorizon(dateTimes[i])}\n");
                 }
                 else
                 {
@@ -207,7 +192,7 @@ namespace DST.Core.Tests
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
 
             IMutableDateTime start = DateTimeFactory.ConvertToMutable(dateTimeInfo.Now);
-            Console.WriteLine($"Start: {start.ToString()}");
+            Console.WriteLine($"Start: {start}");
             Console.WriteLine("--------------------");
 
             // GMST - Sidereal Time
@@ -218,22 +203,22 @@ namespace DST.Core.Tests
 
             IMutableDateTime next = monthsAdder.Add(start, 3);
             IAstronomicalDateTime astronomical = DateTimeFactory.ConvertToAstronomical(next);
-            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"Next: {next}");
             Console.WriteLine($"GMST: {astronomical.GetMeanSiderealTime().TotalDegrees}");
 
             next = monthsAdder.Add(next, 3);
             astronomical = DateTimeFactory.ConvertToAstronomical(next);
-            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"Next: {next}");
             Console.WriteLine($"GMST: {astronomical.GetMeanSiderealTime().TotalDegrees}");
 
             next = yearsAdder.Add(start, 3);
             astronomical = DateTimeFactory.ConvertToAstronomical(next);
-            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"Next: {next}");
             Console.WriteLine($"GMST: {astronomical.GetMeanSiderealTime().TotalDegrees}");
 
             next = yearsAdder.Add(next, 3);
             astronomical = DateTimeFactory.ConvertToAstronomical(next);
-            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"Next: {next}");
             Console.WriteLine($"GMST: {astronomical.GetMeanSiderealTime().TotalDegrees}");
 
             Console.WriteLine("--------------------");
@@ -246,22 +231,22 @@ namespace DST.Core.Tests
 
             next = monthsAdder.Add(start, 3);
             astronomical = DateTimeFactory.ConvertToAstronomical(next);
-            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"Next: {next}");
             Console.WriteLine($"ERA: {astronomical.GetEarthRotationAngle().TotalDegrees}");
 
             next = monthsAdder.Add(next, 3);
             astronomical = DateTimeFactory.ConvertToAstronomical(next);
-            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"Next: {next}");
             Console.WriteLine($"ERA: {astronomical.GetEarthRotationAngle().TotalDegrees}");
 
             next = yearsAdder.Add(start, 3);
             astronomical = DateTimeFactory.ConvertToAstronomical(next);
-            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"Next: {next}");
             Console.WriteLine($"ERA: {astronomical.GetEarthRotationAngle().TotalDegrees}");
 
             next = yearsAdder.Add(next, 3);
             astronomical = DateTimeFactory.ConvertToAstronomical(next);
-            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"Next: {next}");
             Console.WriteLine($"ERA: {astronomical.GetEarthRotationAngle().TotalDegrees}");
         }
 
@@ -286,33 +271,33 @@ namespace DST.Core.Tests
         private static void TestTrackVectors()
         {
             // My location (LAT, LON): 29.4944768, -95.1123968
-            IGeographicCoordinate location = GeographicCoordinateFactory.Create(
+            IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
                 longitude: new Angle(-95.1123968), latitude: new Angle(29.4944768));
             //longitude: Angle.Zero, latitude: new Angle(90.0));
             //longitude: Angle.Zero, latitude: new Angle(-80.0));
 
             // M42: Orion Diffuse Nebula
-            IEquatorialCoordinate m42 = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate m42 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(new TimeSpan(5, 35, 17)), declination: new Angle(-5, -23, -28));
 
             // M31: Andromeda Galaxy
-            IEquatorialCoordinate m31 = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate m31 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(TimeSpan.FromMinutes(42.7383)), declination: new Angle(41, 16, 9));
 
             // Polaris
-            IEquatorialCoordinate polaris = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate polaris = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(new TimeSpan(2, 31, 49)), declination: new Angle(89, 15, 51));
 
             // Some point on the celestial equator
-            IEquatorialCoordinate eq = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate eq = CoordinateFactory.CreateEquatorial(
                 rightAscension: Angle.Zero, declination: Angle.Zero);
 
             // Some northern point at RA 0
-            IEquatorialCoordinate ra = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate ra = CoordinateFactory.CreateEquatorial(
                 rightAscension: Angle.Zero, declination: new Angle(41, 16, 9));
 
             // The North Celestial Pole, or Celestial Intermediate Pole (CIP)
-            IEquatorialCoordinate north = EquatorialCoordinateFactory.Create(
+            IEquatorialCoordinate north = CoordinateFactory.CreateEquatorial(
                 rightAscension: Angle.Zero, declination: new Angle(90.0));
 
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
@@ -378,7 +363,8 @@ namespace DST.Core.Tests
 
         static void Main(string[] args)
         {
-            Test();
+            //Test();
+            TestTrack();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
         }

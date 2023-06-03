@@ -167,7 +167,7 @@ namespace DST.Core.Tracker
             }
 
             // Create the final horizontal coordinate using the calculated components.
-            IHorizontalCoordinate coordinate = HorizontalCoordinateFactory.Create(azimuth, altitude, referencesIRM);
+            IHorizontalCoordinate coordinate = CoordinateFactory.CreateHorizontal(azimuth, altitude, referencesIRM);
 
             return coordinate;
         }

@@ -71,7 +71,7 @@ namespace DST.Core.Coordinate
             Angle dLambda = Angle.Coterminal(Longitude + dPsi);
 
             // Modify the original ecliptic coordinate with the new longitude.
-            return EclipticCoordinateFactory.Create(dLambda, Latitude);
+            return CoordinateFactory.CreateEcliptic(dLambda, Latitude);
         }
 
         // Returns the equatorial-representation of this EclipticCoordinate, at the specified date and time.
@@ -102,7 +102,7 @@ namespace DST.Core.Coordinate
             Angle rightAscension = Angle.FromRadians(alpha);
             Angle declination = Angle.FromRadians(delta);
 
-            return EquatorialCoordinateFactory.Create(rightAscension, declination);
+            return CoordinateFactory.CreateEquatorial(rightAscension, declination);
         }
     }
 }

@@ -5,6 +5,7 @@ namespace DST.Core.Coordinate
 {
     public class EclipticCoordinateFactory
     {
+        [Obsolete("Use CoordinateFactory.CreateEcliptic instead.")]
         // Creates a new IEclipticCoordinate object given the specified longitude and latitude Angle values.
         public static IEclipticCoordinate Create(Angle longitude, Angle latitude)
         {

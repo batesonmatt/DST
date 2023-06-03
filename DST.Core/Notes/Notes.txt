@@ -5,15 +5,6 @@ ________________________________________________________________________________
 
 To-do list:
 
-Consider ConvertTo* factory methods for IFormattableCoordinate, and even other interface designs.
-
-	Instead of:
-
-	if (observer.Origin is IFormattableCoordinate formattableLocation)
-
-	We can do:
-
-	IFormattableCoordinate formattable = CoordinateFactory.ConvertToFormattable(observer.Origin)
 
 ________________________________________________________________________________________________________
 

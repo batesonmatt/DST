@@ -2,7 +2,7 @@
 
 namespace DST.Core.Coordinate
 {
-    public interface ICoordinate
+    public interface ICoordinate : IFormattableCoordinate
     {
         IComponents Components { get; }
     }
