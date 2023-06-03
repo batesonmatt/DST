@@ -5,6 +5,6 @@ namespace DST.Core.Observer
 {
     public interface IVariableRightAscension
     {
-        Angle GetRightAscension(AstronomicalDateTime dateTime);
+        Angle GetRightAscension(IAstronomicalDateTime dateTime);
     }
 }

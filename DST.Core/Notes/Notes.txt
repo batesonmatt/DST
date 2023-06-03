@@ -5,95 +5,15 @@ ________________________________________________________________________________
 
 To-do list:
 
-Revise AstronomicalDateTime design:
+Consider ConvertTo* factory methods for IFormattableCoordinate, and even other interface designs.
 
-*** Expose all necessary members
-*** Might need to replace the static members, or use instance methods to retrieve the static properties.
-IDateTimeInfo
-- TimeZoneInfo ClientTimeZoneInfo
-- ...
+	Instead of:
 
-DateTimeInfo : IDateTimeInfo
-- ...
+	if (observer.Origin is IFormattableCoordinate formattableLocation)
 
-IDateTime
-- DateTime Value
-- DateTimeKind Kind
-- long Ticks
-- IDateTime Date
-- TimeSpan Time
-- TimeSpan UtcOffset
-- long MinTickSpan
-- long MaxTickSpan
+	We can do:
 
-IClientDateTime : IDateTime
-- IDateTimeInfo Info
-
-IAstronomicalDateTime
-- GetTicksFromEpoch
-- GetEarthRotationAngle
-- GetMeanSiderealTime
-- GetSiderealTime
-- GetEclipticLongitude
-- GetMeanSolarLongitude
-- GetMeanLunarLongitude
-- GetMeanObliquity
-- GetNutationInLongitude
-- GetNutationInObliquity
-- GetEquationOfEquinoxes
-- GetEquationOfOrigins
-
-IMutableDateTime
-- IMutableDateTime AddSeconds
-- IMutableDateTime AddMinutes
-- IMutableDateTime AddHours
-- IMutableDateTime AddDays
-- IMutableDateTime AddWeeks
-- IMutableDateTime AddMonths
-- IMutableDateTime AddYears
-- IMutableDateTime AddTicks
-- DateTime ToLocalTime
-- DateTime ToStandardTime
-- IMutableDateTime FromStandardTime
-- bool IsMinOrMaxValue
-
-AstronomicalDateTime : IDateTime, IClientDateTime, IAstronomicalDateTime, IMutableDateTime
-- ...
-
-DateTimeFactory
-- IDateTime Create(DateTime dateTime, IDateTimeInfo dateTimeInfo)
-	_ = dateTimeInfo ?? throw new ArgumentNullException(nameof(dateTimeInfo));
-    return new AstronomicalDateTime(dateTime, dateTimeInfo);
-
-LocalTracker
-	public ICoordinate[] Track(IDateTime[] dateTimes)
-        {
-            if (dateTimes is null)
-            {
-                return Array.Empty<IHorizontalCoordinate>();
-            }
-
-            ICoordinate[] positions = new ICoordinate[dateTimes.Length];
-
-            for (int i = 0; i < dateTimes.Length; i++)
-            {
-				if (dateTimes[i] is IAstronomicalDateTime)
-				{
-					positions[i] = Track(dateTimes[i]); // LocalTracker.Track(IAstronomicalDateTime dateTime)
-				}
-				else
-				{
-					positions[i] = null;
-				}
-            }
-
-            return positions;
-        }
-
-Revise all references to AstronomicalDateTime to reference the object by its implementing interfaces.
-- Use is or as operator where ever necessary.
-
-Consider also referencing instances of DateTimeInfo by its interface, IDateTimeInfo
+	IFormattableCoordinate formattable = CoordinateFactory.ConvertToFormattable(observer.Origin)
 
 ________________________________________________________________________________________________________
 

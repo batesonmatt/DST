@@ -1,5 +1,3 @@
 ﻿To-do list:
 
-Revise all tests
-
 Create unit tests

@@ -5,6 +5,6 @@ namespace DST.Core.TimeKeeper
 {
     public interface ITimeKeeper
     {
-        Angle Calculate(AstronomicalDateTime dateTime);
+        Angle Calculate(IAstronomicalDateTime dateTime);
     }
 }

@@ -16,15 +16,17 @@ namespace DST.Core.Trajectory
         { }
 
         // Returns a value that indicates whether the target is in the observer's local sky at the specified date and time.
-        public override bool IsAboveHorizon(AstronomicalDateTime dateTime)
+        public override bool IsAboveHorizon(IAstronomicalDateTime dateTime)
         {
             return true;
         }
 
         // Returns a tracking of the target when it passes through the observer's meridian,
         // starting from the specified date/time.
-        public override IVector GetApex(AstronomicalDateTime dateTime)
+        public override IVector GetApex(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             return CalculateVector(dateTime, Angle.Zero, HourAngleCycle.Next);
         }
 

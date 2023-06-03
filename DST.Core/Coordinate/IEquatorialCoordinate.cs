@@ -7,8 +7,8 @@ namespace DST.Core.Coordinate
     {
         Angle RightAscension { get; }
         Angle Declination { get; }
-        IEquatorialCoordinate GetNutation(AstronomicalDateTime dateTime);
-        Angle GetIntermediateRightAscension(AstronomicalDateTime dateTime);
-        IEclipticCoordinate ToEcliptic(AstronomicalDateTime dateTime);
+        IEquatorialCoordinate GetNutation(IAstronomicalDateTime dateTime);
+        Angle GetIntermediateRightAscension(IAstronomicalDateTime dateTime);
+        IEclipticCoordinate ToEcliptic(IAstronomicalDateTime dateTime);
     }
 }

@@ -13,7 +13,7 @@ namespace DST.Core.Trajectory
         { }
 
         // Returns a value that indicates whether the target is in the observer's local sky at the specified date and time.
-        public override bool IsAboveHorizon(AstronomicalDateTime dateTime)
+        public override bool IsAboveHorizon(IAstronomicalDateTime dateTime)
         {
             return true;
         }

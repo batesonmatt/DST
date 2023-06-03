@@ -5,6 +5,6 @@ namespace DST.Core.Observer
 {
     public interface IVariableDeclination
     {
-        Angle GetDeclination(AstronomicalDateTime dateTime);
+        Angle GetDeclination(IAstronomicalDateTime dateTime);
     }
 }

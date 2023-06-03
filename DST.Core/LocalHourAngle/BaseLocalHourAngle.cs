@@ -16,9 +16,12 @@ namespace DST.Core.LocalHourAngle
             _localTimeKeeper = localTimeKeeper ?? throw new ArgumentNullException(nameof(localTimeKeeper));
         }
 
-        // Returns the local hour angle (LHA) for the specified ILocalObserver and AstronomicalDateTime arguments.
-        public virtual Angle Calculate(ILocalObserver localObserver, AstronomicalDateTime dateTime)
+        // Returns the local hour angle (LHA) for the specified ILocalObserver and IAstronomicalDateTime arguments.
+        public virtual Angle Calculate(ILocalObserver localObserver, IAstronomicalDateTime dateTime)
         {
+            _ = localObserver ?? throw new ArgumentNullException(nameof(localObserver));
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Calculate the local rotation time.
             Angle localTime = _localTimeKeeper.Calculate(localObserver, dateTime);
 

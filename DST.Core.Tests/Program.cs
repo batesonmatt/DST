@@ -32,9 +32,12 @@ namespace DST.Core.Tests
 
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
-            IObserver observer = ObserverFactory.Create(dateTimeInfo as DateTimeInfo, location, m13, timeKeeper);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m13, timeKeeper);
 
-            AstronomicalDateTime dateTime = new(new DateTime(1998, 8, 10, 23, 10, 0, DateTimeKind.Utc), dateTimeInfo as DateTimeInfo);
+            IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(
+                new DateTime(1998, 8, 10, 23, 10, 0, DateTimeKind.Utc), dateTimeInfo);
+
+            IMutableDateTime mutable = DateTimeFactory.ConvertToMutable(dateTime);
 
             ITracker tracker = TrackerFactory.Create(observer);
 
@@ -57,7 +60,7 @@ namespace DST.Core.Tests
 
             if (position is IFormattableCoordinate formattablePosition)
             {
-                Console.WriteLine($"Period: {dateTime.ToLocalTime()}");
+                Console.WriteLine($"Period: {mutable.ToLocalTime()}");
                 Console.WriteLine($"Position: {formattablePosition} => {formattablePosition.Format(FormatType.Decimal)} => {formattablePosition.Format(FormatType.Compact)}");
             }
         }
@@ -96,7 +99,7 @@ namespace DST.Core.Tests
 
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
-            IObserver observer = ObserverFactory.Create(dateTimeInfo as DateTimeInfo, location, m31, timeKeeper);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m31, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
 
             Console.WriteLine($"Location: {observer.Origin}");
@@ -107,11 +110,13 @@ namespace DST.Core.Tests
             //AstronomicalDateTime start = 
             //    new AstronomicalDateTime(new DateTime(2022, 3, 12, 18, 0, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
 
-            AstronomicalDateTime now = ((DateTimeInfo)dateTimeInfo).Now;
-            AstronomicalDateTime start = ((DateTimeInfo)dateTimeInfo).Now;
+            IAstronomicalDateTime now = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
+            IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
 
             //AstronomicalDateTime start =
             //    new(new DateTime(2022, 12, 13, 19, 32, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
+
+            IMutableDateTime mutable;
 
             if (trajectory is IVariableTrajectory variableTrajectory)
             {
@@ -132,14 +137,21 @@ namespace DST.Core.Tests
                     IVector apex = riseSetTrajectory.GetApex(now);
                     IVector set = riseSetTrajectory.GetSet(now);
 
-                    Console.WriteLine($"Rise: {rise.DateTime.ToLocalTime()}\tPosition: {rise.Coordinate}");
-                    Console.WriteLine($"Apex: {apex.DateTime.ToLocalTime()}\tPosition: {apex.Coordinate}");
-                    Console.WriteLine($"Set: {set.DateTime.ToLocalTime()}\tPosition: {set.Coordinate}");
+                    mutable = DateTimeFactory.ConvertToMutable(rise.DateTime);
+                    Console.WriteLine($"Rise: {mutable.ToLocalTime()}\tPosition: {rise.Coordinate}");
+
+                    mutable = DateTimeFactory.ConvertToMutable(apex.DateTime);
+                    Console.WriteLine($"Apex: {mutable.ToLocalTime()}\tPosition: {apex.Coordinate}");
+
+                    mutable = DateTimeFactory.ConvertToMutable(set.DateTime);
+                    Console.WriteLine($"Set: {mutable.ToLocalTime()}\tPosition: {set.Coordinate}");
                 }
                 else
                 {
                     IVector apex = variableTrajectory.GetApex(now);
-                    Console.WriteLine($"Apex: {apex.DateTime.ToLocalTime()}\tPosition: {apex.Coordinate}");
+
+                    mutable = DateTimeFactory.ConvertToMutable(apex.DateTime);
+                    Console.WriteLine($"Apex: {mutable.ToLocalTime()}\tPosition: {apex.Coordinate}");
                 }
             }
             else
@@ -159,7 +171,8 @@ namespace DST.Core.Tests
             ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.MeanSolarTime);
             IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Hours);
             IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, true);
-            AstronomicalDateTime[] dateTimes = dateTimesBuilder.Build(start, dateTimeAdder.Max, 1);
+            IAstronomicalDateTime[] dateTimes = DateTimeFactory.ConvertToAstronomical(
+                dateTimesBuilder.Build(start, dateTimeAdder.Max, 1));
 
             ITracker tracker = TrackerFactory.Create(observer);
 
@@ -172,7 +185,8 @@ namespace DST.Core.Tests
                 {
                     if (positions[i] is IFormattableCoordinate formattablePosition)
                     {
-                        Console.Write($"Period: {dateTimes[i].ToLocalTime()}\t");
+                        mutable = DateTimeFactory.ConvertToMutable(dateTimes[i]);
+                        Console.Write($"Period: {mutable.ToLocalTime()}\t");
                         Console.Write($"Position: {formattablePosition.Format(FormatType.Decimal)}\t");
                         Console.Write($"Visible: {trajectory.IsAboveHorizon(dateTimes[i])}\n");
                     }
@@ -192,8 +206,8 @@ namespace DST.Core.Tests
         {
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
 
-            AstronomicalDateTime start = ((DateTimeInfo)dateTimeInfo).Now;
-            Console.WriteLine($"Start: {start}");
+            IMutableDateTime start = DateTimeFactory.ConvertToMutable(dateTimeInfo.Now);
+            Console.WriteLine($"Start: {start.ToString()}");
             Console.WriteLine("--------------------");
 
             // GMST - Sidereal Time
@@ -202,21 +216,25 @@ namespace DST.Core.Tests
             IDateTimeAdder monthsAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Months);
             IDateTimeAdder yearsAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Years);
 
-            AstronomicalDateTime next = monthsAdder.Add(start, 3);
-            Console.WriteLine($"Next: {next}");
-            Console.WriteLine($"GMST: {next.GetMeanSiderealTime().TotalDegrees}");
+            IMutableDateTime next = monthsAdder.Add(start, 3);
+            IAstronomicalDateTime astronomical = DateTimeFactory.ConvertToAstronomical(next);
+            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"GMST: {astronomical.GetMeanSiderealTime().TotalDegrees}");
 
             next = monthsAdder.Add(next, 3);
-            Console.WriteLine($"Next: {next}");
-            Console.WriteLine($"GMST: {next.GetMeanSiderealTime().TotalDegrees}");
+            astronomical = DateTimeFactory.ConvertToAstronomical(next);
+            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"GMST: {astronomical.GetMeanSiderealTime().TotalDegrees}");
 
             next = yearsAdder.Add(start, 3);
-            Console.WriteLine($"Next: {next}");
-            Console.WriteLine($"GMST: {next.GetMeanSiderealTime().TotalDegrees}");
+            astronomical = DateTimeFactory.ConvertToAstronomical(next);
+            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"GMST: {astronomical.GetMeanSiderealTime().TotalDegrees}");
 
             next = yearsAdder.Add(next, 3);
-            Console.WriteLine($"Next: {next}");
-            Console.WriteLine($"GMST: {next.GetMeanSiderealTime().TotalDegrees}");
+            astronomical = DateTimeFactory.ConvertToAstronomical(next);
+            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"GMST: {astronomical.GetMeanSiderealTime().TotalDegrees}");
 
             Console.WriteLine("--------------------");
 
@@ -227,20 +245,24 @@ namespace DST.Core.Tests
             yearsAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Years);
 
             next = monthsAdder.Add(start, 3);
-            Console.WriteLine($"Next: {next}");
-            Console.WriteLine($"ERA: {next.GetEarthRotationAngle().TotalDegrees}");
+            astronomical = DateTimeFactory.ConvertToAstronomical(next);
+            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"ERA: {astronomical.GetEarthRotationAngle().TotalDegrees}");
 
             next = monthsAdder.Add(next, 3);
-            Console.WriteLine($"Next: {next}");
-            Console.WriteLine($"ERA: {next.GetEarthRotationAngle().TotalDegrees}");
+            astronomical = DateTimeFactory.ConvertToAstronomical(next);
+            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"ERA: {astronomical.GetEarthRotationAngle().TotalDegrees}");
 
             next = yearsAdder.Add(start, 3);
-            Console.WriteLine($"Next: {next}");
-            Console.WriteLine($"ERA: {next.GetEarthRotationAngle().TotalDegrees}");
+            astronomical = DateTimeFactory.ConvertToAstronomical(next);
+            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"ERA: {astronomical.GetEarthRotationAngle().TotalDegrees}");
 
             next = yearsAdder.Add(next, 3);
-            Console.WriteLine($"Next: {next}");
-            Console.WriteLine($"ERA: {next.GetEarthRotationAngle().TotalDegrees}");
+            astronomical = DateTimeFactory.ConvertToAstronomical(next);
+            Console.WriteLine($"Next: {next.ToString()}");
+            Console.WriteLine($"ERA: {astronomical.GetEarthRotationAngle().TotalDegrees}");
         }
 
         private static void TestDateTimes()
@@ -250,11 +272,12 @@ namespace DST.Core.Tests
             IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Months);
             IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, false);
 
-            AstronomicalDateTime start = new(new DateTime(2022, 11, 24, 12, 0, 0, DateTimeKind.Local), dateTimeInfo as DateTimeInfo);
+            IBaseDateTime start = DateTimeFactory.CreateBase(
+                new DateTime(2022, 11, 24, 12, 0, 0, DateTimeKind.Local), dateTimeInfo);
 
-            AstronomicalDateTime[] dateTimes = dateTimesBuilder.Build(start, -10, 1);
+            IAstronomicalDateTime[] dateTimes = DateTimeFactory.ConvertToAstronomical(dateTimesBuilder.Build(start, -10, 1));
 
-            foreach (AstronomicalDateTime dateTime in dateTimes)
+            foreach (IAstronomicalDateTime dateTime in dateTimes)
             {
                 Console.WriteLine($"{dateTime.Value}: \t{dateTime.GetMeanSiderealTime().TotalDegrees}°");
             }
@@ -294,14 +317,15 @@ namespace DST.Core.Tests
 
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
-            IObserver observer = ObserverFactory.Create(dateTimeInfo as DateTimeInfo, location, m31, timeKeeper);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m31, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
 
             Console.WriteLine($"Location: {observer.Origin}");
             Console.WriteLine($"Target: {observer.Destination}");
             Console.WriteLine($"Visibility: {trajectory}\n");
 
-            AstronomicalDateTime start = ((DateTimeInfo)dateTimeInfo).Now;
+            IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
+            IMutableDateTime mutable;
 
             //AstronomicalDateTime start =
             //    new(new DateTime(2022, 12, 13, 19, 32, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
@@ -320,15 +344,18 @@ namespace DST.Core.Tests
                     {
                         if (rise[i] != null)
                         {
-                            Console.WriteLine($"Rise {i}:\t\tDateTime: {rise[i].DateTime.ToLocalTime()}\t\tPosition: {rise[i].Coordinate}");
+                            mutable = DateTimeFactory.ConvertToMutable(rise[i].DateTime);
+                            Console.WriteLine($"Rise {i}:\t\tDateTime: {mutable.ToLocalTime()}\t\tPosition: {rise[i].Coordinate}");
                         }
                         if (apex[i] != null)
                         {
-                            Console.WriteLine($"Apex {i}:\t\tDateTime: {apex[i].DateTime.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
+                            mutable = DateTimeFactory.ConvertToMutable(apex[i].DateTime);
+                            Console.WriteLine($"Apex {i}:\t\tDateTime: {mutable.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
                         }
                         if (set[i] != null)
                         {
-                            Console.WriteLine($"Set {i}:\t\tDateTime: {set[i].DateTime.ToLocalTime()}\t\tPosition: {set[i].Coordinate}");
+                            mutable = DateTimeFactory.ConvertToMutable(set[i].DateTime);
+                            Console.WriteLine($"Set {i}:\t\tDateTime: {mutable.ToLocalTime()}\t\tPosition: {set[i].Coordinate}");
                         }
                         Console.WriteLine("--------------------");
                     }
@@ -341,7 +368,8 @@ namespace DST.Core.Tests
                     {
                         if (apex[i] != null)
                         {
-                            Console.WriteLine($"Apex {i}:\t\tDateTime: {apex[i].DateTime.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
+                            mutable = DateTimeFactory.ConvertToMutable(apex[i].DateTime);
+                            Console.WriteLine($"Apex {i}:\t\tDateTime: {mutable.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
                         }
                     }
                 }

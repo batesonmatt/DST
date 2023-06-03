@@ -6,6 +6,6 @@ namespace DST.Core.LocalTimeKeeper
 {
     public interface ILocalTimeKeeper
     {
-        Angle Calculate(ILocalObserver localObserver, AstronomicalDateTime dateTime);
+        Angle Calculate(ILocalObserver localObserver, IAstronomicalDateTime dateTime);
     }
 }

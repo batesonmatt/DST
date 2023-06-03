@@ -16,11 +16,12 @@ namespace DST.Core.LocalTimeKeeper
             _timeKeeper = timeKeeper ?? throw new ArgumentNullException(nameof(timeKeeper));
         }
 
-        // Returns the localized rotational angle at the specified AstronomicalDateTime value,
+        // Returns the localized rotational angle at the specified IAstronomicalDateTime value,
         // for the specified ILocalObserver argument.
-        public virtual Angle Calculate(ILocalObserver localObserver, AstronomicalDateTime dateTime)
+        public virtual Angle Calculate(ILocalObserver localObserver, IAstronomicalDateTime dateTime)
         {
             _ = localObserver ?? throw new ArgumentNullException(nameof(localObserver));
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
 
             // The original (base) rotational angle for the underlying ITimeKeeper.
             Angle original = _timeKeeper.Calculate(dateTime);

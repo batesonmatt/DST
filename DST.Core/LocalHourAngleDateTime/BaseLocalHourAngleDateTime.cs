@@ -16,12 +16,12 @@ namespace DST.Core.LocalHourAngleDateTime
             _localHourAngle = localHourAngle ?? throw new ArgumentNullException(nameof(localHourAngle));
         }
 
-        // Returns an AstronomicalDateTime representing the date and time when the specified ILocalObserver.Target
+        // Returns an IAstronomicalDateTime representing the date and time when the specified ILocalObserver.Target
         // reaches the specified target local hour angle (LHA) as observed in standardized local time, beginning from
-        // the specified starting AstronomicalDateTime.
+        // the specified starting IAstronomicalDateTime.
         // If 'cycle' is HourAngleCycle.Next, this returns the next date/time that the targeting object reaches
         // the target LHA, otherwise this returns the previous date/time that the targeting object reached the target LHA.
-        public abstract AstronomicalDateTime Calculate(
-            ILocalObserver localObserver, AstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle);
+        public abstract IAstronomicalDateTime Calculate(
+            ILocalObserver localObserver, IAstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle);
     }
 }

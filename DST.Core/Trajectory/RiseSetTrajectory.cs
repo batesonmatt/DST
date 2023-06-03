@@ -15,8 +15,10 @@ namespace DST.Core.Trajectory
         { }
 
         // Returns a value that indicates whether the target is in the observer's local sky at the specified date and time.
-        public override bool IsAboveHorizon(AstronomicalDateTime dateTime)
+        public override bool IsAboveHorizon(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Calculate the local hour angle (LHA) of the ILocalObserver at the specified date and time.
             Angle lha = _localObserver.LocalHourAngle.Calculate(_localObserver, dateTime);
 
@@ -27,8 +29,10 @@ namespace DST.Core.Trajectory
 
         // Returns a tracking of the target when it passes through the observer's meridian,
         // starting from the specified date/time.
-        public override IVector GetApex(AstronomicalDateTime dateTime)
+        public override IVector GetApex(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // If the target has already reached its apex position and is approaching the observer's horizon,
             // calculate the previous apex position.
             if (IsAboveHorizon(dateTime) && IsSetting(dateTime))
@@ -43,8 +47,10 @@ namespace DST.Core.Trajectory
 
         // Returns a value that indicates whether the target has risen from the observer's horizon
         // and is approaching the observer's meridian at the specified date and time.
-        public bool IsRising(AstronomicalDateTime dateTime)
+        public bool IsRising(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Calculate the local hour angle (LHA) of the ILocalObserver at the specified date and time.
             Angle lha = _localObserver.LocalHourAngle.Calculate(_localObserver, dateTime);
 
@@ -55,8 +61,10 @@ namespace DST.Core.Trajectory
 
         // Returns a value that indicates whether the target has reached its apex at the observer's meridian
         // and is approaching the observer's horizon at the specified date and time.
-        public bool IsSetting(AstronomicalDateTime dateTime)
+        public bool IsSetting(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Calculate the local hour angle (LHA) of the ILocalObserver at the specified date and time.
             Angle lha = _localObserver.LocalHourAngle.Calculate(_localObserver, dateTime);
 
@@ -66,8 +74,10 @@ namespace DST.Core.Trajectory
         }
 
         // Returns a tracking of the target when it rises from the observer's horizon, starting from the specified date/time.
-        public IVector GetRise(AstronomicalDateTime dateTime)
+        public IVector GetRise(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // If the target has already risen from the observer's horizon, calculate the previous rising position.
             if (IsAboveHorizon(dateTime))
             {
@@ -80,17 +90,21 @@ namespace DST.Core.Trajectory
         }
 
         // Returns a tracking of the target when it sets at the observer's horizon, starting from the specified date/time.
-        public IVector GetSet(AstronomicalDateTime dateTime)
+        public IVector GetSet(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Calculate the target's next setting position.
             return CalculateVector(dateTime, GetSetHourAngle(), HourAngleCycle.Next);
         }
 
         // Returns a tracking of the target when it rises from the observer's horizon, starting from the specified date/time,
         // for a specified number of cycles in the underlying time scale.
-        public IVector[] GetRise(AstronomicalDateTime start, int cycles)
+        public IVector[] GetRise(IAstronomicalDateTime start, int cycles)
         {
-            AstronomicalDateTime[] dateTimes = GetDateTimes(start, cycles);
+            _ = start ?? throw new ArgumentNullException(nameof(start));
+
+            IAstronomicalDateTime[] dateTimes = GetDateTimes(start, cycles);
 
             IVector[] vectors = new IVector[dateTimes.Length];
 
@@ -104,9 +118,11 @@ namespace DST.Core.Trajectory
 
         // Returns a tracking of the target when it sets at the observer's horizon, starting from the specified date/time,
         // for a specified number of cycles in the underlying time scale.
-        public IVector[] GetSet(AstronomicalDateTime start, int cycles)
+        public IVector[] GetSet(IAstronomicalDateTime start, int cycles)
         {
-            AstronomicalDateTime[] dateTimes = GetDateTimes(start, cycles);
+            _ = start ?? throw new ArgumentNullException(nameof(start));
+
+            IAstronomicalDateTime[] dateTimes = GetDateTimes(start, cycles);
 
             IVector[] vectors = new IVector[dateTimes.Length];
 

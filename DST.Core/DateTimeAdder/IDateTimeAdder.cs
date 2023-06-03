@@ -6,6 +6,6 @@ namespace DST.Core.DateTimeAdder
     {
         int Min { get; }
         int Max { get; }
-        AstronomicalDateTime Add(AstronomicalDateTime start, int value);
+        IMutableDateTime Add(IMutableDateTime start, int value);
     }
 }

@@ -14,7 +14,7 @@
         }
 
         // Returns a new IDateTimeInfo object by finding a new TimeZoneInfo object by Id.
-        // If the id is not a valid Windows or IANA time zone name, then this returns DateTimeInfo.Default.
+        // If the id is not a valid Windows or IANA time zone name, then this returns DateTimeInfoFactory.Default.
         public static IDateTimeInfo CreateFromTimeZoneId(string id)
         {
             _ = id ?? throw new ArgumentNullException(nameof(id));

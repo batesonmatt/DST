@@ -20,11 +20,13 @@ namespace DST.Core.DateTimeAdder
             : base(timeScalable)
         { }
 
-        // Returns a new AstronomicalDateTime value by adding the given amount of days to a 
-        // specified starting AstronomicalDateTime value in mean solar time.
+        // Returns a new IMutableDateTime value by adding the given amount of days to a 
+        // specified starting IMutableDateTime value in mean solar time.
         // The number of days to add is converted to whole cycles in the underlying time scale.
-        public override AstronomicalDateTime Add(AstronomicalDateTime start, int value)
+        public override IMutableDateTime Add(IMutableDateTime start, int value)
         {
+            _ = start ?? throw new ArgumentNullException(nameof(start));
+
             // Convert the days to ticks.
             long ticks = (long)(GetFixedValue(value) * Constants.TicksPerDay);
 

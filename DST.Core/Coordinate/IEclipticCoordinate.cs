@@ -7,7 +7,7 @@ namespace DST.Core.Coordinate
     {
         Angle Longitude { get; }
         Angle Latitude { get; }
-        IEclipticCoordinate GetNutation(AstronomicalDateTime dateTime);
-        IEquatorialCoordinate ToEquatorial(AstronomicalDateTime dateTime);
+        IEclipticCoordinate GetNutation(IAstronomicalDateTime dateTime);
+        IEquatorialCoordinate ToEquatorial(IAstronomicalDateTime dateTime);
     }
 }

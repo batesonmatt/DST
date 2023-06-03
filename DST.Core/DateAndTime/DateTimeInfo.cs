@@ -18,17 +18,17 @@
         // Gets the maximum allowable DateTime in standardized local time for the underlying time zone.
         public DateTime MaxStandardDateTime => CalculateMaxStandardDateTime();
 
-        // Gets the minimum supported value for an AstronomicalDateTime.
-        public AstronomicalDateTime MinAstronomicalDateTime => new(DateTimeConstants.MinUtcDateTime, this);
+        // Gets the minimum supported value for an IMutableDateTime.
+        public IMutableDateTime MinAstronomicalDateTime => DateTimeFactory.CreateMutable(DateTimeConstants.MinUtcDateTime, this);
 
-        // Gets the maximum supported value for an AstronomicalDateTime.
-        public AstronomicalDateTime MaxAstronomicalDateTime => new(DateTimeConstants.MaxUtcDateTime, this);
+        // Gets the maximum supported value for an IMutableDateTime.
+        public IMutableDateTime MaxAstronomicalDateTime => DateTimeFactory.CreateMutable(DateTimeConstants.MaxUtcDateTime, this);
 
-        // Gets a new AstronomicalDateTime instance resembling the current UTC date and time.
-        public AstronomicalDateTime Now => new(DateTime.UtcNow, this);
+        // Gets a new IDateTime instance resembling the current UTC date and time.
+        public IDateTime Now => DateTimeFactory.CreateDateTime(DateTime.UtcNow, this);
 
-        // Gets a new AstronomicalDateTime instance resembling the current UTC date with the time value set to midnight (00:00:00).
-        public AstronomicalDateTime Today => new(DateTime.UtcNow.Date, this);
+        // Gets a new IDateTime instance resembling the current UTC date with the time value set to midnight (00:00:00).
+        public IDateTime Today => DateTimeFactory.CreateDateTime(DateTime.UtcNow.Date, this);
 
         // Creates a new DateTimeInfo instance given the specified TimeZoneInfo argument.
         public DateTimeInfo(TimeZoneInfo timeZoneInfo)
@@ -36,25 +36,26 @@
             ClientTimeZoneInfo = timeZoneInfo ?? throw new ArgumentNullException(nameof(timeZoneInfo));
         }
 
-        // Returns a new AstronomicalDateTime, converted from a specified DateTime value in standardized
+        // Returns a new IMutableDateTime, converted from a specified DateTime value in standardized
         // local time for the underlying client time zone.
         // If dateTime.Kind already equals DateTimeKind.Utc, then this will not modify the date or time.
-        public AstronomicalDateTime ConvertTimeFromStandard(DateTime dateTime)
+        public IMutableDateTime ConvertTimeFromStandard(DateTime dateTime)
         {
             if (dateTime.Kind != DateTimeKind.Utc)
             {
                 // Verify that the local date and time will be in range when converted to universal time.
-                // If this fails, then the resultant AstronomicalDateTime will have a value of either
-                // DateTimeInfo.MinAstronomicalDateTime or DateTimeInfo.MaxAstronomicalDateTime.
+                // If this fails, then the resultant IMutableDateTime will have a value of either
+                // MinAstronomicalDateTime or MaxAstronomicalDateTime.
                 if (dateTime < MinStandardDateTime) return MinAstronomicalDateTime;
                 if (dateTime > MaxStandardDateTime) return MaxAstronomicalDateTime;
 
                 dateTime = DateTime.SpecifyKind(dateTime.Subtract(BaseUtcOffset), DateTimeKind.Utc);
             }
 
-            return new(dateTime, this);
+            return DateTimeFactory.CreateMutable(dateTime, this);
         }
 
+        // Calculates the minimum allowable DateTime in standardized local time for the underlying time zone.
         private DateTime CalculateMinStandardDateTime()
         {
             double baseOffsetHours = ClientTimeZoneInfo.BaseUtcOffset.TotalHours;
@@ -66,6 +67,7 @@
             };
         }
 
+        // Calculates the maximum allowable DateTime in standardized local time for the underlying time zone.
         private DateTime CalculateMaxStandardDateTime()
         {
             double baseOffsetHours = ClientTimeZoneInfo.BaseUtcOffset.TotalHours;

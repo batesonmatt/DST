@@ -16,7 +16,7 @@ namespace DST.Core.Observer
         public ICoordinate Destination => Target;
 
         // Gets the IDateTimeInfo object for this BaseObserver.
-        public DateTimeInfo DateTimeInfo { get; }
+        public IDateTimeInfo DateTimeInfo { get; }
 
         // Gets the geographic location for this BaseObserver.
         public IGeographicCoordinate Location { get; }
@@ -36,9 +36,9 @@ namespace DST.Core.Observer
         // Gets the ILocalHourAngleDateTime object for this BaseObserver.
         public ILocalHourAngleDateTime LocalHourAngleDateTime => LocalHourAngleDateTimeFactory.Create(LocalHourAngle);
 
-        // Creates a new BaseObserver instance using the specified DateTimeInfo, IGeographicCoordinate,
+        // Creates a new BaseObserver instance using the specified IDateTimeInfo, IGeographicCoordinate,
         // IEquatorialCoordinate, and ITimeKeeper.
-        protected BaseLocalObserver(DateTimeInfo dateTimeInfo, IGeographicCoordinate location, IEquatorialCoordinate target, ITimeKeeper timeKeeper)
+        protected BaseLocalObserver(IDateTimeInfo dateTimeInfo, IGeographicCoordinate location, IEquatorialCoordinate target, ITimeKeeper timeKeeper)
         {
             DateTimeInfo = dateTimeInfo ?? throw new ArgumentNullException(nameof(dateTimeInfo));
             Location = location ?? throw new ArgumentNullException(nameof(location));

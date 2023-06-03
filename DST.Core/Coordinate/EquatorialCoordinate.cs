@@ -54,8 +54,10 @@ namespace DST.Core.Coordinate
         }
 
         // Returns the intermediate right ascension of this EquatorialCoordinate, adjusted by the Celestial Intermediate Origin (CIO).
-        public Angle GetIntermediateRightAscension(AstronomicalDateTime dateTime)
+        public Angle GetIntermediateRightAscension(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Calculate the CIO-based (intermediate) right ascension, in decimal degrees, using the Equation of the Origins (EO).
             Angle ra_i = RightAscension + dateTime.GetEquationOfOrigins();
 
@@ -64,8 +66,10 @@ namespace DST.Core.Coordinate
         }
 
         // Returns the nutated components of this EquatorialCoordinate, for the specified date and time.
-        public IEquatorialCoordinate GetNutation(AstronomicalDateTime dateTime)
+        public IEquatorialCoordinate GetNutation(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // If this equatorial coordinate is close to either of the celestial poles, convert it to an ecliptic coordinate.
             IEquatorialCoordinate result = Math.Abs(Declination) > 85.0 ?
                 CalculateEclipticNutation(dateTime) : CalculateNutation(dateTime);
@@ -74,8 +78,10 @@ namespace DST.Core.Coordinate
         }
 
         // Returns the ecliptic-representation of this EquatorialCoordinate, at the specified date and time.
-        public IEclipticCoordinate ToEcliptic(AstronomicalDateTime dateTime)
+        public IEclipticCoordinate ToEcliptic(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Convert the components of this equatorial coordinate to radians.
             double alpha = RightAscension.TotalRadians;
             double delta = Declination.TotalRadians;
@@ -97,8 +103,10 @@ namespace DST.Core.Coordinate
         }
 
         // Calculates the nutation of this EquatorialCoordinate, for the specified date and time.
-        private IEquatorialCoordinate CalculateNutation(AstronomicalDateTime dateTime)
+        private IEquatorialCoordinate CalculateNutation(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Get a signed coefficient for the nutation quantities.
             // If the specified date/time occurs before the epoch, this gives -1.
             // If the specified date/time occurs after the epoch, this gives 1.
@@ -133,8 +141,10 @@ namespace DST.Core.Coordinate
         }
 
         // Calculates the nutation of this EquatorialCoordinate as an IEclipticCoordinate, for the specified date and time.
-        private IEquatorialCoordinate CalculateEclipticNutation(AstronomicalDateTime dateTime)
+        private IEquatorialCoordinate CalculateEclipticNutation(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Convert this equatorial coordinate to an ecliptic coordinate at the specified date and time.
             IEclipticCoordinate ecliptic = ToEcliptic(dateTime);
 

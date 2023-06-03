@@ -54,8 +54,10 @@ namespace DST.Core.Coordinate
         }
 
         // Returns the nutated components of this EclipticCoordinate, for the specified date and time.
-        public IEclipticCoordinate GetNutation(AstronomicalDateTime dateTime)
+        public IEclipticCoordinate GetNutation(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Get a signed coefficient for the nutation quantities.
             // If the specified date/time occurs before the epoch, this gives -1.
             // If the specified date/time occurs after the epoch, this gives 1.
@@ -73,8 +75,10 @@ namespace DST.Core.Coordinate
         }
 
         // Returns the equatorial-representation of this EclipticCoordinate, at the specified date and time.
-        public IEquatorialCoordinate ToEquatorial(AstronomicalDateTime dateTime)
+        public IEquatorialCoordinate ToEquatorial(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Convert the initial components of this equatorial coordinate to radians.
             double lambda = Longitude.TotalRadians;
             double beta = Latitude.TotalRadians;

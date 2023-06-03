@@ -5,11 +5,11 @@ namespace DST.Core.Trajectory
 {
     public interface IRiseSetTrajectory : ITrajectory, IVariableTrajectory
     {
-        bool IsRising(AstronomicalDateTime dateTime);
-        bool IsSetting(AstronomicalDateTime dateTime);
-        IVector GetRise(AstronomicalDateTime dateTime);
-        IVector GetSet(AstronomicalDateTime dateTime);
-        IVector[] GetRise(AstronomicalDateTime start, int cycles);
-        IVector[] GetSet(AstronomicalDateTime start, int cycles);
+        bool IsRising(IAstronomicalDateTime dateTime);
+        bool IsSetting(IAstronomicalDateTime dateTime);
+        IVector GetRise(IAstronomicalDateTime dateTime);
+        IVector GetSet(IAstronomicalDateTime dateTime);
+        IVector[] GetRise(IAstronomicalDateTime start, int cycles);
+        IVector[] GetSet(IAstronomicalDateTime start, int cycles);
     }
 }

@@ -12,8 +12,8 @@ namespace DST.Core.LocalHourAngle
             : base(localTimeKeeper)
         { }
 
-        // Returns the stellar local hour angle (LHA) for the specified ILocalObserver and AstronomicalDateTime arguments.
-        public override Angle Calculate(ILocalObserver localObserver, AstronomicalDateTime dateTime)
+        // Returns the stellar local hour angle (LHA) for the specified ILocalObserver and IAstronomicalDateTime arguments.
+        public override Angle Calculate(ILocalObserver localObserver, IAstronomicalDateTime dateTime)
         {
             return base.Calculate(localObserver, dateTime);
         }

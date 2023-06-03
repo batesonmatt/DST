@@ -6,7 +6,7 @@ namespace DST.Core.LocalHourAngleDateTime
 {
     public interface ILocalHourAngleDateTime
     {
-        AstronomicalDateTime Calculate(
-            ILocalObserver localObserver, AstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle);
+        IAstronomicalDateTime Calculate(
+            ILocalObserver localObserver, IAstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle);
     }
 }

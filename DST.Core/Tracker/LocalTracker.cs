@@ -18,12 +18,12 @@ namespace DST.Core.Tracker
         // at the current date and time.
         public ICoordinate Track()
         {
-            return Track(_localObserver.DateTimeInfo.Now);
+            return Track(DateTimeFactory.ConvertToAstronomical(_localObserver.DateTimeInfo.Now));
         }
 
         // Tracks the targeting object over a period of time at every specified interval given by 'dateTimes'.
         // Returns an array of HorizontalCoordinate positions in the order they were tracked for each element in 'dateTimes'.
-        public ICoordinate[] Track(AstronomicalDateTime[] dateTimes)
+        public ICoordinate[] Track(IAstronomicalDateTime[] dateTimes)
         {
             if (dateTimes is null)
             {
@@ -41,10 +41,12 @@ namespace DST.Core.Tracker
         }
 
         // Returns a new HorizontalCoordinate resembling the position of the targeting object relative to the observer's location 
-        // at the specified AstronomicalDateTime value.
+        // at the specified IAstronomicalDateTime value.
         // Assumes the observer's height, or distance from the surface of the Earth, is negligible.
-        public ICoordinate Track(AstronomicalDateTime dateTime)
+        public ICoordinate Track(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Calculate the angles of altitude and azimuth using the spherical triangle.
             //
             // The spherical triangle contains the following points and their angles:

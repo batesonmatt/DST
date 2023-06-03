@@ -10,14 +10,18 @@ namespace DST.Core.DateTimesBuilder
             : base(dateTimeAdder)
         { }
 
-        // Builds a new AstronomicalDateTime array given the specified starting date/time value,
+        // Builds a new IBaseDateTime array given the specified starting IBaseDateTime value,
         // the period length, and the interval length.
         // The date/time value at each interval will be added from the previous date/time value.
-        public override AstronomicalDateTime[] Build(AstronomicalDateTime start, int period, int interval)
+        public override IBaseDateTime[] Build(IBaseDateTime start, int period, int interval)
         {
-            List<AstronomicalDateTime> dateTimes = new()
+            _ = start ?? throw new ArgumentNullException(nameof(start));
+
+            IMutableDateTime mutableStart = DateTimeFactory.ConvertToMutable(start);
+
+            List<IMutableDateTime> dateTimes = new()
             {
-                start
+                mutableStart
             };
 
             // The period length must be non-zero

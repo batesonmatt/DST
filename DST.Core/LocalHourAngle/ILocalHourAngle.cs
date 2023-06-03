@@ -6,6 +6,6 @@ namespace DST.Core.LocalHourAngle
 {
     public interface ILocalHourAngle
     {
-        Angle Calculate(ILocalObserver localObserver, AstronomicalDateTime dateTime);
+        Angle Calculate(ILocalObserver localObserver, IAstronomicalDateTime dateTime);
     }
 }

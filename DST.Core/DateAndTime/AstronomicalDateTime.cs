@@ -3,22 +3,19 @@
 namespace DST.Core.DateAndTime
 {
     // Represents a DateTime value in Universal Time, for a given client time zone, on the Gregorian calendar.
-    public class AstronomicalDateTime : IDateTime
+    public class AstronomicalDateTime : IBaseDateTime, IDateTime, IClientDateTime, IAstronomicalDateTime, IMutableDateTime
     {
         // Gets the underlying date and time value, represented in universal time.
         public DateTime Value { get; }
 
-        // Gets the underlying DateTimeInfo object.
-        public DateTimeInfo Info { get; }
+        // Gets the underlying IDateTimeInfo object.
+        public IDateTimeInfo Info { get; }
 
         // Gets the DateTimeKind value for this AstronomicalDateTime instance.
         public DateTimeKind Kind => DateTimeKind.Utc;
 
-        // Gets the number of ticks that represent the date and time of this AstronomicalDateTime instance.
-        public long Ticks => Value.Ticks;
-
         // Gets the date component of the underlying UTC DateTime value.
-        public AstronomicalDateTime Date => new(Value.Date, Info);
+        public IDateTime Date => DateTimeFactory.CreateDateTime(Value.Date, Info);
 
         // Gets the time of day of the underlying DateTime value, represented in universal time.
         public TimeSpan Time => Value.TimeOfDay;
@@ -26,6 +23,9 @@ namespace DST.Core.DateAndTime
         // Gets the Coordinated Universal Time (UTC) offset for the client time zone during the underlying date and time.
         // This considers Daylight Saving Time and may vary for different datetimes.
         public TimeSpan UtcOffset => Info.ClientTimeZoneInfo.GetUtcOffset(Value);
+
+        // Gets the number of ticks that represent the date and time of this AstronomicalDateTime instance.
+        public long Ticks => Value.Ticks;
 
         // Gets the total number of ticks from the underlying DateTime value (Value) to MinUtcDateTime.
         // This value is negative.
@@ -35,10 +35,10 @@ namespace DST.Core.DateAndTime
         // This value is positive.
         public long MaxTickSpan => DateTimeConstants.MaxUtcDateTime.Ticks - Ticks;
 
-        // Creates a new AstronomicalDateTime with the specified DateTime and DateTimeInfo values.
+        // Creates a new AstronomicalDateTime with the specified DateTime and IDateTimeInfo values.
         // If dateTime.Kind is DateTimeKind.Local or DateTimeKind.Unspecified, then this converts
         // dateTime to universal time using dateTimeInfo.ClientTimeZoneInfo.
-        public AstronomicalDateTime(DateTime dateTime, DateTimeInfo dateTimeInfo)
+        public AstronomicalDateTime(DateTime dateTime, IDateTimeInfo dateTimeInfo)
         {
             Info = dateTimeInfo ?? throw new ArgumentNullException(nameof(dateTimeInfo));
 
@@ -47,49 +47,9 @@ namespace DST.Core.DateAndTime
             Value = GetAdjustedDateTime(dateTime);
         }
 
-        // Returns a value that indicates whether two specified AstronomicalDateTime values are not equal.
-        public static bool operator !=(AstronomicalDateTime left, AstronomicalDateTime right)
-        {
-            return left.Ticks != right.Ticks;
-        }
-
-        // Returns a value that indicates whether two specified AstronomicalDateTime values are equal.
-        public static bool operator ==(AstronomicalDateTime left, AstronomicalDateTime right)
-        {
-            return left.Ticks == right.Ticks;
-        }
-
-        // Returns a value that indicates whether a specified AstronomicalDateTime value is less than
-        // another specified AstronomicalDateTime value.
-        public static bool operator <(AstronomicalDateTime left, AstronomicalDateTime right)
-        {
-            return left.Ticks < right.Ticks;
-        }
-
-        // Returns a value that indicates whether a specified AstronomicalDateTime value is greater than
-        // another specified AstronomicalDateTime value.
-        public static bool operator >(AstronomicalDateTime left, AstronomicalDateTime right)
-        {
-            return left.Ticks > right.Ticks;
-        }
-
-        // Returns a value that indicates whether a specified AstronomicalDateTime value is less than
-        // or equal to another specified AstronomicalDateTime value.
-        public static bool operator <=(AstronomicalDateTime left, AstronomicalDateTime right)
-        {
-            return left.Ticks <= right.Ticks;
-        }
-
-        // Returns a value that indicates whether a specified AstronomicalDateTime value is greater than
-        // or equal to another specified AstronomicalDateTime value.
-        public static bool operator >=(AstronomicalDateTime left, AstronomicalDateTime right)
-        {
-            return left.Ticks >= right.Ticks;
-        }
-
         // Restricts an instance of DateTime onto the Gregorian calendar in universal time, for the underlying client time zone.
         // Converts argument 'dateTime' to UTC if dateTime.Kind equals DateTimeKind.Local or DateTimeKind.Unspecified.
-        // For converting from standard time, use DateTimeInfo.ConvertTimeFromStandard.
+        // For converting from standard time, use IDateTimeInfo.ConvertTimeFromStandard.
         private DateTime GetAdjustedDateTime(DateTime dateTime)
         {
             // The dateTime value may have an invalid time if attempting to convert from a standardized local time,
@@ -176,35 +136,11 @@ namespace DST.Core.DateAndTime
         // AstronomicalDateTime values.
         public bool IsMinOrMaxValue()
         {
-            return this == Info.MinAstronomicalDateTime || this == Info.MaxAstronomicalDateTime;
+            return Ticks == Info.MinAstronomicalDateTime.Ticks || Ticks == Info.MaxAstronomicalDateTime.Ticks;
         }
 
-        // Returns the number of ticks between this current AstronomicalDateTime instance and the most recent epoch event.
-        // The resulting value may be positive or negative.
-        public long GetTicksFromEpoch()
-        {
-            long value = Value.Ticks;
-            long epoch = DateTimeConstants.Epoch.Ticks;
-            long bounds = value >= epoch ? DateTimeConstants.MaxUtcDateTime.Ticks : DateTimeConstants.MinUtcDateTime.Ticks;
-
-            // Validate that the difference of the epoch from the adjusted date/time value may be computable.
-            // Note that if a given DateTime value, dateTime, lies within MinUtcDateTime and MaxUtcDateTime, then both
-            // MinUtcDateTime - dateTime and MaxUtcDateTime - dateTime will be computable and will not throw an exception.
-            // 
-            // If the value is between the epoch and boundary datetime.
-            if (Math.Abs(bounds - epoch) >= Math.Abs(bounds - value))
-            {
-                return value - epoch;
-            }
-            else
-            {
-                // The value is out of supported range.
-                return value >= epoch ? DateTimeConstants.MaxEpochTickSpan : DateTimeConstants.MinEpochTickSpan;
-            }
-        }
-
-        // Returns a new AstronomicalDateTime that adds the specified number of seconds to the value of this instance.
-        public AstronomicalDateTime AddSeconds(double value)
+        // Returns a new IMutableDateTime that adds the specified number of seconds to the value of this instance.
+        public IMutableDateTime AddSeconds(double value)
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
@@ -212,11 +148,11 @@ namespace DST.Core.DateAndTime
             if (value >= MaxTickSpan / Constants.TicksPerSecond) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(DateTime.SpecifyKind(Value.AddSeconds(value), Kind), Info);
+            return DateTimeFactory.CreateMutable(DateTime.SpecifyKind(Value.AddSeconds(value), Kind), Info);
         }
 
-        // Returns a new AstronomicalDateTime that adds the specified number of minutes to the value of this instance.
-        public AstronomicalDateTime AddMinutes(double value)
+        // Returns a new IMutableDateTime that adds the specified number of minutes to the value of this instance.
+        public IMutableDateTime AddMinutes(double value)
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
@@ -224,11 +160,11 @@ namespace DST.Core.DateAndTime
             if (value >= MaxTickSpan / Constants.TicksPerMinute) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(DateTime.SpecifyKind(Value.AddMinutes(value), Kind), Info);
+            return DateTimeFactory.CreateMutable(DateTime.SpecifyKind(Value.AddMinutes(value), Kind), Info);
         }
 
-        // Returns a new AstronomicalDateTime that adds the specified number of hours to the value of this instance.
-        public AstronomicalDateTime AddHours(double value)
+        // Returns a new IMutableDateTime that adds the specified number of hours to the value of this instance.
+        public IMutableDateTime AddHours(double value)
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
@@ -236,11 +172,11 @@ namespace DST.Core.DateAndTime
             if (value >= MaxTickSpan / Constants.TicksPerHour) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(DateTime.SpecifyKind(Value.AddHours(value), Kind), Info);
+            return DateTimeFactory.CreateMutable(DateTime.SpecifyKind(Value.AddHours(value), Kind), Info);
         }
 
-        // Returns a new AstronomicalDateTime that adds the specified number of days to the value of this instance.
-        public AstronomicalDateTime AddDays(double value)
+        // Returns a new IMutableDateTime that adds the specified number of days to the value of this instance.
+        public IMutableDateTime AddDays(double value)
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
@@ -248,11 +184,11 @@ namespace DST.Core.DateAndTime
             if (value >= MaxTickSpan / Constants.TicksPerDay) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(DateTime.SpecifyKind(Value.AddDays(value), Kind), Info);
+            return DateTimeFactory.CreateMutable(DateTime.SpecifyKind(Value.AddDays(value), Kind), Info);
         }
 
-        // Returns a new AstronomicalDateTime that adds the specified number of weeks to the value of this instance.
-        public AstronomicalDateTime AddWeeks(double value)
+        // Returns a new IMutableDateTime that adds the specified number of weeks to the value of this instance.
+        public IMutableDateTime AddWeeks(double value)
         {
             if (value == 0.0) return this;
             if (value.IsFiniteRealNumber() == false) return this;
@@ -260,22 +196,22 @@ namespace DST.Core.DateAndTime
             if (value >= MaxTickSpan / Constants.TicksPerWeek) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(DateTime.SpecifyKind(Value.AddDays(value * 7.0), Kind), Info);
+            return DateTimeFactory.CreateMutable(DateTime.SpecifyKind(Value.AddDays(value * 7.0), Kind), Info);
         }
 
-        // Returns a new AstronomicalDateTime that adds the specified number of months to the value of this instance.
-        public AstronomicalDateTime AddMonths(int value)
+        // Returns a new IMutableDateTime that adds the specified number of months to the value of this instance.
+        public IMutableDateTime AddMonths(int value)
         {
             if (value == 0) return this;
             if (value <= 1 - Value.Month + (Value.Year - DateTimeConstants.MinUtcDateTime.Year) * -12) return Info.MinAstronomicalDateTime;
             if (value >= 12 - Value.Month + (DateTimeConstants.MaxUtcDateTime.Year - Value.Year) * 12) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(DateTime.SpecifyKind(Value.AddMonths(value), Kind), Info);
+            return DateTimeFactory.CreateMutable(DateTime.SpecifyKind(Value.AddMonths(value), Kind), Info);
         }
 
-        // Returns a new AstronomicalDateTime that adds the specified number of years to the value of this instance.
-        public AstronomicalDateTime AddYears(int value)
+        // Returns a new IMutableDateTime that adds the specified number of years to the value of this instance.
+        public IMutableDateTime AddYears(int value)
         {
             if (value == 0) return this;
 
@@ -285,18 +221,18 @@ namespace DST.Core.DateAndTime
             if (value >= DateTimeConstants.MaxUtcDateTime.Year - Value.Year) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(DateTime.SpecifyKind(Value.AddYears(value), Kind), Info);
+            return DateTimeFactory.CreateMutable(DateTime.SpecifyKind(Value.AddYears(value), Kind), Info);
         }
 
-        // Returns a new AstronomicalDateTime that adds the specified number of ticks to the value of this instance.
-        public AstronomicalDateTime AddTicks(long value)
+        // Returns a new IMutableDateTime that adds the specified number of ticks to the value of this instance.
+        public IMutableDateTime AddTicks(long value)
         {
             if (value == 0) return this;
             if (value <= MinTickSpan) return Info.MinAstronomicalDateTime;
             if (value >= MaxTickSpan) return Info.MaxAstronomicalDateTime;
 
             // Preserve DateTime.Kind, which should be DateTimeKind.Utc.
-            return new AstronomicalDateTime(DateTime.SpecifyKind(Value.AddTicks(value), Kind), Info);
+            return DateTimeFactory.CreateMutable(DateTime.SpecifyKind(Value.AddTicks(value), Kind), Info);
         }
 
         // Returns the localized DateTime value for the underlying client time zone.
@@ -318,7 +254,7 @@ namespace DST.Core.DateAndTime
             // Note 2:
             // Converting back to universal time from this resultant DateTime will produce the incorrect time
             // if DST is in effect for the client time zone.
-            // Use DateTimeInfo.ConvertTimeFromStandard(DateTime) to get the corrected UTC time.
+            // Use IDateTimeInfo.ConvertTimeFromStandard(DateTime) to get the corrected UTC time.
 
             // The DateTimeKind needs to be explicitly set to Unspecified.
             // No need to check bounds here, since Info.Min- and MaxStandardDateTime are built on the BaseUtcOffset values.
@@ -343,6 +279,30 @@ namespace DST.Core.DateAndTime
         public override string ToString()
         {
             return Value.ToString();
+        }
+
+        // Returns the number of ticks between this current AstronomicalDateTime instance and the most recent epoch event.
+        // The resulting value may be positive or negative.
+        public long GetTicksFromEpoch()
+        {
+            long value = Value.Ticks;
+            long epoch = DateTimeConstants.Epoch.Ticks;
+            long bounds = value >= epoch ? DateTimeConstants.MaxUtcDateTime.Ticks : DateTimeConstants.MinUtcDateTime.Ticks;
+
+            // Validate that the difference of the epoch from the adjusted date/time value may be computable.
+            // Note that if a given DateTime value, dateTime, lies within MinUtcDateTime and MaxUtcDateTime, then both
+            // MinUtcDateTime - dateTime and MaxUtcDateTime - dateTime will be computable and will not throw an exception.
+            // 
+            // If the value is between the epoch and boundary datetime.
+            if (Math.Abs(bounds - epoch) >= Math.Abs(bounds - value))
+            {
+                return value - epoch;
+            }
+            else
+            {
+                // The value is out of supported range.
+                return value >= epoch ? DateTimeConstants.MaxEpochTickSpan : DateTimeConstants.MinEpochTickSpan;
+            }
         }
 
         // Returns the Earth Rotation Angle (ERA) in total decimal degrees on the interval [0°, 360°)

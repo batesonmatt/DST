@@ -28,16 +28,18 @@ namespace DST.Core.Trajectory
         }
 
         // Returns a value that indicates whether the target is in the observer's local sky at the specified date and time.
-        public abstract bool IsAboveHorizon(AstronomicalDateTime dateTime);
+        public abstract bool IsAboveHorizon(IAstronomicalDateTime dateTime);
 
         // Returns a tracking of the targeting object at a specified local hour angle, beginning on a specified date and time.
         // If 'cycle' is HourAngleCycle.Next, this will track the target for the next date/time it reaches the local hour angle.
         // Otherwise, this will track the target for the previous date/time it reached the local hour angle.
-        protected IVector CalculateVector(AstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle)
+        protected IVector CalculateVector(IAstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             // Calculate the date and time of the expected LHA.
-            AstronomicalDateTime finalDateTime = _localObserver.LocalHourAngleDateTime.Calculate(
-                _localObserver, dateTime, target, cycle);
+            IAstronomicalDateTime finalDateTime = _localObserver.LocalHourAngleDateTime
+                .Calculate(_localObserver, dateTime, target, cycle);
 
             // Track the observer at the calculated date/time.
             ICoordinate position = _tracker.Track(finalDateTime);
@@ -48,11 +50,13 @@ namespace DST.Core.Trajectory
 
         // Builds an array of date/time values in the underlying timescale, starting from the specified date/time value,
         // for the specified number of cycles.
-        protected AstronomicalDateTime[] GetDateTimes(AstronomicalDateTime start, int cycles)
+        protected IAstronomicalDateTime[] GetDateTimes(IBaseDateTime start, int cycles)
         {
+            _ = start ?? throw new ArgumentNullException(nameof(start));
+
             if (cycles == 0)
             {
-                return Array.Empty<AstronomicalDateTime>();
+                return Array.Empty<IAstronomicalDateTime>();
             }
 
             // The current tracking algorithms perform in either sidereal time (GMST and GAST) or stellar time (ERA).
@@ -71,9 +75,9 @@ namespace DST.Core.Trajectory
             ITimeScalable timeScalable = TimeScalableFactory.Create(timeScale);
             IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Days);
             IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, true);
-            AstronomicalDateTime[] dateTimes = dateTimesBuilder.Build(start, cycles, 1);
+            IBaseDateTime[] dateTimes = dateTimesBuilder.Build(start, cycles, 1);
 
-            return dateTimes;
+            return DateTimeFactory.ConvertToAstronomical(dateTimes);
         }
     }
 }

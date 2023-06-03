@@ -20,9 +20,9 @@ namespace DST.Core.DateTimeAdder
             _timeScalable = timeScalable ?? throw new ArgumentNullException(nameof(timeScalable)); ;
         }
 
-        // Returns a new AstronomicalDateTime value by adding the given amount of time to a 
-        // specified starting AstronomicalDateTime value.
-        public abstract AstronomicalDateTime Add(AstronomicalDateTime start, int value);
+        // Returns a new IMutableDateTime value by adding the given amount of time to a 
+        // specified starting IMutableDateTime value.
+        public abstract IMutableDateTime Add(IMutableDateTime start, int value);
 
         // Returns a new value by adjusting the given amount of time if it is outside the allowable range.
         protected virtual int GetFixedValue(int value)

@@ -12,14 +12,15 @@ namespace DST.Core.LocalHourAngleDateTime
             : base(localHourAngle)
         { }
 
-        // Returns an AstronomicalDateTime representing the date and time when the specified ILocalObserver.Target
+        // Returns an IAstronomicalDateTime representing the date and time when the specified ILocalObserver.Target
         // reaches the specified target local hour angle (LHA) as observed in standardized local time, beginning from
-        // the specified starting AstronomicalDateTime.
+        // the specified starting IAstronomicalDateTime.
         // If 'cycle' is HourAngleCycle.Next, this returns the next date/time that the targeting object reaches
         // the target LHA, otherwise this returns the previous date/time that the targeting object reached the target LHA.
-        public override AstronomicalDateTime Calculate(
-            ILocalObserver localObserver, AstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle)
+        public override IAstronomicalDateTime Calculate(
+            ILocalObserver localObserver, IAstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
             _ = localObserver ?? throw new ArgumentNullException(nameof(localObserver));
 
             // The current local hour angle of the targeting object at the starting date and time.
@@ -31,7 +32,7 @@ namespace DST.Core.LocalHourAngleDateTime
             double hoursToNextLHA = Angle.Coterminal(target - currentLHA).TotalHours;
 
             // Get the standardized local date and time, ignoring the effects of DST.
-            DateTime standardDateTime = dateTime.ToStandardTime();
+            DateTime standardDateTime = DateTimeFactory.ConvertToMutable(dateTime).ToStandardTime();
 
             // Total hours since midnight (00:00:00) to the specified time, converted to sidereal time.
             double timeOfDay = standardDateTime.TimeOfDay.TotalHours * Constants.SolarToSiderealRatio;
@@ -52,12 +53,13 @@ namespace DST.Core.LocalHourAngleDateTime
             };
 
             // The total hours offset starts from midnight (00:00:00) on the specified date.
-            // Use AstronomicalDateTime.Date to truncate the time component.
+            // Use DateTime.Date to truncate the time component.
             // Convert the hours back to mean solar time before adding to the date.
-            AstronomicalDateTime result = localObserver.DateTimeInfo.ConvertTimeFromStandard(standardDateTime.Date)
+            IMutableDateTime result = localObserver.DateTimeInfo
+                .ConvertTimeFromStandard(standardDateTime.Date)
                 .AddHours(totalHours * Constants.SiderealToSolarRatio);
 
-            return result;
+            return DateTimeFactory.ConvertToAstronomical(result);
         }
     }
 }

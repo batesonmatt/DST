@@ -14,13 +14,15 @@ namespace DST.Core.DateTimesBuilder
             _dateTimeAdder = dateTimeAdder ?? throw new ArgumentNullException(nameof(dateTimeAdder));
         }
 
-        // Builds a new AstronomicalDateTime array given the specified starting date/time value,
+        // Builds a new IBaseDateTime array given the specified starting IBaseDateTime value,
         // the period length, and the interval length.
-        public abstract AstronomicalDateTime[] Build(AstronomicalDateTime start, int period, int interval);
+        public abstract IBaseDateTime[] Build(IBaseDateTime start, int period, int interval);
 
         // Returns a value that indicates whether the builder may continue to add before going out of range.
-        protected virtual bool IsReady(AstronomicalDateTime previous, int timeElapsed, int period)
+        protected virtual bool IsReady(IMutableDateTime previous, int timeElapsed, int period)
         {
+            _ = previous ?? throw new ArgumentNullException(nameof(previous));
+
             // Stop if the previous datetime has reached the minimum or maximum supported datetime.
             if (previous.IsMinOrMaxValue()) return false;
 

@@ -5,7 +5,7 @@ namespace DST.Core.Trajectory
 {
     public interface IVariableTrajectory : ITrajectory
     {
-        IVector GetApex(AstronomicalDateTime dateTime);
-        IVector[] GetApex(AstronomicalDateTime start, int cycles);
+        IVector GetApex(IAstronomicalDateTime dateTime);
+        IVector[] GetApex(IAstronomicalDateTime start, int cycles);
     }
 }

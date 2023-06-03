@@ -44,15 +44,16 @@ namespace DST.Core.Tests
                 Console.WriteLine("----------------------------------------");
 
                 DateTimeInfo info = new(clientTimeZoneInfo);
-                AstronomicalDateTime d1 = new(clientDateTime, info);
-                DateTime local = d1.ToLocalTime();
-                DateTime standard = d1.ToStandardTime();
-                AstronomicalDateTime d2 = info.ConvertTimeFromStandard(standard);
+                IDateTime d1 = DateTimeFactory.CreateDateTime(clientDateTime, info);
+                IMutableDateTime mutable = DateTimeFactory.ConvertToMutable(d1);
+                DateTime local = mutable.ToLocalTime();
+                DateTime standard = mutable.ToStandardTime();
+                IMutableDateTime d2 = info.ConvertTimeFromStandard(standard);
 
                 Console.WriteLine("UTC Now: " + info.Now.ToString());
                 Console.WriteLine("UTC Today: " + info.Today.ToString());
                 Console.WriteLine("Date: " + d1.Date.ToString());
-                Console.WriteLine("UTC: " + d1.ToString());
+                Console.WriteLine("UTC: " + mutable.ToString());
                 Console.WriteLine("Local: " + local.ToString());
                 Console.WriteLine("Standard: " + standard.ToString());
                 Console.WriteLine("From Standard: " + d2.ToString());
@@ -62,11 +63,11 @@ namespace DST.Core.Tests
                 // March 12, 2:00 am
                 // November 5, 2:00 am
                 local = new(2023, 3, 12, 0, 30, 0, DateTimeKind.Unspecified);
-                d1 = new(local, info);
+                mutable = DateTimeFactory.CreateMutable(local, info);
                 for (int i = 0; i < 4; i++)
                 {
-                    d1 = d1.AddMinutes(30);
-                    standard = d1.ToStandardTime();
+                    mutable = mutable.AddMinutes(30);
+                    standard = mutable.ToStandardTime();
                     Console.Write(standard.ToString() + " ... ");
 
                     if (info.ClientTimeZoneInfo.IsInvalidTime(standard))
@@ -77,9 +78,11 @@ namespace DST.Core.Tests
                     Console.WriteLine();
                 }
 
-                d2 = new(standard, info);
+                // Test incorrectly converting from standard time to UTC.
+                d2 = DateTimeFactory.CreateMutable(standard, info);
                 Console.WriteLine(d2.ToString());
 
+                // Test the correct way to convert from standard time to UTC.
                 d2 = info.ConvertTimeFromStandard(standard);
                 Console.WriteLine(d2.ToString());
             }

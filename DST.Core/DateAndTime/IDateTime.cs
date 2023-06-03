@@ -1,7 +1,10 @@
 ﻿namespace DST.Core.DateAndTime
 {
-    public interface IDateTime
+    public interface IDateTime : IBaseDateTime
     {
-        DateTime Value { get; }
+        DateTimeKind Kind { get; }
+        IDateTime Date { get; }
+        TimeSpan Time { get; }
+        TimeSpan UtcOffset { get; }
     }
 }

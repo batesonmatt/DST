@@ -5,7 +5,7 @@ namespace DST.Core.Vector
 {
     public interface IVector
     {
-        AstronomicalDateTime DateTime { get; }
+        IBaseDateTime DateTime { get; }
         ICoordinate Coordinate { get; }
     }
 }

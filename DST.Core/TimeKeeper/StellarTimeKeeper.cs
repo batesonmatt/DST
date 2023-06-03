@@ -5,9 +5,11 @@ namespace DST.Core.TimeKeeper
 {
     public class StellarTimeKeeper : ITimeKeeper
     {
-        // Returns the Earth rotation angle (ERA) for the specified AstronomicalDateTime value.
-        public Angle Calculate(AstronomicalDateTime dateTime)
+        // Returns the Earth rotation angle (ERA) for the specified IAstronomicalDateTime object.
+        public Angle Calculate(IAstronomicalDateTime dateTime)
         {
+            _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
+
             return dateTime.GetEarthRotationAngle();
         }
     }

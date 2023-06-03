@@ -9,7 +9,7 @@ namespace DST.Core.Observer
 {
     public interface ILocalObserver : IObserver
     {
-        DateTimeInfo DateTimeInfo { get; }
+        IDateTimeInfo DateTimeInfo { get; }
         IGeographicCoordinate Location { get; }
         IEquatorialCoordinate Target { get; }
 

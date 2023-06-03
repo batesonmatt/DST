@@ -19,13 +19,15 @@ namespace DST.Core.DateTimeAdder
             : base(timeScalable)
         { }
 
-        // Returns a new AstronomicalDateTime value by adding the given amount of years to a 
-        // specified starting AstronomicalDateTime value in mean solar time.
+        // Returns a new IMutableDateTime value by adding the given amount of years to a 
+        // specified starting IMutableDateTime value in mean solar time.
         // The number of years to add is converted to whole cycles in the underlying time scale.
-        public override AstronomicalDateTime Add(AstronomicalDateTime start, int value)
+        public override IMutableDateTime Add(IMutableDateTime start, int value)
         {
+            _ = start ?? throw new ArgumentNullException(nameof(start));
+
             // Let AddYears determine the ending date/time value in mean solar time.
-            AstronomicalDateTime next = start.AddYears(GetFixedValue(value));
+            IMutableDateTime next = start.AddYears(GetFixedValue(value));
 
             // Get the duration in ticks.
             long ticks = next.Ticks - start.Ticks;
