@@ -1,5 +1,11 @@
 ﻿To Do:
 
+Filter by Season:
+
+1. Get client's  geolocation
+2. Need to know the client's hemisphere (North or South)
+3. 
+
 Consider new fields for Seasons table (StartMonth, EndMonth).
 Then create methods to build and get the DateTime values.
 
@@ -8,6 +14,13 @@ Winter					Summer					1 December      12                  3
 Spring					Autumn					1 March         3                   6
 Summer					Winter					1 June          6                   9
 Autumn					Spring					1 September     9                   12
+
+DateTime start = new(2023, 12, 1, 0, 0, 0);
+DateTime end = new(2023, 3, 1, 0, 0, 0);
+
+
+
+----------
 
 Make a note file explaining the current steps to build the database.
 
@@ -18,6 +31,27 @@ Consider partial view for the filters. (Lot of code)
 Consider partial view for the results
 
 Consider form for the search
+
+Search Page (List.cshtml)
+- Think about all possible items/controls that will
+   be displayed in the main body.
+   I can always add the filters later, or as I go.
+- Remove all styles and start from scratch
+- Focus only on the controls and functionality
+- Get everything on this page
+
+Fix the front-end design.
+(New bootstrap version doesn't support certain things)
+- For the navbar, redesign styles for navbar-toggler 
+  and navbar-dark.
+- refer to bootstrap version documentation
+
+Consider changing the search page to "Browse",
+and maybe a separate page/tab for searching.
+
+Consider separate page for the results?
+
+Consider removing _DetailsLayout.cshtml
 
 ___________________________________________________________
 

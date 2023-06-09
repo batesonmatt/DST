@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<style>
+
+</style>
+</head>
+
+<body style="width:75%;margin:auto;">
+
+<h1>JavaScript GeoLocation</h1>
+
+<br/>
+
+<h2>The getTimezoneOffset() Method</h2>
+<p>getTimezoneOffset() returns the time difference between UTC time and local time, in minutes.</p>
+<p>Offset: <span id="offset"></span></p>
+
+<hr/>
+
+<h2>The resolvedOptions() Method</h2>
+<p>The resolvedOptions() method of Intl.DateTimeFormat instances returns a new object with properties reflecting the locale and date and time formatting options.</p>
+<p>The timeZone value provided for the options argument returns the client's local timezone name, or <strong>undefined</strong> (representing the runtime's default time zone) if none was provided. <i>Warning: Applications should not rely on undefined being returned, as future versions may return a String value identifying the runtime's default time zone instead.</i></p>
+<p>TimeZone: <span id="name"></span></p>
+
+<hr/>
+
+<h2>The GeolocationPosition.coords Property</h2>
+<p>The GeolocationPosition.coords property returned by the Geolocation.getCurrentPosition() method returns a GeolocationCoordinates object representing a geographic position. It contains the location, that is longitude and latitude on the Earth, the altitude, and the speed of the object concerned, regrouped inside the returned value. It also contains accuracy information about these values.</p>
+<p>Latitude: <span id="latitude"></span></p>
+<p>Longitude: <span id="longitude"></span></p>
+<p>Accuracy: <span id="accuracy"></span></p>
+
+<hr/>
+
+<script>
+function showError(error)
+{
+    switch (error.code)
+    {
+        case error.PERMISSION_DENIED:
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+        default:
+            alert("An unknown error occurred.");
+            break;
+    }
+}
+function showPosition(position)
+{
+    const d = new Date();
+    let diff = d.getTimezoneOffset();
+    document.getElementById("offset").innerHTML = diff;
+
+    let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.getElementById("name").innerHTML = tz;
+
+    document.getElementById("latitude").innerHTML = position.coords.latitude;
+    document.getElementById("longitude").innerHTML = position.coords.longitude;
+    document.getElementById("accuracy").innerHTML = position.coords.accuracy;
+
+    //document.getElementById("offset").value = diff;
+    //document.getElementById("name").value = tz;
+    //document.getElementById("latitude").value = position.coords.latitude;
+    //document.getElementById("longitude").value = position.coords.longitude;
+    //document.getElementById("accuracy").value = position.coords.accuracy;
+}
+function getLocation()
+{
+    if (navigator.geolocation)
+    {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    }
+    else
+    {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+</script>
+
+<br/>
+
+<button onclick="getLocation()">Get my location</button>
+
+</body>
+</html>
