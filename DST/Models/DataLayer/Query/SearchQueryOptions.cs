@@ -10,85 +10,95 @@ namespace DST.Models.DataLayer.Query
         /* builder property values are all default */
         public void SortFilter(SearchGridBuilder builder, GeoLocationModel geoLocation)
         {
-            if (builder is not null)
+            if (builder is null)
             {
-                if (builder.IsFilterByType)
-                {
-                    Where = model => builder.CurrentRoute.TypeFilter.EqualsSeo(model.Type);
-                }
-                if (builder.IsFilterByCatalog)
-                {
-                    Where = model => builder.CurrentRoute.CatalogFilter.EqualsSeo(model.CatalogName);
-                }
-                if (builder.IsFilterByConstellation)
-                {
-                    Where = model => builder.CurrentRoute.ConstellationFilter.EqualsSeo(model.ConstellationName);
-                }
-                if (builder.IsFilterBySeason)
-                {
-                    /* Needs geolocation */
-                }
-                if (builder.IsFilterByTrajectory)
-                {
-                    /* Needs geolocation */
-                }
-                if (builder.IsFilterByLocal)
-                {
-                    /* Needs geolocation */
-                }
-                if (builder.IsFilterByHasName)
-                {
-                    Where = model => !string.IsNullOrWhiteSpace(model.Name);
-                }
-                if (builder.IsFilterByVisibility)
-                {
-                    /* Needs geolocation */
-                }
-                if (builder.IsFilterByRiseTime)
-                {
-                    /* Needs geolocation */
-                }
+                return;
+            }
 
-                if (builder.IsSortById)
+            if (builder.IsFilterByType)
+            {
+                Where = model => builder.CurrentRoute.TypeFilter.EqualsSeo(model.Type);
+            }
+            if (builder.IsFilterByCatalog)
+            {
+                Where = model => builder.CurrentRoute.CatalogFilter.EqualsSeo(model.CatalogName);
+            }
+            if (builder.IsFilterByConstellation)
+            {
+                Where = model => builder.CurrentRoute.ConstellationFilter.EqualsSeo(model.ConstellationName);
+            }
+            if (builder.IsFilterBySeason)
+            {
+                /* Needs geolocation */
+                /* Check latitude to determine north/south hemisphere */
+                /* Check Where = model => model.Constellation.* ... */
+                /* Use builder.CurrentRoute.SeasonFilter.Value, or .Id */
+
+                if (geoLocation is not null)
                 {
-                    OrderByAll = new OrderClauses<DsoModel>
+                    
+                }
+            }
+            if (builder.IsFilterByTrajectory)
+            {
+                /* Needs geolocation */
+            }
+            if (builder.IsFilterByLocal)
+            {
+                /* Needs geolocation */
+            }
+            if (builder.IsFilterByHasName)
+            {
+                Where = model => !string.IsNullOrWhiteSpace(model.Name);
+            }
+            if (builder.IsFilterByVisibility)
+            {
+                /* Needs geolocation */
+            }
+            if (builder.IsFilterByRiseTime)
+            {
+                /* Needs geolocation */
+            }
+
+            if (builder.IsSortById)
+            {
+                OrderByAll = new OrderClauses<DsoModel>
                     {
                         { model => model.CatalogName },
                         { model => model.Id }
                     };
-                }
-                else if (builder.IsSortByName)
-                {
-                    OrderBy = model => model.Name;
-                }
-                else if (builder.IsSortByType)
-                {
-                    OrderByAll = new OrderClauses<DsoModel>
+            }
+            else if (builder.IsSortByName)
+            {
+                OrderBy = model => model.Name;
+            }
+            else if (builder.IsSortByType)
+            {
+                OrderByAll = new OrderClauses<DsoModel>
                     {
                         { model => model.Type },
                         { model => model.Description }
                     };
-                }
-                else if (builder.IsSortByConstellation)
-                {
-                    OrderBy = model => model.ConstellationName;
-                }
-                else if (builder.IsSortByDistance)
-                {
-                    OrderBy = model => model.Distance;
-                }
-                else if (builder.IsSortByBrightness)
-                {
-                    OrderBy = model => model.Magnitude;
-                }
-                else if (builder.IsSortByVisibility)
-                {
-                    /* Needs geolocation */
-                }
-                else if (builder.IsSortByRiseTime)
-                {
-                    /* Needs geolocation */
-                }
+            }
+            else if (builder.IsSortByConstellation)
+            {
+                OrderBy = model => model.ConstellationName;
+            }
+            else if (builder.IsSortByDistance)
+            {
+                OrderBy = model => model.Distance;
+            }
+            else if (builder.IsSortByBrightness)
+            {
+                OrderBy = model => model.Magnitude;
+            }
+            else if (builder.IsSortByVisibility)
+            {
+                /* Needs geolocation */
+            }
+            else if (builder.IsSortByRiseTime)
+            {
+                /* Needs geolocation */
             }
         }
 

@@ -1,10 +1,17 @@
 ﻿To Do:
 
-Filter by Season:
+Add support for getting the client's geolocation info (lat, lon, timezone name, accuracy, etc.)
+- Add button to retrieve the info from the javascript code
+  This should "sendToForm()" the values to the form in the markup, or leave blank if disallowed, etc.
+  For the dropdown timezone selector, just send the retrieved IANA name to the value of the box.
+- Disable geo-dependent sort/filter controls until the client either allows it, or fills in their location manually.
+- Consider adding the timezone name and accuracy properties to GeoLocationModel
+- Consider renaming GeoLocationModel to GeolocationModel
+- revise comments refering to "GeoLocation..." or "geoLocation..."
+- For any error or bad input with the geo-dependent sorting/filtering, just return void.
+  No need to alert errors.
 
-1. Get client's  geolocation
-2. Need to know the client's hemisphere (North or South)
-3. 
+Filter by Season:
 
 Consider new fields for Seasons table (StartMonth, EndMonth).
 Then create methods to build and get the DateTime values.
