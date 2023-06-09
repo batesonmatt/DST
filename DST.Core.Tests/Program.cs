@@ -14,45 +14,6 @@ namespace DST.Core.Tests
 {
     internal class Program
     {
-        private static void Test()
-        {
-            // Visibility: Rise and Set
-            // Location: 52°30'00"N 1°55'00"W => 52.5°N 1.9167°W => 53°N 2°W
-            // Target: 16h 41m 42s, +36°28'00" => 16.695h, +36.4667° => 17h, +36°
-            // Period: 8 / 10 / 1998 6:10:00 PM
-            // Position: +49°10'07.927", 269°08'48.008" => +49.1689°, 269.1467° => +49°, 269°
-
-            // LAT: 52.5, LON: -1.9166667
-            IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
-                longitude: new Angle(-1.9166667), latitude: new Angle(52.5));
-
-            // RA: 16.695hr, DEC: 36°28'
-            IEquatorialCoordinate m13 = CoordinateFactory.CreateEquatorial(
-                rightAscension: new Angle(TimeSpan.FromHours(16.695)), declination: new Angle(36, 28));
-
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
-            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
-            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m13, timeKeeper);
-
-            IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(
-                new DateTime(1998, 8, 10, 23, 10, 0, DateTimeKind.Utc), dateTimeInfo);
-
-            IMutableDateTime mutable = DateTimeFactory.ConvertToMutable(dateTime);
-
-            ITracker tracker = TrackerFactory.Create(observer);
-
-            ICoordinate position = tracker.Track(dateTime);
-
-            ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
-
-            // Display results to the user.
-            Console.WriteLine($"Visibility: {trajectory}");
-            Console.WriteLine($"Location: {observer.Origin} => {observer.Origin.Format(FormatType.Decimal)} => {observer.Origin.Format(FormatType.Compact)}");
-            Console.WriteLine($"Target: {observer.Destination} => {observer.Destination.Format(FormatType.Decimal)} => {observer.Destination.Format(FormatType.Compact)}");
-            Console.WriteLine($"Period: {mutable.ToLocalTime()}");
-            Console.WriteLine($"Position: {position} => {position.Format(FormatType.Decimal)} => {position.Format(FormatType.Compact)}");
-        }
-
         private static void TestTrack()
         {
             // My location (LAT, LON): 29.4944768, -95.1123968
@@ -363,8 +324,7 @@ namespace DST.Core.Tests
 
         static void Main(string[] args)
         {
-            //Test();
-            TestTrack();
+            //TestTrack();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
         }
