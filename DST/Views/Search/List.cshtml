@@ -22,6 +22,23 @@
 
 <div id="search-container" class="container">
 
+    <div>
+        <div>
+            <label asp-for="GeoLocation.TimeZoneName">Time Zone:</label>
+            <input id="input-timezone" asp-for="GeoLocation.TimeZoneName" type="text" />
+        </div>
+        <div>
+            <label asp-for="GeoLocation.Latitude">Latitude:</label>
+            <input id="input-latitude" asp-for="GeoLocation.Latitude" type="text" />
+        </div>
+        <div>
+            <label asp-for="GeoLocation.Longitude">Longitude:</label>
+            <input id="input-longitude" asp-for="GeoLocation.Longitude" type="text" />
+        </div>
+
+        <button onclick="getLocation()">Use my location</button>
+    </div>
+
     <div class="list-group">
         @foreach (var sortField in Sort.Fields)
         {

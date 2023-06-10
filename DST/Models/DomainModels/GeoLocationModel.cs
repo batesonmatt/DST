@@ -7,6 +7,19 @@ namespace DST.Models.DomainModels
     {
         #region Properties
 
+        public string TimeZoneName
+        {
+            get
+            {
+                return _timeZoneName;
+            }
+
+            set
+            {
+                _timeZoneName = value;
+            }
+        }
+
         /// <summary>The latitudinal component of this geographic coordinate, as represented in decimal degrees.</summary>
         /// <remarks>The value for this property will be rounded to 7 decimal places.</remarks>
         /// <value>A floating-point value ranging from <c>-90.0</c> to <c>90.0</c>.</value>
@@ -45,6 +58,7 @@ namespace DST.Models.DomainModels
 
         #region Fields
 
+        private string _timeZoneName;
         private double _latitude;
         private double _longitude;
 

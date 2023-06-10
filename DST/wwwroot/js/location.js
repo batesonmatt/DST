@@ -2,7 +2,7 @@
 {
     if (navigator.geolocation)
     {
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
+        navigator.geolocation.getCurrentPosition(sendToForm, showError);
     }
     else
     {
@@ -11,11 +11,19 @@
 }
 
 // Consider using getElementByClassName()
-// Rename this function to sendToForm(position)
-function showPosition(position)
+function sendToForm(position)
 {
+    let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.getElementById("input-timezone").value = tz;
+
     document.getElementById("input-latitude").value = position.coords.latitude;
     document.getElementById("input-longitude").value = position.coords.longitude;
+    //document.getElementById("accuracy").innerHTML = position.coords.accuracy;
+
+    //document.getElementById("input-timezone").value = tz;
+    //document.getElementById("input-latitude").value = position.coords.latitude;
+    //document.getElementById("input-longitude").value = position.coords.longitude;
+    //document.getElementById("accuracy").value = position.coords.accuracy;
 }
 
 // Consider new function sendToText(position) -> "latitude, longitude"
