@@ -22,24 +22,27 @@
 
 <div id="search-container" class="container">
 
-    <div>
-        <div>
-            <label asp-for="GeoLocation.TimeZoneName">Time Zone:</label>
-            <input id="input-timezone" asp-for="GeoLocation.TimeZoneName" type="text" />
+    <div class="mb-3">
+        <div class="mb-3">
+            <label class="form-label" asp-for="GeoLocation.TimeZoneName">Time Zone</label>
+            <input id="input-timezone" class="form-control" asp-for="GeoLocation.TimeZoneName" type="text" />
         </div>
-        <div>
-            <label asp-for="GeoLocation.Latitude">Latitude:</label>
-            <input id="input-latitude" asp-for="GeoLocation.Latitude" type="text" />
+        <div class="mb-3">
+            <label class="form-label" asp-for="GeoLocation.Latitude">Latitude</label>
+            <input id="input-latitude" class="form-control" asp-for="GeoLocation.Latitude" type="number" />
         </div>
-        <div>
-            <label asp-for="GeoLocation.Longitude">Longitude:</label>
-            <input id="input-longitude" asp-for="GeoLocation.Longitude" type="text" />
+        <div class="mb-3">
+            <label class="form-label" asp-for="GeoLocation.Longitude">Longitude</label>
+            <input id="input-longitude" class="form-control" asp-for="GeoLocation.Longitude" type="number" />
         </div>
 
-        <button onclick="getLocation()">Use my location</button>
+        <div class="mb-3">
+            <button onclick="getLocation()" class="btn btn-outline-secondary">Use my location</button>
+            <div id="location-help" class="form-text">Your location will not be shared.</div>
+        </div>
     </div>
 
-    <div class="list-group">
+    <div class="list-group mb-3">
         @foreach (var sortField in Sort.Fields)
         {
             routes.SetSort(sortField.Value);
@@ -55,7 +58,7 @@
         }
     </div>
 
-    <div class="list-group">
+    <div class="list-group mb-3">
         @{
             routes = Model.CurrentRoute.Clone();
 
@@ -75,7 +78,7 @@
         }
     </div>
 
-    <div class="list-group">
+    <div class="list-group mb-3">
         @{
             routes = Model.CurrentRoute.Clone();
 
@@ -95,7 +98,7 @@
         }
     </div>
 
-    <div class="list-group">
+    <div class="list-group mb-3">
         @{
             routes = Model.CurrentRoute.Clone();
 

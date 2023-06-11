@@ -1,5 +1,10 @@
 ﻿To Do:
 
+For the timezone input control
+- Consider starting with a select control, but if the user clicks "Use my location", then 
+  change to an input control with the value set to the retrieved timezone name.
+- Or, just try setting the value of the select control from the javascript.
+
 Add support for getting the client's geolocation info (lat, lon, timezone name, accuracy, etc.)
 - Add button to retrieve the info from the javascript code
   This should "sendToForm()" the values to the form in the markup, or leave blank if disallowed, etc.
@@ -25,7 +30,13 @@ Autumn					Spring					1 September     9                   12
 DateTime start = new(2023, 12, 1, 0, 0, 0);
 DateTime end = new(2023, 3, 1, 0, 0, 0);
 
+-----------
 
+Consider using Bootstrap Cards for the list items...
+
+See:
+https://getbootstrap.com/docs/5.0/components/card/#grid-cards
+https://getbootstrap.com/docs/5.0/components/list-group/#custom-content
 
 ----------
 
@@ -69,18 +80,6 @@ For the home page, consider using a random quote of the day pulled from the data
 - Consider a login page (to login as admin) to CRUD these in the Quotes table.
 - The login page must not be linked on the site.
 
------------------------------------------------------------
-
-BUGS:
-
-- Sort by: Brightness
-  Should be inversely proportional to the magnitude.
-  Ascending - Should sort from lowest to highest, darkest to brightest, magnitude.
-  Descending - Should sort from highest to lowest, brightest to darkest, magnitude.
-
-- Coalsack Nebula (Dark Nebula, Magnitude - null)
-  Treated as the lowest magnitude, thus the "brightest" object.
-
 ___________________________________________________________
 
 - Provide temporary blueprint for filtering/sorting by location-dependent values
@@ -110,18 +109,6 @@ Search View:
 - Change the asp-action of the Search form to "Filter", and implement the 
     Filter() GET and POST methods in CatalogController.
 	[HttpGet] Filter() should store the filering/sorting options in the ViewBag
-
-- Fix:
-	Pressing the "Use my location" button after submitting the Search form does nothing.
-	Try clearing the properties upon submitting the form ??
-
-	Try reformatting as a radio selection and add two new input fields with the "hidden" attribute. Send the data to these hidden fields.
-	
-		<input type="hidden" asp-for="GeoLocation.Latitude" />
-		
-		or
-
-		<input hidden asp-for="GeoLocation.Latitude" />
 
 _____________________________________________________________
 

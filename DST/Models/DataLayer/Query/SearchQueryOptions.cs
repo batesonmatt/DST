@@ -1,5 +1,4 @@
 ﻿using DST.Models.DomainModels;
-using DST.Models.Extensions;
 using DST.Models.Grid;
 
 namespace DST.Models.DataLayer.Query
@@ -90,7 +89,10 @@ namespace DST.Models.DataLayer.Query
             }
             else if (builder.IsSortByBrightness)
             {
-                OrderBy = model => model.Magnitude;
+                // The brightness of a deep sky object is inversely proportional to its magnitude.
+                // DsoModel.Magnitude allows null, for which the object is said to have no brightness and
+                // should be sorted as having the highest magnitude (darkest).
+                OrderBy = model => -(model.Magnitude ?? double.PositiveInfinity);
             }
             else if (builder.IsSortByVisibility)
             {
