@@ -9,7 +9,12 @@ namespace DST.Models.ViewModels
     {
         #region Properties
 
-        public GeoLocationModel GeoLocation { get; set; }
+        public GeolocationModel Geolocation { get; set; }
+
+        /* Consider a Dictionary<string, string> populated with <TimeZoneInfo.Id, TimeZoneInfo.DisplayName> 
+         * To be used for populating the Time Zone Name selection control item.
+         */
+
         public IEnumerable<DsoModel> DsoItems { get; set; }
         public RouteDictionary CurrentRoute { get; set; }
         public int TotalPages { get; set; }

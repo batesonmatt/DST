@@ -8,7 +8,7 @@ namespace DST.Models.DataLayer.Query
 
         public abstract string Value { get; }
 
-        public bool EqualsSeo(string value)
+        public virtual bool EqualsSeo(string value)
         {
             return value.ToKebabCase().EqualsExact(Value);
         }

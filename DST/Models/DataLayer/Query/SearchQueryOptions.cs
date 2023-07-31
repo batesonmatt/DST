@@ -7,7 +7,7 @@ namespace DST.Models.DataLayer.Query
     {
         #region Methods
         /* builder property values are all default */
-        public void SortFilter(SearchGridBuilder builder, GeoLocationModel geoLocation)
+        public void SortFilter(SearchGridBuilder builder, GeolocationModel geolocation)
         {
             if (builder is null)
             {
@@ -33,7 +33,7 @@ namespace DST.Models.DataLayer.Query
                 /* Check Where = model => model.Constellation.* ... */
                 /* Use builder.CurrentRoute.SeasonFilter.Value, or .Id */
 
-                if (geoLocation is not null)
+                if (geolocation is not null)
                 {
                     
                 }

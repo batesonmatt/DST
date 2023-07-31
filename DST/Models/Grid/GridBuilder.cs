@@ -15,11 +15,11 @@ namespace DST.Models.Grid
 
         #region Fields
 
-        private const string _routeKey = "currentroute";
+        protected const string _routeKey = "currentroute";
 
         protected RouteDictionary _routes;
 
-        private readonly ISession _session;
+        protected readonly ISession _session;
 
         #endregion
 

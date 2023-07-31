@@ -8,6 +8,8 @@ using DST.Models.DTOs;
 using DST.Models.Grid;
 using DST.Models.DataLayer.Query;
 using DST.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
+using DST.Models.Extensions;
 
 namespace DST.Controllers
 {
@@ -16,7 +18,6 @@ namespace DST.Controllers
         #region Fields
 
         private readonly SearchUnitOfWork _data;
-        private GeoLocationModel _geoLocation;
 
         #endregion
 
@@ -33,14 +34,27 @@ namespace DST.Controllers
 
         public IActionResult Index()
         {
-            //ViewBag.LAT = 0.0;
-            //ViewBag.LON = 0.0;
+            return RedirectToAction("List");
+        }
+
+        public IActionResult Test(GeolocationModel geolocation)
+        {
+            HttpContext.Session.SetString("TZ", geolocation.TimeZoneName);
+            HttpContext.Session.SetObject("LAT", geolocation.Latitude);
+            HttpContext.Session.SetObject("LON", geolocation.Longitude);
 
             return RedirectToAction("List");
         }
 
         public ViewResult List(SearchGridDTO values)
         {
+            GeolocationModel geolocation = new()
+            {
+                TimeZoneName = HttpContext.Session.GetString("TZ") ?? string.Empty,
+                Latitude = HttpContext.Session.GetObject<double>("LAT"),
+                Longitude = HttpContext.Session.GetObject<double>("LON")
+            };
+
             // Get GridBuilder object, load route segments, and store in session.
             SearchGridBuilder builder = new(HttpContext.Session, values);
 
@@ -56,12 +70,12 @@ namespace DST.Controllers
                 PageSize = builder.CurrentRoute.PageSize,
                 SortDirection = builder.CurrentRoute.SortDirection
             };
-
-            options.SortFilter(builder, _geoLocation);
+            
+            options.SortFilter(builder, geolocation);
 
             SearchListViewModel viewModel = new()
             {
-                GeoLocation = _geoLocation,
+                Geolocation = geolocation,
 
                 DsoItems = _data.DsoItems.List(options),
 
