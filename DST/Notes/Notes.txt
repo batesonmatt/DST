@@ -1,6 +1,5 @@
 ﻿To Do:
 
-- Plan for the TimeZoneName control
 - Consider updating GeolocationModel with extra properties/methods 
    for setting/getting default (Reset(), etc.).
    And determining if properties are default/UTC, etc.
@@ -10,35 +9,13 @@
    ? - Use Session/persistant Cookies to store the values
    ? - Use TempData to transfer the values across controllers
 
-For the TimeZoneName filter
-- Consider no select list, just default to UTC if the user
-  does not choose to use their location.
-- Use a label in the front-end that defaults to the UTC timezone,
-  unless the current.TimeZoneNameFilter.IsDefault() == False
-
 - HttpGet Action method in SearchController to link to Track page.
 - Takes Category, Id, and Geolocation (?) values for routing.
 - Also add this to the Details page to link to Track page.
 
-
 -------------------------------------------------------------------------
 
-For the timezone input control
-- Consider making a postback action so that we can verify the coord and use TimeZoneInfo.FindSystemTimeZoneById(string id).
-  The retrieved timezone name will go to a hidden input control value.
-  Then on server side, set the active timezone display name item in the list control.
-  ...
-  OR
-- Consider starting with a select control, but if the user clicks "Use my location", then 
-  change to an input control with the value set to the retrieved timezone name.
-- Or, just try setting the value of the select control from the javascript.
-
-Add support for getting the client's geolocation info (lat, lon, timezone name, accuracy, etc.)
-- Add button to retrieve the info from the javascript code
-  This should "sendToForm()" the values to the form in the markup, or leave blank if disallowed, etc.
-  For the dropdown timezone selector, just send the retrieved IANA name to the value of the box.
 - Disable geo-dependent sort/filter controls until the client either allows it, or fills in their location manually.
-- Consider adding the timezone name and accuracy properties to GeoLocationModel
 - Enable client-side/server-side validation for GeolocationModel and view form.
  - For any error or bad input with the geo-dependent sorting/filtering within SearchQueryOptions.SortFilter(...), just return void.
    No need to alert errors.

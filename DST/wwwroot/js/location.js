@@ -16,6 +16,9 @@ function sendToForm(position)
     let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     document.getElementById("input-timezone").value = tz;
 
+    document.getElementById("select-timezone").value = null;
+    document.getElementById("select-timezone").setAttribute("disabled", "disabled");
+
     document.getElementById("input-latitude").value = position.coords.latitude;
     document.getElementById("input-longitude").value = position.coords.longitude;
     //document.getElementById("accuracy").innerHTML = position.coords.accuracy;

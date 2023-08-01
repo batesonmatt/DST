@@ -140,7 +140,7 @@ ________________________________________________________________________________
 Models\DataLayer\DomainModels\
 
 Contains all the entity model code that corresponds to the tables in the database.
-
+Also contains miscellaneous models used for model-binding in the front-end.
 
 _________________________________________________________________________________
 

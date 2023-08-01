@@ -10,6 +10,8 @@ using DST.Models.DataLayer.Query;
 using DST.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using DST.Models.Extensions;
+using System;
+using System.Linq;
 
 namespace DST.Controllers
 {
@@ -37,9 +39,31 @@ namespace DST.Controllers
             return RedirectToAction("List");
         }
 
-        public IActionResult Test(GeolocationModel geolocation)
+        public IActionResult CreateGeolocation(GeolocationModel geolocation)
         {
-            HttpContext.Session.SetString("TZ", geolocation.TimeZoneName);
+            geolocation.TimeZoneId ??= string.Empty;
+            geolocation.UserTimeZoneId ??= string.Empty;
+
+            if (geolocation.TimeZoneId != string.Empty)
+            {
+                // Verify the selected id.
+                geolocation.TimeZoneId = TimeZoneItem.GetVerifiedId(geolocation.TimeZoneId);
+            }
+            else if (geolocation.UserTimeZoneId != string.Empty)
+            {
+                // Try to verify the retrieved IANA id.
+                geolocation.TimeZoneId = TimeZoneItem.GetVerifiedId(geolocation.UserTimeZoneId);
+            }
+            else
+            {
+                // No timezone was selected/found. Default to UTC.
+                geolocation.TimeZoneId = TimeZoneItem.DefaultId;
+            }
+
+            geolocation.UserTimeZoneId = geolocation.TimeZoneId;
+
+            HttpContext.Session.SetString("TZ1", geolocation.TimeZoneId);
+            HttpContext.Session.SetString("TZ2", geolocation.UserTimeZoneId);
             HttpContext.Session.SetObject("LAT", geolocation.Latitude);
             HttpContext.Session.SetObject("LON", geolocation.Longitude);
 
@@ -50,7 +74,8 @@ namespace DST.Controllers
         {
             GeolocationModel geolocation = new()
             {
-                TimeZoneName = HttpContext.Session.GetString("TZ") ?? string.Empty,
+                TimeZoneId = HttpContext.Session.GetString("TZ1") ?? TimeZoneItem.DefaultId,
+                UserTimeZoneId = HttpContext.Session.GetString("TZ2") ?? TimeZoneItem.DefaultId,
                 Latitude = HttpContext.Session.GetObject<double>("LAT"),
                 Longitude = HttpContext.Session.GetObject<double>("LON")
             };
@@ -76,6 +101,11 @@ namespace DST.Controllers
             SearchListViewModel viewModel = new()
             {
                 Geolocation = geolocation,
+
+                TimeZoneItems = TimeZoneInfo.GetSystemTimeZones()
+                    .OrderByDescending(t => t.Id == TimeZoneItem.DefaultId)
+                    .ThenBy(t => t.BaseUtcOffset.TotalHours)
+                    .Select(t => new TimeZoneItem(t.Id, t.DisplayName)),
 
                 DsoItems = _data.DsoItems.List(options),
 

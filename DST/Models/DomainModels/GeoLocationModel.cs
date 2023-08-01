@@ -7,20 +7,11 @@ namespace DST.Models.DomainModels
     {
         #region Properties
 
-        public string TimeZoneName
-        {
-            get
-            {
-                return _timeZoneName;
-            }
+        public string TimeZoneId { get; set; }
 
-            set
-            {
-                _timeZoneName = value;
-            }
-        }
+        public string UserTimeZoneId { get; set; }
 
-        /// <summary>The latitudinal component of this geographic coordinate, as represented in decimal degrees.</summary>
+        /// <summary>The latitudinal component of a geographic coordinate, as represented in decimal degrees.</summary>
         /// <remarks>The value for this property will be rounded to 7 decimal places.</remarks>
         /// <value>A floating-point value ranging from <c>-90.0</c> to <c>90.0</c>.</value>
         [Range(-90.0, 90.0, ErrorMessage = "Latitude must be in the range from -90.0 to 90.0")]
@@ -37,7 +28,7 @@ namespace DST.Models.DomainModels
             }
         }
 
-        /// <summary>The longitudinal component of this geographic coordinate, as represented in decimal degrees.</summary>
+        /// <summary>The longitudinal component of a geographic coordinate, as represented in decimal degrees.</summary>
         /// <remarks>The value for this property will be rounded to 7 decimal places.</remarks>
         /// <value>A floating-point value ranging from <c>-180.0</c> to <c>180.0</c>.</value>
         [Range(-180.0, 180.0, ErrorMessage = "Longitude must be in the range from -180.0 to 180.0")]
@@ -58,7 +49,6 @@ namespace DST.Models.DomainModels
 
         #region Fields
 
-        private string _timeZoneName;
         private double _latitude;
         private double _longitude;
 
