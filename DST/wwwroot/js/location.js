@@ -21,12 +21,16 @@ function sendToForm(position)
 
     document.getElementById("input-latitude").value = position.coords.latitude;
     document.getElementById("input-longitude").value = position.coords.longitude;
+
     //document.getElementById("accuracy").innerHTML = position.coords.accuracy;
 
     //document.getElementById("input-timezone").value = tz;
     //document.getElementById("input-latitude").value = position.coords.latitude;
     //document.getElementById("input-longitude").value = position.coords.longitude;
     //document.getElementById("accuracy").value = position.coords.accuracy;
+
+    //document.getElementById("#form-geolocation").submit();
+    $("#form-geolocation").submit();
 }
 
 // Consider new function sendToText(position) -> "latitude, longitude"

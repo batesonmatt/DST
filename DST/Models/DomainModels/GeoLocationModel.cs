@@ -7,6 +7,8 @@ namespace DST.Models.DomainModels
     {
         #region Properties
 
+        public static string DefaultId { get; } = TimeZoneInfo.Utc.Id;
+
         public string TimeZoneId { get; set; }
 
         public string UserTimeZoneId { get; set; }
@@ -51,6 +53,82 @@ namespace DST.Models.DomainModels
 
         private double _latitude;
         private double _longitude;
+
+        #endregion
+
+        #region Methods
+
+        public void VerifyAndUpdateTimeZone(string id)
+        {
+            TimeZoneId = GetVerifiedId(id);
+            UserTimeZoneId = TimeZoneId;
+        }
+
+        public void ResetTimeZone()
+        {
+            TimeZoneId = DefaultId;
+            UserTimeZoneId = DefaultId;
+        }
+
+        public void ResetLocation()
+        {
+            _latitude = 0.0;
+            _longitude = 0.0;
+        }
+
+        public void Reset()
+        {
+            ResetTimeZone();
+            ResetLocation();
+        }
+
+        public bool IsDefaultTimeZone()
+        {
+            return TimeZoneId == DefaultId && UserTimeZoneId == DefaultId;
+        }
+
+        public bool IsDefaultLocation()
+        {
+            return _latitude== 0.0 && _longitude == 0.0;
+        }
+
+        public bool IsDefault()
+        {
+            return IsDefaultTimeZone() && IsDefaultLocation();
+        }
+
+        private static string GetVerifiedId(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return DefaultId;
+            }
+
+            string result;
+
+            try
+            {
+                TimeZoneInfo t = TimeZoneInfo.FindSystemTimeZoneById(id);
+
+                if (t.HasIanaId)
+                {
+                    if (TimeZoneInfo.TryConvertIanaIdToWindowsId(t.Id, out result) == false)
+                    {
+                        result = DefaultId;
+                    }
+                }
+                else
+                {
+                    result = t.Id;
+                }
+            }
+            catch
+            {
+                result = DefaultId;
+            }
+
+            return result;
+        }
 
         #endregion
     }

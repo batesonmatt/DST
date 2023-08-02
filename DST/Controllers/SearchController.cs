@@ -39,43 +39,47 @@ namespace DST.Controllers
             return RedirectToAction("List");
         }
 
-        public IActionResult CreateGeolocation(GeolocationModel geolocation)
+        public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchGridDTO values, bool reset = false)
         {
+            // Replace nulls with an empty string.
             geolocation.TimeZoneId ??= string.Empty;
             geolocation.UserTimeZoneId ??= string.Empty;
 
-            if (geolocation.TimeZoneId != string.Empty)
+            if (reset)
+            {
+                // Reset geolocation and timezone to defaults.
+                geolocation.Reset();
+            }
+            else if (geolocation.TimeZoneId != string.Empty)
             {
                 // Verify the selected id.
-                geolocation.TimeZoneId = TimeZoneItem.GetVerifiedId(geolocation.TimeZoneId);
+                geolocation.VerifyAndUpdateTimeZone(geolocation.TimeZoneId);
             }
             else if (geolocation.UserTimeZoneId != string.Empty)
             {
                 // Try to verify the retrieved IANA id.
-                geolocation.TimeZoneId = TimeZoneItem.GetVerifiedId(geolocation.UserTimeZoneId);
+                geolocation.VerifyAndUpdateTimeZone(geolocation.UserTimeZoneId);
             }
             else
             {
                 // No timezone was selected/found. Default to UTC.
-                geolocation.TimeZoneId = TimeZoneItem.DefaultId;
+                geolocation.ResetTimeZone();
             }
-
-            geolocation.UserTimeZoneId = geolocation.TimeZoneId;
 
             HttpContext.Session.SetString("TZ1", geolocation.TimeZoneId);
             HttpContext.Session.SetString("TZ2", geolocation.UserTimeZoneId);
             HttpContext.Session.SetObject("LAT", geolocation.Latitude);
             HttpContext.Session.SetObject("LON", geolocation.Longitude);
 
-            return RedirectToAction("List");
+            return RedirectToAction("List", values);
         }
 
         public ViewResult List(SearchGridDTO values)
         {
             GeolocationModel geolocation = new()
             {
-                TimeZoneId = HttpContext.Session.GetString("TZ1") ?? TimeZoneItem.DefaultId,
-                UserTimeZoneId = HttpContext.Session.GetString("TZ2") ?? TimeZoneItem.DefaultId,
+                TimeZoneId = HttpContext.Session.GetString("TZ1") ?? GeolocationModel.DefaultId,
+                UserTimeZoneId = HttpContext.Session.GetString("TZ2") ?? GeolocationModel.DefaultId,
                 Latitude = HttpContext.Session.GetObject<double>("LAT"),
                 Longitude = HttpContext.Session.GetObject<double>("LON")
             };
@@ -103,7 +107,7 @@ namespace DST.Controllers
                 Geolocation = geolocation,
 
                 TimeZoneItems = TimeZoneInfo.GetSystemTimeZones()
-                    .OrderByDescending(t => t.Id == TimeZoneItem.DefaultId)
+                    .OrderByDescending(t => t.Id == GeolocationModel.DefaultId)
                     .ThenBy(t => t.BaseUtcOffset.TotalHours)
                     .Select(t => new TimeZoneItem(t.Id, t.DisplayName)),
 
