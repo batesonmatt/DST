@@ -4,9 +4,9 @@ using DST.Models.DTOs;
 using DST.Models.Extensions;
 using Microsoft.AspNetCore.Http;
 
-namespace DST.Models.Grid
+namespace DST.Models.Builders.Routing
 {
-    public class SearchGridBuilder : GridBuilder
+    public class SearchRouteBuilder : RouteBuilder
     {
         #region Properties
 
@@ -33,11 +33,11 @@ namespace DST.Models.Grid
 
         #region Constructors
 
-        public SearchGridBuilder(ISession session)
+        public SearchRouteBuilder(ISession session)
             : base(session)
         { }
 
-        public SearchGridBuilder(ISession session, SearchGridDTO values)
+        public SearchRouteBuilder(ISession session, SearchDTO values)
             : base(session, values)
         {
             LoadFilterSegments(values.Filters);

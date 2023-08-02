@@ -4,7 +4,7 @@ using DST.Models.Extensions;
 using System;
 using System.Collections.Generic;
 
-namespace DST.Models.Grid
+namespace DST.Models.Builders.Routing
 {
     public class RouteDictionary : Dictionary<string, string>
     {
@@ -12,26 +12,26 @@ namespace DST.Models.Grid
 
         public int PageNumber
         {
-            get => Get(nameof(GridDTO.PageNumber)).ToInt();
-            set => this[nameof(GridDTO.PageNumber)] = value.ToString();
+            get => Get(nameof(PageSortDTO.PageNumber)).ToInt();
+            set => this[nameof(PageSortDTO.PageNumber)] = value.ToString();
         }
 
         public int PageSize
         {
-            get => Get(nameof(GridDTO.PageSize)).ToInt();
-            set => this[nameof(GridDTO.PageSize)] = value.ToString();
+            get => Get(nameof(PageSortDTO.PageSize)).ToInt();
+            set => this[nameof(PageSortDTO.PageSize)] = value.ToString();
         }
 
         public string SortField
         {
-            get => Get(nameof(GridDTO.SortField));
-            set => this[nameof(GridDTO.SortField)] = value;
+            get => Get(nameof(PageSortDTO.SortField));
+            set => this[nameof(PageSortDTO.SortField)] = value;
         }
 
         public string SortDirection
         {
-            get => Get(nameof(GridDTO.SortDirection));
-            set => this[nameof(GridDTO.SortDirection)] = value;
+            get => Get(nameof(PageSortDTO.SortDirection));
+            set => this[nameof(PageSortDTO.SortDirection)] = value;
         }
 
         public ListFilter TypeFilter
@@ -91,15 +91,15 @@ namespace DST.Models.Grid
         private static string[] FilterKeys
             => new string[]
             {
-                nameof(SearchGridDTO.Type),
-                nameof(SearchGridDTO.Catalog),
-                nameof(SearchGridDTO.Constellation),
-                nameof(SearchGridDTO.Season),
-                nameof(SearchGridDTO.Local),
-                nameof(SearchGridDTO.HasName),
-                nameof(SearchGridDTO.Visibility),
-                nameof(SearchGridDTO.RiseTime),
-                nameof(SearchGridDTO.Trajectory)
+                nameof(SearchDTO.Type),
+                nameof(SearchDTO.Catalog),
+                nameof(SearchDTO.Constellation),
+                nameof(SearchDTO.Season),
+                nameof(SearchDTO.Local),
+                nameof(SearchDTO.HasName),
+                nameof(SearchDTO.Visibility),
+                nameof(SearchDTO.RiseTime),
+                nameof(SearchDTO.Trajectory)
             };
 
         private IFilter[] Filters

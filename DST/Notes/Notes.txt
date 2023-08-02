@@ -1,10 +1,15 @@
 ﻿To Do:
 
-- Consider updating GeolocationModel with extra properties/methods 
-   for setting/getting default (Reset(), etc.).
-   And determining if properties are default/UTC, etc.
-- Plan for clearing/Resetting the Geolocation form in the view
-- Consider better design for saving the Geolocation properties to Session
+Consider better design for saving the Geolocation properties to Session
+Add class GeolocationBuilder under Models.Builders
+- Add methods/properties to maintain session state for GeolocationModel
+- SaveGeolocation(GeolocationModel) -> SeoExtensions.SetObject
+- LoadGeolocation(GeolocationModel) -> SeoExtensions.GetObject
+
+- Remove DomainModels.ObservationModel
+
+- Resume work on the filters.
+
 - Plan for passing the Geolocation properties/model across controllers.
    ? - Use Session/persistant Cookies to store the values
    ? - Use TempData to transfer the values across controllers
@@ -12,6 +17,8 @@
 - HttpGet Action method in SearchController to link to Track page.
 - Takes Category, Id, and Geolocation (?) values for routing.
 - Also add this to the Details page to link to Track page.
+
+Update VS
 
 -------------------------------------------------------------------------
 

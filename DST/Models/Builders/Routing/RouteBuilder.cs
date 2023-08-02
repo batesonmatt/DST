@@ -3,9 +3,9 @@ using DST.Models.DTOs;
 using DST.Models.Extensions;
 using Microsoft.AspNetCore.Http;
 
-namespace DST.Models.Grid
+namespace DST.Models.Builders.Routing
 {
-    public class GridBuilder
+    public class RouteBuilder
     {
         #region Properties
 
@@ -25,14 +25,14 @@ namespace DST.Models.Grid
 
         #region Constructors
 
-        public GridBuilder(ISession session)
+        public RouteBuilder(ISession session)
         {
             _session = session;
 
             _routes = _session.GetObject<RouteDictionary>(_routeKey) ?? new RouteDictionary();
         }
 
-        public GridBuilder(ISession session, GridDTO values)
+        public RouteBuilder(ISession session, PageSortDTO values)
         {
             _session = session;
 
@@ -52,7 +52,7 @@ namespace DST.Models.Grid
 
         #region Methods
 
-        public void SaveRouteSegments() => _session.SetObject<RouteDictionary>(_routeKey, _routes);
+        public void SaveRouteSegments() => _session.SetObject(_routeKey, _routes);
 
         public int GetTotalPages(int count)
         {

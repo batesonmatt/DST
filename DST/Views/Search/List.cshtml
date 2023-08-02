@@ -72,7 +72,7 @@
 
             foreach (var type in Model.Types)
             {
-                routes.TypeFilter = new ListFilter(nameof(SearchGridDTO.Type), type.Type);
+                routes.TypeFilter = new ListFilter(nameof(SearchDTO.Type), type.Type);
 
                 if (current.TypeFilter.EqualsSeo(type.Type))
                 {
@@ -92,7 +92,7 @@
 
             foreach (var catalog in Model.Catalogs)
             {
-                routes.CatalogFilter = new ListFilter(nameof(SearchGridDTO.Catalog), catalog.Name);
+                routes.CatalogFilter = new ListFilter(nameof(SearchDTO.Catalog), catalog.Name);
 
                 if (current.CatalogFilter.EqualsSeo(catalog.Name))
                 {
@@ -112,7 +112,7 @@
 
             foreach (var constellation in Model.Constellations)
             {
-                routes.ConstellationFilter = new ListFilter(nameof(SearchGridDTO.Constellation), constellation.Name);
+                routes.ConstellationFilter = new ListFilter(nameof(SearchDTO.Constellation), constellation.Name);
 
                 if (current.ConstellationFilter.EqualsSeo(constellation.Name))
                 {

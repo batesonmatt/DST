@@ -2,8 +2,7 @@
 
 namespace DST.Models.DTOs
 {
-    /* Consider renaming since the page using this DTO does not use a grid. */
-    public class GridDTO
+    public class PageSortDTO
     {
         #region Properties
 

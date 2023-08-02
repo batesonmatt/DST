@@ -5,7 +5,7 @@ using DST.Models.DomainModels;
 using DST.Models.DataLayer;
 using DST.Models.DataLayer.Repositories;
 using DST.Models.DTOs;
-using DST.Models.Grid;
+using DST.Models.Builders.Routing;
 using DST.Models.DataLayer.Query;
 using DST.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +39,7 @@ namespace DST.Controllers
             return RedirectToAction("List");
         }
 
-        public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchGridDTO values, bool reset = false)
+        public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchDTO values, bool reset = false)
         {
             // Replace nulls with an empty string.
             geolocation.TimeZoneId ??= string.Empty;
@@ -74,7 +74,7 @@ namespace DST.Controllers
             return RedirectToAction("List", values);
         }
 
-        public ViewResult List(SearchGridDTO values)
+        public ViewResult List(SearchDTO values)
         {
             GeolocationModel geolocation = new()
             {
@@ -85,7 +85,7 @@ namespace DST.Controllers
             };
 
             // Get GridBuilder object, load route segments, and store in session.
-            SearchGridBuilder builder = new(HttpContext.Session, values);
+            SearchRouteBuilder builder = new(HttpContext.Session, values);
 
             // if clear filters:
             // builder.ClearFilterSegments();
@@ -153,7 +153,7 @@ namespace DST.Controllers
         [HttpPost]
         public RedirectToActionResult Filter(string[] filterIds, string[] filters, string[] options, bool clear = false)
         {
-            SearchGridBuilder builder = new(HttpContext.Session);
+            SearchRouteBuilder builder = new(HttpContext.Session);
 
             if (clear)
             {

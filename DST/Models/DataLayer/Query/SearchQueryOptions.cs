@@ -1,5 +1,5 @@
 ﻿using DST.Models.DomainModels;
-using DST.Models.Grid;
+using DST.Models.Builders.Routing;
 
 namespace DST.Models.DataLayer.Query
 {
@@ -7,7 +7,7 @@ namespace DST.Models.DataLayer.Query
     {
         #region Methods
         /* builder property values are all default */
-        public void SortFilter(SearchGridBuilder builder, GeolocationModel geolocation)
+        public void SortFilter(SearchRouteBuilder builder, GeolocationModel geolocation)
         {
             if (builder is null)
             {
