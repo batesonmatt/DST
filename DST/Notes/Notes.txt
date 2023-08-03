@@ -1,9 +1,5 @@
 ﻿To Do:
 
-- Use GeolocationModel.Default where necessary
-
-- Remove DomainModels.ObservationModel
-
 - Resume work on the filters.
 
 - Plan for passing the Geolocation properties/model across controllers.

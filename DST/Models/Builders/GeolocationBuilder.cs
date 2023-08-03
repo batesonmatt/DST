@@ -15,7 +15,7 @@ namespace DST.Models.Builders
         #region Fields
 
         private const string _sessionKey = "currentgeosession";
-        private readonly GeolocationModel _currentGeolocation;
+        private GeolocationModel _currentGeolocation;
         private readonly ISession _session;
 
         #endregion
@@ -32,13 +32,25 @@ namespace DST.Models.Builders
         {
             _session = session;
             _currentGeolocation = geolocation ?? GeolocationModel.Default;
+            Save();
         }
 
         #endregion
 
         #region Methods
 
-        public void SaveGeolocation()
+        public static void SaveGeolocation(ISession session, GeolocationModel geolocation)
+        {
+            _ = new GeolocationBuilder(session, geolocation);
+        }
+
+        public void SaveGeolocation(GeolocationModel geolocation)
+        {
+            _currentGeolocation = geolocation ?? GeolocationModel.Default;
+            Save();
+        }
+
+        private void Save()
         {
             _session.SetObject(_sessionKey, _currentGeolocation);
         }

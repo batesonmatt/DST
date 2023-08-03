@@ -68,15 +68,14 @@ namespace DST.Controllers
             }
 
             // Store the GeolocationModel object in session.
-            GeolocationBuilder geoBuilder = new(HttpContext.Session, geolocation);
-            geoBuilder.SaveGeolocation();
+            GeolocationBuilder.SaveGeolocation(HttpContext.Session, geolocation);
 
             return RedirectToAction("List", values);
         }
 
         public ViewResult List(SearchDTO values)
         {
-            // Get a new the GeolocationBuilder for the current session.
+            // Get a new GeolocationBuilder for the current session.
             GeolocationBuilder geoBuilder = new(HttpContext.Session);
 
             // Get a new GridBuilder object, load route segments, and store in the current session.

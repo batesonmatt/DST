@@ -66,6 +66,39 @@ namespace DST.Models.DomainModels
 
         #region Methods
 
+        private static string GetVerifiedId(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return DefaultId;
+            }
+
+            string result;
+
+            try
+            {
+                TimeZoneInfo t = TimeZoneInfo.FindSystemTimeZoneById(id);
+
+                if (t.HasIanaId)
+                {
+                    if (TimeZoneInfo.TryConvertIanaIdToWindowsId(t.Id, out result) == false)
+                    {
+                        result = DefaultId;
+                    }
+                }
+                else
+                {
+                    result = t.Id;
+                }
+            }
+            catch
+            {
+                result = DefaultId;
+            }
+
+            return result;
+        }
+
         public void VerifyAndUpdateTimeZone(string id)
         {
             TimeZoneId = GetVerifiedId(id);
@@ -103,39 +136,6 @@ namespace DST.Models.DomainModels
         public bool IsDefault()
         {
             return IsDefaultTimeZone() && IsDefaultLocation();
-        }
-
-        private static string GetVerifiedId(string id)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return DefaultId;
-            }
-
-            string result;
-
-            try
-            {
-                TimeZoneInfo t = TimeZoneInfo.FindSystemTimeZoneById(id);
-
-                if (t.HasIanaId)
-                {
-                    if (TimeZoneInfo.TryConvertIanaIdToWindowsId(t.Id, out result) == false)
-                    {
-                        result = DefaultId;
-                    }
-                }
-                else
-                {
-                    result = t.Id;
-                }
-            }
-            catch
-            {
-                result = DefaultId;
-            }
-
-            return result;
         }
 
         #endregion
