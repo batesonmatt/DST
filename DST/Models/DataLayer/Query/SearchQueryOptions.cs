@@ -1,5 +1,6 @@
 ﻿using DST.Models.DomainModels;
 using DST.Models.Builders.Routing;
+using DST.Models.Builders;
 
 namespace DST.Models.DataLayer.Query
 {
@@ -7,7 +8,7 @@ namespace DST.Models.DataLayer.Query
     {
         #region Methods
         /* builder property values are all default */
-        public void SortFilter(SearchRouteBuilder builder, GeolocationModel geolocation)
+        public void SortFilter(SearchRouteBuilder builder, GeolocationBuilder geoBuilder)
         {
             if (builder is null)
             {
@@ -33,10 +34,10 @@ namespace DST.Models.DataLayer.Query
                 /* Check Where = model => model.Constellation.* ... */
                 /* Use builder.CurrentRoute.SeasonFilter.Value, or .Id */
 
-                if (geolocation is not null)
-                {
+                //if (geolocation is not null)
+                //{
                     
-                }
+                //}
             }
             if (builder.IsFilterByTrajectory)
             {

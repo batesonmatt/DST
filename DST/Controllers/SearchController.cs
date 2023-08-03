@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using DST.Models.Extensions;
 using System;
 using System.Linq;
+using DST.Models.Builders;
 
 namespace DST.Controllers
 {
@@ -66,25 +67,19 @@ namespace DST.Controllers
                 geolocation.ResetTimeZone();
             }
 
-            HttpContext.Session.SetString("TZ1", geolocation.TimeZoneId);
-            HttpContext.Session.SetString("TZ2", geolocation.UserTimeZoneId);
-            HttpContext.Session.SetObject("LAT", geolocation.Latitude);
-            HttpContext.Session.SetObject("LON", geolocation.Longitude);
+            // Store the GeolocationModel object in session.
+            GeolocationBuilder geoBuilder = new(HttpContext.Session, geolocation);
+            geoBuilder.SaveGeolocation();
 
             return RedirectToAction("List", values);
         }
 
         public ViewResult List(SearchDTO values)
         {
-            GeolocationModel geolocation = new()
-            {
-                TimeZoneId = HttpContext.Session.GetString("TZ1") ?? GeolocationModel.DefaultId,
-                UserTimeZoneId = HttpContext.Session.GetString("TZ2") ?? GeolocationModel.DefaultId,
-                Latitude = HttpContext.Session.GetObject<double>("LAT"),
-                Longitude = HttpContext.Session.GetObject<double>("LON")
-            };
+            // Get a new the GeolocationBuilder for the current session.
+            GeolocationBuilder geoBuilder = new(HttpContext.Session);
 
-            // Get GridBuilder object, load route segments, and store in session.
+            // Get a new GridBuilder object, load route segments, and store in the current session.
             SearchRouteBuilder builder = new(HttpContext.Session, values);
 
             // if clear filters:
@@ -100,11 +95,11 @@ namespace DST.Controllers
                 SortDirection = builder.CurrentRoute.SortDirection
             };
             
-            options.SortFilter(builder, geolocation);
+            options.SortFilter(builder, geoBuilder);
 
             SearchListViewModel viewModel = new()
             {
-                Geolocation = geolocation,
+                Geolocation = geoBuilder.CurrentGeolocation,
 
                 TimeZoneItems = TimeZoneInfo.GetSystemTimeZones()
                     .OrderByDescending(t => t.Id == GeolocationModel.DefaultId)

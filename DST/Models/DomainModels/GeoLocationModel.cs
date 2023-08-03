@@ -9,6 +9,14 @@ namespace DST.Models.DomainModels
 
         public static string DefaultId { get; } = TimeZoneInfo.Utc.Id;
 
+        public static GeolocationModel Default => new()
+        {
+            TimeZoneId = DefaultId,
+            UserTimeZoneId = DefaultId,
+            Latitude = 0.0,
+            Longitude = 0.0
+        };
+
         public string TimeZoneId { get; set; }
 
         public string UserTimeZoneId { get; set; }

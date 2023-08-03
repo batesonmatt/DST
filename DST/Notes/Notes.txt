@@ -1,10 +1,6 @@
 ﻿To Do:
 
-Consider better design for saving the Geolocation properties to Session
-Add class GeolocationBuilder under Models.Builders
-- Add methods/properties to maintain session state for GeolocationModel
-- SaveGeolocation(GeolocationModel) -> SeoExtensions.SetObject
-- LoadGeolocation(GeolocationModel) -> SeoExtensions.GetObject
+- Use GeolocationModel.Default where necessary
 
 - Remove DomainModels.ObservationModel
 
