@@ -25,7 +25,7 @@
     @{
         routes = Model.CurrentRoute.Clone();
     }
-    <form id="form-geolocation" class="mb-3" asp-action="CreateGeolocation" asp-all-route-data="@routes" method="post">
+    <form id="form-geolocation" class="mb-3" asp-action="CreateGeolocation" asp-all-route-data="@routes" method="post" onchange="enableGeoSubmit()" oninput="enableGeoSubmit()">
         <div class="mb-3">
             <label class="form-label" asp-for="Geolocation.TimeZoneId">Time Zone</label>
             <input id="input-timezone" class="form-control" type="hidden" asp-for="Geolocation.UserTimeZoneId" value="@Model.Geolocation.TimeZoneId" />
@@ -44,7 +44,7 @@
             <div id="location-help" class="form-text">Your location will not be shared.</div>
         </div>
         <div class="mb-3">
-            <button class="btn btn-primary" type="submit">Submit</button>
+            <button id="form-geo-submit" class="btn btn-primary" type="submit" disabled>Submit</button>
             <button class="btn btn-outline-secondary" type="button" onclick="getLocation()">Use my location</button>
             <button class="btn btn-secondary" type="submit" name="reset" value="true">Reset</button>
         </div>
@@ -121,6 +121,26 @@
                 else
                 {
                     <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@constellation.Name</a>
+                }
+            }
+        }
+    </div>
+
+    <div class="list-group mb-3">
+        @{
+            routes = Model.CurrentRoute.Clone();
+
+            foreach (var season in Model.Seasons)
+            {
+                routes.SeasonFilter = new ListFilter(nameof(SearchDTO.Season), season.North);
+
+                if (current.SeasonFilter.EqualsSeo(season.North))
+                {
+                    <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@season.North</a>
+                }
+                else
+                {
+                    <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@season.North</a>
                 }
             }
         }

@@ -53,3 +53,13 @@ function showError(error)
             break;
     }
 }
+
+function enableGeoSubmit()
+{
+    let e = document.getElementById("form-geo-submit");
+
+    if (e.hasAttribute("disabled"))
+    {
+        e.removeAttribute("disabled");
+    }
+}

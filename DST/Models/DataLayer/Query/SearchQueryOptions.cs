@@ -31,13 +31,39 @@ namespace DST.Models.DataLayer.Query
             {
                 /* Needs geolocation */
                 /* Check latitude to determine north/south hemisphere */
+                /* Don't check if user latitude is within range of the Constellation NorthernLatitude/SouthernLatitude.
+                 *      This will be part of the visibility filter (not visibility sort).
+                 */
                 /* Check Where = model => model.Constellation.* ... */
                 /* Use builder.CurrentRoute.SeasonFilter.Value, or .Id */
 
-                //if (geolocation is not null)
-                //{
-                    
-                //}
+                /* Testing */
+                if (geoBuilder is not null)
+                {
+                    switch (geoBuilder.CurrentGeolocation.Latitude)
+                    {
+                        case > 0.0:
+                            /* Look at Season Id for North value */
+                            /* Get the Season Id for when North = SeasonFilter */
+                            /* Get the Constellation for when SeasonId = Id */
+                            Where = model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North);
+                            break;
+                        case < 0.0:
+                            /* Look at Season Id for South value */
+                            /* Get the Season Id for when South = SeasonFilter */
+                            /* Get the Constellation for when SeasonId = Id */
+                            Where = model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South);
+                            break;
+                        default:
+                            /* Look at Season Id for both North and South values */
+                            /* Get the Season Id for when North = SeasonFilter */
+                            /* Get the Season Id for when South = SeasonFilter */
+                            /* Get the Constellation for when SeasonId = the North Id, or the South Id */
+                            Where = model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North) ||
+                                             builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South);
+                            break;
+                    }
+                }
             }
             if (builder.IsFilterByTrajectory)
             {
@@ -98,6 +124,7 @@ namespace DST.Models.DataLayer.Query
             else if (builder.IsSortByVisibility)
             {
                 /* Needs geolocation */
+                /* This will be based on a lot of factors. */
             }
             else if (builder.IsSortByRiseTime)
             {
