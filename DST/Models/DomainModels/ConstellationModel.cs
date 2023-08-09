@@ -9,11 +9,11 @@ namespace DST.Models.DomainModels
         #region Properties
 
         [Key]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         public int SeasonId { get; set; }
-        public SeasonModel Season { get; set; }
+        public SeasonModel Season { get; set; } = null!;
 
         [Range(0, 90)]
         public int NorthernLatitude { get; set; }
@@ -22,6 +22,12 @@ namespace DST.Models.DomainModels
         public int SouthernLatitude { get; set; }
 
         public ICollection<DsoModel> Children { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        public ConstellationModel() => Children = new HashSet<DsoModel>();
 
         #endregion
     }

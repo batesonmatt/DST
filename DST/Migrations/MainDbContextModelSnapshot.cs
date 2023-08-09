@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace DST.Migrations
 {
     [DbContext(typeof(MainDbContext))]
@@ -15,9 +17,10 @@ namespace DST.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.8")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("DST.Models.DomainModels.CatalogModel", b =>
                 {
@@ -738,6 +741,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 2,
+                            Common = "",
                             ConstellationName = "Aquarius",
                             Declination = -0.82325000000000004,
                             Description = "Globular cluster",
@@ -750,6 +754,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 3,
+                            Common = "",
                             ConstellationName = "Canes Venatici",
                             Declination = 28.377277800000002,
                             Description = "Globular cluster",
@@ -762,6 +767,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 4,
+                            Common = "",
                             ConstellationName = "Scorpius",
                             Declination = -26.525749999999999,
                             Description = "Globular cluster",
@@ -774,6 +780,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 5,
+                            Common = "",
                             ConstellationName = "Serpens",
                             Declination = 2.0810278000000002,
                             Description = "Globular cluster",
@@ -825,6 +832,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 9,
+                            Common = "",
                             ConstellationName = "Ophiuchus",
                             Declination = -18.516249999999999,
                             Description = "Globular cluster",
@@ -837,6 +845,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 10,
+                            Common = "",
                             ConstellationName = "Ophiuchus",
                             Declination = -4.0994638999999999,
                             Description = "Globular cluster",
@@ -862,6 +871,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 12,
+                            Common = "",
                             ConstellationName = "Ophiuchus",
                             Declination = -1.9485277999999999,
                             Description = "Globular cluster",
@@ -887,6 +897,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 14,
+                            Common = "",
                             ConstellationName = "Ophiuchus",
                             Declination = -3.2459167,
                             Description = "Globular cluster",
@@ -899,6 +910,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 15,
+                            Common = "",
                             ConstellationName = "Pegasus",
                             Declination = 12.167,
                             Description = "Globular cluster",
@@ -937,6 +949,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 18,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -17.1333333,
                             Description = "Open cluster",
@@ -949,6 +962,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 19,
+                            Common = "",
                             ConstellationName = "Ophiuchus",
                             Declination = -26.267944400000001,
                             Description = "Globular cluster",
@@ -974,6 +988,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 21,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -22.5,
                             Description = "Open cluster",
@@ -999,6 +1014,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 23,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -19.016666699999998,
                             Description = "Open cluster",
@@ -1024,6 +1040,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 25,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -19.25,
                             Description = "Open cluster",
@@ -1036,6 +1053,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 26,
+                            Common = "",
                             ConstellationName = "Scutum",
                             Declination = -9.4000000000000004,
                             Description = "Open cluster",
@@ -1061,6 +1079,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 28,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -24.8698333,
                             Description = "Globular cluster",
@@ -1086,6 +1105,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 30,
+                            Common = "",
                             ConstellationName = "Capricornus",
                             Declination = -23.1798611,
                             Description = "Globular cluster",
@@ -1137,6 +1157,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 34,
+                            Common = "",
                             ConstellationName = "Perseus",
                             Declination = 42.766666700000002,
                             Description = "Open cluster",
@@ -1149,6 +1170,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 35,
+                            Common = "",
                             ConstellationName = "Gemini",
                             Declination = 24.350000000000001,
                             Description = "Open cluster",
@@ -1161,6 +1183,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 36,
+                            Common = "",
                             ConstellationName = "Auriga",
                             Declination = 34.1344444,
                             Description = "Open cluster",
@@ -1173,6 +1196,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 37,
+                            Common = "",
                             ConstellationName = "Auriga",
                             Declination = 32.550555600000003,
                             Description = "Open cluster",
@@ -1198,6 +1222,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 39,
+                            Common = "",
                             ConstellationName = "Cygnus",
                             Declination = 48.433333300000001,
                             Description = "Open cluster",
@@ -1223,6 +1248,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 41,
+                            Common = "",
                             ConstellationName = "Canis Major",
                             Declination = -20.766666699999998,
                             Description = "Open cluster",
@@ -1287,6 +1313,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 46,
+                            Common = "",
                             ConstellationName = "Puppis",
                             Declination = -14.816666700000001,
                             Description = "Open cluster",
@@ -1299,6 +1326,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 47,
+                            Common = "",
                             ConstellationName = "Puppis",
                             Declination = -14.5,
                             Description = "Open cluster",
@@ -1311,6 +1339,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 48,
+                            Common = "",
                             ConstellationName = "Hydra",
                             Declination = -5.75,
                             Description = "Open cluster",
@@ -1323,6 +1352,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 49,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = 8.0005556000000002,
                             Description = "Elliptical galaxy",
@@ -1335,6 +1365,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 50,
+                            Common = "",
                             ConstellationName = "Monoceros",
                             Declination = -8.3333332999999996,
                             Description = "Open cluster",
@@ -1360,6 +1391,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 52,
+                            Common = "",
                             ConstellationName = "Cassiopeia",
                             Declination = 61.5833333,
                             Description = "Open cluster",
@@ -1372,6 +1404,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 53,
+                            Common = "",
                             ConstellationName = "Coma Berenices",
                             Declination = 18.1681667,
                             Description = "Globular cluster",
@@ -1384,6 +1417,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 54,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -30.479861100000001,
                             Description = "Globular cluster",
@@ -1396,6 +1430,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 55,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -30.964749999999999,
                             Description = "Globular cluster",
@@ -1408,6 +1443,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 56,
+                            Common = "",
                             ConstellationName = "Lyra",
                             Declination = 30.183472200000001,
                             Description = "Globular cluster",
@@ -1433,6 +1469,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 58,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = 11.818055599999999,
                             Description = "Barred spiral galaxy",
@@ -1445,6 +1482,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 59,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = 11.646944400000001,
                             Description = "Elliptical galaxy",
@@ -1457,6 +1495,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 60,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = 11.5525,
                             Description = "Elliptical galaxy",
@@ -1469,6 +1508,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 61,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = 4.4736111000000003,
                             Description = "Spiral galaxy",
@@ -1481,6 +1521,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 62,
+                            Common = "",
                             ConstellationName = "Ophiuchus",
                             Declination = -30.112361100000001,
                             Description = "Globular cluster",
@@ -1545,6 +1586,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 67,
+                            Common = "",
                             ConstellationName = "Cancer",
                             Declination = 11.816666700000001,
                             Description = "Open cluster",
@@ -1557,6 +1599,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 68,
+                            Common = "",
                             ConstellationName = "Hydra",
                             Declination = -26.744055599999999,
                             Description = "Globular cluster",
@@ -1569,6 +1612,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 69,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -32.348083299999999,
                             Description = "Globular cluster",
@@ -1581,6 +1625,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 70,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -32.2921111,
                             Description = "Globular cluster",
@@ -1593,6 +1638,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 71,
+                            Common = "",
                             ConstellationName = "Sagitta",
                             Declination = 18.779194400000002,
                             Description = "Globular cluster",
@@ -1605,6 +1651,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 72,
+                            Common = "",
                             ConstellationName = "Aquarius",
                             Declination = -12.5373056,
                             Description = "Globular cluster",
@@ -1617,6 +1664,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 73,
+                            Common = "",
                             ConstellationName = "Aquarius",
                             Declination = -12.6333333,
                             Description = "Group of 4 stars",
@@ -1642,6 +1690,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 75,
+                            Common = "",
                             ConstellationName = "Sagittarius",
                             Declination = -21.921166700000001,
                             Description = "Globular cluster",
@@ -1680,6 +1729,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 78,
+                            Common = "",
                             ConstellationName = "Orion",
                             Declination = 0.013888899999999999,
                             Description = "Reflection nebula",
@@ -1692,6 +1742,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 79,
+                            Common = "",
                             ConstellationName = "Lepus",
                             Declination = -24.524249999999999,
                             Description = "Globular cluster",
@@ -1704,6 +1755,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 80,
+                            Common = "",
                             ConstellationName = "Scorpius",
                             Declination = -22.976083299999999,
                             Description = "Globular cluster",
@@ -1755,6 +1807,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 84,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = 12.886944400000001,
                             Description = "Lenticular galaxy",
@@ -1767,6 +1820,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 85,
+                            Common = "",
                             ConstellationName = "Coma Berenices",
                             Declination = 18.191111100000001,
                             Description = "Lenticular galaxy",
@@ -1779,6 +1833,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 86,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = 12.9461111,
                             Description = "Lenticular galaxy",
@@ -1804,6 +1859,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 88,
+                            Common = "",
                             ConstellationName = "Coma Berenices",
                             Declination = 14.4205556,
                             Description = "Spiral galaxy",
@@ -1816,6 +1872,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 89,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = 12.5563889,
                             Description = "Elliptical galaxy",
@@ -1828,6 +1885,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 90,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = 13.162777800000001,
                             Description = "Spiral galaxy",
@@ -1840,6 +1898,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 91,
+                            Common = "",
                             ConstellationName = "Coma Berenices",
                             Declination = 14.496388899999999,
                             Description = "Barred spiral galaxy",
@@ -1852,6 +1911,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 92,
+                            Common = "",
                             ConstellationName = "Hercules",
                             Declination = 43.1359444,
                             Description = "Globular cluster",
@@ -1864,6 +1924,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 93,
+                            Common = "",
                             ConstellationName = "Puppis",
                             Declination = -23.8666667,
                             Description = "Open cluster",
@@ -1889,6 +1950,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 95,
+                            Common = "",
                             ConstellationName = "Leo",
                             Declination = 11.703888900000001,
                             Description = "Barred spiral galaxy",
@@ -1901,6 +1963,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 96,
+                            Common = "",
                             ConstellationName = "Leo",
                             Declination = 11.82,
                             Description = "Spiral galaxy",
@@ -1926,6 +1989,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 98,
+                            Common = "",
                             ConstellationName = "Coma Berenices",
                             Declination = 14.9004694,
                             Description = "Spiral galaxy",
@@ -1938,6 +2002,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 99,
+                            Common = "",
                             ConstellationName = "Coma Berenices",
                             Declination = 14.416388899999999,
                             Description = "Spiral galaxy",
@@ -1950,6 +2015,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 100,
+                            Common = "",
                             ConstellationName = "Coma Berenices",
                             Declination = 15.8225,
                             Description = "Spiral galaxy",
@@ -1988,6 +2054,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 103,
+                            Common = "",
                             ConstellationName = "Cassiopeia",
                             Declination = 60.700000000000003,
                             Description = "Open cluster",
@@ -2013,6 +2080,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 105,
+                            Common = "",
                             ConstellationName = "Leo",
                             Declination = 12.5816667,
                             Description = "Elliptical galaxy",
@@ -2025,6 +2093,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 106,
+                            Common = "",
                             ConstellationName = "Canes Venatici",
                             Declination = 47.303888899999997,
                             Description = "Spiral galaxy",
@@ -2037,6 +2106,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 107,
+                            Common = "",
                             ConstellationName = "Ophiuchus",
                             Declination = -13.053777800000001,
                             Description = "Globular cluster",
@@ -2049,6 +2119,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 108,
+                            Common = "",
                             ConstellationName = "Ursa Major",
                             Declination = 55.674166700000001,
                             Description = "Barred spiral galaxy",
@@ -2061,6 +2132,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Messier",
                             Id = 109,
+                            Common = "",
                             ConstellationName = "Ursa Major",
                             Declination = 53.374444400000002,
                             Description = "Barred spiral galaxy",
@@ -2086,6 +2158,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 1,
+                            Common = "",
                             ConstellationName = "Cepheus",
                             Declination = 85.254999999999995,
                             Description = "Open cluster",
@@ -2111,6 +2184,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 3,
+                            Common = "",
                             ConstellationName = "Draco",
                             Declination = 69.462500000000006,
                             Description = "Barred spiral galaxy",
@@ -2162,6 +2236,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 7,
+                            Common = "",
                             ConstellationName = "Camelopardalis",
                             Declination = 65.602500000000006,
                             Description = "Spiral galaxy",
@@ -2174,6 +2249,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 8,
+                            Common = "",
                             ConstellationName = "Cassiopeia",
                             Declination = 63.302,
                             Description = "Open cluster",
@@ -2199,6 +2275,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 10,
+                            Common = "",
                             ConstellationName = "Cassiopeia",
                             Declination = 61.218333299999998,
                             Description = "Open cluster",
@@ -2276,6 +2353,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 16,
+                            Common = "",
                             ConstellationName = "Lacerta",
                             Declination = 49.897500000000001,
                             Description = "Open cluster",
@@ -2288,6 +2366,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 17,
+                            Common = "",
                             ConstellationName = "Cassiopeia",
                             Declination = 48.508888900000002,
                             Description = "Dwarf spheroidal galaxy",
@@ -2300,6 +2379,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 18,
+                            Common = "",
                             ConstellationName = "Cassiopeia",
                             Declination = 48.337377799999999,
                             Description = "Dwarf spheroidal galaxy",
@@ -2338,6 +2418,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 21,
+                            Common = "",
                             ConstellationName = "Canes Venatici",
                             Declination = 44.0944444,
                             Description = "Irregular galaxy",
@@ -2389,6 +2470,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 25,
+                            Common = "",
                             ConstellationName = "Lynx",
                             Declination = 38.881916699999998,
                             Description = "Globular cluster",
@@ -2401,6 +2483,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 26,
+                            Common = "",
                             ConstellationName = "Canes Venatici",
                             Declination = 37.807222199999998,
                             Description = "Spiral galaxy",
@@ -2426,6 +2509,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 28,
+                            Common = "",
                             ConstellationName = "Andromeda",
                             Declination = 37.865833299999998,
                             Description = "Open cluster",
@@ -2438,6 +2522,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 29,
+                            Common = "",
                             ConstellationName = "Canes Venatici",
                             Declination = 37.059166699999999,
                             Description = "Spiral galaxy",
@@ -2450,6 +2535,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 30,
+                            Common = "",
                             ConstellationName = "Pegasus",
                             Declination = 34.415555599999998,
                             Description = "Spiral galaxy",
@@ -2527,6 +2613,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 36,
+                            Common = "",
                             ConstellationName = "Coma Berenices",
                             Declination = 27.959722200000002,
                             Description = "Spiral galaxy",
@@ -2539,6 +2626,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 37,
+                            Common = "",
                             ConstellationName = "Vulpecula",
                             Declination = 26.483333300000002,
                             Description = "Open cluster",
@@ -2577,9 +2665,10 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 40,
+                            Common = "",
                             ConstellationName = "Leo",
                             Declination = 18.356791699999999,
-                            Description = "Spiral galaxy",
+                            Description = "Lenticular galaxy",
                             Distance = 74000.0,
                             Magnitude = 10.800000000000001,
                             RightAscension = 11.3343872,
@@ -2602,6 +2691,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 42,
+                            Common = "",
                             ConstellationName = "Delphinus",
                             Declination = 16.187333299999999,
                             Description = "Globular cluster",
@@ -2614,6 +2704,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 43,
+                            Common = "",
                             ConstellationName = "Pegasus",
                             Declination = 16.145555600000002,
                             Description = "Spiral galaxy",
@@ -2626,6 +2717,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 44,
+                            Common = "",
                             ConstellationName = "Pegasus",
                             Declination = 12.322777800000001,
                             Description = "Barred spiral galaxy",
@@ -2638,6 +2730,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 45,
+                            Common = "",
                             ConstellationName = "Boötes",
                             Declination = 8.8852778000000008,
                             Description = "Spiral galaxy",
@@ -2663,6 +2756,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 47,
+                            Common = "",
                             ConstellationName = "Delphinus",
                             Declination = 7.4041389000000004,
                             Description = "Globular cluster",
@@ -2675,6 +2769,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 48,
+                            Common = "",
                             ConstellationName = "Cancer",
                             Declination = 7.0379250000000004,
                             Description = "Spiral galaxy",
@@ -2713,6 +2808,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 51,
+                            Common = "",
                             ConstellationName = "Cetus",
                             Declination = 2.1177777999999998,
                             Description = "Irregular galaxy",
@@ -2725,6 +2821,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 52,
+                            Common = "",
                             ConstellationName = "Virgo",
                             Declination = -5.8008332999999999,
                             Description = "Elliptical galaxy",
@@ -2750,6 +2847,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 54,
+                            Common = "",
                             ConstellationName = "Monoceros",
                             Declination = -10.77,
                             Description = "Open cluster",
@@ -2853,6 +2951,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 62,
+                            Common = "",
                             ConstellationName = "Cetus",
                             Declination = -20.760277800000001,
                             Description = "Spiral galaxy",
@@ -2904,6 +3003,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 66,
+                            Common = "",
                             ConstellationName = "Hydra",
                             Declination = -26.538333300000001,
                             Description = "Globular cluster",
@@ -2916,6 +3016,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 67,
+                            Common = "",
                             ConstellationName = "Fornax",
                             Declination = -30.274999999999999,
                             Description = "Barred spiral galaxy",
@@ -2928,6 +3029,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 68,
+                            Common = "",
                             ConstellationName = "Corona Australis",
                             Declination = -36.953333299999997,
                             Description = "Emission and reflection nebula",
@@ -2953,6 +3055,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 70,
+                            Common = "",
                             ConstellationName = "Sculptor",
                             Declination = -37.684444399999997,
                             Description = "Spiral galaxy",
@@ -2965,6 +3068,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 71,
+                            Common = "",
                             ConstellationName = "Puppis",
                             Declination = -38.533333300000002,
                             Description = "Open cluster",
@@ -2977,6 +3081,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 72,
+                            Common = "",
                             ConstellationName = "Sculptor",
                             Declination = -39.196666700000002,
                             Description = "Barred spiral galaxy",
@@ -2989,6 +3094,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 73,
+                            Common = "",
                             ConstellationName = "Columba",
                             Declination = -40.046555599999998,
                             Description = "Globular cluster",
@@ -3014,6 +3120,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 75,
+                            Common = "",
                             ConstellationName = "Scorpius",
                             Declination = -40.6402778,
                             Description = "Open cluster",
@@ -3026,6 +3133,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 76,
+                            Common = "",
                             ConstellationName = "Scorpius",
                             Declination = -41.826666699999997,
                             Description = "Open cluster",
@@ -3051,6 +3159,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 78,
+                            Common = "",
                             ConstellationName = "Corona Australis",
                             Declination = -43.714888899999998,
                             Description = "Globular cluster",
@@ -3063,6 +3172,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 79,
+                            Common = "",
                             ConstellationName = "Vela",
                             Declination = -46.411222199999997,
                             Description = "Globular cluster",
@@ -3088,6 +3198,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 81,
+                            Common = "",
                             ConstellationName = "Ara",
                             Declination = -48.422166699999998,
                             Description = "Globular cluster",
@@ -3100,6 +3211,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 82,
+                            Common = "",
                             ConstellationName = "Ara",
                             Declination = -48.763333299999999,
                             Description = "Open cluster with nebula",
@@ -3112,6 +3224,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 83,
+                            Common = "",
                             ConstellationName = "Centaurus",
                             Declination = -49.468333299999998,
                             Description = "Barred spiral galaxy",
@@ -3124,6 +3237,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 84,
+                            Common = "",
                             ConstellationName = "Centaurus",
                             Declination = -51.373472200000002,
                             Description = "Globular cluster",
@@ -3149,6 +3263,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 86,
+                            Common = "",
                             ConstellationName = "Ara",
                             Declination = -53.674333300000001,
                             Description = "Globular cluster",
@@ -3161,6 +3276,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 87,
+                            Common = "",
                             ConstellationName = "Horologium",
                             Declination = -55.216222199999997,
                             Description = "Globular cluster",
@@ -3173,6 +3289,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 88,
+                            Common = "",
                             ConstellationName = "Circinus",
                             Declination = -55.625,
                             Description = "Open cluster",
@@ -3198,6 +3315,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 90,
+                            Common = "",
                             ConstellationName = "Carina",
                             Declination = -58.311282400000003,
                             Description = "Planetary nebula",
@@ -3262,6 +3380,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 95,
+                            Common = "",
                             ConstellationName = "Triangulum Australe",
                             Declination = -60.433333300000001,
                             Description = "Open cluster",
@@ -3300,6 +3419,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 98,
+                            Common = "",
                             ConstellationName = "Crux",
                             Declination = -62.994999999999997,
                             Description = "Open cluster",
@@ -3337,6 +3457,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 101,
+                            Common = "",
                             ConstellationName = "Pavo",
                             Declination = -63.857500000000002,
                             Description = "Spiral galaxy",
@@ -3375,6 +3496,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 104,
+                            Common = "",
                             ConstellationName = "Tucana",
                             Declination = -70.848777799999993,
                             Description = "Globular cluster",
@@ -3387,6 +3509,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 105,
+                            Common = "",
                             ConstellationName = "Musca",
                             Declination = -70.874611099999996,
                             Description = "Globular cluster",
@@ -3412,6 +3535,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 107,
+                            Common = "",
                             ConstellationName = "Apus",
                             Declination = -72.202194399999996,
                             Description = "Globular cluster",
@@ -3424,6 +3548,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 108,
+                            Common = "",
                             ConstellationName = "Musca",
                             Declination = -72.659083300000006,
                             Description = "Globular cluster",
@@ -3436,6 +3561,7 @@ namespace DST.Migrations
                         {
                             CatalogName = "Caldwell",
                             Id = 109,
+                            Common = "",
                             ConstellationName = "Chamaeleon",
                             Declination = -80.858536099999995,
                             Description = "Planetary nebula",
@@ -3499,8 +3625,12 @@ namespace DST.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EndMonth")
+                        .HasColumnType("int");
 
                     b.Property<string>("North")
                         .IsRequired()
@@ -3510,6 +3640,9 @@ namespace DST.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StartMonth")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Seasons");
@@ -3518,26 +3651,34 @@ namespace DST.Migrations
                         new
                         {
                             Id = 1,
+                            EndMonth = 5,
                             North = "Spring",
-                            South = "Autumn"
+                            South = "Autumn",
+                            StartMonth = 3
                         },
                         new
                         {
                             Id = 2,
+                            EndMonth = 8,
                             North = "Summer",
-                            South = "Winter"
+                            South = "Winter",
+                            StartMonth = 6
                         },
                         new
                         {
                             Id = 3,
+                            EndMonth = 11,
                             North = "Autumn",
-                            South = "Spring"
+                            South = "Spring",
+                            StartMonth = 9
                         },
                         new
                         {
                             Id = 4,
+                            EndMonth = 2,
                             North = "Winter",
-                            South = "Summer"
+                            South = "Summer",
+                            StartMonth = 12
                         });
                 });
 

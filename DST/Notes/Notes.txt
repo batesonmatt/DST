@@ -1,58 +1,30 @@
 ﻿To Do:
 
+- Consider setting the Include property within SearchQueryOptions
+   Then add a method to QueryOptions that checks whether
+   _includes already contains a property before adding it.
+
+- Continue work on the filters and sorting
+
 SeasonModel
-- Consider a [NotMapped] property Name, which just points to the North value.
-   This would make it less confusing in the markup.
 - Consider other methods/properties for easier work
 
+Consider:
+- initializers for GeolocationModel.TimeZoneId and .UserTimeZoneId
+- initializers for SearchListViewModel properties
+- initializers for DTO properties
 
-Season Filter
-- Front-end list contains Spring, Summer, Autumn, Winter (use the North column values)
-- If client latitude = 0, treat as both North and South.
-  For example, if my latitude = 0, and I choose Spring, then query all DsoModels
-  whose Constellation has a SeasonId = 1 and SeasonId = 3.
-
-? Maybe just ignore this below. Consider a simple label in the front-end that states the 
-4 seasons are not cultural, and they only represent divisions of the year.
-
-- If client Latitude is between -10 and 10 degrees, just disable/ignore the seasons filter.
-   This is equatorial climate. They experience only wet and dry seasons.
-- If client Latitude is within 10 degree of either geographic pole, 
-   ignore Spring and autumn.
-   The poles only have winter and summer.
-   This is arctic climate.
-- If the client's geolocation is either equatorial or arctic, 
-   display a label under the seasons filter to notify them
-   that this climate does not experience all seasons.
-
-- Choose season
-- Filter DsoModels whose Constellation has a SeasonId matching to the chosen season.
-
-
-? Update Seasons table for easier filtering:
-
-Consider new fields for Seasons table (StartMonth, EndMonth).
-Then create methods to build and get the DateTime values.
-
-Northern hemisphere		Southern hemisphere		Start date      StartMonth (>=)     EndMonth (<)
-Winter					Summer					1 December      12                  3
-Spring					Autumn					1 March         3                   6
-Summer					Winter					1 June          6                   9
-Autumn					Spring					1 September     9                   12
-
-DateTime start = new(2023, 12, 1, 0, 0, 0);
-DateTime end = new(2023, 3, 1, 0, 0, 0);
-
-- Make a note file explaining the current steps to build the database.
-- Rebuild the local database on all dev machines.
+- Add error page
+- Revise Startup env.IsDevelopment() condition to point to and test the error page.
 
 -------------------------------------------------------------------------
-
-- Resume work on the filters.
 
 - Plan for passing the Geolocation properties/model across controllers.
    ? - Use Session/persistant Cookies to store the values
    ? - Use TempData to transfer the values across controllers
+
+   Might need to add a CookieExtensions class
+   Might need to add more functionality to SessionExtensions class
 
 - HttpGet Action method in SearchController to link to Track page.
 - Takes Category, Id, and Geolocation (?) values for routing.
@@ -68,9 +40,6 @@ Update VS
 - Enable client-side/server-side validation for GeolocationModel and view form.
  - For any error or bad input with the geo-dependent sorting/filtering within SearchQueryOptions.SortFilter(...), just return void.
    No need to alert errors.
-- Consider requiring the user to fill in the geolocation form first before anything else.
-  Then enable/show the other stuff on the page.
-  Or maybe default to location 0,0 and UTC timezone?
 
 Implement exception handling
 - All process-heavy methods, such as SearchQueryOptions.SortFilter(...)
@@ -124,10 +93,8 @@ For the home page, consider using a random quote of the day pulled from the data
 ___________________________________________________________
 
 - Provide temporary blueprint for filtering/sorting by location-dependent values
-  Add DsoModel.GetVisibility() and DsoModel.GetRiseTime()
+  ? Add DsoModel.GetVisibility() and DsoModel.GetRiseTime()
   Query these methods in SearchQueryOptions
-
-- Finish back-end code and incorporate into this project
 
 - Finish DTO implementations and paging/filtering/sorting support.
 
@@ -177,3 +144,5 @@ _____________________________________________________________
 _______________________________________________________________________
 
 Enable error reporting via GoDaddy email
+- Add code to Services namespace
+- Consider moving Services namespace up one level (out of Models)

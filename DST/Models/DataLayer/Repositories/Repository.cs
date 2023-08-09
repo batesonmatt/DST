@@ -13,10 +13,6 @@ namespace DST.Models.DataLayer.Repositories
 
         public int Count => _count ?? _dbset.Count();
 
-        // Access the underlying model instances associated with this repository.
-        // Allows querying their methods and non-mapped properties.
-        public List<T> Table => _dbset?.ToList();
-
         #endregion
 
         #region Fields
@@ -43,12 +39,16 @@ namespace DST.Models.DataLayer.Repositories
 
         private IQueryable<T> BuildQuery(QueryOptions<T> options)
         {
-            IQueryable<T> query = Table.AsQueryable();
+            IQueryable<T> query = _dbset;
 
+            // Include entity navigation properties to allow eager loading related entities.
             foreach (string include in options.GetIncludes())
             {
                 query = query.Include(include);
             }
+            
+            // Call ToList() to allow querying the T instance methods and non-mapped properties.
+            query = query.ToList().AsQueryable();
 
             if (options.HasWhere)
             {
@@ -57,6 +57,7 @@ namespace DST.Models.DataLayer.Repositories
                     query = query.Where(clause);
                 }
 
+                // Calculate the new count after filtering.
                 _count = query.Count();
             }
 
@@ -83,23 +84,13 @@ namespace DST.Models.DataLayer.Repositories
             return query;
         }
 
-        public virtual T Get(QueryOptions<T> options)
-        {
-            IQueryable<T> query = BuildQuery(options);
-
-            return query.FirstOrDefault();
-        }
+        public virtual T Get(QueryOptions<T> options) => BuildQuery(options).FirstOrDefault();
 
         #endregion
 
         #region IRepository<T> Members
 
-        public virtual IEnumerable<T> List(QueryOptions<T> options)
-        {
-            IQueryable<T> query = BuildQuery(options);
-
-            return query.ToList();
-        }
+        public virtual IEnumerable<T> List(QueryOptions<T> options) => BuildQuery(options).ToList();
 
         public virtual T Get(params object[] keyValues) => _dbset.Find(keyValues);
 

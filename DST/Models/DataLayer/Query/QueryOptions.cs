@@ -13,7 +13,7 @@ namespace DST.Models.DataLayer.Query
 
         public int PageSize { get; set; }
 
-        public OrderClauses<T> OrderByAll { get; set; }
+        public OrderClauses<T> OrderByAll { get; set; } = null!;
 
         public Expression<Func<T, object>> OrderBy
         {
@@ -25,7 +25,7 @@ namespace DST.Models.DataLayer.Query
             }
         }
 
-        public WhereClauses<T> WhereAll { get; set; }
+        public WhereClauses<T> WhereAll { get; set; } = null!;
 
         public Expression<Func<T, bool>> Where
         {
@@ -37,9 +37,9 @@ namespace DST.Models.DataLayer.Query
             }
         }
 
-        public bool HasWhere => WhereAll is not null;
+        public bool HasWhere => WhereAll != null;
 
-        public bool HasOrderBy => OrderByAll is not null;
+        public bool HasOrderBy => OrderByAll != null;
 
         public bool HasPaging => PageNumber > 0 && PageSize > 0;
 
@@ -52,16 +52,13 @@ namespace DST.Models.DataLayer.Query
 
         #region Fields
 
-        private string[] _includes;
+        private string[] _includes = Array.Empty<string>();
 
         #endregion
 
         #region Methods
 
-        public string[] GetIncludes()
-        {
-            return _includes ?? Array.Empty<string>();
-        }
+        public string[] GetIncludes() => _includes;
 
         #endregion
     }

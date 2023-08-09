@@ -7,13 +7,15 @@ namespace DST.Models.DataLayer.Query
     public class SearchQueryOptions : QueryOptions<DsoModel>
     {
         #region Methods
-        /* builder property values are all default */
+
         public void SortFilter(SearchRouteBuilder builder, GeolocationBuilder geoBuilder)
         {
             if (builder is null)
             {
                 return;
             }
+
+            // Filtering
 
             if (builder.IsFilterByType)
             {
@@ -29,40 +31,21 @@ namespace DST.Models.DataLayer.Query
             }
             if (builder.IsFilterBySeason)
             {
-                /* Needs geolocation */
-                /* Check latitude to determine north/south hemisphere */
-                /* Don't check if user latitude is within range of the Constellation NorthernLatitude/SouthernLatitude.
-                 *      This will be part of the visibility filter (not visibility sort).
-                 */
-                /* Check Where = model => model.Constellation.* ... */
-                /* Use builder.CurrentRoute.SeasonFilter.Value, or .Id */
-
-                /* Testing */
                 if (geoBuilder is not null)
                 {
-                    switch (geoBuilder.CurrentGeolocation.Latitude)
+                    Where = geoBuilder.CurrentGeolocation.Latitude switch
                     {
-                        case > 0.0:
-                            /* Look at Season Id for North value */
-                            /* Get the Season Id for when North = SeasonFilter */
-                            /* Get the Constellation for when SeasonId = Id */
-                            Where = model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North);
-                            break;
-                        case < 0.0:
-                            /* Look at Season Id for South value */
-                            /* Get the Season Id for when South = SeasonFilter */
-                            /* Get the Constellation for when SeasonId = Id */
-                            Where = model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South);
-                            break;
-                        default:
-                            /* Look at Season Id for both North and South values */
-                            /* Get the Season Id for when North = SeasonFilter */
-                            /* Get the Season Id for when South = SeasonFilter */
-                            /* Get the Constellation for when SeasonId = the North Id, or the South Id */
-                            Where = model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North) ||
-                                             builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South);
-                            break;
-                    }
+                        // For positive latitudes, select all constellations for the specified season in the northern date range.
+                        > 0.0 => model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North),
+
+                        // For negative latitudes, select all constellations for the specified season in the southern date range.
+                        < 0.0 => model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South),
+
+                        // For equatorial latitudes, select all constellations for the specified season in
+                        // both the northern and southern date ranges.
+                        _ => model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North) ||
+                                      builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South),
+                    };
                 }
             }
             if (builder.IsFilterByTrajectory)
@@ -75,7 +58,7 @@ namespace DST.Models.DataLayer.Query
             }
             if (builder.IsFilterByHasName)
             {
-                Where = model => !string.IsNullOrWhiteSpace(model.Name);
+                Where = model => model.HasName;
             }
             if (builder.IsFilterByVisibility)
             {
@@ -86,25 +69,35 @@ namespace DST.Models.DataLayer.Query
                 /* Needs geolocation */
             }
 
+            // Options
+
+            // Sorting
+
             if (builder.IsSortById)
             {
                 OrderByAll = new OrderClauses<DsoModel>
-                    {
-                        { model => model.CatalogName },
-                        { model => model.Id }
-                    };
+                {
+                    { model => model.CatalogName },
+                    { model => model.Id }
+                };
             }
             else if (builder.IsSortByName)
             {
-                OrderBy = model => model.Name;
+                OrderByAll = new OrderClauses<DsoModel>
+                {
+                    { model => model.HasName == false },
+                    { model => model.Name },
+                    { model => model.CatalogName },
+                    { model => model.Id }
+                };
             }
             else if (builder.IsSortByType)
             {
                 OrderByAll = new OrderClauses<DsoModel>
-                    {
-                        { model => model.Type },
-                        { model => model.Description }
-                    };
+                {
+                    { model => model.Type },
+                    { model => model.Description }
+                };
             }
             else if (builder.IsSortByConstellation)
             {

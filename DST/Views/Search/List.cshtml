@@ -24,6 +24,7 @@
 
     @{
         routes = Model.CurrentRoute.Clone();
+        routes.PageNumber = 1;
     }
     <form id="form-geolocation" class="mb-3" asp-action="CreateGeolocation" asp-all-route-data="@routes" method="post" onchange="enableGeoSubmit()" oninput="enableGeoSubmit()">
         <div class="mb-3">
@@ -51,17 +52,21 @@
     </form>
 
     <div class="list-group mb-3">
-        @foreach (var sortField in Sort.Fields)
-        {
-            routes.SetSort(sortField.Value);
+        @{
+            routes = Model.CurrentRoute.Clone();
+
+            foreach (var sortField in Sort.Fields)
+            {
+                routes.SetSort(sortField.Value);
             
-            @if (sortField.Value == current.SortField)
-            {
-                <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@sortField.Key</a>
-            }
-            else
-            {
-                <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@sortField.Key</a>
+                @if (sortField.Value == current.SortField)
+                {
+                    <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@sortField.Key</a>
+                }
+                else
+                {
+                    <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@sortField.Key</a>
+                }
             }
         }
     </div>
@@ -73,6 +78,7 @@
             foreach (var type in Model.Types)
             {
                 routes.TypeFilter = new ListFilter(nameof(SearchDTO.Type), type.Type);
+                routes.PageNumber = 1;
 
                 if (current.TypeFilter.EqualsSeo(type.Type))
                 {
@@ -93,6 +99,7 @@
             foreach (var catalog in Model.Catalogs)
             {
                 routes.CatalogFilter = new ListFilter(nameof(SearchDTO.Catalog), catalog.Name);
+                routes.PageNumber = 1;
 
                 if (current.CatalogFilter.EqualsSeo(catalog.Name))
                 {
@@ -113,6 +120,7 @@
             foreach (var constellation in Model.Constellations)
             {
                 routes.ConstellationFilter = new ListFilter(nameof(SearchDTO.Constellation), constellation.Name);
+                routes.PageNumber = 1;
 
                 if (current.ConstellationFilter.EqualsSeo(constellation.Name))
                 {
@@ -132,15 +140,16 @@
 
             foreach (var season in Model.Seasons)
             {
-                routes.SeasonFilter = new ListFilter(nameof(SearchDTO.Season), season.North);
+                routes.SeasonFilter = new ListFilter(nameof(SearchDTO.Season), season.Name);
+                routes.PageNumber = 1;
 
-                if (current.SeasonFilter.EqualsSeo(season.North))
+                if (current.SeasonFilter.EqualsSeo(season.Name))
                 {
-                    <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@season.North</a>
+                    <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@season.Name</a>
                 }
                 else
                 {
-                    <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@season.North</a>
+                    <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@season.Name</a>
                 }
             }
         }
@@ -239,13 +248,13 @@
                     //asp-route-slug="@dso.Name.Slug()"
                     <a asp-controller="Search" asp-action="Details" asp-route-cat="@dso.CatalogName" asp-route-id="@dso.Id">
                         <div>
-                            @if (string.IsNullOrWhiteSpace(dso.Name))
+                            @if (dso.HasName)
                             {
-                                <h3>@dso.CompoundId</h3>
+                                <h3>@dso.CompoundId - @dso.Name</h3>
                             }
                             else
                             {
-                                <h3>@dso.CompoundId - @dso.Name</h3>
+                                <h3>@dso.CompoundId</h3>
                             }
                             <p>
                                 @dso.CatalogName

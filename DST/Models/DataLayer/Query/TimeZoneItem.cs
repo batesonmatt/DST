@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DST.Models.DataLayer.Query
+﻿namespace DST.Models.DataLayer.Query
 {
     public class TimeZoneItem
     {

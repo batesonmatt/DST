@@ -7,11 +7,11 @@ namespace DST.Models.DataLayer
     {
         #region Properties
 
-        public DbSet<DsoModel> DsoItems { get; set; }
-        public DbSet<ConstellationModel> Constellations { get; set; }
-        public DbSet<SeasonModel> Seasons { get; set; }
-        public DbSet<DsoTypeModel> DsoTypes { get; set; }
-        public DbSet<CatalogModel> Catalogs { get; set; }
+        public DbSet<DsoModel> DsoItems { get; set; } = null!;
+        public DbSet<ConstellationModel> Constellations { get; set; } = null!;
+        public DbSet<SeasonModel> Seasons { get; set; } = null!;
+        public DbSet<DsoTypeModel> DsoTypes { get; set; } = null!;
+        public DbSet<CatalogModel> Catalogs { get; set; } = null!;
 
         #endregion
 
@@ -44,6 +44,12 @@ namespace DST.Models.DataLayer
                 .WithMany(con => con.Children)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasForeignKey(dso => dso.ConstellationName);
+
+            // Uncomment the statement below to automatically include all navigation properties.
+            // To ignore auto includes when querying, use IQueryable<T>.IgnoreAutoIncludes().
+            //
+            //modelBuilder.Entity<DsoModel>()
+            //    .Navigation(dso => dso.Constellation).AutoInclude();
 
             // DsoModel: Set DsoType foreign key and remove cascading delete with DsoType.
             modelBuilder.Entity<DsoModel>()

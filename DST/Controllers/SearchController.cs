@@ -85,17 +85,21 @@ namespace DST.Controllers
             // else:
             builder.SaveRouteSegments();
 
+            // Set initial options from the route segments.
             SearchQueryOptions options = new()
             {
+                /* Consider setting this solely in SortFilter().
+                 * Consider setting initial nav properties here that should always be included. */
                 // Include navigation properties here for accessing related entities in queries.
-                // Include = "Constellation",
+                Include = "Constellation.Season",
+
                 PageNumber = builder.CurrentRoute.PageNumber,
                 PageSize = builder.CurrentRoute.PageSize,
                 SortDirection = builder.CurrentRoute.SortDirection
             };
 
             options.SortFilter(builder, geoBuilder);
-            
+
             SearchListViewModel viewModel = new()
             {
                 Geolocation = geoBuilder.CurrentGeolocation,
@@ -105,11 +109,6 @@ namespace DST.Controllers
                     .ThenBy(t => t.BaseUtcOffset.TotalHours)
                     .Select(t => new TimeZoneItem(t.Id, t.DisplayName)),
 
-                /* BUG
-                 * EF Core 4+ does not support eager loading for entity navigation properties.
-                 * Solution - Ensure all necessary properties are initialized before this call,
-                 * or move this call outside the initializer.
-                 */
                 DsoItems = _data.DsoItems.List(options),
 
                 Types = _data.DsoTypes.List(new QueryOptions<DsoTypeModel>

@@ -5,6 +5,7 @@ using DST.Models.Builders.Routing;
 
 namespace DST.Models.ViewModels
 {
+    /* Should I add initializers to the properties here? */
     public class SearchListViewModel
     {
         #region Properties

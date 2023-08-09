@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static Azure.Core.HttpHeader;
 
 namespace DST.Models.DomainModels
 {
@@ -14,8 +15,8 @@ namespace DST.Models.DomainModels
         /// <remarks>This property is part of a composite primary key and foreign key for a table.</remarks>
         /// <value>The name of the catalog or founder.</value>
         [Required]
-        public string CatalogName { get; set; }
-        public CatalogModel Catalog { get; set; }
+        public string CatalogName { get; set; } = string.Empty;
+        public CatalogModel Catalog { get; set; } = null!;
 
         /// <summary>The identification number of this object as it appears in its catalog.</summary>
         /// <remarks>This property is part of a composite primary key for a table.</remarks>
@@ -49,6 +50,9 @@ namespace DST.Models.DomainModels
         public string Name => _names?[0];
 
         [NotMapped]
+        public bool HasName => !string.IsNullOrWhiteSpace(_names?[0]);
+
+        [NotMapped]
         public bool HasMultipleNames => _names?.Length > 1;
 
         [DefaultValue(null)]
@@ -57,8 +61,8 @@ namespace DST.Models.DomainModels
         /// <summary>The type of deep-sky object.</summary>
         /// <remarks>This property is a foreign key for a table.</remarks>
         [Required]
-        public string Type { get; set; }
-        public DsoTypeModel DsoType { get; set; }
+        public string Type { get; set; } = string.Empty;
+        public DsoTypeModel DsoType { get; set; } = null!;
 
         /// <summary>The celestial equivalent of longitude, as represented in decimal hours.</summary>
         /// <value>A floating-point value ranging from <c>0.0</c> to <c>24.0</c>.</value>
@@ -82,8 +86,8 @@ namespace DST.Models.DomainModels
         /// <remarks>This property is a foreign key for a table.</remarks>
         /// <value>The name of the constellation.</value>
         [Required]
-        public string ConstellationName { get; set; }
-        public ConstellationModel Constellation { get; set; }
+        public string ConstellationName { get; set; } = string.Empty;
+        public ConstellationModel Constellation { get; set; } = null!;
 
         #endregion
 
