@@ -5,7 +5,6 @@ using DST.Models.Builders.Routing;
 
 namespace DST.Models.ViewModels
 {
-    /* Should I add initializers to the properties here? */
     public class SearchListViewModel
     {
         #region Properties
@@ -24,13 +23,16 @@ namespace DST.Models.ViewModels
         public IEnumerable<ConstellationModel> Constellations { get; set; }
         public IEnumerable<SeasonModel> Seasons { get; set; }
 
-        public Dictionary<string, string> Trajectories
-            => new()
-            {
-                { nameof(Trajectory.RiseSet), Trajectory.RiseSet },
-                { nameof(Trajectory.Circumpolar), Trajectory.Circumpolar },
-                { nameof(Trajectory.NeverRise), Trajectory.NeverRise }
-            };
+        /* Eventually remove the initializer list */
+        /* Use nameof(SearchDTO.Trajectory) in the view like the other filter lists. */
+        public IEnumerable<string> Trajectories { get; set; }
+            = new List<string>()
+        {
+            Core.Resources.DisplayText.TrajectoryCircumpolar,
+            Core.Resources.DisplayText.TrajectoryCircumpolarOffset,
+            Core.Resources.DisplayText.TrajectoryNeverRise,
+            Core.Resources.DisplayText.TrajectoryRiseAndSet
+        };
 
         #endregion
     }

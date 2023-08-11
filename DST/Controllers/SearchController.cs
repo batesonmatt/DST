@@ -39,6 +39,7 @@ namespace DST.Controllers
             return RedirectToAction("List");
         }
 
+        [HttpPost]
         public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchDTO values, bool reset = false)
         {
             // Replace nulls with an empty string.
@@ -62,7 +63,7 @@ namespace DST.Controllers
             }
             else
             {
-                // No timezone was selected/found. Default to UTC.
+                // No timezone was selected or found. Default to UTC.
                 geolocation.ResetTimeZone();
             }
 
@@ -88,10 +89,8 @@ namespace DST.Controllers
             // Set initial options from the route segments.
             SearchQueryOptions options = new()
             {
-                /* Consider setting this solely in SortFilter().
-                 * Consider setting initial nav properties here that should always be included. */
-                // Include navigation properties here for accessing related entities in queries.
-                Include = "Constellation.Season",
+                // Include any initial navigation properties.
+                //IncludeAll = "",
 
                 PageNumber = builder.CurrentRoute.PageNumber,
                 PageSize = builder.CurrentRoute.PageSize,
@@ -127,6 +126,8 @@ namespace DST.Controllers
                 {
                     OrderBy = obj => obj.Id
                 }),
+                
+                /* Add initializer for Trajectories here */
 
                 CurrentRoute = builder.CurrentRoute,
                 TotalPages = builder.GetTotalPages(_data.DsoItems.Count)

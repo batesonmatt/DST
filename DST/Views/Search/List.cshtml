@@ -23,7 +23,6 @@
 <div id="search-container" class="container mb-3">
 
     @{
-        routes = Model.CurrentRoute.Clone();
         routes.PageNumber = 1;
     }
     <form id="form-geolocation" class="mb-3" asp-action="CreateGeolocation" asp-all-route-data="@routes" method="post" onchange="enableGeoSubmit()" oninput="enableGeoSubmit()">
@@ -150,6 +149,27 @@
                 else
                 {
                     <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@season.Name</a>
+                }
+            }
+        }
+    </div>
+
+    <div class="list-group mb-3">
+        @{
+            routes = Model.CurrentRoute.Clone();
+
+            foreach (var trajectory in Model.Trajectories)
+            {
+                routes.TrajectoryFilter = new ListFilter(nameof(SearchDTO.Trajectory), trajectory);
+                routes.PageNumber = 1;
+
+                if (current.TrajectoryFilter.EqualsSeo(trajectory))
+                {
+                    <a class="list-group-item active" asp-action="List" asp-all-route-data="@routes">@trajectory</a>
+                }
+                else
+                {
+                    <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@trajectory</a>
                 }
             }
         }

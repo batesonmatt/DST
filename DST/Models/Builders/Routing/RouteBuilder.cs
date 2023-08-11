@@ -41,7 +41,7 @@ namespace DST.Models.Builders.Routing
             {
                 PageNumber = values.PageNumber,
                 PageSize = values.PageSize,
-                SortField = values.SortField ?? Sort.Default,
+                SortField = values.SortField,
                 SortDirection = values.SortDirection
             };
 

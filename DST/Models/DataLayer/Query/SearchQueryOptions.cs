@@ -1,6 +1,7 @@
 ﻿using DST.Models.DomainModels;
 using DST.Models.Builders.Routing;
 using DST.Models.Builders;
+using DST.Models.BusinessLogic;
 
 namespace DST.Models.DataLayer.Query
 {
@@ -33,6 +34,8 @@ namespace DST.Models.DataLayer.Query
             {
                 if (geoBuilder is not null)
                 {
+                    Include = "Constellation.Season";
+
                     Where = geoBuilder.CurrentGeolocation.Latitude switch
                     {
                         // For positive latitudes, select all constellations for the specified season in the northern date range.
@@ -50,7 +53,11 @@ namespace DST.Models.DataLayer.Query
             }
             if (builder.IsFilterByTrajectory)
             {
-                /* Needs geolocation */
+                if (geoBuilder is not null)
+                {
+                    Where = model => builder.CurrentRoute.TrajectoryFilter.EqualsSeo(
+                        Utilities.GetTrajectoryName(model, geoBuilder.CurrentGeolocation));
+                }
             }
             if (builder.IsFilterByLocal)
             {
@@ -68,8 +75,6 @@ namespace DST.Models.DataLayer.Query
             {
                 /* Needs geolocation */
             }
-
-            // Options
 
             // Sorting
 

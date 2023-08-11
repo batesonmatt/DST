@@ -1,10 +1,13 @@
 ﻿To Do:
 
-- Consider setting the Include property within SearchQueryOptions
-   Then add a method to QueryOptions that checks whether
-   _includes already contains a property before adding it.
-
 - Continue work on the filters and sorting
+
+Trajectory
+- Initialize SearchListViewModel.Trajectories in the SearchController
+
+Consider moding DST.Core.Resources to a new library.
+- Add more resource definitions for the static strings used in the DST project
+- Add static methods somewhere to retrieve multiple definitions in a list, such as GetTrajectoryNames() => IEnumerable<string>
 
 SeasonModel
 - Consider other methods/properties for easier work
@@ -12,7 +15,9 @@ SeasonModel
 Consider:
 - initializers for GeolocationModel.TimeZoneId and .UserTimeZoneId
 - initializers for SearchListViewModel properties
-- initializers for DTO properties
+
+Consider adding custom Repositories in SearchUnitOfWork for the TimeZones and Trajectories.
+- Need to have queries to retrieve the lists of TimeZones, Trajectories, and Sort fields.
 
 - Add error page
 - Revise Startup env.IsDevelopment() condition to point to and test the error page.
@@ -81,6 +86,10 @@ Consider separate page for the results?
 
 Consider removing _DetailsLayout.cshtml
 
+- Add validation messages to GeoLocation properties, and any others if necessary.
+
+- Incorporate aria, title, and name (etc.) attributes in the markups
+
 ___________________________________________________________
 
 Ideas:
@@ -92,56 +101,7 @@ For the home page, consider using a random quote of the day pulled from the data
 
 ___________________________________________________________
 
-- Provide temporary blueprint for filtering/sorting by location-dependent values
-  ? Add DsoModel.GetVisibility() and DsoModel.GetRiseTime()
-  Query these methods in SearchQueryOptions
-
-- Finish DTO implementations and paging/filtering/sorting support.
-
-- Finish designing Search controls
-
-- Revise class="btn-custom" and control-wrapper divs
-    Use the outline style, no borders for control-wrapper
-    Consider using <button> and overriding btn-primary and btn-secondary
-    Consider introducing btn-control or btn-form id
-
-- Edit the Search controls BG image, and design new images for the articles
-
-- Add validation messages to GeoLocation properties, and any others if necessary.
-
-- Incorporate aria, title, and name (etc.) attributes in the markups
-___________________________________________________________
-
-Search View:
-
-- Change the asp-action of the Search form to "Filter", and implement the 
-    Filter() GET and POST methods in CatalogController.
-	[HttpGet] Filter() should store the filering/sorting options in the ViewBag
-
-_____________________________________________________________
-
-<!--<form asp-action="Index" method="post">
-        <div class="form-group">
-            <button onclick="getLocation()">Use my location</button>
-
-            <div>
-                <label asp-for="GeoLocation.Latitude">Latitude:</label>
-                <input id="input-latitude" asp-for="GeoLocation.Latitude" />
-            </div>
-            <div>
-                <label asp-for="GeoLocation.Longitude">Longitude:</label>
-                <input id="input-longitude" asp-for="GeoLocation.Longitude" />
-            </div>-->
-    @* Change to a label *@
-    <!--<div>
-        <input value="@ViewBag.LAT.ToString(), @ViewBag.LON.ToString()" readonly />
-    </div>-->
-    @* Enable after changes are made *@
-    <!--<button type="submit">Submit</button>
-        </div>
-    </form>-->
-
-_______________________________________________________________________
+Add admin pages so that I may keep the Dso items up to date
 
 Enable error reporting via GoDaddy email
 - Add code to Services namespace

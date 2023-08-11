@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DST.Models.DataLayer.Query
@@ -13,15 +15,33 @@ namespace DST.Models.DataLayer.Query
 
         public int PageSize { get; set; }
 
-        public OrderClauses<T> OrderByAll { get; set; } = null!;
+        public List<string> Includes { get; set; } = null!;
 
-        public Expression<Func<T, object>> OrderBy
+        public string Include
         {
             set
             {
-                OrderByAll ??= new OrderClauses<T>();
+                if (string.IsNullOrWhiteSpace(value) == false)
+                {
+                    Includes ??= new List<string>();
 
-                OrderByAll.Add(value);
+                    if (Includes.Contains(value) == false)
+                    {
+                        Includes.Add(value);
+                    }
+                }
+            }
+        }
+
+        public string IncludeAll
+        {
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value) == false)
+                {
+                    Includes ??= new List<string>();
+                    Includes.AddRange(value.Replace(" ", string.Empty).Split(',').Where(i => !Includes.Contains(i)));
+                }
             }
         }
 
@@ -37,28 +57,25 @@ namespace DST.Models.DataLayer.Query
             }
         }
 
-        public bool HasWhere => WhereAll != null;
+        public OrderClauses<T> OrderByAll { get; set; } = null!;
 
-        public bool HasOrderBy => OrderByAll != null;
+        public Expression<Func<T, object>> OrderBy
+        {
+            set
+            {
+                OrderByAll ??= new OrderClauses<T>();
+
+                OrderByAll.Add(value);
+            }
+        }
 
         public bool HasPaging => PageNumber > 0 && PageSize > 0;
 
-        public string Include
-        {
-            set => _includes = value?.Replace(" ", string.Empty).Split(',');
-        }
+        public bool HasInclude => Includes?.Count > 0;
 
-        #endregion
+        public bool HasWhere => WhereAll?.Count > 0;
 
-        #region Fields
-
-        private string[] _includes = Array.Empty<string>();
-
-        #endregion
-
-        #region Methods
-
-        public string[] GetIncludes() => _includes;
+        public bool HasOrderBy => OrderByAll?.Count > 0;
 
         #endregion
     }

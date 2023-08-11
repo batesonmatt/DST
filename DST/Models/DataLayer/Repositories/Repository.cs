@@ -42,14 +42,18 @@ namespace DST.Models.DataLayer.Repositories
             IQueryable<T> query = _dbset;
 
             // Include entity navigation properties to allow eager loading related entities.
-            foreach (string include in options.GetIncludes())
+            if (options.HasInclude)
             {
-                query = query.Include(include);
+                foreach (string include in options.Includes)
+                {
+                    query = query.Include(include);
+                }
             }
             
             // Call ToList() to allow querying the T instance methods and non-mapped properties.
             query = query.ToList().AsQueryable();
 
+            // Filter the results.
             if (options.HasWhere)
             {
                 foreach (var clause in options.WhereAll)
@@ -61,6 +65,7 @@ namespace DST.Models.DataLayer.Repositories
                 _count = query.Count();
             }
 
+            // Sort the results.
             if (options.HasOrderBy)
             {
                 foreach (var clause in options.OrderByAll)
@@ -76,6 +81,7 @@ namespace DST.Models.DataLayer.Repositories
                 }
             }
 
+            // Get a subset of the results for the page.
             if (options.HasPaging)
             {
                 query = query.PageBy(options.PageNumber, options.PageSize);

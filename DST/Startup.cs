@@ -28,7 +28,7 @@ namespace DST
                 //}
                 );
 
-            services.AddControllersWithViews().AddNewtonsoftJson();
+            services.AddControllersWithViews();
 
             // Enable dependency injection for DbContext objects.
             services.AddDbContext<MainDbContext>(options =>
@@ -75,7 +75,8 @@ namespace DST
                 endpoints.MapControllerRoute(
                     name: "filtering",
                     pattern: "{controller}/{action}/page/{pagenumber}/size/{pagesize}/sort/{sortfield}/{sortdirection}/" +
-                    "filter/type-{type}/catalog-{catalog}/constellation-{constellation}/season-{season}/local-{local}/hasname-{hasname}/visible-{visibility}/rising-{risetime}/trajectory-{trajectory}");
+                    "filter/type-{type}/catalog-{catalog}/constellation-{constellation}/season-{season}/local-{local}/" +
+                    "hasname-{hasname}/visible-{visibility}/rising-{risetime}/trajectory-{trajectory}");
 
                 // Paging route
                 endpoints.MapControllerRoute(

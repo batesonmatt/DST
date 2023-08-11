@@ -40,7 +40,7 @@ namespace DST.Models.Builders.Routing
         public SearchRouteBuilder(ISession session, SearchDTO values)
             : base(session, values)
         {
-            LoadFilterSegments(values.Filters);
+            LoadFilterSegments(values.GetFilters());
         }
 
         #endregion

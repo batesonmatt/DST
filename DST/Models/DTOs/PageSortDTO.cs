@@ -10,7 +10,7 @@ namespace DST.Models.DTOs
 
         public int PageSize { get; set; } = 10;
 
-        public string SortField { get; set; }
+        public string SortField { get; set; } = Sort.Default;
 
         public string SortDirection { get; set; } = OrderDirection.Default;
 

@@ -1,5 +1,4 @@
 ﻿using DST.Models.DataLayer.Query;
-using Newtonsoft.Json;
 
 namespace DST.Models.DTOs
 {
@@ -7,26 +6,29 @@ namespace DST.Models.DTOs
     {
         #region Properties
 
-        public string Type { get; set; }
+        public string Type { get; set; } = ListFilter.All;
 
-        public string Catalog { get; set; }
+        public string Catalog { get; set; } = ListFilter.All;
 
-        public string Constellation { get; set; }
+        public string Constellation { get; set; } = ListFilter.All;
 
-        public string Season { get; set; }
+        public string Season { get; set; } = ListFilter.All;
 
-        public string Local { get; set; }
+        public string Local { get; set; } = ToggleFilter.Off;
 
-        public string HasName { get; set; }
+        public string HasName { get; set; } = ToggleFilter.Off;
 
-        public string Visibility { get; set; }
+        public string Visibility { get; set; } = ToggleFilter.Off;
 
-        public string RiseTime { get; set; }
+        public string RiseTime { get; set; } = ToggleFilter.Off;
 
-        public string Trajectory { get; set; }
+        public string Trajectory { get; set; } = ListFilter.All;
 
-        [JsonIgnore]
-        public IFilter[] Filters
+        #endregion
+
+        #region Methods
+
+        public IFilter[] GetFilters()
             => new IFilter[]
             {
                 new ListFilter(nameof(Type), Type),
@@ -41,5 +43,6 @@ namespace DST.Models.DTOs
             };
 
         #endregion
+
     }
 }
