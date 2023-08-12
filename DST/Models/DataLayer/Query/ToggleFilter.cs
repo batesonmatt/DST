@@ -50,6 +50,10 @@ namespace DST.Models.DataLayer.Query
 
         public override void Reset() => _value = Off;
 
+        public bool IsOn() => _value == On;
+
+        public bool IsOff() => _value == Off;
+
         public void Toggle() => _value = _value == Off ? On : Off;
 
         #endregion

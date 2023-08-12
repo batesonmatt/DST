@@ -2,24 +2,31 @@
 
 - Continue work on the filters and sorting
 
-Trajectory
-- Initialize SearchListViewModel.Trajectories in the SearchController
-
-Consider moding DST.Core.Resources to a new library.
-- Add more resource definitions for the static strings used in the DST project
-- Add static methods somewhere to retrieve multiple definitions in a list, such as GetTrajectoryNames() => IEnumerable<string>
-
-SeasonModel
-- Consider other methods/properties for easier work
+Routing
+- Change the order of the route segments so that the toggle filters appear after the list filters.
+- Move hasname segment last => (local/visible/rising/hasname)
+- Need to modify Startup, SearchDTO, SearchRouteBuilder, RouteDictionary, SearchQueryOptions.
 
 Consider:
 - initializers for GeolocationModel.TimeZoneId and .UserTimeZoneId
 - initializers for SearchListViewModel properties
 
+Consider moding DST.Core.Resources to a new library.
+- Add more resource definitions for the static strings used in the DST solution
+- Most strings that are displayed are also used for SEO (in the URL). 
+   Don't worry too much about that now, just add the values to the default language resx file.
+- Add static methods somewhere to retrieve multiple definitions in a list, such as GetTrajectoryNames() => IEnumerable<string>
+
 Consider adding custom Repositories in SearchUnitOfWork for the TimeZones and Trajectories.
 - Need to have queries to retrieve the lists of TimeZones, Trajectories, and Sort fields.
 
+Trajectory
+- Initialize SearchListViewModel.Trajectories in the SearchController
+
+Startup
 - Add error page
+- Test error page by removing an Include statement from SearchQueryOptions
+
 - Revise Startup env.IsDevelopment() condition to point to and test the error page.
 
 -------------------------------------------------------------------------
@@ -78,6 +85,9 @@ Fix the front-end design.
 - For the navbar, redesign styles for navbar-toggler 
   and navbar-dark.
 - refer to bootstrap version documentation
+
+For Mobile responsiveness
+- Design sort and Filter menu like Google Images page, or Amazon
 
 Consider changing the search page to "Browse",
 and maybe a separate page/tab for searching.

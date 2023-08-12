@@ -30,38 +30,37 @@ namespace DST.Models.DataLayer.Query
             {
                 Where = model => builder.CurrentRoute.ConstellationFilter.EqualsSeo(model.ConstellationName);
             }
-            if (builder.IsFilterBySeason)
+            if (builder.IsFilterBySeason && geoBuilder is not null)
             {
-                if (geoBuilder is not null)
+                Include = "Constellation.Season";
+
+                // Get all objects visible during the specified season, regardless of the client's geolocation.
+                // The latitudinal checks here only determine the date ranges for the client's hemisphere.
+                Where = geoBuilder.CurrentGeolocation.Latitude switch
                 {
-                    Include = "Constellation.Season";
+                    // For positive latitudes, select all constellations for the specified season in the northern date range.
+                    > 0.0 => model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North),
 
-                    Where = geoBuilder.CurrentGeolocation.Latitude switch
-                    {
-                        // For positive latitudes, select all constellations for the specified season in the northern date range.
-                        > 0.0 => model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North),
+                    // For negative latitudes, select all constellations for the specified season in the southern date range.
+                    < 0.0 => model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South),
 
-                        // For negative latitudes, select all constellations for the specified season in the southern date range.
-                        < 0.0 => model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South),
-
-                        // For equatorial latitudes, select all constellations for the specified season in
-                        // both the northern and southern date ranges.
-                        _ => model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North) ||
-                                      builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South),
-                    };
-                }
+                    // Although all objects rise and set from the equator, they only do so seasonally.
+                    // For equatorial latitudes, select all constellations for the specified season in
+                    // both the northern and southern date ranges.
+                    _ => model => builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.North) ||
+                                  builder.CurrentRoute.SeasonFilter.EqualsSeo(model.Constellation.Season.South)
+                };
             }
-            if (builder.IsFilterByTrajectory)
+            if (builder.IsFilterByTrajectory && geoBuilder is not null)
             {
-                if (geoBuilder is not null)
-                {
-                    Where = model => builder.CurrentRoute.TrajectoryFilter.EqualsSeo(
-                        Utilities.GetTrajectoryName(model, geoBuilder.CurrentGeolocation));
-                }
+                Where = model => builder.CurrentRoute.TrajectoryFilter.EqualsSeo(
+                    Utilities.GetTrajectoryName(model, geoBuilder.CurrentGeolocation));
             }
-            if (builder.IsFilterByLocal)
+            if (builder.IsFilterByLocal && geoBuilder is not null)
             {
-                /* Needs geolocation */
+                Include = "Constellation.Season";
+
+                Where = model => Utilities.IsLocal(model, geoBuilder.CurrentGeolocation);
             }
             if (builder.IsFilterByHasName)
             {

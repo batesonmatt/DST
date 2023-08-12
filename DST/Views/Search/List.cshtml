@@ -5,7 +5,7 @@
     Layout = "_BannerLayout";
 
     RouteDictionary current = Model.CurrentRoute;
-    RouteDictionary routes = Model.CurrentRoute.Clone();
+    RouteDictionary routes = current.Clone();
 }
 
 @* Pulled from _Layout.cshtml *@
@@ -52,7 +52,7 @@
 
     <div class="list-group mb-3">
         @{
-            routes = Model.CurrentRoute.Clone();
+            routes = current.Clone();
 
             foreach (var sortField in Sort.Fields)
             {
@@ -72,7 +72,7 @@
     
     <div class="list-group mb-3">
         @{
-            routes = Model.CurrentRoute.Clone();
+            routes = current.Clone();
 
             foreach (var type in Model.Types)
             {
@@ -93,7 +93,7 @@
 
     <div class="list-group mb-3">
         @{
-            routes = Model.CurrentRoute.Clone();
+            routes = current.Clone();
 
             foreach (var catalog in Model.Catalogs)
             {
@@ -114,7 +114,7 @@
 
     <div class="list-group mb-3">
         @{
-            routes = Model.CurrentRoute.Clone();
+            routes = current.Clone();
 
             foreach (var constellation in Model.Constellations)
             {
@@ -135,7 +135,7 @@
 
     <div class="list-group mb-3">
         @{
-            routes = Model.CurrentRoute.Clone();
+            routes = current.Clone();
 
             foreach (var season in Model.Seasons)
             {
@@ -156,7 +156,7 @@
 
     <div class="list-group mb-3">
         @{
-            routes = Model.CurrentRoute.Clone();
+            routes = current.Clone();
 
             foreach (var trajectory in Model.Trajectories)
             {
@@ -171,6 +171,42 @@
                 {
                     <a class="list-group-item" asp-action="List" asp-all-route-data="@routes">@trajectory</a>
                 }
+            }
+        }
+    </div>
+
+    <div class="mb-3">
+        @{
+            routes = current.Clone();
+            routes.PageNumber = 1;
+            
+            if (current.LocalFilter.IsOn())
+            {
+                routes.LocalFilter = new ToggleFilter(nameof(SearchDTO.Local), ToggleFilter.Off);
+                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes">Local</a>
+            }
+            else
+            {
+                routes.LocalFilter = new ToggleFilter(nameof(SearchDTO.Local), ToggleFilter.On);
+                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Is Local</a>
+            }
+        }
+    </div>
+
+    <div class="mb-3">
+        @{
+            routes = current.Clone();
+            routes.PageNumber = 1;
+
+            if (current.HasNameFilter.IsOn())
+            {
+                routes.HasNameFilter = new ToggleFilter(nameof(SearchDTO.HasName), ToggleFilter.Off);
+                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes">Has Name</a>
+            }
+            else
+            {
+                routes.HasNameFilter = new ToggleFilter(nameof(SearchDTO.HasName), ToggleFilter.On);
+                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Has Name</a>
             }
         }
     </div>
@@ -309,7 +345,7 @@
 
     <div>
         @{
-            routes = Model.CurrentRoute.Clone();
+            routes = current.Clone();
 
             if (current.PageNumber > 1)
             {
