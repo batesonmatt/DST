@@ -198,14 +198,14 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            if (current.VisibilityFilter.IsOn())
+            if (current.VisibleFilter.IsOn())
             {
-                routes.VisibilityFilter = new ToggleFilter(nameof(SearchDTO.Visibility), ToggleFilter.Off);
+                routes.VisibleFilter = new ToggleFilter(nameof(SearchDTO.Visible), ToggleFilter.Off);
                 <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes">Visible</a>
             }
             else
             {
-                routes.VisibilityFilter = new ToggleFilter(nameof(SearchDTO.Visibility), ToggleFilter.On);
+                routes.VisibleFilter = new ToggleFilter(nameof(SearchDTO.Visible), ToggleFilter.On);
                 <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Visible</a>
             }
         }

@@ -14,11 +14,11 @@ namespace DST.Models.Builders.Routing
         public bool IsFilterByCatalog => !_routes.CatalogFilter.IsDefault();
         public bool IsFilterByConstellation => !_routes.ConstellationFilter.IsDefault();
         public bool IsFilterBySeason => !_routes.SeasonFilter.IsDefault();
-        public bool IsFilterByLocal => !_routes.LocalFilter.IsDefault();
-        public bool IsFilterByHasName => !_routes.HasNameFilter.IsDefault();
-        public bool IsFilterByVisibility => !_routes.VisibilityFilter.IsDefault();
-        public bool IsFilterByRiseTime => !_routes.RiseTimeFilter.IsDefault();
         public bool IsFilterByTrajectory => !_routes.TrajectoryFilter.IsDefault();
+        public bool IsFilterByLocal => !_routes.LocalFilter.IsDefault();
+        public bool IsFilterByVisible => !_routes.VisibleFilter.IsDefault();
+        public bool IsFilterByRising => !_routes.RisingFilter.IsDefault();
+        public bool IsFilterByHasName => !_routes.HasNameFilter.IsDefault();
 
         public bool IsSortById => _routes.SortField.EqualsIgnoreCase(Sort.Id);
         public bool IsSortByName => _routes.SortField.EqualsIgnoreCase(Sort.Name);

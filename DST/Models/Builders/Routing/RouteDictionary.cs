@@ -58,31 +58,31 @@ namespace DST.Models.Builders.Routing
             set => this[FilterKeys[3]] = value.Value;
         }
 
-        public ToggleFilter LocalFilter
+        public ListFilter TrajectoryFilter
         {
             get => new(FilterKeys[4], Get(FilterKeys[4]));
             set => this[FilterKeys[4]] = value.Value;
         }
 
-        public ToggleFilter HasNameFilter
+        public ToggleFilter LocalFilter
         {
             get => new(FilterKeys[5], Get(FilterKeys[5]));
             set => this[FilterKeys[5]] = value.Value;
         }
 
-        public ToggleFilter VisibilityFilter
+        public ToggleFilter VisibleFilter
         {
             get => new(FilterKeys[6], Get(FilterKeys[6]));
             set => this[FilterKeys[6]] = value.Value;
         }
 
-        public ToggleFilter RiseTimeFilter
+        public ToggleFilter RisingFilter
         {
             get => new(FilterKeys[7], Get(FilterKeys[7]));
             set => this[FilterKeys[7]] = value.Value;
         }
 
-        public ListFilter TrajectoryFilter
+        public ToggleFilter HasNameFilter
         {
             get => new(FilterKeys[8], Get(FilterKeys[8]));
             set => this[FilterKeys[8]] = value.Value;
@@ -95,11 +95,11 @@ namespace DST.Models.Builders.Routing
                 nameof(SearchDTO.Catalog),
                 nameof(SearchDTO.Constellation),
                 nameof(SearchDTO.Season),
+                nameof(SearchDTO.Trajectory),
                 nameof(SearchDTO.Local),
-                nameof(SearchDTO.HasName),
-                nameof(SearchDTO.Visibility),
-                nameof(SearchDTO.RiseTime),
-                nameof(SearchDTO.Trajectory)
+                nameof(SearchDTO.Visible),
+                nameof(SearchDTO.Rising),
+                nameof(SearchDTO.HasName)
             };
 
         private IFilter[] Filters
@@ -109,11 +109,11 @@ namespace DST.Models.Builders.Routing
                 CatalogFilter,
                 ConstellationFilter,
                 SeasonFilter,
+                TrajectoryFilter,
                 LocalFilter,
-                HasNameFilter,
-                VisibilityFilter,
-                RiseTimeFilter,
-                TrajectoryFilter
+                VisibleFilter,
+                RisingFilter,
+                HasNameFilter
             };
 
         #endregion

@@ -14,15 +14,15 @@ namespace DST.Models.DTOs
 
         public string Season { get; set; } = ListFilter.All;
 
+        public string Trajectory { get; set; } = ListFilter.All;
+
         public string Local { get; set; } = ToggleFilter.Off;
 
+        public string Visible { get; set; } = ToggleFilter.Off;
+
+        public string Rising { get; set; } = ToggleFilter.Off;
+
         public string HasName { get; set; } = ToggleFilter.Off;
-
-        public string Visibility { get; set; } = ToggleFilter.Off;
-
-        public string RiseTime { get; set; } = ToggleFilter.Off;
-
-        public string Trajectory { get; set; } = ListFilter.All;
 
         #endregion
 
@@ -35,11 +35,11 @@ namespace DST.Models.DTOs
                 new ListFilter(nameof(Catalog), Catalog),
                 new ListFilter(nameof(Constellation), Constellation),
                 new ListFilter(nameof(Season), Season),
+                new ListFilter(nameof(Trajectory), Trajectory),
                 new ToggleFilter(nameof(Local), Local),
-                new ToggleFilter(nameof(HasName), HasName),
-                new ToggleFilter(nameof(Visibility), Visibility),
-                new ToggleFilter(nameof(RiseTime), RiseTime),
-                new ListFilter(nameof(Trajectory), Trajectory)
+                new ToggleFilter(nameof(Visible), Visible),
+                new ToggleFilter(nameof(Rising), Rising),
+                new ToggleFilter(nameof(HasName), HasName)
             };
 
         #endregion

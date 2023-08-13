@@ -75,8 +75,8 @@ namespace DST
                 endpoints.MapControllerRoute(
                     name: "filtering",
                     pattern: "{controller}/{action}/page/{pagenumber}/size/{pagesize}/sort/{sortfield}/{sortdirection}/" +
-                    "filter/type-{type}/catalog-{catalog}/constellation-{constellation}/season-{season}/local-{local}/" +
-                    "hasname-{hasname}/visible-{visibility}/rising-{risetime}/trajectory-{trajectory}");
+                    "filter/type-{type}/catalog-{catalog}/constellation-{constellation}/season-{season}/trajectory-{trajectory}/" +
+                    "local-{local}/visible-{visible}/rising-{rising}/hasname-{hasname}");
 
                 // Paging route
                 endpoints.MapControllerRoute(

@@ -1,18 +1,8 @@
 ﻿To Do:
 
- - Consider revising Utilities.IsVisible and Utilities.IsLocal for DRY principle.
-
-Routing
-- Change the order of the route segments so that the toggle filters appear after the list filters.
-- Move hasname segment last => (local/visible/rising/hasname)
-- Need to modify Startup, SearchDTO, SearchRouteBuilder, RouteDictionary, SearchQueryOptions.
-
-Filter by Rise Time (Rising)
-- Consider renaming the filter identifier to RisingFilter
-   Modify Startup, SearchDTO, SearchRouteBuilder, RouteDictionary, and SearchQueryOptions
+Filter by Rising
 - Gets objects that are Local, RiseSetTrajectory, and IsRising() == true
    Consider  IsAboveHorizon() == false
-- Mutually exclusive to Visibility and Local filters.
 
 Sort by Rise Time
 - Gets objects that are Local and order by the object's next rise datetime.
@@ -25,9 +15,13 @@ Sort by Rise Time
    3. The amount of time until it rises.
 - Use this collection to write to a "Tag" informational string on each of the objects in the List view.
    I will need to do this for some of the other sorting options (Distance, Brightness, visibility score)
+- Consider QueryOptions.Information expression property, set in SearchQueryOptions, 
+  and use it to populate the SortTags collection in the SearchController.
 
 Sort by Visibility
 - Consider removing.
+
+- Consider revising Utilities.IsVisible, Utilities.IsLocal, Utilities.IsRising for DRY principle.
 
 Filters
 - Local, Visibility, and Rising are all mutually exclusive (Toggle 1 on at a time).
