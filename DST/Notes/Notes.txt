@@ -1,6 +1,6 @@
 ﻿To Do:
 
-- Continue work on the filters and sorting
+ - Consider revising Utilities.IsVisible and Utilities.IsLocal for DRY principle.
 
 Routing
 - Change the order of the route segments so that the toggle filters appear after the list filters.
@@ -56,14 +56,6 @@ Startup
 - Test error page by removing an Include statement from SearchQueryOptions
 
 - Revise Startup env.IsDevelopment() condition to point to and test the error page.
-
-BUG?
-- For Visible filter, CircumpolarOffset trajectories are not showing up
-- This is due to the Season check, meaning the object is out of season for best visibility.
-- Consider a bypass check for Circumpolar and CircumpolarOffset trajectories to return true
-   before the season check.
-   OR
-   Consider a message in the List view explaining the Visibility filter resembles "best" visibility.
 
 -------------------------------------------------------------------------
 

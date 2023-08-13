@@ -5,7 +5,7 @@ namespace DST.Core.Trajectory
 {
     // Represents a type of celestial trajectory in which the object is always visible relative to the observer's position,
     // in which the observer is located at either of the geographic poles.
-    public class CircumpolarTrajectory : BaseTrajectory, ITrajectory
+    public class CircumpolarTrajectory : BaseTrajectory, ITrajectory, ICircumpolarTrajectory
     {
         // Creates a new CircumpolarTrajectory instance with the specified ILocalObserver argument.
         public CircumpolarTrajectory(ILocalObserver localObserver)
@@ -16,6 +16,12 @@ namespace DST.Core.Trajectory
         public override bool IsAboveHorizon(IAstronomicalDateTime dateTime)
         {
             return true;
+        }
+
+        // Returns a value that indicates whether the origin of this ICircumpolarTrajectory is offset from the observer's zenith.
+        public bool IsOffset()
+        {
+            return false;
         }
 
         // Returns the string-representation of this CircumpolarTrajectory instance.

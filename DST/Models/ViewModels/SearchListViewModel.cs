@@ -29,7 +29,6 @@ namespace DST.Models.ViewModels
             = new List<string>()
         {
             Core.Resources.DisplayText.TrajectoryCircumpolar,
-            Core.Resources.DisplayText.TrajectoryCircumpolarOffset,
             Core.Resources.DisplayText.TrajectoryNeverRise,
             Core.Resources.DisplayText.TrajectoryRiseAndSet
         };

@@ -54,11 +54,42 @@ namespace DST.Models.BusinessLogic
         // Returns the trajectory name for the specified DsoModel and GeolocationModel objects.
         public static string GetTrajectoryName(DsoModel model, GeolocationModel geolocation)
         {
-            string result;
+            string result = string.Empty;
+            ITrajectory trajectory;
 
             try
             {
-                result = GetTrajectory(model, geolocation).ToString();
+                trajectory = GetTrajectory(model, geolocation);
+
+                if (trajectory is not null)
+                {
+                    result = GetTrajectory(model, geolocation).ToString();
+                }
+            }
+            catch
+            {
+                result = string.Empty;
+            }
+
+            return result;
+        }
+
+        // Returns the primary trajectory name for the specified DsoModel and GeolocationModel objects.
+        public static string GetPrimaryTrajectoryName(DsoModel model, GeolocationModel geolocation)
+        {
+            string result;
+            ITrajectory trajectory;
+
+            try
+            {
+                trajectory = GetTrajectory(model, geolocation);
+
+                result = trajectory switch
+                {
+                    null => string.Empty,
+                    IMultipleNameTrajectory trajectoryName => trajectoryName.GetPrimaryName(),
+                    _ => trajectory.ToString(),
+                };
             }
             catch
             {
@@ -72,6 +103,7 @@ namespace DST.Models.BusinessLogic
         public static bool IsLocal(DsoModel model, GeolocationModel geolocation)
         {
             bool result = true;
+            ITrajectory trajectory;
             IDateTimeInfo dateTimeInfo;
             IMutableDateTime clientDateTime;
             int clientMonth;
@@ -85,10 +117,22 @@ namespace DST.Models.BusinessLogic
                     return false;
                 }
 
+                // Get the object's type of trajectory relative to the observer's location.
+                trajectory = GetTrajectory(model, geolocation);
+
                 // The trajectory of the object must be visible above the observer's horizon at some point in time.
-                if (GetTrajectory(model, geolocation) is null or NeverRiseTrajectory)
+                if (trajectory is null or NeverRiseTrajectory)
                 {
                     return false;
+                }
+
+                // If the object's trajectory is circumpolar, then it is always visible from the observer's location.
+                if (trajectory is ICircumpolarTrajectory)
+                {
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine($"{model.CompoundId}: Circumpolar");
+#endif
+                    return true;
                 }
 
                 // Get the date and time info for the client.
@@ -135,12 +179,19 @@ namespace DST.Models.BusinessLogic
                     return false;
                 }
 
+                // Get the object's type of trajectory relative to the observer's location.
                 trajectory = GetTrajectory(model, geolocation);
 
                 // The trajectory of the object must be visible above the observer's horizon at some point in time.
                 if (trajectory is null or NeverRiseTrajectory)
                 {
                     return false;
+                }
+
+                // If the object's trajectory is circumpolar, then it is always visible from the observer's location.
+                if (trajectory is ICircumpolarTrajectory)
+                {
+                    return true;
                 }
 
                 // Get the date and time info for the client.

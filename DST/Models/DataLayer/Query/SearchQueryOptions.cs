@@ -54,7 +54,7 @@ namespace DST.Models.DataLayer.Query
             if (builder.IsFilterByTrajectory && geoBuilder is not null)
             {
                 Where = model => builder.CurrentRoute.TrajectoryFilter.EqualsSeo(
-                    Utilities.GetTrajectoryName(model, geoBuilder.CurrentGeolocation));
+                    Utilities.GetPrimaryTrajectoryName(model, geoBuilder.CurrentGeolocation));
             }
             if (builder.IsFilterByLocal && geoBuilder is not null)
             {
