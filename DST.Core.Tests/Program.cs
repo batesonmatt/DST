@@ -46,9 +46,13 @@ namespace DST.Core.Tests
             IEquatorialCoordinate north = CoordinateFactory.CreateEquatorial(
                 rightAscension: Angle.Zero, declination: new Angle(90.0));
 
+            // RightAscension = 23.34675, Declination = 61.2016667
+            IEquatorialCoordinate test = CoordinateFactory.CreateEquatorial(
+                rightAscension: new(23.34675), declination: new(61.2016667));
+
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
-            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m31, timeKeeper);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, test, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
 
             Console.WriteLine($"Location: {observer.Origin}");
@@ -324,7 +328,7 @@ namespace DST.Core.Tests
 
         static void Main(string[] args)
         {
-            //TestTrack();
+            TestTrack();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
         }

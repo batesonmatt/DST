@@ -7,6 +7,34 @@ Routing
 - Move hasname segment last => (local/visible/rising/hasname)
 - Need to modify Startup, SearchDTO, SearchRouteBuilder, RouteDictionary, SearchQueryOptions.
 
+Filter by Rise Time (Rising)
+- Consider renaming the filter identifier to RisingFilter
+   Modify Startup, SearchDTO, SearchRouteBuilder, RouteDictionary, and SearchQueryOptions
+- Gets objects that are Local, RiseSetTrajectory, and IsRising() == true
+   Consider  IsAboveHorizon() == false
+- Mutually exclusive to Visibility and Local filters.
+
+Sort by Rise Time
+- Gets objects that are Local and order by the object's next rise datetime.
+   Ascending => Sooner rise time to later rise time
+- Consider a IDictionary<string,string> SearchListViewModel.SortTags => Key = DsoModel.CompoundId
+   populate the values with the datetime strings that the object will rise from the observer's horizon.
+   Order by all:
+   1. object has rise and set trajectory
+   2. object is local
+   3. The amount of time until it rises.
+- Use this collection to write to a "Tag" informational string on each of the objects in the List view.
+   I will need to do this for some of the other sorting options (Distance, Brightness, visibility score)
+
+Sort by Visibility
+- Consider removing.
+
+Filters
+- Local, Visibility, and Rising are all mutually exclusive (Toggle 1 on at a time).
+- If TrajectoryFilter is NeverRise, disable Local and Visibility
+- If TrajectoryFilter.IsDefault() is false, disable Rising
+- If SeasonFilter.IsDefault() is false, disable Local, Visibility, and Rising filters
+
 Consider:
 - initializers for GeolocationModel.TimeZoneId and .UserTimeZoneId
 - initializers for SearchListViewModel properties
@@ -28,6 +56,14 @@ Startup
 - Test error page by removing an Include statement from SearchQueryOptions
 
 - Revise Startup env.IsDevelopment() condition to point to and test the error page.
+
+BUG?
+- For Visible filter, CircumpolarOffset trajectories are not showing up
+- This is due to the Season check, meaning the object is out of season for best visibility.
+- Consider a bypass check for Circumpolar and CircumpolarOffset trajectories to return true
+   before the season check.
+   OR
+   Consider a message in the List view explaining the Visibility filter resembles "best" visibility.
 
 -------------------------------------------------------------------------
 

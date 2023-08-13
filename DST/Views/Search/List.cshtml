@@ -188,7 +188,25 @@
             else
             {
                 routes.LocalFilter = new ToggleFilter(nameof(SearchDTO.Local), ToggleFilter.On);
-                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Is Local</a>
+                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Local</a>
+            }
+        }
+    </div>
+
+    <div class="mb-3">
+        @{
+            routes = current.Clone();
+            routes.PageNumber = 1;
+
+            if (current.VisibilityFilter.IsOn())
+            {
+                routes.VisibilityFilter = new ToggleFilter(nameof(SearchDTO.Visibility), ToggleFilter.Off);
+                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes">Visible</a>
+            }
+            else
+            {
+                routes.VisibilityFilter = new ToggleFilter(nameof(SearchDTO.Visibility), ToggleFilter.On);
+                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Visible</a>
             }
         }
     </div>
