@@ -68,9 +68,11 @@ namespace DST.Models.DataLayer.Query
 
                 Where = model => Utilities.IsVisible(model, geoBuilder.CurrentGeolocation);
             }
-            if (builder.IsFilterByRising)
+            if (builder.IsFilterByRising && geoBuilder is not null)
             {
-                /* Needs geolocation */
+                Include = "Constellation.Season";
+
+                Where = model => Utilities.IsRising(model, geoBuilder.CurrentGeolocation);
             }
             if (builder.IsFilterByHasName)
             {

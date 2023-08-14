@@ -1,11 +1,7 @@
 ﻿To Do:
 
-Filter by Rising
-- Gets objects that are Local, RiseSetTrajectory, and IsRising() == true
-   Consider  IsAboveHorizon() == false
-
 Sort by Rise Time
-- Gets objects that are Local and order by the object's next rise datetime.
+- Gets objects that are Local and order by the object's next rise time, or previous rise time if already in sky.
    Ascending => Sooner rise time to later rise time
 - Consider a IDictionary<string,string> SearchListViewModel.SortTags => Key = DsoModel.CompoundId
    populate the values with the datetime strings that the object will rise from the observer's horizon.
@@ -14,7 +10,16 @@ Sort by Rise Time
    2. object is local
    3. The amount of time until it rises.
 - Use this collection to write to a "Tag" informational string on each of the objects in the List view.
-   I will need to do this for some of the other sorting options (Distance, Brightness, visibility score)
+   I will need to do this for most sorting options.
+
+   Type sort
+   Constellation sort
+   Distance sort =>		"Distance: #.# lyr",
+   Brightness sort =>	"Apparent magnitude: #.#",
+   RiseTime sort =>		"Rise: hh:mm:ss", "Rise: ## ago", "Never rise", "Circumpolar"
+						If GetRise() returns the previous rise, consider "Rise: -hh:mm:ss"
+						Determine by: timespan = riseDT - clientDT
+
 - Consider QueryOptions.Information expression property, set in SearchQueryOptions, 
   and use it to populate the SortTags collection in the SearchController.
 

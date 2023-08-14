@@ -216,6 +216,24 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
+            if (current.RisingFilter.IsOn())
+            {
+                routes.RisingFilter = new ToggleFilter(nameof(SearchDTO.Rising), ToggleFilter.Off);
+                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes">Rising</a>
+            }
+            else
+            {
+                routes.RisingFilter = new ToggleFilter(nameof(SearchDTO.Rising), ToggleFilter.On);
+                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Rising</a>
+            }
+        }
+    </div>
+
+    <div class="mb-3">
+        @{
+            routes = current.Clone();
+            routes.PageNumber = 1;
+
             if (current.HasNameFilter.IsOn())
             {
                 routes.HasNameFilter = new ToggleFilter(nameof(SearchDTO.HasName), ToggleFilter.Off);
