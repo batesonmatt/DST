@@ -1,14 +1,18 @@
 ﻿To Do:
 
 Sort by Rise Time
-- Gets objects that are Local and order by the object's next rise time, or previous rise time if already in sky.
-   Ascending => Sooner rise time to later rise time
+- Revise the diagnostic debug code.
+
+Sort by brightness
+- Try to keep all business logic code in the BusinessLogic namespace.
+- Consider Utilities.GetMagnitude(DsoModel) => double
+- Or, move the comment to DsoModel.Magnitude as documentation,
+  and use OrderByAll with two OrderBy statements.
+- Revise the comment, it's technically wrong regarding the "inversely proportional".
+
+Sort Tags
 - Consider a IDictionary<string,string> SearchListViewModel.SortTags => Key = DsoModel.CompoundId
    populate the values with the datetime strings that the object will rise from the observer's horizon.
-   Order by all:
-   1. object has rise and set trajectory
-   2. object is local
-   3. The amount of time until it rises.
 - Use this collection to write to a "Tag" informational string on each of the objects in the List view.
    I will need to do this for most sorting options.
 
@@ -26,6 +30,7 @@ Sort by Rise Time
 Sort by Visibility
 - Consider removing.
 
+DRY
 - Consider revising Utilities.IsVisible, Utilities.IsLocal, Utilities.IsRising for DRY principle.
 
 Filters
@@ -56,6 +61,22 @@ Startup
 
 - Revise Startup env.IsDevelopment() condition to point to and test the error page.
 
+Implement exception handling
+- All process-heavy methods, such as SearchQueryOptions.SortFilter(...)
+
+-------------------------------------------------------------------------
+
+BUG
+- For Local, Visible, and Rising filters. And sort by Rise Time.
+- The number of results (DsoItems) is dependent on the calculation.
+- These options cause the calculation to be re-executed during paging,
+  which could cause the result count to change between pages.
+- I might not be able to do anything about this.
+
+Performance
+- In Repository<T>.BuildQuery ... line 54
+- Worst case - Need to omit .ToList() and redesign everything.
+
 -------------------------------------------------------------------------
 
 - Plan for passing the Geolocation properties/model across controllers.
@@ -79,9 +100,6 @@ Update VS
 - Enable client-side/server-side validation for GeolocationModel and view form.
  - For any error or bad input with the geo-dependent sorting/filtering within SearchQueryOptions.SortFilter(...), just return void.
    No need to alert errors.
-
-Implement exception handling
-- All process-heavy methods, such as SearchQueryOptions.SortFilter(...)
 
 -------------------------------------------------------------------------
 

@@ -314,5 +314,82 @@ namespace DST.Models.BusinessLogic
 
             return result;
         }
+
+        public static long GetRiseTime(DsoModel model, GeolocationModel geolocation)
+        {
+            long result;
+            ITrajectory trajectory;
+            IDateTimeInfo dateTimeInfo;
+            IMutableDateTime clientDateTime;
+            IAstronomicalDateTime astronomicalDateTime;
+            DateTime localTime;
+            DateTime riseTime;
+            TimeSpan timeSpan;
+            int clientMonth;
+
+            try
+            {
+                // The observer's latitude must be within the constellation's visible range.
+                if (geolocation.Latitude > model.Constellation.NorthernLatitude ||
+                    geolocation.Latitude < -model.Constellation.SouthernLatitude)
+                {
+                    return long.MaxValue;
+                }
+
+                // Get the object's type of trajectory relative to the observer's location.
+                trajectory = GetTrajectory(model, geolocation);
+
+                // The trajectory of the object must be able to rise above the observer's horizon at some point in time.
+                if (trajectory is null or not IRiseSetTrajectory)
+                {
+                    return long.MaxValue;
+                }
+
+                // Get the date and time info for the client.
+                dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(geolocation.TimeZoneId);
+
+                // Get the client's current date and time represented in universal time.
+                clientDateTime = DateTimeFactory.CreateMutable(DateTime.UtcNow, dateTimeInfo);
+
+                // Get the current month in the client's local timezone.
+                clientMonth = clientDateTime.ToLocalTime().Month;
+
+                // The observer's current month must fall within the constellation's seasonal timespan.
+                if (clientMonth < model.Constellation.Season.StartMonth ||
+                    clientMonth > model.Constellation.Season.EndMonth)
+                {
+                    return long.MaxValue;
+                }
+
+                // Get a new IAstronomicalDateTime object using the client's current date and time info.
+                astronomicalDateTime = DateTimeFactory.ConvertToAstronomical(clientDateTime);
+
+                if (trajectory is IRiseSetTrajectory riseSet)
+                {
+                    localTime = clientDateTime.ToLocalTime();
+                    riseTime = DateTimeFactory.ConvertToMutable(riseSet.GetRise(astronomicalDateTime).DateTime).ToLocalTime();
+
+                    timeSpan = riseTime - localTime;
+                    result = timeSpan.Ticks;
+#if DEBUG
+                    string tag = timeSpan.ToString();
+                    //if (timeSpan.Hours > 0) tag = timeSpan.ToString("%h' hr ago'");
+                    //else if (timeSpan.Minutes > 0) tag = timeSpan.ToString("%m' min ago'");
+                    //else tag = timeSpan.ToString("%s' sec ago'");
+                    Debug.WriteLine($"{model.CompoundId}: {tag}");
+#endif
+                }
+                else
+                {
+                    result = long.MaxValue;
+                }
+            }
+            catch
+            {
+                result = long.MaxValue;
+            }
+
+            return result;
+        }
     }
 }

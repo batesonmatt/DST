@@ -127,9 +127,11 @@ namespace DST.Models.DataLayer.Query
                 /* Needs geolocation */
                 /* This will be based on a lot of factors. */
             }
-            else if (builder.IsSortByRiseTime)
+            else if (builder.IsSortByRiseTime && geoBuilder is not null)
             {
-                /* Needs geolocation */
+                Include = "Constellation.Season";
+
+                OrderBy = model => Utilities.GetRiseTime(model, geoBuilder.CurrentGeolocation);
             }
         }
 
