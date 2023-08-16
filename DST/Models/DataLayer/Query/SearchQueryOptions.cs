@@ -117,10 +117,13 @@ namespace DST.Models.DataLayer.Query
             }
             else if (builder.IsSortByBrightness)
             {
-                // The brightness of a deep sky object is inversely proportional to its magnitude.
-                // DsoModel.Magnitude allows null, for which the object is said to have no brightness and
-                // should be sorted as having the highest magnitude (darkest).
-                OrderBy = model => -(model.Magnitude ?? double.PositiveInfinity);
+                //OrderBy = model => -(model.Magnitude ?? double.PositiveInfinity);
+
+                OrderByAll = new OrderClauses<DsoModel>
+                {
+                    { model => -model.Magnitude },
+                    { model => model.Magnitude == null }
+                };
             }
             else if (builder.IsSortByVisibility)
             {

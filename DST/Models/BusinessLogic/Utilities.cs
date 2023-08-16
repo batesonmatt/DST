@@ -293,11 +293,14 @@ namespace DST.Models.BusinessLogic
                         DateTime localTime = clientDateTime.ToLocalTime();
                         DateTime riseTime = DateTimeFactory.ConvertToMutable(riseSet.GetRise(astronomicalDateTime).DateTime).ToLocalTime();
                         Debug.Assert(localTime > riseTime);
-                        TimeSpan timeSpan = localTime - riseTime;
+                        TimeSpan timeSpan = riseTime - localTime;
                         string tag;
-                        if (timeSpan.Hours > 0) tag = timeSpan.ToString("%h' hr ago'");
-                        else if (timeSpan.Minutes > 0) tag = timeSpan.ToString("%m' min ago'");
-                        else tag = timeSpan.ToString("%s' sec ago'");
+                        if (timeSpan.Days > 0 || timeSpan.Hours > 0) tag = string.Format("{0:F0} hr", timeSpan.TotalHours);
+                        else if (timeSpan.Minutes > 0) tag = string.Format("{0} min", timeSpan.Minutes);
+                        else if (timeSpan.Ticks >= 0) tag = string.Format("{0} sec", timeSpan.Seconds);
+                        else if (timeSpan.Days < 0 || timeSpan.Hours < 0) tag = string.Format("{0:F0} hr ago", timeSpan.Duration().TotalHours);
+                        else if (timeSpan.Minutes < 0) tag = string.Format("{0} min ago", timeSpan.Duration().Minutes);
+                        else tag = string.Format("{0} sec ago", timeSpan.Duration().Seconds);
                         Debug.WriteLine($"{model.CompoundId}: {tag}");
                     }
 #endif
@@ -373,9 +376,12 @@ namespace DST.Models.BusinessLogic
                     result = timeSpan.Ticks;
 #if DEBUG
                     string tag = timeSpan.ToString();
-                    //if (timeSpan.Hours > 0) tag = timeSpan.ToString("%h' hr ago'");
-                    //else if (timeSpan.Minutes > 0) tag = timeSpan.ToString("%m' min ago'");
-                    //else tag = timeSpan.ToString("%s' sec ago'");
+                    if (timeSpan.Days > 0 || timeSpan.Hours > 0) tag = string.Format("{0:F0} hr", timeSpan.TotalHours);
+                    else if (timeSpan.Minutes > 0) tag = string.Format("{0} min", timeSpan.Minutes);
+                    else if (timeSpan.Ticks >= 0) tag = string.Format("{0} sec", timeSpan.Seconds);
+                    else if (timeSpan.Days < 0 || timeSpan.Hours < 0) tag = string.Format("{0:F0} hr ago", timeSpan.Duration().TotalHours);
+                    else if (timeSpan.Minutes < 0) tag = string.Format("{0} min ago", timeSpan.Duration().Minutes);
+                    else tag = string.Format("{0} sec ago", timeSpan.Duration().Seconds);
                     Debug.WriteLine($"{model.CompoundId}: {tag}");
 #endif
                 }

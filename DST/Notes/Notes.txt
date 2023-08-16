@@ -1,14 +1,10 @@
 ﻿To Do:
 
 Sort by Rise Time
-- Revise the diagnostic debug code.
-
-Sort by brightness
-- Try to keep all business logic code in the BusinessLogic namespace.
-- Consider Utilities.GetMagnitude(DsoModel) => double
-- Or, move the comment to DsoModel.Magnitude as documentation,
-  and use OrderByAll with two OrderBy statements.
-- Revise the comment, it's technically wrong regarding the "inversely proportional".
+- Revise the diagnostic debug code for simplicity.
+  Include the method name.
+- Implement a new method to get the tag, GetRiseTimeTag(DsoModel, GeolocationModel)
+  There's gonna be lots of code duplication
 
 Sort Tags
 - Consider a IDictionary<string,string> SearchListViewModel.SortTags => Key = DsoModel.CompoundId
@@ -72,10 +68,16 @@ BUG
 - These options cause the calculation to be re-executed during paging,
   which could cause the result count to change between pages.
 - I might not be able to do anything about this.
+- Possible solution:
+  These options all use a client date time.
+  Try to store that value in session (Consider new property in GeolocationModel)
+  Keep loading this value from session until the user chooses a different filter/sort option.
 
 Performance
 - In Repository<T>.BuildQuery ... line 54
-- Worst case - Need to omit .ToList() and redesign everything.
+- Do not call ToList()
+- This causes all objects and the included nav properties to be loaded into memory
+- I will likely need to redesign RouteDictionary, RouteBuilder, SearchRouteBuilder, and Filters
 
 -------------------------------------------------------------------------
 
