@@ -2,6 +2,8 @@
 using DST.Models.DataLayer.Query;
 using System.Collections.Generic;
 using DST.Models.Builders.Routing;
+using DST.Models.BusinessLogic;
+using System;
 
 namespace DST.Models.ViewModels
 {
@@ -32,6 +34,8 @@ namespace DST.Models.ViewModels
             Core.Resources.DisplayText.TrajectoryNeverRise,
             Core.Resources.DisplayText.TrajectoryRiseAndSet
         };
+
+        public Func<DsoObserverOptions, string> GetSortTag { get; set; }
 
         #endregion
     }

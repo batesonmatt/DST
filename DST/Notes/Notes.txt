@@ -1,5 +1,39 @@
 ﻿To Do:
 
+BUG
+- IsRising
+- Debug.Assert(localTime > riseTime)
+- riseTime is greater than localTime
+- RiseSetTrajectory.GetRise fails to calculate the Previous rise time for 0,0 UTC
+- See ILocalHourAngleDateTime.Calculate implementations.
+
+***
+
+SearchListViewModel
+- public Func<DsoObserverOptions, string> GetSortTag { get; set; }
+
+BusinessLogic
+- class DsoObserverOptions
+	public DsoModel Dso { get; }
+	public GeolocationModel Geolocation { get; }
+	public DsoObserverOptions(DsoModel dso) => Dso = dso, Geolocation = null;
+	public DsoObserverOptions(DsoModel dso, GeolocationModel geolocation) => Dso = dso, Geolocation = geolocation;
+	...
+	Extra helper methods, etc.
+
+Utilities
+- public static Func<DsoObserverOptions, string> GetSortTagFunc(string sortField) => ...
+- Add all the specific sort tag methods ...
+- public static string GetTypeSortTag(DsoObserverOptions options) ...
+- Update other methods to utilize the DsoObserverOptions class?
+
+SearchController.List
+- Inside SearchListViewModel initializer
+- GetSortTag = GetSortTagFunc(values.SortField)
+  Default to a lambda function that returns an empty string.
+
+***
+
 Sort by Rise Time
 - Revise the diagnostic debug code for simplicity.
   Include the method name.
@@ -14,7 +48,7 @@ Sort Tags
 
    Type sort
    Constellation sort
-   Distance sort =>		"Distance: #.# lyr",
+   Distance sort =>		"Distance: #.# kly",
    Brightness sort =>	"Apparent magnitude: #.#",
    RiseTime sort =>		"Rise: hh:mm:ss", "Rise: ## ago", "Never rise", "Circumpolar"
 						If GetRise() returns the previous rise, consider "Rise: -hh:mm:ss"
@@ -73,6 +107,8 @@ BUG
   Try to store that value in session (Consider new property in GeolocationModel)
   Keep loading this value from session until the user chooses a different filter/sort option.
 
+*** I won't be able to resolve this. ToList materializes the models so that the 
+*** NotMapped properties may be seen by the LINQ query.
 Performance
 - In Repository<T>.BuildQuery ... line 54
 - Do not call ToList()

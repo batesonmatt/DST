@@ -7,6 +7,9 @@ using DST.Core.Observer;
 using DST.Core.Trajectory;
 using System;
 using System.Diagnostics;
+using DST.Models.DTOs;
+using DST.Models.DataLayer.Query;
+using DST.Models.Extensions;
 
 namespace DST.Models.BusinessLogic
 {
@@ -292,7 +295,10 @@ namespace DST.Models.BusinessLogic
                     {
                         DateTime localTime = clientDateTime.ToLocalTime();
                         DateTime riseTime = DateTimeFactory.ConvertToMutable(riseSet.GetRise(astronomicalDateTime).DateTime).ToLocalTime();
-                        Debug.Assert(localTime > riseTime);
+                        if (localTime > riseTime)
+                        {
+                            Debug.Assert(localTime > riseTime);
+                        }
                         TimeSpan timeSpan = riseTime - localTime;
                         string tag;
                         if (timeSpan.Days > 0 || timeSpan.Hours > 0) tag = string.Format("{0:F0} hr", timeSpan.TotalHours);
@@ -396,6 +402,70 @@ namespace DST.Models.BusinessLogic
             }
 
             return result;
+        }
+
+        public static string GetTypeInfo(DsoObserverOptions options)
+        {
+            if (options is null || options.Dso is null)
+            {
+                return string.Empty;
+            }
+
+            return options.Dso.Type ?? string.Empty;
+        }
+
+        public static string GetConstellationInfo(DsoObserverOptions options)
+        {
+            if (options is null || options.Dso is null)
+            {
+                return string.Empty;
+            }
+
+            return options.Dso.ConstellationName ?? string.Empty;
+        }
+
+        public static string GetDistanceInfo(DsoObserverOptions options)
+        {
+            if (options is null || options.Dso is null)
+            {
+                return string.Empty;
+            }
+
+            return string.Format("{0:0.0#} kly", options.Dso.Distance);
+        }
+
+        public static string GetBrightnessInfo(DsoObserverOptions options)
+        {
+            if (options is null || options.Dso is null)
+            {
+                return string.Empty;
+            }
+
+            return options.Dso.Magnitude switch
+            {
+                null => "Apparent Magnitude: none",
+                _ => string.Format("Apparent Magnitude: {0:0.0#}", options.Dso.Magnitude)
+            };
+        }
+
+        public static string GetRiseTimeInfo(DsoObserverOptions options)
+        {
+            if (options is null || options.Dso is null || options.Geolocation is null)
+            {
+                return string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+        public static Func<DsoObserverOptions, string> GetInfoFunc(string sortField)
+        {
+            if (sortField.EqualsIgnoreCase(Sort.Type)) return GetTypeInfo;
+            if (sortField.EqualsIgnoreCase(Sort.Constellation)) return GetConstellationInfo;
+            if (sortField.EqualsIgnoreCase(Sort.Distance)) return GetDistanceInfo;
+            if (sortField.EqualsIgnoreCase(Sort.Brightness)) return GetBrightnessInfo;
+            if (sortField.EqualsIgnoreCase(Sort.RiseTime)) return GetRiseTimeInfo;
+            return x => string.Empty;
         }
     }
 }

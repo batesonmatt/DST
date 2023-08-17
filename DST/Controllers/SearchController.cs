@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
 using DST.Models.Builders;
+using DST.Models.BusinessLogic;
 
 namespace DST.Controllers
 {
@@ -80,7 +81,7 @@ namespace DST.Controllers
 
             // Get a new GridBuilder object, load route segments, and store in the current session.
             SearchRouteBuilder builder = new(HttpContext.Session, values);
-
+            
             // if clear filters:
             // builder.ClearFilterSegments();
             // else:
@@ -126,8 +127,10 @@ namespace DST.Controllers
                 {
                     OrderBy = obj => obj.Id
                 }),
-                
+
                 /* Add initializer for Trajectories here */
+
+                GetSortTag = Utilities.GetInfoFunc(values.SortField),
 
                 CurrentRoute = builder.CurrentRoute,
                 TotalPages = builder.GetTotalPages(_data.DsoItems.Count)

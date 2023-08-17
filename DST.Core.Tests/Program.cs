@@ -18,7 +18,7 @@ namespace DST.Core.Tests
         {
             // My location (LAT, LON): 29.4944768, -95.1123968
             IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
-                longitude: new Angle(-95.1123968), latitude: new Angle(29.4944768));
+                longitude: new Angle(0.0), latitude: new Angle(0.0));
             //longitude: Angle.Zero, latitude: new Angle(90.0));
             //longitude: Angle.Zero, latitude: new Angle(-80.0));
 
@@ -50,7 +50,8 @@ namespace DST.Core.Tests
             IEquatorialCoordinate test = CoordinateFactory.CreateEquatorial(
                 rightAscension: new(23.34675), declination: new(61.2016667));
 
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
+            // My timezone: America/Chicago
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Utc");
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, test, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);

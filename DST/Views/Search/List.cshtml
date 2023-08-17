@@ -329,7 +329,8 @@
 
     <hr />
 
-    @* Add else block, and also check if Model.DsoItems is empty. If null or empty, display message such as "No objects found that match your filters", etc. *@
+    @* Check if Model.DsoItems is empty in this first if statement. 
+    Add else block to display message such as "No objects found that match your filters", etc. *@
     <div id="start">
         @if (Model.DsoItems is not null)
         {
@@ -347,6 +348,14 @@
                             else
                             {
                                 <h3>@dso.CompoundId</h3>
+                            }
+                            @if (current.SortField == Sort.RiseTime)
+                            {
+                                <i>@Model.GetSortTag(new DsoObserverOptions(dso, Model.Geolocation))</i>
+                            }
+                            else
+                            {
+                                <i>@Model.GetSortTag(new DsoObserverOptions(dso))</i>
                             }
                             <p>
                                 @dso.CatalogName
