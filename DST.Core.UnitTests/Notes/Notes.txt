@@ -1,4 +1,1 @@
-﻿Consider separating the unit tests from the console tests
-- Keep the console tests with the output statements
-
-OR, just revise the unit tests to output cleaner
+﻿

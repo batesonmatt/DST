@@ -14,20 +14,20 @@ namespace DST.Core.Tests
 {
     internal class Program
     {
-        private static void Xinjiang_M17_ERA_Trajectory_AntiSetting_August19_2023_1300()
+        private static void NullIsland_M17_ERA_Trajectory_AntiSetting_August19_2023_1300()
         {
             // Arrange
 
-            // LAT: 45.0, LON: 90.0 (Xinjiang, China)
+            // LAT: 0.0, LON: 0.0 (Null Island)
             IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
-                longitude: new Angle(90.0), latitude: new Angle(45.0));
+                longitude: new Angle(0.0), latitude: new Angle(0.0));
 
             // RA: 18.3405556hr, DEC: -16.1766667° (M17)
             IEquatorialCoordinate m17 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(TimeSpan.FromHours(18.3405556)), declination: new Angle(-16.1766667));
 
-            // China Standard Time (IANA: Asia/Shanghai)
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Asia/Shanghai");
+            // Universal Coordinated Time (IANA: UTC)
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("UTC");
 
             // Earth Rotation Angle (ERA)
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.ERA);
@@ -81,7 +81,7 @@ namespace DST.Core.Tests
         {
             // My location (LAT, LON): 29.4944768, -95.1123968
             IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
-                longitude: new Angle(90.0), latitude: new Angle(45.0));
+                longitude: new Angle(0.0), latitude: new Angle(0.0));
             //longitude: Angle.Zero, latitude: new Angle(90.0));
             //longitude: Angle.Zero, latitude: new Angle(-80.0));
 
@@ -114,8 +114,8 @@ namespace DST.Core.Tests
                 rightAscension: new(TimeSpan.FromHours(18.3405556)), declination: new(-16.1766667));
 
             // My timezone: America/Chicago
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Asia/Shanghai");
-            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GAST);
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("UTC");
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, test, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
 
@@ -130,7 +130,7 @@ namespace DST.Core.Tests
             //IAstronomicalDateTime now = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
             //IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
 
-            AstronomicalDateTime start = new(new DateTime(2023, 8, 18, 1, 0, 0), dateTimeInfo);
+            AstronomicalDateTime start = new(new DateTime(2023, 8, 18, 18, 0, 0), dateTimeInfo);
 
             IMutableDateTime mutable;
 
@@ -394,7 +394,7 @@ namespace DST.Core.Tests
             //TestTrack();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
-            Xinjiang_M17_ERA_Trajectory_AntiSetting_August19_2023_1300();
+            //NullIsland_M17_ERA_Trajectory_AntiSetting_August19_2023_1300();
         }
     }
 }

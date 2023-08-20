@@ -1,25 +1,5 @@
 ﻿To Do:
 
-Unit Tests:
-
-Test Combinations
-- Geolocation  45,  90 (Xinjiang, China)				China Standard Time (Asia/Shanghai)				M17 Omega Nebula
-- Geolocation  45, -90 (Poniatowski, Wisconsin)			Central Standard Time (America/Chicago)			M17 Omega Nebula
-- Geolocation -30, 150 (New South Wales, Australia)		AUS Eastern Standard Time (Australia/Sydney)	M17 Omega Nebula
-- Geolocation -30, -60 (Santa Fe Province, Argentina)	Argentina Standard Time (America/Buenos_Aires)	M17 Omega Nebula
-- Geolocation   0,   0 (Null Island)					UTC (UTC)										M17 Omega Nebula
-...
-- Rise -> Apex -> Set
-...
-- When object is rising
-- When object is setting
-- When object is AntiRising
-- When object is AntiSetting
-...
-- Different timekeeper algorithms (GMST, GAST, ERA)
-
--------------------------------------------------------------------------
-
 Utilities
 - Finish GetRiseTimeInfo implementation
 	RiseTime sort =>		"Rise: hh:mm:ss", "Rise: ## ago", "Never rise", "Circumpolar"
