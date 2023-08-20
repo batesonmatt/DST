@@ -1,0 +1,46 @@
+GMST
+
+Dec					= 69.4625
+Ra					= 12.2783611
+
+local				= 8/18/2023 9:00:00 AM
+UTC					= 8/18/2023 9:00:00 PM
+
+EXPECTED VALUE
+previous rise 		= 8/17/2023 9:05:10 PM
+
+-----------------------------
+
+BaseTrajectory.Calculate
+
+datetime			= 8/18/2023 9:00:00 PM
+target LHA			= 270° (rise)
+cycle				= previous
+finaldatetime 		= 8/18/2023 9:01:14 PM	WRONG!
+
+------------------------------
+
+LocalMeanSiderealHourAngleDateTime.Calculate
+
+currentLHA			= 89.1958°
+hoursToNextLHA		= 12.053611839702382
+standardDateTime	= 8/18/2023 9:00:00 AM
+timeOfDay			= 9.0246411841571561
+hoursToTodayLHA		= 21.078253023859538	WRONG!
+totalHours			= 21.078253023859538	WRONG!
+result				= 8/18/2023 9:01:14 PM	WRONG!
+
+-------------------------------
+
+hoursToTodayLHA	= Coterminal(timeOfDay * 15 + hoursToNextLHA * 15).TotalHours
+		= Coterminal(135.3696177623573415 + 180.80417759553573).TotalHours
+		= 316.1737953578930715 / 15
+		= 21.0782530238595381 hours
+
+Try:
+hoursToPrevLHA = (target - currentLHA - 360) / 15 		=> on (-360, 360)
+hoursToCycleStart = -(currentLHA) / 15					=> on (-360, 0]
+hoursToCycleEnd = Coterminal(0 - currentLHA) / 15		=> on [0, 360)
+
+Need to add IsCoterminal boolean check for 'target' Angle argument.
+currentLHA should also be on [0, 360)

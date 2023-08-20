@@ -1,7 +1,7 @@
 ﻿namespace DST.Core.Physics
 {
     // Represents a mathematical angle.
-    public readonly partial struct Angle
+    public readonly partial struct Angle : IEquatable<Angle>
     {
         // The number of arc-milliseconds per unit degree, arc-minute, arc-second, and arc-millisecond, respectively.
         // The quotient of every two consecutive values results in the magnitude of the first component 
@@ -94,16 +94,16 @@
             TotalDegrees = GetAdjustedTotalDegrees(totalDegrees);
         }
 
-        // Returns a value that indicates whether two specified Angle values are not equal.
-        public static bool operator !=(Angle left, Angle right)
-        {
-            return left.TotalDegrees != right.TotalDegrees;
-        }
-
         // Returns a value that indicates whether two specified Angle values are equal.
         public static bool operator ==(Angle left, Angle right)
         {
-            return left.TotalDegrees == right.TotalDegrees;
+            return left.Equals(right);
+        }
+
+        // Returns a value that indicates whether two specified Angle values are not equal.
+        public static bool operator !=(Angle left, Angle right)
+        {
+            return !(left == right);
         }
 
         // Returns a value that indicates whether a specified Angle value is less than
@@ -321,7 +321,13 @@
         // Indicates whether this Angle instance and a specified object are equal.
         public override bool Equals(object? obj)
         {
-            return base.Equals(obj);
+            return obj is Angle other && Equals(other);
+        }
+
+        // Indicates whether this Angle instance and another Angle instance are equal.
+        public bool Equals(Angle other)
+        {
+            return other.TotalDegrees == TotalDegrees;
         }
 
         // Returns the hash code for this Angle instance.

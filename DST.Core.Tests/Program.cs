@@ -14,11 +14,84 @@ namespace DST.Core.Tests
 {
     internal class Program
     {
+        private static void Xinjiang_M17_GMST_Trajectory_AntiSetting_August19_2023_1300()
+        {
+            // Arrange
+
+            // LAT: 45.0, LON: 90.0 (Xinjiang, China)
+            IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
+                longitude: new Angle(90.0), latitude: new Angle(45.0));
+
+            // RA: 18.3405556hr, DEC: -16.1766667° (M17)
+            IEquatorialCoordinate m17 = CoordinateFactory.CreateEquatorial(
+                rightAscension: new Angle(TimeSpan.FromHours(18.3405556)), declination: new Angle(-16.1766667));
+
+            // China Standard Time (IANA: Asia/Shanghai)
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Asia/Shanghai");
+
+            // Greenwich Mean Sidereal Time (GMST)
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
+
+            // August 19, 2023, 1:00 PM
+            DateTime localDateTime = new(2023, 8, 19, 13, 0, 0, DateTimeKind.Unspecified);
+            IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
+
+            // Act
+            ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
+            IRiseSetTrajectory riseSet = (IRiseSetTrajectory)trajectory;
+            IVector rise = riseSet.GetRise(dateTime);
+            IVector apex = riseSet.GetApex(DateTimeFactory.ConvertToAstronomical(rise.DateTime));
+            IVector set = riseSet.GetSet(DateTimeFactory.ConvertToAstronomical(rise.DateTime));
+            ICoordinate riseCoordinate = rise.Coordinate;
+            ICoordinate apexCoordinate = apex.Coordinate;
+            ICoordinate setCoordinate = set.Coordinate;
+            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
+            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
+            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
+            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
+            DateTime localApexDateTime = apexDateTime.ToLocalTime();
+            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            
+            bool isRiseSet = trajectory is IRiseSetTrajectory;
+            bool isNotAboveHorizon = !riseSet.IsAboveHorizon(dateTime);
+            bool isNotRising = !riseSet.IsRising(dateTime);
+            bool isNotSetting = !riseSet.IsSetting(dateTime);
+
+            /*
+            -2.074191968404193E-06
+            113.20361351477486
+            28.823333299999916
+            179.99999627848695
+            2.539377644764488E-06
+            246.79638146562223
+            638280346765420000
+            638280521814800000
+            638280696864180000
+            638280634765420000
+            638280809814800000
+            638280984864180000
+             */
+
+            Console.WriteLine(riseCoordinate.Components.Inclination.TotalDegrees);
+            Console.WriteLine(riseCoordinate.Components.Rotation.TotalDegrees);
+            Console.WriteLine(apexCoordinate.Components.Inclination.TotalDegrees);
+            Console.WriteLine(apexCoordinate.Components.Rotation.TotalDegrees);
+            Console.WriteLine(setCoordinate.Components.Inclination.TotalDegrees);
+            Console.WriteLine(setCoordinate.Components.Rotation.TotalDegrees);
+            Console.WriteLine(riseDateTime.Ticks);
+            Console.WriteLine(apexDateTime.Ticks);
+            Console.WriteLine(setDateTime.Ticks);
+            Console.WriteLine(localRiseDateTime.Ticks);
+            Console.WriteLine(localApexDateTime.Ticks);
+            Console.WriteLine(localSetDateTime.Ticks);
+        }
+
         private static void TestTrack()
         {
             // My location (LAT, LON): 29.4944768, -95.1123968
             IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
-                longitude: new Angle(0.0), latitude: new Angle(0.0));
+                longitude: new Angle(90.0), latitude: new Angle(45.0));
             //longitude: Angle.Zero, latitude: new Angle(90.0));
             //longitude: Angle.Zero, latitude: new Angle(-80.0));
 
@@ -46,12 +119,12 @@ namespace DST.Core.Tests
             IEquatorialCoordinate north = CoordinateFactory.CreateEquatorial(
                 rightAscension: Angle.Zero, declination: new Angle(90.0));
 
-            // RightAscension = 23.34675, Declination = 61.2016667
+            // Test equatorial coordinate
             IEquatorialCoordinate test = CoordinateFactory.CreateEquatorial(
-                rightAscension: new(23.34675), declination: new(61.2016667));
+                rightAscension: new(TimeSpan.FromHours(18.3405556)), declination: new(-16.1766667));
 
             // My timezone: America/Chicago
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Utc");
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Asia/Shanghai");
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, test, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
@@ -64,17 +137,16 @@ namespace DST.Core.Tests
             //AstronomicalDateTime start = 
             //    new AstronomicalDateTime(new DateTime(2022, 3, 12, 18, 0, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
 
-            IAstronomicalDateTime now = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
-            IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
+            //IAstronomicalDateTime now = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
+            //IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
 
-            //AstronomicalDateTime start =
-            //    new(new DateTime(2022, 12, 13, 19, 32, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
+            AstronomicalDateTime start = new(new DateTime(2023, 8, 19, 13, 0, 0), dateTimeInfo);
 
             IMutableDateTime mutable;
 
             if (trajectory is IVariableTrajectory variableTrajectory)
             {
-                if (variableTrajectory.IsAboveHorizon(now))
+                if (variableTrajectory.IsAboveHorizon(start))
                 {
                     Console.WriteLine("This object is in your sky now!");
                 }
@@ -87,9 +159,9 @@ namespace DST.Core.Tests
 
                 if (trajectory is IRiseSetTrajectory riseSetTrajectory)
                 {
-                    IVector rise = riseSetTrajectory.GetRise(now);
-                    IVector apex = riseSetTrajectory.GetApex(now);
-                    IVector set = riseSetTrajectory.GetSet(now);
+                    IVector rise = riseSetTrajectory.GetRise(start);
+                    IVector apex = riseSetTrajectory.GetApex(DateTimeFactory.ConvertToAstronomical(rise.DateTime));
+                    IVector set = riseSetTrajectory.GetSet(DateTimeFactory.ConvertToAstronomical(rise.DateTime));
 
                     mutable = DateTimeFactory.ConvertToMutable(rise.DateTime);
                     Console.WriteLine($"Rise: {mutable.ToLocalTime()}\tPosition: {rise.Coordinate}");
@@ -102,7 +174,7 @@ namespace DST.Core.Tests
                 }
                 else
                 {
-                    IVector apex = variableTrajectory.GetApex(now);
+                    IVector apex = variableTrajectory.GetApex(start);
 
                     mutable = DateTimeFactory.ConvertToMutable(apex.DateTime);
                     Console.WriteLine($"Apex: {mutable.ToLocalTime()}\tPosition: {apex.Coordinate}");
@@ -110,7 +182,7 @@ namespace DST.Core.Tests
             }
             else
             {
-                if (trajectory.IsAboveHorizon(now))
+                if (trajectory.IsAboveHorizon(start))
                 {
                     Console.WriteLine("This object is in your sky now!");
                 }
@@ -329,9 +401,10 @@ namespace DST.Core.Tests
 
         static void Main(string[] args)
         {
-            TestTrack();
+            //TestTrack();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
+            Xinjiang_M17_GMST_Trajectory_AntiSetting_August19_2023_1300();
         }
     }
 }

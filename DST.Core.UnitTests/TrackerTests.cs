@@ -29,8 +29,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m13, timeKeeper);
 
             DateTime localDateTime = new(1998, 8, 10, 18, 10, 0, DateTimeKind.Unspecified);
-            IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(
-                localDateTime, dateTimeInfo);
+            IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             IMutableDateTime mutable = DateTimeFactory.ConvertToMutable(dateTime);
             ITracker tracker = TrackerFactory.Create(observer);

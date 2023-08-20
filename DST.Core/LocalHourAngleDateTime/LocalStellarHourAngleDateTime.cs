@@ -2,6 +2,7 @@
 using DST.Core.LocalHourAngle;
 using DST.Core.Observer;
 using DST.Core.Physics;
+using System.Diagnostics;
 
 namespace DST.Core.LocalHourAngleDateTime
 {
@@ -15,8 +16,8 @@ namespace DST.Core.LocalHourAngleDateTime
         // Returns an IAstronomicalDateTime representing the date and time when the specified ILocalObserver.Target
         // reaches the specified target local hour angle (LHA) as observed in standardized local time, beginning from
         // the specified starting IAstronomicalDateTime.
-        // If 'cycle' is HourAngleCycle.Next, this returns the next date/time that the targeting object reaches
-        // the target LHA, otherwise this returns the previous date/time that the targeting object reached the target LHA.
+        // If 'cycle' is HourAngleCycle.Previous, this returns the previous date/time that the targeting object reaches
+        // the target LHA, otherwise this returns the next date/time that the targeting object reached the target LHA.
         public override IAstronomicalDateTime Calculate(
             ILocalObserver localObserver, IAstronomicalDateTime dateTime, Angle target, HourAngleCycle cycle)
         {
@@ -27,30 +28,32 @@ namespace DST.Core.LocalHourAngleDateTime
             // This is calculated in stellar time
             Angle currentLHA = _localHourAngle.Calculate(localObserver, dateTime);
 
-            // Approximate time in stellar hours until the targeting object reaches the next target LHA,
-            // starting from the specified time.
-            double hoursToNextLHA = Angle.Coterminal(target - currentLHA).TotalHours;
-
             // Get the standardized local date and time, ignoring the effects of DST.
             DateTime standardDateTime = DateTimeFactory.ConvertToMutable(dateTime).ToStandardTime();
 
             // Total hours since midnight (00:00:00) to the specified time, converted to stellar time.
             double timeOfDay = standardDateTime.TimeOfDay.TotalHours * Constants.SolarToStellarRatio;
 
-            // Approximate time in stellar hours until the targeting object reaches the target LHA on the current cycle,
-            // beginning at midnight on the specified date.
-            // This value may be negative.
-            double hoursToTodayLHA = Angle.Coterminal(
-                timeOfDay * Constants.RotationPerHour + hoursToNextLHA * Constants.RotationPerHour).TotalHours;
-
-            // If the time until the targeting object reaches the target LHA on this date since midnight
-            // occurs before, or on, the current time of day, then adjust the starting date/time
-            // so that we may evaluate the next time the object reaches the same LHA.
-            double totalHours = cycle switch
+            // Total hours until the targeting object reaches the target LHA, starting from the current LHA.
+            double hoursToLHA = cycle switch
             {
-                HourAngleCycle.Next when hoursToTodayLHA <= timeOfDay => timeOfDay + hoursToNextLHA,
-                _ => hoursToTodayLHA
+                // Approximate time in stellar hours until the targeting object reaches the previous target LHA,
+                // starting from the specified time.
+                // This value will always be negative.
+                HourAngleCycle.Previous => -Angle.Coterminal(currentLHA - target).TotalHours,
+
+                // Approximate time in stellar hours until the targeting object reaches the next target LHA,
+                // starting from the specified time.
+                HourAngleCycle.Next or _ => Angle.Coterminal(target - currentLHA).TotalHours
             };
+#if DEBUG
+            if (cycle == HourAngleCycle.Previous)
+            {
+                Debug.Assert(hoursToLHA <= 0);
+            }
+#endif
+            // Total hours until the targeting object reaches the target LHA, starting from midnight on the specified date.
+            double totalHours = timeOfDay + hoursToLHA;
 
             // The total hours offset starts from midnight (00:00:00) on the specified date.
             // Use DateTime.Date to truncate the time component.

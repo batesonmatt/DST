@@ -1,61 +1,33 @@
 ﻿To Do:
 
-BUG
-- IsRising
-- Debug.Assert(localTime > riseTime)
-- riseTime is greater than localTime
-- RiseSetTrajectory.GetRise fails to calculate the Previous rise time for 0,0 UTC
-- See ILocalHourAngleDateTime.Calculate implementations.
+Unit Tests:
 
-***
+Test Combinations
+- Geolocation  45,  90 (Xinjiang, China)				China Standard Time (Asia/Shanghai)				M17 Omega Nebula
+- Geolocation  45, -90 (Poniatowski, Wisconsin)			Central Standard Time (America/Chicago)			M17 Omega Nebula
+- Geolocation -30, 150 (New South Wales, Australia)		AUS Eastern Standard Time (Australia/Sydney)	M17 Omega Nebula
+- Geolocation -30, -60 (Santa Fe Province, Argentina)	Argentina Standard Time (America/Buenos_Aires)	M17 Omega Nebula
+- Geolocation   0,   0 (Null Island)					UTC (UTC)										M17 Omega Nebula
+...
+- Rise -> Apex -> Set
+...
+- When object is rising
+- When object is setting
+- When object is below horizon (Consider AntiRising and AntiSetting)
+...
+- Different timekeeper algorithms (GMST, GAST, ERA)
 
-SearchListViewModel
-- public Func<DsoObserverOptions, string> GetSortTag { get; set; }
-
-BusinessLogic
-- class DsoObserverOptions
-	public DsoModel Dso { get; }
-	public GeolocationModel Geolocation { get; }
-	public DsoObserverOptions(DsoModel dso) => Dso = dso, Geolocation = null;
-	public DsoObserverOptions(DsoModel dso, GeolocationModel geolocation) => Dso = dso, Geolocation = geolocation;
-	...
-	Extra helper methods, etc.
+-------------------------------------------------------------------------
 
 Utilities
-- public static Func<DsoObserverOptions, string> GetSortTagFunc(string sortField) => ...
-- Add all the specific sort tag methods ...
-- public static string GetTypeSortTag(DsoObserverOptions options) ...
+- Finish GetRiseTimeInfo implementation
+	RiseTime sort =>		"Rise: hh:mm:ss", "Rise: ## ago", "Never rise", "Circumpolar"
+							If GetRise() returns the previous rise, consider "Rise: -hh:mm:ss"
+							Determine by: timespan = riseDT - clientDT
+
 - Update other methods to utilize the DsoObserverOptions class?
-
-SearchController.List
-- Inside SearchListViewModel initializer
-- GetSortTag = GetSortTagFunc(values.SortField)
-  Default to a lambda function that returns an empty string.
-
-***
-
-Sort by Rise Time
 - Revise the diagnostic debug code for simplicity.
-  Include the method name.
-- Implement a new method to get the tag, GetRiseTimeTag(DsoModel, GeolocationModel)
-  There's gonna be lots of code duplication
-
-Sort Tags
-- Consider a IDictionary<string,string> SearchListViewModel.SortTags => Key = DsoModel.CompoundId
-   populate the values with the datetime strings that the object will rise from the observer's horizon.
-- Use this collection to write to a "Tag" informational string on each of the objects in the List view.
-   I will need to do this for most sorting options.
-
-   Type sort
-   Constellation sort
-   Distance sort =>		"Distance: #.# kly",
-   Brightness sort =>	"Apparent magnitude: #.#",
-   RiseTime sort =>		"Rise: hh:mm:ss", "Rise: ## ago", "Never rise", "Circumpolar"
-						If GetRise() returns the previous rise, consider "Rise: -hh:mm:ss"
-						Determine by: timespan = riseDT - clientDT
-
-- Consider QueryOptions.Information expression property, set in SearchQueryOptions, 
-  and use it to populate the SortTags collection in the SearchController.
+  Include the method names.
 
 Sort by Visibility
 - Consider removing.
@@ -93,6 +65,11 @@ Startup
 
 Implement exception handling
 - All process-heavy methods, such as SearchQueryOptions.SortFilter(...)
+
+DST.Core.LocalHourAngleDateTime.HourAngleCycle
+- Consider renaming because it's usage doesn't necessarily refer to the LHA cycles, 
+  but rather the previous/next target LHA.
+  The previous/next target LHA may be on the same LHA cycle as the current LHA.
 
 -------------------------------------------------------------------------
 

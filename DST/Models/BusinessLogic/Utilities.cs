@@ -15,6 +15,7 @@ namespace DST.Models.BusinessLogic
 {
     public class Utilities
     {
+        /* Consider optional Algorithm algorithm = Algorithm.GMST */
         // Calculates and returns the type of trajectory for the specified DsoModel and GeolocationModel objects.
         public static ITrajectory GetTrajectory(DsoModel model, GeolocationModel geolocation)
         {
@@ -29,7 +30,7 @@ namespace DST.Models.BusinessLogic
             {
                 // Get the equatorial coordinate of the DsoModel.
                 target = CoordinateFactory.CreateEquatorial(
-                    rightAscension: new Angle(model.RightAscension), declination: new Angle(model.Declination));
+                    rightAscension: new Angle(TimeSpan.FromHours(model.RightAscension)), declination: new Angle(model.Declination));
 
                 // Get the client's geographic coordinate.
                 location = CoordinateFactory.CreateGeographic(
@@ -133,9 +134,6 @@ namespace DST.Models.BusinessLogic
                 // If the object's trajectory is circumpolar, then it is always visible from the observer's location.
                 if (trajectory is ICircumpolarTrajectory)
                 {
-#if DEBUG
-                    Debug.WriteLine($"{model.CompoundId}: Circumpolar");
-#endif
                     return true;
                 }
 
@@ -295,19 +293,8 @@ namespace DST.Models.BusinessLogic
                     {
                         DateTime localTime = clientDateTime.ToLocalTime();
                         DateTime riseTime = DateTimeFactory.ConvertToMutable(riseSet.GetRise(astronomicalDateTime).DateTime).ToLocalTime();
-                        if (localTime > riseTime)
-                        {
-                            Debug.Assert(localTime > riseTime);
-                        }
-                        TimeSpan timeSpan = riseTime - localTime;
-                        string tag;
-                        if (timeSpan.Days > 0 || timeSpan.Hours > 0) tag = string.Format("{0:F0} hr", timeSpan.TotalHours);
-                        else if (timeSpan.Minutes > 0) tag = string.Format("{0} min", timeSpan.Minutes);
-                        else if (timeSpan.Ticks >= 0) tag = string.Format("{0} sec", timeSpan.Seconds);
-                        else if (timeSpan.Days < 0 || timeSpan.Hours < 0) tag = string.Format("{0:F0} hr ago", timeSpan.Duration().TotalHours);
-                        else if (timeSpan.Minutes < 0) tag = string.Format("{0} min ago", timeSpan.Duration().Minutes);
-                        else tag = string.Format("{0} sec ago", timeSpan.Duration().Seconds);
-                        Debug.WriteLine($"{model.CompoundId}: {tag}");
+                        Debug.Assert(localTime > riseTime);
+                        Debug.WriteLine($"{model.CompoundId}: {riseTime}");
                     }
 #endif
                 }
@@ -448,6 +435,7 @@ namespace DST.Models.BusinessLogic
             };
         }
 
+        /* In Progress */
         public static string GetRiseTimeInfo(DsoObserverOptions options)
         {
             if (options is null || options.Dso is null || options.Geolocation is null)
