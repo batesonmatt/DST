@@ -13,7 +13,8 @@ Test Combinations
 ...
 - When object is rising
 - When object is setting
-- When object is below horizon (Consider AntiRising and AntiSetting)
+- When object is AntiRising
+- When object is AntiSetting
 ...
 - Different timekeeper algorithms (GMST, GAST, ERA)
 

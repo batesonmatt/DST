@@ -14,7 +14,7 @@ namespace DST.Core.Tests
 {
     internal class Program
     {
-        private static void Xinjiang_M17_GMST_Trajectory_AntiSetting_August19_2023_1300()
+        private static void Xinjiang_M17_ERA_Trajectory_AntiSetting_August19_2023_1300()
         {
             // Arrange
 
@@ -29,8 +29,8 @@ namespace DST.Core.Tests
             // China Standard Time (IANA: Asia/Shanghai)
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Asia/Shanghai");
 
-            // Greenwich Mean Sidereal Time (GMST)
-            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
+            // Earth Rotation Angle (ERA)
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.ERA);
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 PM
@@ -58,33 +58,23 @@ namespace DST.Core.Tests
             bool isNotRising = !riseSet.IsRising(dateTime);
             bool isNotSetting = !riseSet.IsSetting(dateTime);
 
-            /*
-            -2.074191968404193E-06
-            113.20361351477486
-            28.823333299999916
-            179.99999627848695
-            2.539377644764488E-06
-            246.79638146562223
-            638280346765420000
-            638280521814800000
-            638280696864180000
-            638280634765420000
-            638280809814800000
-            638280984864180000
-             */
-
-            Console.WriteLine(riseCoordinate.Components.Inclination.TotalDegrees);
-            Console.WriteLine(riseCoordinate.Components.Rotation.TotalDegrees);
-            Console.WriteLine(apexCoordinate.Components.Inclination.TotalDegrees);
-            Console.WriteLine(apexCoordinate.Components.Rotation.TotalDegrees);
-            Console.WriteLine(setCoordinate.Components.Inclination.TotalDegrees);
-            Console.WriteLine(setCoordinate.Components.Rotation.TotalDegrees);
-            Console.WriteLine(riseDateTime.Ticks);
-            Console.WriteLine(apexDateTime.Ticks);
-            Console.WriteLine(setDateTime.Ticks);
-            Console.WriteLine(localRiseDateTime.Ticks);
-            Console.WriteLine(localApexDateTime.Ticks);
-            Console.WriteLine(localSetDateTime.Ticks);
+            // Assert
+            Console.WriteLine("Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));");
+            Console.WriteLine("Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));");
+            Console.WriteLine("Assert.IsFalse(riseSet.IsRising(dateTime));");
+            Console.WriteLine("Assert.IsFalse(riseSet.IsSetting(dateTime));");
+            Console.WriteLine($"Assert.AreEqual({riseCoordinate.Components.Inclination.TotalDegrees}, riseCoordinate.Components.Inclination);");
+            Console.WriteLine($"Assert.AreEqual({riseCoordinate.Components.Rotation.TotalDegrees}, riseCoordinate.Components.Rotation);");
+            Console.WriteLine($"Assert.AreEqual({apexCoordinate.Components.Inclination.TotalDegrees}, apexCoordinate.Components.Inclination);");
+            Console.WriteLine($"Assert.AreEqual({apexCoordinate.Components.Rotation.TotalDegrees}, apexCoordinate.Components.Rotation);");
+            Console.WriteLine($"Assert.AreEqual({setCoordinate.Components.Inclination.TotalDegrees}, setCoordinate.Components.Inclination);");
+            Console.WriteLine($"Assert.AreEqual({setCoordinate.Components.Rotation.TotalDegrees}, setCoordinate.Components.Rotation);");
+            Console.WriteLine($"Assert.AreEqual({riseDateTime.Ticks}, riseDateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({apexDateTime.Ticks}, apexDateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({setDateTime.Ticks}, setDateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({localRiseDateTime.Ticks}, localRiseDateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({localApexDateTime.Ticks}, localApexDateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({localSetDateTime.Ticks}, localSetDateTime.Ticks);");
         }
 
         private static void TestTrack()
@@ -125,7 +115,7 @@ namespace DST.Core.Tests
 
             // My timezone: America/Chicago
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Asia/Shanghai");
-            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GAST);
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, test, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
 
@@ -140,7 +130,7 @@ namespace DST.Core.Tests
             //IAstronomicalDateTime now = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
             //IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
 
-            AstronomicalDateTime start = new(new DateTime(2023, 8, 19, 13, 0, 0), dateTimeInfo);
+            AstronomicalDateTime start = new(new DateTime(2023, 8, 18, 1, 0, 0), dateTimeInfo);
 
             IMutableDateTime mutable;
 
@@ -404,7 +394,7 @@ namespace DST.Core.Tests
             //TestTrack();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
-            Xinjiang_M17_GMST_Trajectory_AntiSetting_August19_2023_1300();
+            Xinjiang_M17_ERA_Trajectory_AntiSetting_August19_2023_1300();
         }
     }
 }
