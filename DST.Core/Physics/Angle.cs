@@ -228,12 +228,18 @@
             return result;
         }
 
+        // Returns a value that indicates whether this current Angle instance lies on the interval [0°, 360°).
+        public bool IsCoterminal()
+        {
+            // If this Angle is positive, then it is already on the interval [0°, 360°).
+            return TotalDegrees >= 0.0;
+        }
+
         // Returns a new Angle instance whose value is equal to the coterminal value, on the interval [0°, 360°),
         // of this current Angle instance.
         public Angle Coterminal()
         {
-            // If this Angle is positive, then it is already onto the interval [0°, 360°).
-            return TotalDegrees >= 0.0 ? this : Coterminal(TotalDegrees);
+            return IsCoterminal() ? this : Coterminal(TotalDegrees);
         }
 
         // Returns a 180° rotation of this current Angle instance onto the interval (-360°, 360°).
@@ -245,8 +251,8 @@
         // Returns the reference angle of this current Angle instance onto the interval [0°, 90°].
         public Angle Reference()
         {
-            // Relate the angle to [0°, 360°).
-            double degrees = Coterminal().TotalDegrees;
+            // Relate the angle to [0°, 360°) if it is not already a coterminal angle.
+            double degrees = IsCoterminal() ? TotalDegrees : Coterminal().TotalDegrees;
 
             return degrees switch
             {

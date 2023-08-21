@@ -27,7 +27,9 @@ namespace DST.Core.LocalHourAngleDateTime
             // The current local hour angle of the targeting object at the starting date and time.
             // This is calculated in stellar time
             Angle currentLHA = _localHourAngle.Calculate(localObserver, dateTime);
-
+#if DEBUG
+            Debug.Assert(target.IsCoterminal() && currentLHA.IsCoterminal());
+#endif
             // Get the standardized local date and time, ignoring the effects of DST.
             DateTime standardDateTime = DateTimeFactory.ConvertToMutable(dateTime).ToStandardTime();
 

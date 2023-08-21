@@ -34,7 +34,7 @@ namespace DST.Core.Components
             }
 
             // Relate the rotation angle onto [0°, 360°), equivalent to [0, 24) hours, if necessary.
-            if (rotation < 0.0 || rotation >= 360.0)
+            if (rotation.IsCoterminal() == false)
             {
                 rotation = rotation.Coterminal();
             }
