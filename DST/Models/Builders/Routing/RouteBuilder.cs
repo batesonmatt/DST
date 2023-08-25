@@ -18,7 +18,7 @@ namespace DST.Models.Builders.Routing
 
         protected RouteDictionary _routes;
 
-        protected readonly ISession _session;
+        protected ISession _session;
 
         #endregion
 

@@ -54,7 +54,7 @@
         @{
             routes = current.Clone();
 
-            foreach (var sortField in Sort.Fields)
+            foreach (var sortField in Sort.GetFields())
             {
                 routes.SetSort(sortField.Value);
             

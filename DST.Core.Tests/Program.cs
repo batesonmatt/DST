@@ -81,7 +81,7 @@ namespace DST.Core.Tests
         {
             // My location (LAT, LON): 29.4944768, -95.1123968
             IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
-                longitude: new Angle(0.0), latitude: new Angle(0.0));
+                longitude: new Angle(-95.1123968), latitude: new Angle(29.4944768));
             //longitude: Angle.Zero, latitude: new Angle(90.0));
             //longitude: Angle.Zero, latitude: new Angle(-80.0));
 
@@ -110,11 +110,12 @@ namespace DST.Core.Tests
                 rightAscension: Angle.Zero, declination: new Angle(90.0));
 
             // Test equatorial coordinate
+            //RightAscension = 16.6947889, Declination = 36.4598611
             IEquatorialCoordinate test = CoordinateFactory.CreateEquatorial(
-                rightAscension: new(TimeSpan.FromHours(18.3405556)), declination: new(-16.1766667));
+                rightAscension: new(TimeSpan.FromHours(16.6947889)), declination: new(36.4598611));
 
             // My timezone: America/Chicago
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("UTC");
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, test, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
@@ -391,7 +392,7 @@ namespace DST.Core.Tests
 
         static void Main(string[] args)
         {
-            //TestTrack();
+            TestTrack();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
             //NullIsland_M17_ERA_Trajectory_AntiSetting_August19_2023_1300();

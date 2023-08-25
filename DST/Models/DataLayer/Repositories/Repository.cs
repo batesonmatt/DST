@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DST.Models.DataLayer.Repositories
 {
-    public class Repository<T> : IRepository<T> 
+    public class Repository<T> : IRepository<T>
         where T : class
     {
         #region Properties
@@ -17,10 +17,8 @@ namespace DST.Models.DataLayer.Repositories
 
         #region Fields
         
-        protected MainDbContext _context;
-
+        protected readonly MainDbContext _context;
         private readonly DbSet<T> _dbset;
-
         private int? _count;
 
         #endregion

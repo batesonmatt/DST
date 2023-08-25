@@ -6,7 +6,6 @@ using DST.Core.TimeKeeper;
 using DST.Core.Observer;
 using DST.Core.Trajectory;
 using System;
-using System.Diagnostics;
 using DST.Models.DataLayer.Query;
 using DST.Models.Extensions;
 
@@ -216,16 +215,6 @@ namespace DST.Models.BusinessLogic
 
                 // Determine whether the object is above the observer's horizon.
                 result = trajectory.IsAboveHorizon(astronomicalDateTime);
-
-#if DEBUG
-                if (trajectory is IRiseSetTrajectory riseSet)
-                {
-                    Debug.WriteLine(
-                        $"{model.CompoundId} ... " +
-                        $"Rise: {DateTimeFactory.ConvertToMutable(riseSet.GetRise(astronomicalDateTime).DateTime).ToLocalTime()} ... " +
-                        $"Set: {DateTimeFactory.ConvertToMutable(riseSet.GetSet(astronomicalDateTime).DateTime).ToLocalTime()}");
-                }
-#endif
             }
             catch
             {
@@ -287,15 +276,6 @@ namespace DST.Models.BusinessLogic
                 {
                     // Determine whether the object is rising from the observer's horizon.
                     result = riseSet.IsRising(astronomicalDateTime);
-#if DEBUG
-                    if (result)
-                    {
-                        DateTime localTime = clientDateTime.ToLocalTime();
-                        DateTime riseTime = DateTimeFactory.ConvertToMutable(riseSet.GetRise(astronomicalDateTime).DateTime).ToLocalTime();
-                        Debug.Assert(localTime > riseTime);
-                        Debug.WriteLine($"{model.CompoundId}: {riseTime}");
-                    }
-#endif
                 }
                 else
                 {
@@ -366,16 +346,6 @@ namespace DST.Models.BusinessLogic
 
                     timeSpan = riseTime - localTime;
                     result = timeSpan.Ticks;
-#if DEBUG
-                    string tag = timeSpan.ToString();
-                    if (timeSpan.Days > 0 || timeSpan.Hours > 0) tag = string.Format("{0:F0} hr", timeSpan.TotalHours);
-                    else if (timeSpan.Minutes > 0) tag = string.Format("{0} min", timeSpan.Minutes);
-                    else if (timeSpan.Ticks >= 0) tag = string.Format("{0} sec", timeSpan.Seconds);
-                    else if (timeSpan.Days < 0 || timeSpan.Hours < 0) tag = string.Format("{0:F0} hr ago", timeSpan.Duration().TotalHours);
-                    else if (timeSpan.Minutes < 0) tag = string.Format("{0} min ago", timeSpan.Duration().Minutes);
-                    else tag = string.Format("{0} sec ago", timeSpan.Duration().Seconds);
-                    Debug.WriteLine($"{model.CompoundId}: {tag}");
-#endif
                 }
                 else
                 {
@@ -434,7 +404,6 @@ namespace DST.Models.BusinessLogic
             };
         }
 
-        /* In Progress */
         public static string GetRiseTimeInfo(DsoObserverOptions options)
         {
             if (options is null || options.Dso is null || options.Geolocation is null)
@@ -442,7 +411,57 @@ namespace DST.Models.BusinessLogic
                 return string.Empty;
             }
 
-            return string.Empty;
+            string result;
+            long ticks;
+            TimeSpan timeSpan;
+
+            try
+            {
+                // Calculate the object's recent/next rise time relative to the observer's geolocation on the
+                // current date and time for the client.
+                ticks = GetRiseTime(options.Dso, options.Geolocation);
+
+                // Get the rise time duration as a timespan.
+                timeSpan = TimeSpan.FromTicks(ticks);
+
+                // The rise time could not be calculated.
+                if (timeSpan == TimeSpan.MaxValue)
+                {
+                    return string.Empty;
+                }
+
+                // Format the result.
+                if (timeSpan.Days > 0 || timeSpan.Hours > 0)
+                {
+                    result = string.Format("{0:F0} hr", timeSpan.TotalHours);
+                }
+                else if (timeSpan.Minutes > 0)
+                {
+                    result = string.Format("{0} min", timeSpan.Minutes);
+                }
+                else if (timeSpan.Ticks >= 0)
+                {
+                    result = string.Format("{0} sec", timeSpan.Seconds);
+                }
+                else if (timeSpan.Days < 0 || timeSpan.Hours < 0)
+                {
+                    result = string.Format("{0:F0} hr ago", timeSpan.Duration().TotalHours);
+                }
+                else if (timeSpan.Minutes < 0)
+                {
+                    result = string.Format("{0} min ago", timeSpan.Duration().Minutes);
+                }
+                else
+                {
+                    result = string.Format("{0} sec ago", timeSpan.Duration().Seconds);
+                }
+            }
+            catch
+            {
+                result = string.Empty;
+            }
+
+            return result;
         }
 
         public static Func<DsoObserverOptions, string> GetInfoFunc(string sortField)

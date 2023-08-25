@@ -21,6 +21,7 @@ namespace DST
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
+
             services.AddSession(
                 //options =>
                 //{
@@ -30,9 +31,12 @@ namespace DST
 
             services.AddControllersWithViews();
 
-            // Enable dependency injection for DbContext objects.
+            // Enable dependency injection and disable query tracking for DbContext objects.
             services.AddDbContext<MainDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MainDbContext")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("MainDbContext"));
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
             // Make URLs lowercase and end with a trailing slash.
             services.AddRouting(options =>

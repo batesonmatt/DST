@@ -18,7 +18,7 @@ namespace DST.Models.DataLayer.Query
 
         public static string Default { get; } = Id;
 
-        public static Dictionary<string, string> Fields
+        public static Dictionary<string, string> GetFields()
             => new()
             {
                 { "Id", Id },

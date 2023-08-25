@@ -36,59 +36,59 @@ namespace DST.Models.Builders.Routing
 
         public ListFilter TypeFilter
         {
-            get => new(FilterKeys[0], Get(FilterKeys[0]));
-            set => this[FilterKeys[0]] = value.Value;
+            get => new(nameof(SearchDTO.Type), Get(nameof(SearchDTO.Type)));
+            set => this[nameof(SearchDTO.Type)] = value.Value;
         }
 
         public ListFilter CatalogFilter
         {
-            get => new(FilterKeys[1], Get(FilterKeys[1]));
-            set => this[FilterKeys[1]] = value.Value;
+            get => new(nameof(SearchDTO.Catalog), Get(nameof(SearchDTO.Catalog)));
+            set => this[nameof(SearchDTO.Catalog)] = value.Value;
         }
 
         public ListFilter ConstellationFilter
         {
-            get => new(FilterKeys[2], Get(FilterKeys[2]));
-            set => this[FilterKeys[2]] = value.Value;
+            get => new(nameof(SearchDTO.Constellation), Get(nameof(SearchDTO.Constellation)));
+            set => this[nameof(SearchDTO.Constellation)] = value.Value;
         }
 
         public ListFilter SeasonFilter
         {
-            get => new(FilterKeys[3], Get(FilterKeys[3]));
-            set => this[FilterKeys[3]] = value.Value;
+            get => new(nameof(SearchDTO.Season), Get(nameof(SearchDTO.Season)));
+            set => this[nameof(SearchDTO.Season)] = value.Value;
         }
 
         public ListFilter TrajectoryFilter
         {
-            get => new(FilterKeys[4], Get(FilterKeys[4]));
-            set => this[FilterKeys[4]] = value.Value;
+            get => new(nameof(SearchDTO.Trajectory), Get(nameof(SearchDTO.Trajectory)));
+            set => this[nameof(SearchDTO.Trajectory)] = value.Value;
         }
 
         public ToggleFilter LocalFilter
         {
-            get => new(FilterKeys[5], Get(FilterKeys[5]));
-            set => this[FilterKeys[5]] = value.Value;
+            get => new(nameof(SearchDTO.Local), Get(nameof(SearchDTO.Local)));
+            set => this[nameof(SearchDTO.Local)] = value.Value;
         }
 
         public ToggleFilter VisibleFilter
         {
-            get => new(FilterKeys[6], Get(FilterKeys[6]));
-            set => this[FilterKeys[6]] = value.Value;
+            get => new(nameof(SearchDTO.Visible), Get(nameof(SearchDTO.Visible)));
+            set => this[nameof(SearchDTO.Visible)] = value.Value;
         }
 
         public ToggleFilter RisingFilter
         {
-            get => new(FilterKeys[7], Get(FilterKeys[7]));
-            set => this[FilterKeys[7]] = value.Value;
+            get => new(nameof(SearchDTO.Rising), Get(nameof(SearchDTO.Rising)));
+            set => this[nameof(SearchDTO.Rising)] = value.Value;
         }
 
         public ToggleFilter HasNameFilter
         {
-            get => new(FilterKeys[8], Get(FilterKeys[8]));
-            set => this[FilterKeys[8]] = value.Value;
+            get => new(nameof(SearchDTO.HasName), Get(nameof(SearchDTO.HasName)));
+            set => this[nameof(SearchDTO.HasName)] = value.Value;
         }
 
-        private static string[] FilterKeys
+        private string[] FilterKeys
             => new string[]
             {
                 nameof(SearchDTO.Type),
@@ -207,13 +207,16 @@ namespace DST.Models.Builders.Routing
                 Set(filter.Id, filter.Value);
             }
 
+            string[] keys = FilterKeys;
+            IFilter[] filterValues = Filters;
+
             // Insert default values for any filter key that was not specified.
             /* This should only be called once during this instance's lifespan */
-            for (int i = 0; i < FilterKeys.Length; i++)
+            for (int i = 0; i < keys.Length; i++)
             {
-                if (ContainsKey(FilterKeys[i]) == false)
+                if (ContainsKey(keys[i]) == false)
                 {
-                    Set(FilterKeys[i], Filters[i].Value);
+                    Set(keys[i], filterValues[i].Value);
                 }
             }
         }

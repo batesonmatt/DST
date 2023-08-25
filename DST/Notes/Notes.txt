@@ -1,14 +1,19 @@
 ﻿To Do:
 
-Utilities
-- Finish GetRiseTimeInfo implementation
-	RiseTime sort =>		"Rise: hh:mm:ss", "Rise: ## ago", "Never rise", "Circumpolar"
-							If GetRise() returns the previous rise, consider "Rise: -hh:mm:ss"
-							Determine by: timespan = riseDT - clientDT
+Reconsider implementing IDisposable in QueryOptions<T>
+
+Sort by rise time (Utilities.GetRiseTime and Utilities.GetRiseTimeInfo)
+- Instead of returning long from GetRiseTime, consider a custom class to return both long (Ticks) 
+  and enum value - VisibilityKind (RiseSet, Circumpolar, NeverRise, OutOfSeason, OutOfRange, Unknown)
+  Then I can revise the orderby clause to use multiple order by clauses based on the VisibilityKind.
+- Or, use a default string, like ""
+
+Utilities.GetRiseTimeInfo
+- Beautify the format strings.
+- Consider seo extension method for The TimeSpan value.
 
 - Update other methods to utilize the DsoObserverOptions class?
-- Revise the diagnostic debug code for simplicity.
-  Include the method names.
+- Revise the diagnostic debug code for simplicity (Assert only).
 
 Sort by Visibility
 - Consider removing.
@@ -64,14 +69,6 @@ BUG
   These options all use a client date time.
   Try to store that value in session (Consider new property in GeolocationModel)
   Keep loading this value from session until the user chooses a different filter/sort option.
-
-*** I won't be able to resolve this. ToList materializes the models so that the 
-*** NotMapped properties may be seen by the LINQ query.
-Performance
-- In Repository<T>.BuildQuery ... line 54
-- Do not call ToList()
-- This causes all objects and the included nav properties to be loaded into memory
-- I will likely need to redesign RouteDictionary, RouteBuilder, SearchRouteBuilder, and Filters
 
 -------------------------------------------------------------------------
 

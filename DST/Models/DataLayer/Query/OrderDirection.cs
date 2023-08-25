@@ -1,5 +1,6 @@
 ﻿namespace DST.Models.DataLayer.Query
 {
+    /* Consider revising */
     public static class OrderDirection
     {
         #region Properties

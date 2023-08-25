@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 //using Microsoft.EntityFrameworkCore;
 using DST.Models.DomainModels;
 using DST.Models.DataLayer;
@@ -87,16 +86,16 @@ namespace DST.Controllers
             // else:
             builder.SaveRouteSegments();
 
-            // Set initial options from the route segments.
-            SearchQueryOptions options = new()
-            {
-                // Include any initial navigation properties.
-                //IncludeAll = "",
+           // Set initial options from the route segments.
+           SearchQueryOptions options = new()
+           {
+               // Include any initial navigation properties.
+               //IncludeAll = "",
 
-                PageNumber = builder.CurrentRoute.PageNumber,
-                PageSize = builder.CurrentRoute.PageSize,
-                SortDirection = builder.CurrentRoute.SortDirection
-            };
+               PageNumber = builder.CurrentRoute.PageNumber,
+               PageSize = builder.CurrentRoute.PageSize,
+               SortDirection = builder.CurrentRoute.SortDirection
+           };
 
             options.SortFilter(builder, geoBuilder);
 
@@ -152,50 +151,52 @@ namespace DST.Controllers
         // Argument filterIds contains the posted values for ListFilter.Id.
         // Argument filters contains the posted values for ListFilter.Value in the order defined by filterIds.
         // Argument options contains the posted values for ToggleFilter.Id.
-        [HttpPost]
-        public RedirectToActionResult Filter(string[] filterIds, string[] filters, string[] options, bool clear = false)
-        {
-            SearchRouteBuilder builder = new(HttpContext.Session);
+        //[HttpPost]
+        //public RedirectToActionResult Filter(string[] filterIds, string[] filters, string[] options, bool clear = false)
+        //{
+        //    SearchRouteBuilder builder = new(HttpContext.Session);
 
-            if (clear)
-            {
-                builder.ClearFilterSegments();
-            }
-            else
-            {
-                List<IFilter> form = new();
+        //    if (clear)
+        //    {
+        //        builder.ClearFilterSegments();
+        //    }
+        //    else
+        //    {
+        //        List<IFilter> form = new();
 
-                if (filters?.Length <= filterIds?.Length)
-                {
-                    for (int i = 0; i < filters.Length; i++)
-                    {
-                        form.Add(new ListFilter(filterIds[i], filters[i]));
-                    }
-                }
+        //        if (filters?.Length <= filterIds?.Length)
+        //        {
+        //            for (int i = 0; i < filters.Length; i++)
+        //            {
+        //                form.Add(new ListFilter(filterIds[i], filters[i]));
+        //            }
+        //        }
 
-                if (options?.Length > 0)
-                {
-                    // The length of the array is variable since the input elements are posted only if they are checked.
-                    foreach (string id in options)
-                    {
-                        if (id is not null)
-                        {
-                            form.Add(new ToggleFilter(id, ToggleFilter.On));
-                        }
-                    }
-                }
+        //        if (options?.Length > 0)
+        //        {
+        //            // The length of the array is variable since the input elements are posted only if they are checked.
+        //            foreach (string id in options)
+        //            {
+        //                if (id is not null)
+        //                {
+        //                    form.Add(new ToggleFilter(id, ToggleFilter.On));
+        //                }
+        //            }
+        //        }
 
-                builder.LoadFilterSegments(form.ToArray());
-            }
+        //        builder.LoadFilterSegments(form.ToArray());
+        //    }
 
-            builder.SaveRouteSegments();
+        //    builder.SaveRouteSegments();
 
-            return RedirectToAction("List", builder.CurrentRoute);
-        }
+        //    return RedirectToAction("List", builder.CurrentRoute);
+        //}
 
         [HttpGet]
         public IActionResult Details(string cat, int id)
         {
+            /* Repository<T>.Get may return null. */
+            /* DsoModel dso = _data.DsoItems.Get(cat, id) ?? default or "NotFound" model */
             DsoModel dso = _data.DsoItems.Get(cat, id);
             
             return View(dso);
