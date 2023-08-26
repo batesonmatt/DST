@@ -13,7 +13,6 @@ namespace DST.Models.DataLayer.Query
         public static string Constellation { get; } = "constellation";
         public static string Distance { get; } = "distance";
         public static string Brightness { get; } = "brightness";
-        public static string Visibility { get; } = "visibility";
         public static string RiseTime { get; } = "rise-time";
 
         public static string Default { get; } = Id;
@@ -27,7 +26,6 @@ namespace DST.Models.DataLayer.Query
                 { "Constellation", Constellation },
                 { "Distance", Distance },
                 { "Brightness", Brightness },
-                { "Visibility", Visibility },
                 { "Rise Time", RiseTime }
             };
 

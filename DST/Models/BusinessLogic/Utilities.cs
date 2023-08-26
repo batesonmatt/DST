@@ -15,7 +15,7 @@ namespace DST.Models.BusinessLogic
     {
         /* Consider optional Algorithm algorithm = Algorithm.GMST */
         // Calculates and returns the type of trajectory for the specified DsoModel and GeolocationModel objects.
-        public static ITrajectory GetTrajectory(DsoModel model, GeolocationModel geolocation)
+        public static ITrajectory GetTrajectory(DsoModel dso, GeolocationModel geolocation)
         {
             IEquatorialCoordinate target;
             IGeographicCoordinate location;
@@ -28,7 +28,7 @@ namespace DST.Models.BusinessLogic
             {
                 // Get the equatorial coordinate of the DsoModel.
                 target = CoordinateFactory.CreateEquatorial(
-                    rightAscension: new Angle(TimeSpan.FromHours(model.RightAscension)), declination: new Angle(model.Declination));
+                    rightAscension: new Angle(TimeSpan.FromHours(dso.RightAscension)), declination: new Angle(dso.Declination));
 
                 // Get the client's geographic coordinate.
                 location = CoordinateFactory.CreateGeographic(
@@ -55,18 +55,18 @@ namespace DST.Models.BusinessLogic
         }
 
         // Returns the trajectory name for the specified DsoModel and GeolocationModel objects.
-        public static string GetTrajectoryName(DsoModel model, GeolocationModel geolocation)
+        public static string GetTrajectoryName(DsoModel dso, GeolocationModel geolocation)
         {
             string result = string.Empty;
             ITrajectory trajectory;
 
             try
             {
-                trajectory = GetTrajectory(model, geolocation);
+                trajectory = GetTrajectory(dso, geolocation);
 
                 if (trajectory is not null)
                 {
-                    result = GetTrajectory(model, geolocation).ToString();
+                    result = GetTrajectory(dso, geolocation).ToString();
                 }
             }
             catch
@@ -78,14 +78,14 @@ namespace DST.Models.BusinessLogic
         }
 
         // Returns the primary trajectory name for the specified DsoModel and GeolocationModel objects.
-        public static string GetPrimaryTrajectoryName(DsoModel model, GeolocationModel geolocation)
+        public static string GetPrimaryTrajectoryName(DsoModel dso, GeolocationModel geolocation)
         {
             string result;
             ITrajectory trajectory;
 
             try
             {
-                trajectory = GetTrajectory(model, geolocation);
+                trajectory = GetTrajectory(dso, geolocation);
 
                 result = trajectory switch
                 {
@@ -103,7 +103,7 @@ namespace DST.Models.BusinessLogic
         }
 
         // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation.
-        public static bool IsLocal(DsoModel model, GeolocationModel geolocation)
+        public static bool IsLocal(DsoModel dso, GeolocationModel geolocation)
         {
             bool result = true;
             ITrajectory trajectory;
@@ -114,14 +114,14 @@ namespace DST.Models.BusinessLogic
             try
             {
                 // The observer's latitude must be within the constellation's visible range.
-                if (geolocation.Latitude > model.Constellation.NorthernLatitude ||
-                    geolocation.Latitude < -model.Constellation.SouthernLatitude)
+                if (geolocation.Latitude > dso.Constellation.NorthernLatitude ||
+                    geolocation.Latitude < -dso.Constellation.SouthernLatitude)
                 {
                     return false;
                 }
 
                 // Get the object's type of trajectory relative to the observer's location.
-                trajectory = GetTrajectory(model, geolocation);
+                trajectory = GetTrajectory(dso, geolocation);
 
                 // The trajectory of the object must be visible above the observer's horizon at some point in time.
                 if (trajectory is null or NeverRiseTrajectory)
@@ -145,8 +145,8 @@ namespace DST.Models.BusinessLogic
                 clientMonth = clientDateTime.ToLocalTime().Month;
 
                 // The observer's current month must fall within the constellation's seasonal timespan.
-                if (clientMonth < model.Constellation.Season.StartMonth ||
-                    clientMonth > model.Constellation.Season.EndMonth)
+                if (clientMonth < dso.Constellation.Season.StartMonth ||
+                    clientMonth > dso.Constellation.Season.EndMonth)
                 {
                     return false;
                 }
@@ -161,7 +161,7 @@ namespace DST.Models.BusinessLogic
 
         // Returns a value indicating whether the specified deep-sky object is currently visible from the specified geolocation.
         // This does not consider the affects of light pollution.
-        public static bool IsVisible(DsoModel model, GeolocationModel geolocation)
+        public static bool IsVisible(DsoModel dso, GeolocationModel geolocation)
         {
             bool result;
             ITrajectory trajectory;
@@ -173,14 +173,14 @@ namespace DST.Models.BusinessLogic
             try
             {
                 // The observer's latitude must be within the constellation's visible range.
-                if (geolocation.Latitude > model.Constellation.NorthernLatitude ||
-                    geolocation.Latitude < -model.Constellation.SouthernLatitude)
+                if (geolocation.Latitude > dso.Constellation.NorthernLatitude ||
+                    geolocation.Latitude < -dso.Constellation.SouthernLatitude)
                 {
                     return false;
                 }
 
                 // Get the object's type of trajectory relative to the observer's location.
-                trajectory = GetTrajectory(model, geolocation);
+                trajectory = GetTrajectory(dso, geolocation);
 
                 // The trajectory of the object must be visible above the observer's horizon at some point in time.
                 if (trajectory is null or NeverRiseTrajectory)
@@ -204,8 +204,8 @@ namespace DST.Models.BusinessLogic
                 clientMonth = clientDateTime.ToLocalTime().Month;
 
                 // The observer's current month must fall within the constellation's seasonal timespan.
-                if (clientMonth < model.Constellation.Season.StartMonth ||
-                    clientMonth > model.Constellation.Season.EndMonth)
+                if (clientMonth < dso.Constellation.Season.StartMonth ||
+                    clientMonth > dso.Constellation.Season.EndMonth)
                 {
                     return false;
                 }
@@ -226,7 +226,7 @@ namespace DST.Models.BusinessLogic
 
         // Returns a value indicating whether the specified deep-sky object is currently rising from the observer's
         // horizon and is approaching it's apex altitude at the observer's meridian.
-        public static bool IsRising(DsoModel model, GeolocationModel geolocation)
+        public static bool IsRising(DsoModel dso, GeolocationModel geolocation)
         {
             bool result;
             ITrajectory trajectory;
@@ -238,14 +238,14 @@ namespace DST.Models.BusinessLogic
             try
             {
                 // The observer's latitude must be within the constellation's visible range.
-                if (geolocation.Latitude > model.Constellation.NorthernLatitude ||
-                    geolocation.Latitude < -model.Constellation.SouthernLatitude)
+                if (geolocation.Latitude > dso.Constellation.NorthernLatitude ||
+                    geolocation.Latitude < -dso.Constellation.SouthernLatitude)
                 {
                     return false;
                 }
 
                 // Get the object's type of trajectory relative to the observer's location.
-                trajectory = GetTrajectory(model, geolocation);
+                trajectory = GetTrajectory(dso, geolocation);
 
                 // The trajectory of the object must be able to rise above the observer's horizon at some point in time.
                 if (trajectory is null or not IRiseSetTrajectory)
@@ -263,8 +263,8 @@ namespace DST.Models.BusinessLogic
                 clientMonth = clientDateTime.ToLocalTime().Month;
 
                 // The observer's current month must fall within the constellation's seasonal timespan.
-                if (clientMonth < model.Constellation.Season.StartMonth ||
-                    clientMonth > model.Constellation.Season.EndMonth)
+                if (clientMonth < dso.Constellation.Season.StartMonth ||
+                    clientMonth > dso.Constellation.Season.EndMonth)
                 {
                     return false;
                 }
@@ -290,7 +290,7 @@ namespace DST.Models.BusinessLogic
             return result;
         }
 
-        public static long GetRiseTime(DsoModel model, GeolocationModel geolocation)
+        public static long GetRiseTime(DsoModel dso, GeolocationModel geolocation)
         {
             long result;
             ITrajectory trajectory;
@@ -305,14 +305,14 @@ namespace DST.Models.BusinessLogic
             try
             {
                 // The observer's latitude must be within the constellation's visible range.
-                if (geolocation.Latitude > model.Constellation.NorthernLatitude ||
-                    geolocation.Latitude < -model.Constellation.SouthernLatitude)
+                if (geolocation.Latitude > dso.Constellation.NorthernLatitude ||
+                    geolocation.Latitude < -dso.Constellation.SouthernLatitude)
                 {
                     return long.MaxValue;
                 }
 
                 // Get the object's type of trajectory relative to the observer's location.
-                trajectory = GetTrajectory(model, geolocation);
+                trajectory = GetTrajectory(dso, geolocation);
 
                 // The trajectory of the object must be able to rise above the observer's horizon at some point in time.
                 if (trajectory is null or not IRiseSetTrajectory)
@@ -330,8 +330,8 @@ namespace DST.Models.BusinessLogic
                 clientMonth = clientDateTime.ToLocalTime().Month;
 
                 // The observer's current month must fall within the constellation's seasonal timespan.
-                if (clientMonth < model.Constellation.Season.StartMonth ||
-                    clientMonth > model.Constellation.Season.EndMonth)
+                if (clientMonth < dso.Constellation.Season.StartMonth ||
+                    clientMonth > dso.Constellation.Season.EndMonth)
                 {
                     return long.MaxValue;
                 }
@@ -427,7 +427,7 @@ namespace DST.Models.BusinessLogic
                 // The rise time could not be calculated.
                 if (timeSpan == TimeSpan.MaxValue)
                 {
-                    return string.Empty;
+                    return "Rise time not available";
                 }
 
                 // Format the result.
@@ -458,7 +458,7 @@ namespace DST.Models.BusinessLogic
             }
             catch
             {
-                result = string.Empty;
+                result = "Rise time not available";
             }
 
             return result;

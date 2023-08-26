@@ -1,23 +1,5 @@
 ﻿To Do:
 
-Reconsider implementing IDisposable in QueryOptions<T>
-
-Sort by rise time (Utilities.GetRiseTime and Utilities.GetRiseTimeInfo)
-- Instead of returning long from GetRiseTime, consider a custom class to return both long (Ticks) 
-  and enum value - VisibilityKind (RiseSet, Circumpolar, NeverRise, OutOfSeason, OutOfRange, Unknown)
-  Then I can revise the orderby clause to use multiple order by clauses based on the VisibilityKind.
-- Or, use a default string, like ""
-
-Utilities.GetRiseTimeInfo
-- Beautify the format strings.
-- Consider seo extension method for The TimeSpan value.
-
-- Update other methods to utilize the DsoObserverOptions class?
-- Revise the diagnostic debug code for simplicity (Assert only).
-
-Sort by Visibility
-- Consider removing.
-
 DRY
 - Consider revising Utilities.IsVisible, Utilities.IsLocal, Utilities.IsRising for DRY principle.
 
@@ -31,7 +13,7 @@ Consider:
 - initializers for GeolocationModel.TimeZoneId and .UserTimeZoneId
 - initializers for SearchListViewModel properties
 
-Consider moding DST.Core.Resources to a new library.
+Consider moving DST.Core.Resources to a new library.
 - Add more resource definitions for the static strings used in the DST solution
 - Most strings that are displayed are also used for SEO (in the URL). 
    Don't worry too much about that now, just add the values to the default language resx file.
@@ -56,6 +38,8 @@ DST.Core.LocalHourAngleDateTime.HourAngleCycle
 - Consider renaming because it's usage doesn't necessarily refer to the LHA cycles, 
   but rather the previous/next target LHA.
   The previous/next target LHA may be on the same LHA cycle as the current LHA.
+
+Update VS
 
 -------------------------------------------------------------------------
 
@@ -84,8 +68,6 @@ BUG
 - Also add this to the Details page to link to Track page.
 
 - Consider expanding/collapsable controls for the filter/sort lists
-
-Update VS
 
 -------------------------------------------------------------------------
 

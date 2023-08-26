@@ -86,16 +86,16 @@ namespace DST.Controllers
             // else:
             builder.SaveRouteSegments();
 
-           // Set initial options from the route segments.
-           SearchQueryOptions options = new()
-           {
-               // Include any initial navigation properties.
-               //IncludeAll = "",
+            // Set initial options from the route segments.
+            SearchQueryOptions options = new()
+            {
+                // Include any initial navigation properties.
+                //IncludeAll = "",
 
-               PageNumber = builder.CurrentRoute.PageNumber,
-               PageSize = builder.CurrentRoute.PageSize,
-               SortDirection = builder.CurrentRoute.SortDirection
-           };
+                PageNumber = builder.CurrentRoute.PageNumber,
+                PageSize = builder.CurrentRoute.PageSize,
+                SortDirection = builder.CurrentRoute.SortDirection
+            };
 
             options.SortFilter(builder, geoBuilder);
 

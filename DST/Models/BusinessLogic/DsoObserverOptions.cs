@@ -4,8 +4,8 @@ namespace DST.Models.BusinessLogic
 {
     public class DsoObserverOptions
     {
-        public DsoModel Dso { get; set; } = null!;
-        public GeolocationModel Geolocation { get; set; } = null!;
+        public DsoModel Dso { get; } = null!;
+        public GeolocationModel Geolocation { get; } = null!;
 
         public DsoObserverOptions(DsoModel dso)
         {

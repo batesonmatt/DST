@@ -26,7 +26,6 @@ namespace DST.Models.Builders.Routing
         public bool IsSortByConstellation => _routes.SortField.EqualsIgnoreCase(Sort.Constellation);
         public bool IsSortByDistance => _routes.SortField.EqualsIgnoreCase(Sort.Distance);
         public bool IsSortByBrightness => _routes.SortField.EqualsIgnoreCase(Sort.Brightness);
-        public bool IsSortByVisibility => _routes.SortField.EqualsIgnoreCase(Sort.Visibility);
         public bool IsSortByRiseTime => _routes.SortField.EqualsIgnoreCase(Sort.RiseTime);
 
         #endregion
