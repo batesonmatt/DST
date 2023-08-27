@@ -7,26 +7,26 @@ namespace DST.Models.DataLayer.Query
     {
         #region Properties
 
-        public static string Id { get; } = "id";
-        public static string Name { get; } = "name";
-        public static string Type { get; } = "type";
-        public static string Constellation { get; } = "constellation";
-        public static string Distance { get; } = "distance";
-        public static string Brightness { get; } = "brightness";
-        public static string RiseTime { get; } = "rise-time";
+        public static string Id { get; } = "Id";
+        public static string Name { get; } = "Name";
+        public static string Type { get; } = "Type";
+        public static string Constellation { get; } = "Constellation";
+        public static string Distance { get; } = "Distance";
+        public static string Brightness { get; } = "Brightness";
+        public static string RiseTime { get; } = "Rise Time";
 
         public static string Default { get; } = Id;
 
-        public static Dictionary<string, string> GetFields()
-            => new()
+        public static string[] GetFields() 
+            => new[]
             {
-                { "Id", Id },
-                { "Name", Name },
-                { "Type", Type },
-                { "Constellation", Constellation },
-                { "Distance", Distance },
-                { "Brightness", Brightness },
-                { "Rise Time", RiseTime }
+                Id,
+                Name,
+                Type,
+                Constellation,
+                Distance,
+                Brightness,
+                RiseTime
             };
 
         #endregion

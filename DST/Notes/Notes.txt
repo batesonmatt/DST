@@ -1,14 +1,5 @@
 ﻿To Do:
 
-DRY
-- Consider revising Utilities.IsVisible, Utilities.IsLocal, Utilities.IsRising for DRY principle.
-
-Filters
-- Local, Visibility, and Rising are all mutually exclusive (Toggle 1 on at a time).
-- If TrajectoryFilter is NeverRise, disable Local and Visibility
-- If TrajectoryFilter.IsDefault() is false, disable Rising
-- If SeasonFilter.IsDefault() is false, disable Local, Visibility, and Rising filters
-
 Consider:
 - initializers for GeolocationModel.TimeZoneId and .UserTimeZoneId
 - initializers for SearchListViewModel properties

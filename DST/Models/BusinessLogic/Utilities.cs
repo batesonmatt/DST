@@ -466,11 +466,11 @@ namespace DST.Models.BusinessLogic
 
         public static Func<DsoObserverOptions, string> GetInfoFunc(string sortField)
         {
-            if (sortField.EqualsIgnoreCase(Sort.Type)) return GetTypeInfo;
-            if (sortField.EqualsIgnoreCase(Sort.Constellation)) return GetConstellationInfo;
-            if (sortField.EqualsIgnoreCase(Sort.Distance)) return GetDistanceInfo;
-            if (sortField.EqualsIgnoreCase(Sort.Brightness)) return GetBrightnessInfo;
-            if (sortField.EqualsIgnoreCase(Sort.RiseTime)) return GetRiseTimeInfo;
+            if (sortField.EqualsSeo(Sort.Type)) return GetTypeInfo;
+            if (sortField.EqualsSeo(Sort.Constellation)) return GetConstellationInfo;
+            if (sortField.EqualsSeo(Sort.Distance)) return GetDistanceInfo;
+            if (sortField.EqualsSeo(Sort.Brightness)) return GetBrightnessInfo;
+            if (sortField.EqualsSeo(Sort.RiseTime)) return GetRiseTimeInfo;
             return x => string.Empty;
         }
     }

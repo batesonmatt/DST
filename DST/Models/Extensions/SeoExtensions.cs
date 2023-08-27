@@ -63,6 +63,23 @@ namespace DST.Models.Extensions
             return a?.ToLowerInvariant() == b?.ToLowerInvariant();
         }
 
+        public static bool EqualsSeo(this string a, string b)
+        {
+            return a.ToKebabCase().EqualsExact(b.ToKebabCase());
+        }
+
+        public static string Active(this string a, string b)
+        {
+            if (a.EqualsSeo(b))
+            {
+                return "active";
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
         public static int ToInt(this string value)
         {
             return int.TryParse(value, out int result) ? result : default;

@@ -20,13 +20,13 @@ namespace DST.Models.Builders.Routing
         public bool IsFilterByRising => !_routes.RisingFilter.IsDefault();
         public bool IsFilterByHasName => !_routes.HasNameFilter.IsDefault();
 
-        public bool IsSortById => _routes.SortField.EqualsIgnoreCase(Sort.Id);
-        public bool IsSortByName => _routes.SortField.EqualsIgnoreCase(Sort.Name);
-        public bool IsSortByType => _routes.SortField.EqualsIgnoreCase(Sort.Type);
-        public bool IsSortByConstellation => _routes.SortField.EqualsIgnoreCase(Sort.Constellation);
-        public bool IsSortByDistance => _routes.SortField.EqualsIgnoreCase(Sort.Distance);
-        public bool IsSortByBrightness => _routes.SortField.EqualsIgnoreCase(Sort.Brightness);
-        public bool IsSortByRiseTime => _routes.SortField.EqualsIgnoreCase(Sort.RiseTime);
+        public bool IsSortById => _routes.SortField.EqualsSeo(Sort.Id);
+        public bool IsSortByName => _routes.SortField.EqualsSeo(Sort.Name);
+        public bool IsSortByType => _routes.SortField.EqualsSeo(Sort.Type);
+        public bool IsSortByConstellation => _routes.SortField.EqualsSeo(Sort.Constellation);
+        public bool IsSortByDistance => _routes.SortField.EqualsSeo(Sort.Distance);
+        public bool IsSortByBrightness => _routes.SortField.EqualsSeo(Sort.Brightness);
+        public bool IsSortByRiseTime => _routes.SortField.EqualsSeo(Sort.RiseTime);
 
         #endregion
 

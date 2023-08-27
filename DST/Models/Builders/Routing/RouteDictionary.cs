@@ -156,7 +156,8 @@ namespace DST.Models.Builders.Routing
         {
             SortField = fieldName;
 
-            if (current.SortField.EqualsIgnoreCase(fieldName) && current.SortDirection == OrderDirection.Ascending)
+            /* Might eventually need to use EqualsSeo on SortDirection */
+            if (current.SortField.EqualsSeo(fieldName) && current.SortDirection == OrderDirection.Ascending)
             {
                 SortDirection = OrderDirection.Descending;
             }
