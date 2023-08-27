@@ -17,9 +17,9 @@ namespace DST.Models.DomainModels
             Longitude = 0.0
         };
 
-        public string TimeZoneId { get; set; }
+        public string TimeZoneId { get; set; } = string.Empty;
 
-        public string UserTimeZoneId { get; set; }
+        public string UserTimeZoneId { get; set; } = string.Empty;
 
         /// <summary>The latitudinal component of a geographic coordinate, as represented in decimal degrees.</summary>
         /// <remarks>The value for this property will be rounded to 7 decimal places.</remarks>

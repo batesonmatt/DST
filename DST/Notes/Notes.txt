@@ -1,9 +1,5 @@
 ﻿To Do:
 
-Consider:
-- initializers for GeolocationModel.TimeZoneId and .UserTimeZoneId
-- initializers for SearchListViewModel properties
-
 Consider moving DST.Core.Resources to a new library.
 - Add more resource definitions for the static strings used in the DST solution
 - Most strings that are displayed are also used for SEO (in the URL). 
@@ -15,6 +11,8 @@ Consider adding custom Repositories in SearchUnitOfWork for the TimeZones and Tr
 
 Trajectory
 - Initialize SearchListViewModel.Trajectories in the SearchController
+
+--------------------------------------------------------------------------
 
 Startup
 - Add error page

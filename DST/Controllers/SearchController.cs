@@ -42,10 +42,6 @@ namespace DST.Controllers
         [HttpPost]
         public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchDTO values, bool reset = false)
         {
-            // Replace nulls with an empty string.
-            geolocation.TimeZoneId ??= string.Empty;
-            geolocation.UserTimeZoneId ??= string.Empty;
-
             if (reset)
             {
                 // Reset geolocation and timezone to defaults.
