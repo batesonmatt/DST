@@ -50,7 +50,7 @@ namespace DST.Core.Coordinate
                     }
             }
 
-            return string.Format(Resources.AngleStringFormats.CoordinateFormatWithDelimiter, longitude, latitude);
+            return string.Format(DST.Resources.AngleFormats.CoordinateFormatWithDelimiter, longitude, latitude);
         }
 
         // Returns the nutated components of this EclipticCoordinate, for the specified date and time.

@@ -49,7 +49,7 @@ namespace DST.Core.Coordinate
                     }
             }
 
-            return string.Format(Resources.AngleStringFormats.CoordinateFormatWithDelimiter, altitude, azimuth);
+            return string.Format(DST.Resources.AngleFormats.CoordinateFormatWithDelimiter, altitude, azimuth);
         }
     }
 }

@@ -39,19 +39,19 @@ namespace DST.Core.Trajectory
         // Returns the string-representation of this CircumpolarOffsetTrajectory instance.
         public override string ToString()
         {
-            return Resources.DisplayText.TrajectoryCircumpolarOffset;
+            return GetSecondaryName();
         }
 
         // Returns the primary name for this CircumpolarOffsetTrajectory instance.
         public string GetPrimaryName()
         {
-            return Resources.DisplayText.TrajectoryCircumpolar;
+            return DST.Resources.DisplayText.TrajectoryCircumpolar;
         }
 
         // Returns the secondary name for this CircumpolarOffsetTrajectory instance.
         public string GetSecondaryName()
         {
-            return ToString();
+            return DST.Resources.DisplayText.TrajectoryCircumpolarOffset;
         }
     }
 }

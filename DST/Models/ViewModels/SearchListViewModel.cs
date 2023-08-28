@@ -30,9 +30,9 @@ namespace DST.Models.ViewModels
         public IEnumerable<string> Trajectories { get; set; }
             = new List<string>()
         {
-            Core.Resources.DisplayText.TrajectoryCircumpolar,
-            Core.Resources.DisplayText.TrajectoryNeverRise,
-            Core.Resources.DisplayText.TrajectoryRiseAndSet
+            DST.Resources.DisplayText.TrajectoryCircumpolar,
+            DST.Resources.DisplayText.TrajectoryNeverRise,
+            DST.Resources.DisplayText.TrajectoryRiseAndSet
         };
 
         public Func<DsoObserverOptions, string> GetSortTag { get; set; }

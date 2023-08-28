@@ -20,7 +20,7 @@ namespace DST.Core.Trajectory
         // Returns the string-representation of this NeverRiseTrajectory instance.
         public override string ToString()
         {
-            return Resources.DisplayText.TrajectoryNeverRise;
+            return DST.Resources.DisplayText.TrajectoryNeverRise;
         }
     }
 }

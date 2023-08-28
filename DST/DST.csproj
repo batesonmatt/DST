@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DST.Core\DST.Core.csproj" />
+    <ProjectReference Include="..\DST.Resources\DST.Resources.csproj" />
   </ItemGroup>
 
 </Project>

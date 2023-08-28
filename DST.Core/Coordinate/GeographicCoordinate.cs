@@ -49,7 +49,7 @@ namespace DST.Core.Coordinate
                     }
             }
 
-            return string.Format(Resources.AngleStringFormats.CoordinateFormatNoDelimiter, latitude, longitude);
+            return string.Format(DST.Resources.AngleFormats.CoordinateFormatNoDelimiter, latitude, longitude);
         }
 
         // Returns true when this GeographicCoordinate's latitudinal component is either -90° or 90°; false otherwise.

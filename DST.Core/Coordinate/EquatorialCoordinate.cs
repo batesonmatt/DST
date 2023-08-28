@@ -50,7 +50,7 @@ namespace DST.Core.Coordinate
                     }
             }
 
-            return string.Format(Resources.AngleStringFormats.CoordinateFormatWithDelimiter, rightAscension, declination);
+            return string.Format(DST.Resources.AngleFormats.CoordinateFormatWithDelimiter, rightAscension, declination);
         }
 
         // Returns the intermediate right ascension of this EquatorialCoordinate, adjusted by the Celestial Intermediate Origin (CIO).

@@ -7,4 +7,8 @@
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DST.Resources\DST.Resources.csproj" />
+  </ItemGroup>
+
 </Project>

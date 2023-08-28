@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DST.Models.DataLayer.Query
+﻿namespace DST.Models.DataLayer.Query
 {
     /* Consider revising */
     public static class Sort

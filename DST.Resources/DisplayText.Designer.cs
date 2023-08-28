@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DST.Core.Resources {
+namespace DST.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace DST.Core.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DST.Core.Resources.DisplayText", typeof(DisplayText).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DST.Resources.DisplayText", typeof(DisplayText).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
