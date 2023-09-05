@@ -99,10 +99,7 @@ namespace DST.Controllers
             {
                 Geolocation = geoBuilder.CurrentGeolocation,
 
-                TimeZoneItems = TimeZoneInfo.GetSystemTimeZones()
-                    .OrderByDescending(t => t.Id == GeolocationModel.DefaultId)
-                    .ThenBy(t => t.BaseUtcOffset.TotalHours)
-                    .Select(t => new TimeZoneItem(t.Id, t.DisplayName)),
+                TimeZoneItems = Utilities.GetTimeZoneItems(),
 
                 DsoItems = _data.DsoItems.List(options),
 
@@ -123,7 +120,7 @@ namespace DST.Controllers
                     OrderBy = obj => obj.Id
                 }),
 
-                /* Add initializer for Trajectories here */
+                Trajectories = Utilities.GetTrajectoryNames(),
 
                 GetSortTag = Utilities.GetInfoFunc(values.SortField),
 

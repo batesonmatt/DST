@@ -7,7 +7,7 @@ namespace DST.Models.DomainModels
     {
         #region Properties
 
-        public static string DefaultId { get; } = TimeZoneInfo.Utc.Id;
+        public static string DefaultId => TimeZoneInfo.Utc.Id;
 
         public static GeolocationModel Default => new()
         {

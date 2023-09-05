@@ -11,7 +11,7 @@ namespace DST.Models.DataLayer.Query
 
         public override string Value => _value;
 
-        public static string All { get; } = "all";
+        public static string All => "all";
 
         #endregion
 

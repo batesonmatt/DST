@@ -1,14 +1,13 @@
 ﻿namespace DST.Models.DataLayer.Query
 {
-    /* Consider revising */
     public static class OrderDirection
     {
         #region Properties
 
-        public static string Ascending { get; } = "asc";
-        public static string Descending { get; } = "desc";
+        public static string Ascending => "asc";
+        public static string Descending => "desc";
 
-        public static string Default { get; } = Ascending;
+        public static string Default => Ascending;
 
         #endregion
     }

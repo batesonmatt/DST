@@ -153,6 +153,74 @@
     <value>Set</value>
     <comment>The setting altitude of a tracked object at an observer's horizon</comment>
   </data>
+  <data name="ApparentMagnitudeDefault" xml:space="preserve">
+    <value>Apparent Magnitude: none</value>
+    <comment>The default text for a particular deep-sky object's apparent magnitude.</comment>
+  </data>
+  <data name="ApparentMagnitudeFormatDecimal" xml:space="preserve">
+    <value>Apparent Magnitude: {0:0.0#}</value>
+    <comment>Formats the apparent magnitude of a particular deep-sky object as a decimal value, up to two decimal places, or a single zero decimal digit if there is no fractional part.</comment>
+  </data>
+  <data name="DistanceFormatDecimalKly" xml:space="preserve">
+    <value>{0:n} kly</value>
+    <comment>Formats the distance of a deep-sky object as a floating-point value to two decimal places, with group separators, measured in kilolight-years.</comment>
+  </data>
+  <data name="RiseTimeDefault" xml:space="preserve">
+    <value>Rise time not available</value>
+    <comment>The default text for a particular deep-sky object's rising time.</comment>
+  </data>
+  <data name="RiseTimeFormatHoursFuture" xml:space="preserve">
+    <value>{0:F0} hr</value>
+    <comment>Formats the future rising time for a particular deep-sky object measured in hours, rounded to the nearest whole hour.</comment>
+  </data>
+  <data name="RiseTimeFormatHoursPast" xml:space="preserve">
+    <value>{0:F0} hr ago</value>
+    <comment>Formats the past rising time for a particular deep-sky object measured in hours, rounded to the nearest whole hour.</comment>
+  </data>
+  <data name="RiseTimeFormatMinutesFuture" xml:space="preserve">
+    <value>{0} min</value>
+    <comment>Formats the future rising time for a particular deep-sky object measured in integral minutes.</comment>
+  </data>
+  <data name="RiseTimeFormatMinutesPast" xml:space="preserve">
+    <value>{0} min ago</value>
+    <comment>Formats the past rising time for a particular deep-sky object measured in integral minutes.</comment>
+  </data>
+  <data name="RiseTimeFormatSecondsFuture" xml:space="preserve">
+    <value>{0} sec</value>
+    <comment>Formats the future rising time for a particular deep-sky object measured in integral seconds.</comment>
+  </data>
+  <data name="RiseTimeFormatSecondsPast" xml:space="preserve">
+    <value>{0} sec ago</value>
+    <comment>Formats the past rising time for a particular deep-sky object measured in integral seconds.</comment>
+  </data>
+  <data name="SortFieldBrightness" xml:space="preserve">
+    <value>Brightness</value>
+    <comment>The display text for sorting by brightness.</comment>
+  </data>
+  <data name="SortFieldConstellation" xml:space="preserve">
+    <value>Constellation</value>
+    <comment>The display text for sorting by constellation.</comment>
+  </data>
+  <data name="SortFieldDistance" xml:space="preserve">
+    <value>Distance</value>
+    <comment>The display text for sorting by distance.</comment>
+  </data>
+  <data name="SortFieldId" xml:space="preserve">
+    <value>Id</value>
+    <comment>The display text for sorting by Id.</comment>
+  </data>
+  <data name="SortFieldName" xml:space="preserve">
+    <value>Name</value>
+    <comment>The display text for sorting by name.</comment>
+  </data>
+  <data name="SortFieldRiseTime" xml:space="preserve">
+    <value>Rise Time</value>
+    <comment>The display text for sorting by rise time.</comment>
+  </data>
+  <data name="SortFieldType" xml:space="preserve">
+    <value>Type</value>
+    <comment>The display text for sorting by type.</comment>
+  </data>
   <data name="TimeScaleSidereal" xml:space="preserve">
     <value>Sidereal Time</value>
     <comment>A 1:1.0027379093507951 timescale ratio of mean solar time</comment>

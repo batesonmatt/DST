@@ -1,19 +1,5 @@
 ﻿To Do:
 
-Add DST.Resources class library
-- Migrate all existing resource definitions to this project.                    ... DONE
-- Add resource definitions for the static strings used in the DST solution
-- Add static methods somewhere to retrieve multiple definitions in a list, 
-  such as GetTrajectoryNames() => IEnumerable<string>
-
-Consider adding custom Repositories in SearchUnitOfWork for the TimeZones and Trajectories.
-- Need to have queries to retrieve the lists of TimeZones, Trajectories, and Sort fields.
-
-Trajectory
-- Initialize SearchListViewModel.Trajectories in the SearchController
-
---------------------------------------------------------------------------
-
 Startup
 - Add error page
 - Test error page by removing an Include statement from SearchQueryOptions
@@ -126,14 +112,25 @@ ___________________________________________________________
 
 Ideas:
 
-For the home page, consider using a random quote of the day pulled from the database.
-- These will be quotes from scifi books.
-- Consider a login page (to login as admin) to CRUD these in the Quotes table.
-- The login page must not be linked on the site.
+For the home page, consider selecting a random object and display its info
+Or perhaps a random object, and a random track or vector calculation, etc.
 
 ___________________________________________________________
 
-Add admin pages so that I may keep the Dso items up to date
+Localization
+- Add resource strings for the views' harcoded text.
+- Once all static strings and display text have definitions in DST.Resources, 
+  we need to set up the localizer service/support.
+- Important:
+    For display strings that are also used in route segments, be sure to send the default language value
+    to the route from the view.
+    Example: See the Sort.cs string properties. These are displayed, but also sent to the route dictionary.
+    I can set up a test resource file with definitions for these in another language, and confirm
+    that only the values from the default resource (english) are sent to the route.
+- https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization/
+- https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization/make-content-localizable?view=aspnetcore-7.0
+
+? Add admin pages so that I may keep the Dso items up to date
 
 Enable error reporting via GoDaddy email
 - Add code to Services namespace

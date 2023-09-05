@@ -10,9 +10,9 @@ namespace DST.Models.DataLayer.Query
 
         public override string Value => _value;
 
-        public static string On { get; } = _on;
+        public static string On => _on;
 
-        public static string Off { get; } = _off;
+        public static string Off => _off;
 
         #endregion
 

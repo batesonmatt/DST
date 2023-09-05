@@ -142,6 +142,159 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apparent Magnitude: none.
+        /// </summary>
+        public static string ApparentMagnitudeDefault {
+            get {
+                return ResourceManager.GetString("ApparentMagnitudeDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apparent Magnitude: {0:0.0#}.
+        /// </summary>
+        public static string ApparentMagnitudeFormatDecimal {
+            get {
+                return ResourceManager.GetString("ApparentMagnitudeFormatDecimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0:n} kly.
+        /// </summary>
+        public static string DistanceFormatDecimalKly {
+            get {
+                return ResourceManager.GetString("DistanceFormatDecimalKly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rise time not available.
+        /// </summary>
+        public static string RiseTimeDefault {
+            get {
+                return ResourceManager.GetString("RiseTimeDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0:F0} hr.
+        /// </summary>
+        public static string RiseTimeFormatHoursFuture {
+            get {
+                return ResourceManager.GetString("RiseTimeFormatHoursFuture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0:F0} hr ago.
+        /// </summary>
+        public static string RiseTimeFormatHoursPast {
+            get {
+                return ResourceManager.GetString("RiseTimeFormatHoursPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} min.
+        /// </summary>
+        public static string RiseTimeFormatMinutesFuture {
+            get {
+                return ResourceManager.GetString("RiseTimeFormatMinutesFuture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} min ago.
+        /// </summary>
+        public static string RiseTimeFormatMinutesPast {
+            get {
+                return ResourceManager.GetString("RiseTimeFormatMinutesPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} sec.
+        /// </summary>
+        public static string RiseTimeFormatSecondsFuture {
+            get {
+                return ResourceManager.GetString("RiseTimeFormatSecondsFuture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} sec ago.
+        /// </summary>
+        public static string RiseTimeFormatSecondsPast {
+            get {
+                return ResourceManager.GetString("RiseTimeFormatSecondsPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brightness.
+        /// </summary>
+        public static string SortFieldBrightness {
+            get {
+                return ResourceManager.GetString("SortFieldBrightness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constellation.
+        /// </summary>
+        public static string SortFieldConstellation {
+            get {
+                return ResourceManager.GetString("SortFieldConstellation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance.
+        /// </summary>
+        public static string SortFieldDistance {
+            get {
+                return ResourceManager.GetString("SortFieldDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id.
+        /// </summary>
+        public static string SortFieldId {
+            get {
+                return ResourceManager.GetString("SortFieldId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string SortFieldName {
+            get {
+                return ResourceManager.GetString("SortFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rise Time.
+        /// </summary>
+        public static string SortFieldRiseTime {
+            get {
+                return ResourceManager.GetString("SortFieldRiseTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string SortFieldType {
+            get {
+                return ResourceManager.GetString("SortFieldType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sidereal Time.
         /// </summary>
         public static string TimeScaleSidereal {

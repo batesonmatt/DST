@@ -24,16 +24,7 @@ namespace DST.Models.ViewModels
         public IEnumerable<CatalogModel> Catalogs { get; set; }
         public IEnumerable<ConstellationModel> Constellations { get; set; }
         public IEnumerable<SeasonModel> Seasons { get; set; }
-
-        /* Eventually remove the initializer list */
-        /* Use nameof(SearchDTO.Trajectory) in the view like the other filter lists. */
         public IEnumerable<string> Trajectories { get; set; }
-            = new List<string>()
-        {
-            DST.Resources.DisplayText.TrajectoryCircumpolar,
-            DST.Resources.DisplayText.TrajectoryNeverRise,
-            DST.Resources.DisplayText.TrajectoryRiseAndSet
-        };
 
         public Func<DsoObserverOptions, string> GetSortTag { get; set; }
 

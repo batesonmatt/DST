@@ -8,6 +8,8 @@ using DST.Core.Trajectory;
 using System;
 using DST.Models.DataLayer.Query;
 using DST.Models.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DST.Models.BusinessLogic
 {
@@ -100,6 +102,26 @@ namespace DST.Models.BusinessLogic
             }
 
             return result;
+        }
+
+        // Returns all the displayable Trajectory names.
+        public static IEnumerable<string> GetTrajectoryNames()
+        {
+            return new string[]
+            {
+                Resources.DisplayText.TrajectoryCircumpolar,
+                Resources.DisplayText.TrajectoryNeverRise,
+                Resources.DisplayText.TrajectoryRiseAndSet
+            };
+        }
+
+        // Returns all the displayable time zones.
+        public static IEnumerable<TimeZoneItem> GetTimeZoneItems()
+        {
+            return TimeZoneInfo.GetSystemTimeZones()
+                .OrderByDescending(t => t.Id == GeolocationModel.DefaultId)
+                .ThenBy(t => t.BaseUtcOffset.TotalHours)
+                .Select(t => new TimeZoneItem(t.Id, t.DisplayName));
         }
 
         // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation.
@@ -387,7 +409,7 @@ namespace DST.Models.BusinessLogic
                 return string.Empty;
             }
 
-            return string.Format("{0:0.0#} kly", options.Dso.Distance);
+            return string.Format(Resources.DisplayText.DistanceFormatDecimalKly, options.Dso.Distance);
         }
 
         public static string GetBrightnessInfo(DsoObserverOptions options)
@@ -399,8 +421,8 @@ namespace DST.Models.BusinessLogic
 
             return options.Dso.Magnitude switch
             {
-                null => "Apparent Magnitude: none",
-                _ => string.Format("Apparent Magnitude: {0:0.0#}", options.Dso.Magnitude)
+                null => Resources.DisplayText.ApparentMagnitudeDefault,
+                _ => string.Format(Resources.DisplayText.ApparentMagnitudeFormatDecimal, options.Dso.Magnitude)
             };
         }
 
@@ -427,38 +449,38 @@ namespace DST.Models.BusinessLogic
                 // The rise time could not be calculated.
                 if (timeSpan == TimeSpan.MaxValue)
                 {
-                    return "Rise time not available";
+                    return Resources.DisplayText.RiseTimeDefault;
                 }
 
                 // Format the result.
                 if (timeSpan.Days > 0 || timeSpan.Hours > 0)
                 {
-                    result = string.Format("{0:F0} hr", timeSpan.TotalHours);
+                    result = string.Format(Resources.DisplayText.RiseTimeFormatHoursFuture, timeSpan.TotalHours);
                 }
                 else if (timeSpan.Minutes > 0)
                 {
-                    result = string.Format("{0} min", timeSpan.Minutes);
+                    result = string.Format(Resources.DisplayText.RiseTimeFormatMinutesFuture, timeSpan.Minutes);
                 }
                 else if (timeSpan.Ticks >= 0)
                 {
-                    result = string.Format("{0} sec", timeSpan.Seconds);
+                    result = string.Format(Resources.DisplayText.RiseTimeFormatSecondsFuture, timeSpan.Seconds);
                 }
                 else if (timeSpan.Days < 0 || timeSpan.Hours < 0)
                 {
-                    result = string.Format("{0:F0} hr ago", timeSpan.Duration().TotalHours);
+                    result = string.Format(Resources.DisplayText.RiseTimeFormatHoursPast, timeSpan.Duration().TotalHours);
                 }
                 else if (timeSpan.Minutes < 0)
                 {
-                    result = string.Format("{0} min ago", timeSpan.Duration().Minutes);
+                    result = string.Format(Resources.DisplayText.RiseTimeFormatMinutesPast, timeSpan.Duration().Minutes);
                 }
                 else
                 {
-                    result = string.Format("{0} sec ago", timeSpan.Duration().Seconds);
+                    result = string.Format(Resources.DisplayText.RiseTimeFormatSecondsPast, timeSpan.Duration().Seconds);
                 }
             }
             catch
             {
-                result = "Rise time not available";
+                result = Resources.DisplayText.RiseTimeDefault;
             }
 
             return result;

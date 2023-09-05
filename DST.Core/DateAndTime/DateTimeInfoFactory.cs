@@ -3,7 +3,7 @@
     public class DateTimeInfoFactory
     {
         // Gets the default IDateTimeInfo object, which uses the UTC time zone.
-        public static IDateTimeInfo Default { get; } = new DateTimeInfo(TimeZoneInfo.Utc);
+        public static IDateTimeInfo Default => new DateTimeInfo(TimeZoneInfo.Utc);
 
         // Returns a new IDateTimeInfo object given the specified TimeZoneInfo.
         public static IDateTimeInfo Create(TimeZoneInfo timeZoneInfo)
