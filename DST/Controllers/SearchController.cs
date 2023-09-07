@@ -8,8 +8,6 @@ using DST.Models.Builders.Routing;
 using DST.Models.DataLayer.Query;
 using DST.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Linq;
 using DST.Models.Builders;
 using DST.Models.BusinessLogic;
 
@@ -76,7 +74,7 @@ namespace DST.Controllers
 
             // Get a new GridBuilder object, load route segments, and store in the current session.
             SearchRouteBuilder builder = new(HttpContext.Session, values);
-            
+
             // if clear filters:
             // builder.ClearFilterSegments();
             // else:

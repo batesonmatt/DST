@@ -1,14 +1,5 @@
 ﻿To Do:
 
-Startup
-- Add error page
-- Test error page by removing an Include statement from SearchQueryOptions
-
-- Revise Startup env.IsDevelopment() condition to point to and test the error page.
-
-Implement exception handling
-- All process-heavy methods, such as SearchQueryOptions.SortFilter(...)
-
 DST.Core.LocalHourAngleDateTime.HourAngleCycle
 - Consider renaming because it's usage doesn't necessarily refer to the LHA cycles, 
   but rather the previous/next target LHA.
@@ -115,6 +106,8 @@ Ideas:
 For the home page, consider selecting a random object and display its info
 Or perhaps a random object, and a random track or vector calculation, etc.
 
+? Add admin pages so that I may keep the Dso items up to date
+
 ___________________________________________________________
 
 Localization
@@ -130,8 +123,16 @@ Localization
 - https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization/
 - https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization/make-content-localizable?view=aspnetcore-7.0
 
-? Add admin pages so that I may keep the Dso items up to date
+----------------------------------------------------------
+
+Exception handling and reporting
 
 Enable error reporting via GoDaddy email
 - Add code to Services namespace
 - Consider moving Services namespace up one level (out of Models)
+
+https://stackoverflow.com/questions/40614184/handling-exception-in-asp-net-core
+https://stackoverflow.com/questions/56772155/asp-net-core-how-to-handle-error-pages-in-area
+https://learn.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-7.0
+https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-7.0&viewFallbackFrom=aspnetcore-2.2#exception-handler-lambda
+https://blog.kloud.com.au/2016/03/23/aspnet-core-tips-and-tricks-global-exception-handling/

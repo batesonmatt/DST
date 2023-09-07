@@ -1,10 +1,14 @@
 using DST.Models.DataLayer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Net;
+using System.Threading.Tasks;
+//using static System.Net.Mime.MediaTypeNames;
 
 namespace DST
 {
@@ -51,12 +55,49 @@ namespace DST
         {
             if (env.IsDevelopment())
             {
+#if DEBUG
                 app.UseDeveloperExceptionPage();
+#else
+                app.UseExceptionHandler(
+                    builder => builder.Run(async context => await Task.Run(() =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+
+                        if (error != null)
+                        {
+                            context.Response.Redirect("/error");
+                        }
+                    })));
+#endif
             }
             else
             {
-                /* Add a dedicated error page for production. */
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler(
+                    builder => builder.Run(async context => await Task.Run(() =>
+                    {
+                        //context.Response.ContentType = Text.Html;
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+
+                        if (error != null)
+                        {
+                            //if (error.Path.Contains("/home/", System.StringComparison.InvariantCultureIgnoreCase))
+                            //{
+                            //    context.Response.Redirect("/home/error");
+                            //}
+                            //else if (error.Path.Contains("/search/", System.StringComparison.InvariantCultureIgnoreCase))
+                            //{
+                            //    context.Response.Redirect("/search/error");
+                            //}
+                            //else
+                            //{
+                            //    context.Response.Redirect("/error");
+                            //}
+
+                            context.Response.Redirect("/error");
+                        }
+                    })));
 
                 /* The default HSTS value is 30 days. 
                  * You may want to change this for production scenarios.
