@@ -1,24 +1,6 @@
 ﻿To Do:
 
-DST.Core.LocalHourAngleDateTime.HourAngleCycle
-- Consider renaming because it's usage doesn't necessarily refer to the LHA cycles, 
-  but rather the previous/next target LHA.
-  The previous/next target LHA may be on the same LHA cycle as the current LHA.
-
 Update VS
-
--------------------------------------------------------------------------
-
-BUG
-- For Local, Visible, and Rising filters. And sort by Rise Time.
-- The number of results (DsoItems) is dependent on the calculation.
-- These options cause the calculation to be re-executed during paging,
-  which could cause the result count to change between pages.
-- I might not be able to do anything about this.
-- Possible solution:
-  These options all use a client date time.
-  Try to store that value in session (Consider new property in GeolocationModel)
-  Keep loading this value from session until the user chooses a different filter/sort option.
 
 -------------------------------------------------------------------------
 
@@ -46,67 +28,36 @@ BUG
 - Takes Category, Id, and Geolocation (?) values for routing.
 - Also add this to the Details page to link to Track page.
 
+-------------------------------------------------------------------------
+
+Redesign Shared views
+
+Redesign Home and About views
+
+Redesign List view
+- Add sort direction controls (Ascending and Descending)
 - Consider expanding/collapsable controls for the filter/sort lists
+- Consider using Bootstrap Cards for the list items
+    https://getbootstrap.com/docs/5.0/components/card/#grid-cards
+    https://getbootstrap.com/docs/5.0/components/list-group/#custom-content
+- Consider a search bar control
+- For the navbar, redesign styles for navbar-toggler and navbar-dark. (?)
 
 -------------------------------------------------------------------------
 
-- Disable geo-dependent sort/filter controls until the client either allows it, or fills in their location manually.
-- Enable client-side/server-side validation for GeolocationModel and view form.
- - For any error or bad input with the geo-dependent sorting/filtering within SearchQueryOptions.SortFilter(...), just return void.
-   No need to alert errors.
+Disable geo-dependent sort/filter controls until the client either allows it,
+or fills in their location manually. (?)
 
--------------------------------------------------------------------------
-
-Consider using Bootstrap Cards for the list items...
-
-See:
-https://getbootstrap.com/docs/5.0/components/card/#grid-cards
-https://getbootstrap.com/docs/5.0/components/list-group/#custom-content
-
--------------------------------------------------------------------------
-
-Consider partial view for the filters. (Lot of code)
-
-Consider partial view for the results
-
-Consider form for the search
-
-Search Page (List.cshtml)
-- Think about all possible items/controls that will
-   be displayed in the main body.
-   I can always add the filters later, or as I go.
-- Remove all styles and start from scratch
-- Focus only on the controls and functionality
-- Get everything on this page
-
-Fix the front-end design.
-(New bootstrap version doesn't support certain things)
-- For the navbar, redesign styles for navbar-toggler 
-  and navbar-dark.
-- refer to bootstrap version documentation
-
-For Mobile responsiveness
-- Design sort and Filter menu like Google Images page, or Amazon
-
-Consider changing the search page to "Browse",
-and maybe a separate page/tab for searching.
-
-Consider separate page for the results?
-
-Consider removing _DetailsLayout.cshtml
-
-- Add validation messages to GeoLocation properties, and any others if necessary.
-
-- Incorporate aria, title, and name (etc.) attributes in the markups
+Enable client-side/server-side validation for GeolocationModel and view form.
 
 ___________________________________________________________
-
-Ideas:
 
 For the home page, consider selecting a random object and display its info
 Or perhaps a random object, and a random track or vector calculation, etc.
 
-? Add admin pages so that I may keep the Dso items up to date
+Incorporate aria, title, and name (etc.) attributes in the markups
+
+Add admin pages so that I may keep the Dso items up to date (?)
 
 ___________________________________________________________
 
