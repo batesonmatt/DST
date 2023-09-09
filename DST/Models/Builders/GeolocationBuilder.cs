@@ -8,51 +8,61 @@ namespace DST.Models.Builders
     {
         #region Properties
 
-        public GeolocationModel CurrentGeolocation => _currentGeolocation;
+        public GeolocationModel CurrentGeolocation { get; set; } = null!;
 
         #endregion
 
         #region Fields
 
-        private const string _sessionKey = "currentgeosession";
-        private GeolocationModel _currentGeolocation;
+        private const string _geolocationKey = "geolocationKey";
         private readonly ISession _session;
+        private readonly IRequestCookieCollection _requestCookies;
+        private readonly IResponseCookies _responseCookies;
 
         #endregion
 
         #region Constructors
 
-        public GeolocationBuilder(ISession session)
+        public GeolocationBuilder(HttpContext context)
         {
-            _session = session;
-            _currentGeolocation = _session.GetObject<GeolocationModel>(_sessionKey) ?? GeolocationModel.Default;
-        }
-
-        public GeolocationBuilder(ISession session, GeolocationModel geolocation)
-        {
-            _session = session;
-            _currentGeolocation = geolocation ?? GeolocationModel.Default;
-            Save();
+            _session = context.Session;
+            _requestCookies = context.Request.Cookies;
+            _responseCookies = context.Response.Cookies;
         }
 
         #endregion
 
         #region Methods
 
-        public static void SaveGeolocation(ISession session, GeolocationModel geolocation)
+        public void Load()
         {
-            _ = new GeolocationBuilder(session, geolocation);
-        }
+            // Try to load from session state, or persistent cookie, if possible.
+            // Use the default geolocation if no value is stored.
+            CurrentGeolocation =
+                _session.GetObject<GeolocationModel>(_geolocationKey)
+                ?? _requestCookies.GetObject<GeolocationModel>(_geolocationKey)
+                ?? GeolocationModel.Default;
 
-        public void SaveGeolocation(GeolocationModel geolocation)
-        {
-            _currentGeolocation = geolocation ?? GeolocationModel.Default;
+            // Save the current geolocation to session state and create a persistent cookie.
             Save();
         }
 
-        private void Save()
+        public void Save()
         {
-            _session.SetObject(_sessionKey, _currentGeolocation);
+            switch (CurrentGeolocation)
+            {
+                // If set to null, remove the geolocation from session state and delete the persistent cookie.
+                case null:
+                    _session.Remove(_geolocationKey);
+                    _responseCookies.Delete(_geolocationKey);
+                    break;
+
+                // Save to session state and create a persistent cookie.
+                default:
+                    _session.SetObject(_geolocationKey, CurrentGeolocation);
+                    _responseCookies.SetObject(_geolocationKey, CurrentGeolocation);
+                    break;
+            }
         }
 
         #endregion

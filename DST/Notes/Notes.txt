@@ -1,5 +1,13 @@
 ﻿To Do:
 
+*** In progress ***
+
+GeolocationBuilder now creates a persistent cookie.
+
+Need to implement DI for GeolocationBuilder now.
+
+*******************
+
 - Plan for passing the Geolocation properties/model across controllers.
    ? - Use Session/persistant Cookies to store the values
    ? - Use TempData to transfer the values across controllers
@@ -26,22 +34,37 @@
 
 -------------------------------------------------------------------------
 
+When the user selects Reset for the geolocation, consider setting GeolocationBuilder.CurrentGeolocation = null.
+Or create a new method, GeolocationBuilder.Clear(), to set to null.
+This way, when calling Save(), the session and cookie are removed/deleted.
+
+-------------------------------------------------------------------------
+
+There are more static strings that need to use resource strings.
+- See GeolocationModel data annotations (validation messages).
+- Make sure all remaining displayable static strings in the solution use resource strings.
+- Just ignore the display text in the views for now.
+
+-------------------------------------------------------------------------
+
 Update VS
 
 -------------------------------------------------------------------------
 
-Redesign Shared views
-
-Redesign Home and About views
-
 Redesign List view
 - Add sort direction controls (Ascending and Descending)
+- Add clear filters control
+- Add any other necessary controls
 - Consider expanding/collapsable controls for the filter/sort lists
 - Consider using Bootstrap Cards for the list items
     https://getbootstrap.com/docs/5.0/components/card/#grid-cards
     https://getbootstrap.com/docs/5.0/components/list-group/#custom-content
 - Consider a search bar control
 - For the navbar, redesign styles for navbar-toggler and navbar-dark. (?)
+
+Redesign Shared views
+
+Redesign Home and About views
 
 -------------------------------------------------------------------------
 

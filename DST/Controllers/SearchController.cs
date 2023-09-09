@@ -32,6 +32,13 @@ namespace DST.Controllers
 
         #region Methods
 
+        private GeolocationBuilder GetGeoBuilder()
+        {
+            GeolocationBuilder builder = new(HttpContext);
+            builder.Load();
+            return builder;
+        }
+
         public IActionResult Index()
         {
             return RedirectToAction("List");
@@ -40,29 +47,35 @@ namespace DST.Controllers
         [HttpPost]
         public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchDTO values, bool reset = false)
         {
+            GeolocationBuilder builder = GetGeoBuilder();
+
+            // Set the location coordinates.
+            builder.CurrentGeolocation.Latitude = geolocation.Latitude;
+            builder.CurrentGeolocation.Longitude = geolocation.Longitude;
+
             if (reset)
             {
                 // Reset geolocation and timezone to defaults.
-                geolocation.Reset();
+                builder.CurrentGeolocation.Reset();
             }
             else if (geolocation.TimeZoneId != string.Empty)
             {
                 // Verify the selected id.
-                geolocation.VerifyAndUpdateTimeZone(geolocation.TimeZoneId);
+                builder.CurrentGeolocation.VerifyAndUpdateTimeZone(geolocation.TimeZoneId);
             }
             else if (geolocation.UserTimeZoneId != string.Empty)
             {
                 // Try to verify the retrieved IANA id.
-                geolocation.VerifyAndUpdateTimeZone(geolocation.UserTimeZoneId);
+                builder.CurrentGeolocation.VerifyAndUpdateTimeZone(geolocation.UserTimeZoneId);
             }
             else
             {
                 // No timezone was selected or found. Default to UTC.
-                geolocation.ResetTimeZone();
+                builder.CurrentGeolocation.ResetTimeZone();
             }
 
             // Store the GeolocationModel object in session.
-            GeolocationBuilder.SaveGeolocation(HttpContext.Session, geolocation);
+            builder.Save();
 
             return RedirectToAction("List", values);
         }
@@ -70,7 +83,7 @@ namespace DST.Controllers
         public ViewResult List(SearchDTO values)
         {
             // Get a new GeolocationBuilder for the current session.
-            GeolocationBuilder geoBuilder = new(HttpContext.Session);
+            GeolocationBuilder geoBuilder = GetGeoBuilder();
 
             // Get a new GridBuilder object, load route segments, and store in the current session.
             SearchRouteBuilder builder = new(HttpContext.Session, values);

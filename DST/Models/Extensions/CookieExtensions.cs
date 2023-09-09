@@ -22,7 +22,7 @@ namespace DST.Models.Extensions
         {
             string value = cookies.GetString(key);
 
-            return value is null ? default : JsonSerializer.Deserialize<T>(value);
+            return string.IsNullOrWhiteSpace(value) ? default : JsonSerializer.Deserialize<T>(value);
         }
 
         public static void SetString(this IResponseCookies cookies, string key, string value, int days = 30)

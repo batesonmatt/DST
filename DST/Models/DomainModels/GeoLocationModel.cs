@@ -130,7 +130,7 @@ namespace DST.Models.DomainModels
 
         public bool IsDefaultLocation()
         {
-            return _latitude== 0.0 && _longitude == 0.0;
+            return _latitude == 0.0 && _longitude == 0.0;
         }
 
         public bool IsDefault()
