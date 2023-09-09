@@ -1,9 +1,5 @@
 ﻿To Do:
 
-Update VS
-
--------------------------------------------------------------------------
-
 - Plan for passing the Geolocation properties/model across controllers.
    ? - Use Session/persistant Cookies to store the values
    ? - Use TempData to transfer the values across controllers
@@ -27,6 +23,10 @@ Update VS
 - HttpGet Action method in SearchController to link to Track page.
 - Takes Category, Id, and Geolocation (?) values for routing.
 - Also add this to the Details page to link to Track page.
+
+-------------------------------------------------------------------------
+
+Update VS
 
 -------------------------------------------------------------------------
 
