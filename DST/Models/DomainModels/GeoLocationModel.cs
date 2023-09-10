@@ -7,8 +7,12 @@ namespace DST.Models.DomainModels
     {
         #region Properties
 
+        /// <summary>The default time zone identifier.</summary>
+        /// <value>A Coordinated Universal Time (UTC) zone identifier.</value>
         public static string DefaultId => TimeZoneInfo.Utc.Id;
 
+        /// <summary>The default GeolocationModel object.</summary>
+        /// <value>A geolocation of <c>0°N 0°E</c> and a time zone set to Coordinated Universal Time (UTC).</value>
         public static GeolocationModel Default => new()
         {
             TimeZoneId = DefaultId,
@@ -17,14 +21,26 @@ namespace DST.Models.DomainModels
             Longitude = 0.0
         };
 
+        /// <summary>The unique time zone identifier.</summary>
+        /// <remarks>
+        /// This value may not represent a true time zone ID if updated from a form field.
+        /// Use <see cref="VerifyAndUpdateTimeZone(string)"/> to set this property value to a verified ID.
+        /// </remarks>
+        /// <value>A Windows or IANA time zone ID.</value>
         public string TimeZoneId { get; set; } = string.Empty;
 
+        /// <summary>A secondary, user-defined unique time zone identifier.</summary>
+        /// <remarks>
+        /// This value may not represent a true time zone ID if updated from a form field.
+        /// Use <see cref="VerifyAndUpdateTimeZone(string)"/> to set this property value to a verified ID.
+        /// </remarks>
+        /// <value>A Windows or IANA time zone ID.</value>
         public string UserTimeZoneId { get; set; } = string.Empty;
 
         /// <summary>The latitudinal component of a geographic coordinate, as represented in decimal degrees.</summary>
         /// <remarks>The value for this property will be rounded to 7 decimal places.</remarks>
         /// <value>A floating-point value ranging from <c>-90.0</c> to <c>90.0</c>.</value>
-        [Range(-90.0, 90.0, ErrorMessage = "Latitude must be in the range from -90.0 to 90.0")]
+        [Range(-90.0, 90.0, ErrorMessageResourceType = typeof(Resources.DisplayText), ErrorMessageResourceName = "LatitudeValidationMessage")]
         public double Latitude
         {
             get
@@ -41,7 +57,7 @@ namespace DST.Models.DomainModels
         /// <summary>The longitudinal component of a geographic coordinate, as represented in decimal degrees.</summary>
         /// <remarks>The value for this property will be rounded to 7 decimal places.</remarks>
         /// <value>A floating-point value ranging from <c>-180.0</c> to <c>180.0</c>.</value>
-        [Range(-180.0, 180.0, ErrorMessage = "Longitude must be in the range from -180.0 to 180.0")]
+        [Range(-180.0, 180.0, ErrorMessageResourceType = typeof(Resources.DisplayText), ErrorMessageResourceName = "LongitudeValidationMessage")]
         public double Longitude
         {
             get
@@ -113,8 +129,8 @@ namespace DST.Models.DomainModels
 
         public void ResetLocation()
         {
-            _latitude = 0.0;
-            _longitude = 0.0;
+            Latitude = 0.0;
+            Longitude = 0.0;
         }
 
         public void Reset()
@@ -130,7 +146,7 @@ namespace DST.Models.DomainModels
 
         public bool IsDefaultLocation()
         {
-            return _latitude == 0.0 && _longitude == 0.0;
+            return Latitude == 0.0 && Longitude == 0.0;
         }
 
         public bool IsDefault()

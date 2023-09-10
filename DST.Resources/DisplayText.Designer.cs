@@ -169,6 +169,24 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Latitude must be in the range from -90.0 to 90.0.
+        /// </summary>
+        public static string LatitudeValidationMessage {
+            get {
+                return ResourceManager.GetString("LatitudeValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Longitude must be in the range from -180.0 to 180.0.
+        /// </summary>
+        public static string LongitudeValidationMessage {
+            get {
+                return ResourceManager.GetString("LongitudeValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rise time not available.
         /// </summary>
         public static string RiseTimeDefault {

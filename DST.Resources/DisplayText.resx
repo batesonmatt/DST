@@ -165,6 +165,14 @@
     <value>{0:n} kly</value>
     <comment>Formats the distance of a deep-sky object as a floating-point value to two decimal places, with group separators, measured in kilolight-years.</comment>
   </data>
+  <data name="LatitudeValidationMessage" xml:space="preserve">
+    <value>Latitude must be in the range from -90.0 to 90.0</value>
+    <comment>The validation message for a latitudinal coordinate value.</comment>
+  </data>
+  <data name="LongitudeValidationMessage" xml:space="preserve">
+    <value>Longitude must be in the range from -180.0 to 180.0</value>
+    <comment>The validation message for a longitudinal coordinate value.</comment>
+  </data>
   <data name="RiseTimeDefault" xml:space="preserve">
     <value>Rise time not available</value>
     <comment>The default text for a particular deep-sky object's rising time.</comment>

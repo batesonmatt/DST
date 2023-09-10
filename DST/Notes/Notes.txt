@@ -1,21 +1,5 @@
 ﻿To Do:
 
-When the user selects Reset for the geolocation, consider setting GeolocationBuilder.CurrentGeolocation = null.
-Or create a new method, GeolocationBuilder.Clear() or .Reset(), to set to null.
-This way, when calling Save(), the session and cookie are removed/deleted.
-
-When setting the latitude and longitude during post, consider a method GeolocationModel.SetLocation(double, double)
-- Then use double.IsFiniteRealNumber() before setting the properties.
-
--------------------------------------------------------------------------
-
-There are more static strings that need to use resource strings.
-- See GeolocationModel data annotations (validation messages).
-- Make sure all remaining displayable static strings in the solution use resource strings.
-- Just ignore the display text in the views for now.
-
--------------------------------------------------------------------------
-
 Update VS
 
 -------------------------------------------------------------------------
