@@ -1,3 +1,4 @@
+using DST.Models.Builders;
 using DST.Models.DataLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -41,6 +42,12 @@ namespace DST
                 options.UseSqlServer(Configuration.GetConnectionString("MainDbContext"));
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
+
+            // Configure dependency injection for the IHttpContextAccessor service.
+            services.AddHttpContextAccessor();
+
+            // Enable dependency injection for IGeolocationBuilder objects.
+            services.AddTransient<IGeolocationBuilder, GeolocationBuilder>();
 
             // Make URLs lowercase and end with a trailing slash.
             services.AddRouting(options =>

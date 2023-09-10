@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace DST.Models.Builders
 {
-    public class GeolocationBuilder
+    public class GeolocationBuilder : IGeolocationBuilder
     {
         #region Properties
 
@@ -23,11 +23,11 @@ namespace DST.Models.Builders
 
         #region Constructors
 
-        public GeolocationBuilder(HttpContext context)
+        public GeolocationBuilder(IHttpContextAccessor context)
         {
-            _session = context.Session;
-            _requestCookies = context.Request.Cookies;
-            _responseCookies = context.Response.Cookies;
+            _session = context.HttpContext!.Session;
+            _requestCookies = context.HttpContext!.Request.Cookies;
+            _responseCookies = context.HttpContext!.Response.Cookies;
         }
 
         #endregion

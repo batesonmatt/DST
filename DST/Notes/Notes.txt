@@ -1,42 +1,11 @@
 ﻿To Do:
 
-*** In progress ***
-
-GeolocationBuilder now creates a persistent cookie.
-
-Need to implement DI for GeolocationBuilder now.
-
-*******************
-
-- Plan for passing the Geolocation properties/model across controllers.
-   ? - Use Session/persistant Cookies to store the values
-   ? - Use TempData to transfer the values across controllers
-
-   Might need to add a CookieExtensions class
-   Might need to add more functionality to SessionExtensions class
-
-   ** Might need to use dependency injection for the GeolocationModel between controllers.
-      Use HttpContext (IHttpContextAccessor)
-
-      This can also be useful for allowing the different action methods of a controller access the object.
-
-      SearchController is currently injecting the MainDbContext, which is used to load the SearchListViewModel.
-      Consider extracting an interface, IGeolocation, and inject it to load the GeolocationModel.
-
-      This would cut back on the Builder classes.
-
-      Posting to CreateGeolocation is causing SearchController to inject a not-needed MainDbContext, 
-      and loading the SearchListViewModel, which isn't used.
-
-- HttpGet Action method in SearchController to link to Track page.
-- Takes Category, Id, and Geolocation (?) values for routing.
-- Also add this to the Details page to link to Track page.
-
--------------------------------------------------------------------------
-
 When the user selects Reset for the geolocation, consider setting GeolocationBuilder.CurrentGeolocation = null.
-Or create a new method, GeolocationBuilder.Clear(), to set to null.
+Or create a new method, GeolocationBuilder.Clear() or .Reset(), to set to null.
 This way, when calling Save(), the session and cookie are removed/deleted.
+
+When setting the latitude and longitude during post, consider a method GeolocationModel.SetLocation(double, double)
+- Then use double.IsFiniteRealNumber() before setting the properties.
 
 -------------------------------------------------------------------------
 
@@ -48,6 +17,12 @@ There are more static strings that need to use resource strings.
 -------------------------------------------------------------------------
 
 Update VS
+
+-------------------------------------------------------------------------
+
+Linking to Track page/Controller
+- HttpGet Action method in SearchController to link to Track page.
+- Add link to Track page in the Details page (Do I need a Details controller?).
 
 -------------------------------------------------------------------------
 

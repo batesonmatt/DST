@@ -9,7 +9,7 @@ namespace DST.Models.DataLayer.Query
     {
         #region Methods
 
-        public void SortFilter(SearchRouteBuilder builder, GeolocationBuilder geoBuilder)
+        public void SortFilter(SearchRouteBuilder builder, GeolocationModel geolocation)
         {
             if (builder is null)
             {
@@ -30,13 +30,13 @@ namespace DST.Models.DataLayer.Query
             {
                 Where = dso => builder.CurrentRoute.ConstellationFilter.EqualsSeo(dso.ConstellationName);
             }
-            if (builder.IsFilterBySeason && geoBuilder is not null)
+            if (builder.IsFilterBySeason && geolocation is not null)
             {
                 Include = "Constellation.Season";
 
                 // Get all objects visible during the specified season, regardless of the client's geolocation.
                 // The latitudinal checks here only determine the date ranges for the client's hemisphere.
-                Where = geoBuilder.CurrentGeolocation.Latitude switch
+                Where = geolocation.Latitude switch
                 {
                     // For positive latitudes, select all constellations for the specified season in the northern date range.
                     > 0.0 => dso => builder.CurrentRoute.SeasonFilter.EqualsSeo(dso.Constellation.Season.North),
@@ -51,28 +51,28 @@ namespace DST.Models.DataLayer.Query
                                   builder.CurrentRoute.SeasonFilter.EqualsSeo(dso.Constellation.Season.South)
                 };
             }
-            if (builder.IsFilterByTrajectory && geoBuilder is not null)
+            if (builder.IsFilterByTrajectory && geolocation is not null)
             {
                 Where = dso => builder.CurrentRoute.TrajectoryFilter.EqualsSeo(
-                    Utilities.GetPrimaryTrajectoryName(dso, geoBuilder.CurrentGeolocation));
+                    Utilities.GetPrimaryTrajectoryName(dso, geolocation));
             }
-            if (builder.IsFilterByLocal && geoBuilder is not null)
+            if (builder.IsFilterByLocal && geolocation is not null)
             {
                 Include = "Constellation.Season";
 
-                Where = dso => Utilities.IsLocal(dso, geoBuilder.CurrentGeolocation);
+                Where = dso => Utilities.IsLocal(dso, geolocation);
             }
-            if (builder.IsFilterByVisible && geoBuilder is not null)
+            if (builder.IsFilterByVisible && geolocation is not null)
             {
                 Include = "Constellation.Season";
 
-                Where = dso => Utilities.IsVisible(dso, geoBuilder.CurrentGeolocation);
+                Where = dso => Utilities.IsVisible(dso, geolocation);
             }
-            if (builder.IsFilterByRising && geoBuilder is not null)
+            if (builder.IsFilterByRising && geolocation is not null)
             {
                 Include = "Constellation.Season";
 
-                Where = dso => Utilities.IsRising(dso, geoBuilder.CurrentGeolocation);
+                Where = dso => Utilities.IsRising(dso, geolocation);
             }
             if (builder.IsFilterByHasName)
             {
@@ -125,11 +125,11 @@ namespace DST.Models.DataLayer.Query
                     { dso => dso.Magnitude == null }
                 };
             }
-            else if (builder.IsSortByRiseTime && geoBuilder is not null)
+            else if (builder.IsSortByRiseTime && geolocation is not null)
             {
                 Include = "Constellation.Season";
 
-                OrderBy = dso => Utilities.GetRiseTime(dso, geoBuilder.CurrentGeolocation);
+                OrderBy = dso => Utilities.GetRiseTime(dso, geolocation);
             }
         }
 

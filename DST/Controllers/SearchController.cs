@@ -18,26 +18,22 @@ namespace DST.Controllers
         #region Fields
 
         private readonly SearchUnitOfWork _data;
+        private readonly IGeolocationBuilder _geoBuilder;
 
         #endregion
 
         #region Constructors
 
-        public SearchController(MainDbContext context)
+        public SearchController(MainDbContext context, IGeolocationBuilder geoBuilder)
         {
             _data = new SearchUnitOfWork(context);
+            _geoBuilder = geoBuilder;
+            _geoBuilder.Load();
         }
 
         #endregion
 
         #region Methods
-
-        private GeolocationBuilder GetGeoBuilder()
-        {
-            GeolocationBuilder builder = new(HttpContext);
-            builder.Load();
-            return builder;
-        }
 
         public IActionResult Index()
         {
@@ -47,44 +43,39 @@ namespace DST.Controllers
         [HttpPost]
         public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchDTO values, bool reset = false)
         {
-            GeolocationBuilder builder = GetGeoBuilder();
-
             // Set the location coordinates.
-            builder.CurrentGeolocation.Latitude = geolocation.Latitude;
-            builder.CurrentGeolocation.Longitude = geolocation.Longitude;
+            _geoBuilder.CurrentGeolocation.Latitude = geolocation.Latitude;
+            _geoBuilder.CurrentGeolocation.Longitude = geolocation.Longitude;
 
             if (reset)
             {
                 // Reset geolocation and timezone to defaults.
-                builder.CurrentGeolocation.Reset();
+                _geoBuilder.CurrentGeolocation.Reset();
             }
             else if (geolocation.TimeZoneId != string.Empty)
             {
                 // Verify the selected id.
-                builder.CurrentGeolocation.VerifyAndUpdateTimeZone(geolocation.TimeZoneId);
+                _geoBuilder.CurrentGeolocation.VerifyAndUpdateTimeZone(geolocation.TimeZoneId);
             }
             else if (geolocation.UserTimeZoneId != string.Empty)
             {
                 // Try to verify the retrieved IANA id.
-                builder.CurrentGeolocation.VerifyAndUpdateTimeZone(geolocation.UserTimeZoneId);
+                _geoBuilder.CurrentGeolocation.VerifyAndUpdateTimeZone(geolocation.UserTimeZoneId);
             }
             else
             {
                 // No timezone was selected or found. Default to UTC.
-                builder.CurrentGeolocation.ResetTimeZone();
+                _geoBuilder.CurrentGeolocation.ResetTimeZone();
             }
 
-            // Store the GeolocationModel object in session.
-            builder.Save();
+            // Save the geolocation in session and create a persistent cookie.
+            _geoBuilder.Save();
 
             return RedirectToAction("List", values);
         }
 
         public ViewResult List(SearchDTO values)
         {
-            // Get a new GeolocationBuilder for the current session.
-            GeolocationBuilder geoBuilder = GetGeoBuilder();
-
             // Get a new GridBuilder object, load route segments, and store in the current session.
             SearchRouteBuilder builder = new(HttpContext.Session, values);
 
@@ -104,11 +95,11 @@ namespace DST.Controllers
                 SortDirection = builder.CurrentRoute.SortDirection
             };
 
-            options.SortFilter(builder, geoBuilder);
+            options.SortFilter(builder, _geoBuilder.CurrentGeolocation);
 
             SearchListViewModel viewModel = new()
             {
-                Geolocation = geoBuilder.CurrentGeolocation,
+                Geolocation = _geoBuilder.CurrentGeolocation,
 
                 TimeZoneItems = Utilities.GetTimeZoneItems(),
 
