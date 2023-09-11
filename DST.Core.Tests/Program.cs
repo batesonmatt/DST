@@ -116,8 +116,8 @@ namespace DST.Core.Tests
 
             // My timezone: America/Chicago
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
-            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
-            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, test, timeKeeper);
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.ERA);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m42, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
 
             Console.WriteLine($"Location: {observer.Origin}");
@@ -131,7 +131,7 @@ namespace DST.Core.Tests
             //IAstronomicalDateTime now = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
             //IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
 
-            AstronomicalDateTime start = new(new DateTime(2023, 8, 18, 18, 0, 0), dateTimeInfo);
+            AstronomicalDateTime start = new(new DateTime(2023, 10, 1, 22, 0, 0), dateTimeInfo);
 
             IMutableDateTime mutable;
 
@@ -185,11 +185,11 @@ namespace DST.Core.Tests
 
             Console.WriteLine();
 
-            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.MeanSolarTime);
-            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Hours);
+            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.StellarTime);
+            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Months);
             IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, true);
             IAstronomicalDateTime[] dateTimes = DateTimeFactory.ConvertToAstronomical(
-                dateTimesBuilder.Build(start, dateTimeAdder.Max, 1));
+                dateTimesBuilder.Build(start, 12, 1));
 
             ITracker tracker = TrackerFactory.Create(observer);
 
@@ -201,6 +201,14 @@ namespace DST.Core.Tests
                 if (positions[i] != null)
                 {
                     mutable = DateTimeFactory.ConvertToMutable(dateTimes[i]);
+
+                    if (observer is ILocalObserver localObserver)
+                    {
+                        Console.Write($"ROT: {localObserver.TimeKeeper.Calculate(dateTimes[i])}\t");
+                        Console.Write($"LROT: {localObserver.LocalTimeKeeper.Calculate(localObserver, dateTimes[i])}\t");
+                        Console.Write($"LHA: {localObserver.LocalHourAngle.Calculate(localObserver, dateTimes[i])}\t");
+                    }
+                    
                     Console.Write($"Period: {mutable.ToLocalTime()}\t");
                     Console.Write($"Position: {positions[i].Format(FormatType.Decimal)}\t");
                     Console.Write($"Visible: {trajectory.IsAboveHorizon(dateTimes[i])}\n");

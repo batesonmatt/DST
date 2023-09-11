@@ -133,16 +133,6 @@ namespace DST.Controllers
             return View(viewModel);
         }
 
-        /* Filter()
-            
-           if (model?.GeoLocation is not null)
-           {
-               ViewBag.LAT = model.GeoLocation.Latitude;
-               ViewBag.LON = model.GeoLocation.Longitude;
-               _geoLocation = model.GeoLocation;
-           }
-         */
-
         // Argument filterIds contains the posted values for ListFilter.Id.
         // Argument filters contains the posted values for ListFilter.Value in the order defined by filterIds.
         // Argument options contains the posted values for ToggleFilter.Id.
@@ -188,11 +178,9 @@ namespace DST.Controllers
         //}
 
         [HttpGet]
-        public IActionResult Details(string cat, int id)
+        public IActionResult Details(string catalog, int id)
         {
-            /* Repository<T>.Get may return null. */
-            /* DsoModel dso = _data.DsoItems.Get(cat, id) ?? default or "NotFound" model */
-            DsoModel dso = _data.DsoItems.Get(cat, id);
+            DsoModel dso = _data.DsoItems.Get(catalog, id);
             
             return View(dso);
         }

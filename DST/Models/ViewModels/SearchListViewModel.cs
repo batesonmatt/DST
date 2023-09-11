@@ -11,15 +11,13 @@ namespace DST.Models.ViewModels
     {
         #region Properties
 
-        // Geolocation data
         public GeolocationModel Geolocation { get; set; }
         public IEnumerable<TimeZoneItem> TimeZoneItems { get; set; }
 
-        public IEnumerable<DsoModel> DsoItems { get; set; }
         public RouteDictionary CurrentRoute { get; set; }
         public int TotalPages { get; set; }
 
-        // Filter data
+        public IEnumerable<DsoModel> DsoItems { get; set; }
         public IEnumerable<DsoTypeModel> Types { get; set; }
         public IEnumerable<CatalogModel> Catalogs { get; set; }
         public IEnumerable<ConstellationModel> Constellations { get; set; }

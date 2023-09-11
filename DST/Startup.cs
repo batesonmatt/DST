@@ -138,7 +138,7 @@ namespace DST
                 // Details route
                 endpoints.MapControllerRoute(
                     name: "details",
-                    pattern: "{controller}/{action}/{cat}/{id}/{slug?}");
+                    pattern: "{controller}/{action}/{catalog}/{id}");
 
                 // Default route
                 endpoints.MapControllerRoute(

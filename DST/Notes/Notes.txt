@@ -4,14 +4,6 @@ Update VS
 
 -------------------------------------------------------------------------
 
-Details route and action method
-- Change "cat" to "catalog"
-- Make sure to update the List view: asp-route-cat to asp-route-catalog
-- Consider removing the slug from the endpoint route.
-  Remove commented out slug in List view (line 326)
-
--------------------------------------------------------------------------
-
 Track view/Controller
 
 Linking to Track page/Controller
@@ -19,9 +11,22 @@ Linking to Track page/Controller
 - Add link to Track page in the Details page (Add action method to SearchController).
 
 Routes
-- name = "tracking"
+- name = "tracksummary"
 - pattern = "{controller}/{action}/{catalog}/{id}/{algorithm}"
+- Ex: "/track/summary/messier/13/gmst/"
 ...
+- name = "trackvector"
+- pattern = "{controller}/{action}/{catalog}/{id}/{algorithm}/{start}/cycles-{cycles}/historical-{historical}"
+- Ex: "/track/rise/messier/13/gmst/13011995/cycles-10/historical-on/"
+- Ex: "/track/apex/messier/13/gmst/25122023/cycles-15/historical-off/"
+- Ex: "/track/set/messier/13/gmst/14042004/cycles-2/historical-off/"
+...
+- name = "trackmain"
+- pattern = "{controller}/{action}/{catalog}/{id}/{algorithm}/{start}/{timescale}/{timeunit}/period-{period}/interval-{interval}/historical-{historical}"
+- Ex: "/track/main/messier/13/gmst/13011995/mean-solar-time/hours/period-24/interval-2/historical-on/"
+- Ex: "/track/main/messier/13/gast/13011995/sidereal-time/days/period-10/interval-3/historical-off/"
+- Ex: "/track/main/messier/13/era/13011995/stellar-time/weeks/period-50/interval-5/historical-off/"
+
 
 TrackDTO
 - Catalog
@@ -34,7 +39,7 @@ TrackViewModel
 - ILocalObserver ClientObserver
 - RouteDictionary CurrentRoute
 
-Features (Track/Summary)
+Features (Track/"Summary", or "Main", action method)
 - Form to change geolocation/timezone (consider shared view or partial view)
 - Display details (Compound Id, names, catalog, type, description, constellation, RA, DEC, 
   distance, magnitude, ideal viewing season)

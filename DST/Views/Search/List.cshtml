@@ -323,8 +323,7 @@
             {
                 @if (dso is not null)
                 {
-                    //asp-route-slug="@dso.Name.Slug()"
-                    <a asp-controller="Search" asp-action="Details" asp-route-cat="@dso.CatalogName" asp-route-id="@dso.Id">
+                    <a asp-controller="Search" asp-action="Details" asp-route-catalog="@dso.CatalogName" asp-route-id="@dso.Id">
                         <div>
                             @if (dso.HasName)
                             {
