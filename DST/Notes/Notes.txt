@@ -4,9 +4,89 @@ Update VS
 
 -------------------------------------------------------------------------
 
+Details route and action method
+- Change "cat" to "catalog"
+- Make sure to update the List view: asp-route-cat to asp-route-catalog
+- Consider removing the slug from the endpoint route.
+  Remove commented out slug in List view (line 326)
+
+-------------------------------------------------------------------------
+
+Track view/Controller
+
 Linking to Track page/Controller
 - HttpGet Action method in SearchController to link to Track page.
-- Add link to Track page in the Details page (Do I need a Details controller?).
+- Add link to Track page in the Details page (Add action method to SearchController).
+
+Routes
+- name = "tracking"
+- pattern = "{controller}/{action}/{catalog}/{id}/{algorithm}"
+...
+
+TrackDTO
+- Catalog
+- Id
+- Algorithm
+
+TrackViewModel
+- GeolocationModel Geolocation (? - If I use a partial view, do I need to include this property for the viewmodels?)
+- IEnumerable<TimeZoneItem> TimeZoneItems (? - Same question for above)
+- ILocalObserver ClientObserver
+- RouteDictionary CurrentRoute
+
+Features (Track/Summary)
+- Form to change geolocation/timezone (consider shared view or partial view)
+- Display details (Compound Id, names, catalog, type, description, constellation, RA, DEC, 
+  distance, magnitude, ideal viewing season)
+- Display client observer info (geolocation, timezone, current datetime, algorithm type, current timekeeper, 
+  current local timekeeper, LHA)
+- Option to change the algorithm type.
+- Display current tracking info (The trajectory name, local?, visible?, current rise/apex/set cycle - datetime and position,
+  current altaz track position)
+- Refresh button to refresh the datetime, timekeeper, local timekeeper, LHA, and current tracking info.
+- Track Rise vectors over time
+  Select the starting datetime and the number of cycles, then click "Track" to see the results
+- Track Apex vectors over time
+  Select the starting datetime and the number of cycles, then click "Track" to see the results
+- Track Set vectors over time
+  Select the starting datetime and the number of cycles, then click "Track" to see the results
+- Track horizontal position over time
+  Select the starting datetime, time scale, time unit, period, interval, add from start?, then click "Track" to see the results
+- Consider a results section for the rise, apex, set, and track results.
+  Otherwise, I will need to have separate action methods for these that redirect to their own views/routes.
+- Need to disable/hide certain controls and information if the trajectory is never rise or circumpolar.
+
+....................................................................
+
+Using IDateTimeAdder and/or ITimeScalable
+
+When adding in seconds, minutes, and hours in sidereal time and stellar time, 
+the datetimes are all the same.
+
+This is actually due to the ITimeScalable implementations converting the ticks
+to total days, then truncating the fractional part.
+	
+Since each interval being added is less than a whole day, the value will almost always be 0.
+
+Test a 24 hour period for 1 hour intervals, where each interval is based on the 
+starting datetime. Only the last interval will be different, since it is 24 hours
+from the start, which is 1 whole day.
+Likewise, testing a 168 hour period for 12 hour intervals, every two datetimes are the same.
+
+Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time if
+			tracking in days, weeks, months, and years.
+			This will be accomplished in the front-end.
+
+			The user may, however, still choose the Earth-rotational algorithm, 
+			but can only track in mean solar time if using seconds, minutes, and hours.
+
+....................................................................
+
+"Continuous" Tracking
+- After tracking over time, allow the user to click a button to continue tracking for the same period/interval, 
+  but starting at the last DateTime value.
+- This could cause a bug where the datetime would eventually run to min/max value, or to a point where
+  the results are not trustworthy.
 
 -------------------------------------------------------------------------
 
@@ -20,6 +100,8 @@ Redesign List view
     https://getbootstrap.com/docs/5.0/components/list-group/#custom-content
 - Consider a search bar control
 - For the navbar, redesign styles for navbar-toggler and navbar-dark. (?)
+
+Redesign Details view
 
 Redesign Shared views
 
@@ -40,6 +122,9 @@ Or perhaps a random object, and a random track or vector calculation, etc.
 Incorporate aria, title, and name (etc.) attributes in the markups
 
 Add admin pages so that I may keep the Dso items up to date (?)
+
+Graphing support (?)
+- Graph the trajectory of a tracked object as a sinosoidal wave (position over time)
 
 ___________________________________________________________
 

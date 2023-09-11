@@ -5,12 +5,9 @@ ________________________________________________________________________________
 
 To-do list:
 
+____________________________________________________________________________________________________________________________
 
-________________________________________________________________________________________________________
-
-Web app project (DST):
-
-** BUG? - IDateTimeAdder and/or ITimeScalable
+Using IDateTimeAdder and/or ITimeScalable
 
 When adding in seconds, minutes, and hours in sidereal time and stellar time, 
 the datetimes are all the same.
@@ -31,24 +28,3 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 
 			The user may, however, still choose the Earth-rotational algorithm, 
 			but can only track in mean solar time if using seconds, minutes, and hours.
-
-...........
-
-Using Tracker
-	Store results in a Dictionary<DateTime, HorizontalCoordinate>, where DateTime is computed by AstronomicalDateTime.ToLocalDateTime()
-
-Implement geo-positioning support
-	Resulting object is GeographicCoordinate
-
-Graphing support
-	Graph the trajectory of a tracked object as a sinosoidal wave (position over time)
-
-"Continuous" Tracking
-	After tracking over time, allow the user to click a button to continue tracking for the same period/interval, 
-	but starting at the last DateTime value.
-
-Implement Error Logging (Users report errors; developer looks over report)
-	Use a singleton, thread-safe logger class
-	Include serialized exception with complete stack-trace.
-
-________________________________________________________________________________________________________
