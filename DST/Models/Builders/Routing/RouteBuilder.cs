@@ -27,7 +27,7 @@ namespace DST.Models.Builders.Routing
         public RouteBuilder(ISession session)
         {
             _session = session;
-
+            
             _routes = _session.GetObject<RouteDictionary>(_routeKey) ?? new RouteDictionary();
         }
 
