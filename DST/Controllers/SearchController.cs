@@ -74,8 +74,11 @@ namespace DST.Controllers
 
         public ViewResult List(SearchRoute values)
         {
-            // if clear filters:
-            // values.ClearFilters();
+            if (values.ClearFilters)
+            {
+                // Clear the filters, but retain the paging and sorting values.
+                values = values.Reset();
+            }
 
             // Set initial options from the route segments.
             SearchQueryOptions options = new()

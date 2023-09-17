@@ -4,44 +4,6 @@ Update VS
 
 -------------------------------------------------------------------------
 
-OrderDirection
-- Add values to resource file: "Ascending", "asc", "Descending", "desc"
-- Add properties to get the full words and the abbreviated strings.
-- Use the abbr versions for the sorting, and the word versions for tooltips, etc.
-
-SearchRoute
-- Use static class/const values for the default values
-
-    ** Put these strings in the resource file:
-
-    public static class DST.Models.DataLayer.Query.Filter
-    {
-        #region Properties
-
-        public static string All => "All";
-        public static string Off => "Off";
-        public static string On => "On";
-
-        #endregion
-    }
-
-  Consider:
-  SeoExtensions.IsToggleOn(this string value) => value.EqualsSeo(Filter.On)
-  SeoExtensions.IsToggleOff(this string value) => value.EqualsSeo(Filter.Off)
-
-- Add ClearFilters() method
-- Consider SetFilter method, similar to PageSortRoute.SetSort, for use in the List view.
-    
-    Consider SearchRoute.SetFilter(string filterName, string value) => switch on the filterName argument
-    
-    Usage: routes.SetFilter(nameof(SearchRoute.Constellation), constellation.Name)
-
-List view
-- Use static/const string values and methods for the default filter values.
-
-
--------------------------------------------------------------------------
-
 Track view/Controller
 
 Linking to Track page/Controller

@@ -169,6 +169,33 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string FilterAll {
+            get {
+                return ResourceManager.GetString("FilterAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        public static string FilterOff {
+            get {
+                return ResourceManager.GetString("FilterOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On.
+        /// </summary>
+        public static string FilterOn {
+            get {
+                return ResourceManager.GetString("FilterOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Latitude must be in the range from -90.0 to 90.0.
         /// </summary>
         public static string LatitudeValidationMessage {
@@ -246,6 +273,42 @@ namespace DST.Resources {
         public static string RiseTimeFormatSecondsPast {
             get {
                 return ResourceManager.GetString("RiseTimeFormatSecondsPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asc.
+        /// </summary>
+        public static string SortAsc {
+            get {
+                return ResourceManager.GetString("SortAsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ascending.
+        /// </summary>
+        public static string SortAscending {
+            get {
+                return ResourceManager.GetString("SortAscending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Desc.
+        /// </summary>
+        public static string SortDesc {
+            get {
+                return ResourceManager.GetString("SortDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descending.
+        /// </summary>
+        public static string SortDescending {
+            get {
+                return ResourceManager.GetString("SortDescending", resourceCulture);
             }
         }
         

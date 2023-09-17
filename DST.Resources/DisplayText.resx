@@ -165,6 +165,18 @@
     <value>{0:n} kly</value>
     <comment>Formats the distance of a deep-sky object as a floating-point value to two decimal places, with group separators, measured in kilolight-years.</comment>
   </data>
+  <data name="FilterAll" xml:space="preserve">
+    <value>All</value>
+    <comment>The display text for enabling all options in a filter.</comment>
+  </data>
+  <data name="FilterOff" xml:space="preserve">
+    <value>Off</value>
+    <comment>The display text for disabling a particular filter option.</comment>
+  </data>
+  <data name="FilterOn" xml:space="preserve">
+    <value>On</value>
+    <comment>The display text for enabling a particular filter option.</comment>
+  </data>
   <data name="LatitudeValidationMessage" xml:space="preserve">
     <value>Latitude must be in the range from -90.0 to 90.0</value>
     <comment>The validation message for a latitudinal coordinate value.</comment>
@@ -200,6 +212,22 @@
   <data name="RiseTimeFormatSecondsPast" xml:space="preserve">
     <value>{0} sec ago</value>
     <comment>Formats the past rising time for a particular deep-sky object measured in integral seconds.</comment>
+  </data>
+  <data name="SortAsc" xml:space="preserve">
+    <value>Asc</value>
+    <comment>The abbreviated display text for an ascending sort order.</comment>
+  </data>
+  <data name="SortAscending" xml:space="preserve">
+    <value>Ascending</value>
+    <comment>The display text for an ascending sort order.</comment>
+  </data>
+  <data name="SortDesc" xml:space="preserve">
+    <value>Desc</value>
+    <comment>The abbreviated display text for a descending sort order.</comment>
+  </data>
+  <data name="SortDescending" xml:space="preserve">
+    <value>Descending</value>
+    <comment>The display text for a descending sort order.</comment>
   </data>
   <data name="SortFieldBrightness" xml:space="preserve">
     <value>Brightness</value>

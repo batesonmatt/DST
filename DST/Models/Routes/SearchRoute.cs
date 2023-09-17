@@ -6,21 +6,19 @@ using System.Text.Json.Serialization;
 
 namespace DST.Models.Routes
 {
-    /* Use static class/const values for the default values, "All"=>"all", "Off"=>"off", "On"=>"on" */
-
     public class SearchRoute : PageSortRoute, IRouteDictionary<SearchRoute>
     {
         #region Properties
 
-        public string Type { get; set; } = "all";
-        public string Catalog { get; set; } = "all";
-        public string Constellation { get; set; } = "all";
-        public string Season { get; set; } = "all";
-        public string Trajectory { get; set; } = "all";
-        public string Local { get; set; } = "off";
-        public string Visible { get; set; } = "off";
-        public string Rising { get; set; } = "off";
-        public string HasName { get; set; } = "off";
+        public string Type { get; set; } = Filter.All;
+        public string Catalog { get; set; } = Filter.All;
+        public string Constellation { get; set; } = Filter.All;
+        public string Season { get; set; } = Filter.All;
+        public string Trajectory { get; set; } = Filter.All;
+        public string Local { get; set; } = Filter.Off;
+        public string Visible { get; set; } = Filter.Off;
+        public string Rising { get; set; } = Filter.Off;
+        public string HasName { get; set; } = Filter.Off;
 
         [JsonIgnore] public bool IsSortById => SortField.EqualsSeo(Sort.Id);
         [JsonIgnore] public bool IsSortByName => SortField.EqualsSeo(Sort.Name);
@@ -29,21 +27,34 @@ namespace DST.Models.Routes
         [JsonIgnore] public bool IsSortByDistance => SortField.EqualsSeo(Sort.Distance);
         [JsonIgnore] public bool IsSortByBrightness => SortField.EqualsSeo(Sort.Brightness);
         [JsonIgnore] public bool IsSortByRiseTime => SortField.EqualsSeo(Sort.RiseTime);
-        [JsonIgnore] public bool IsFilterByType => Type != "all";
-        [JsonIgnore] public bool IsFilterByCatalog => Catalog != "all";
-        [JsonIgnore] public bool IsFilterByConstellation => Constellation != "all";
-        [JsonIgnore] public bool IsFilterBySeason => Season != "all";
-        [JsonIgnore] public bool IsFilterByTrajectory => Trajectory != "all";
-        [JsonIgnore] public bool IsFilterByLocal => Local != "off";
-        [JsonIgnore] public bool IsFilterByVisible => Visible != "off";
-        [JsonIgnore] public bool IsFilterByRising => Rising != "off";
-        [JsonIgnore] public bool IsFilterByHasName => HasName != "off";
+        [JsonIgnore] public bool IsFilterByType => !Type.IsFilterAll();
+        [JsonIgnore] public bool IsFilterByCatalog => !Catalog.IsFilterAll();
+        [JsonIgnore] public bool IsFilterByConstellation => !Constellation.IsFilterAll();
+        [JsonIgnore] public bool IsFilterBySeason => !Season.IsFilterAll();
+        [JsonIgnore] public bool IsFilterByTrajectory => !Trajectory.IsFilterAll();
+        [JsonIgnore] public bool IsFilterByLocal => Local.IsFilterOn();
+        [JsonIgnore] public bool IsFilterByVisible => Visible.IsFilterOn();
+        [JsonIgnore] public bool IsFilterByRising => Rising.IsFilterOn();
+        [JsonIgnore] public bool IsFilterByHasName => HasName.IsFilterOn();
+
+        [JsonIgnore] public bool ClearFilters { get; set; } = false;
+
+        #endregion
+
+        #region Constructors
+
+        public SearchRoute() { }
+
+        public SearchRoute(PageSortRoute values) : base(values) { }
 
         #endregion
 
         #region Methods
 
-        /* public void ClearFilters() => reset all filters to default values */
+        public SearchRoute Reset()
+        {
+            return new SearchRoute(this as PageSortRoute);
+        }
 
         public new SearchRoute Clone()
         {

@@ -68,7 +68,7 @@ namespace DST.Models.DataLayer.Repositories
             {
                 foreach (var clause in options.OrderByAll)
                 {
-                    if (options.SortDirection == OrderDirection.Ascending)
+                    if (options.SortDirection.EqualsSeo(OrderDirection.AscendingAbbr))
                     {
                         query = query.AppendOrderBy(clause);
                     }

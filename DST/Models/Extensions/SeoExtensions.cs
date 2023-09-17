@@ -1,4 +1,4 @@
-﻿using System;
+﻿using DST.Models.DataLayer.Query;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -77,6 +77,21 @@ namespace DST.Models.Extensions
             }
         }
 
+        public static bool IsFilterAll(this string value)
+        {
+            return value.EqualsSeo(Filter.All);
+        }
+
+        public static bool IsFilterOff(this string value)
+        {
+            return value.EqualsSeo(Filter.Off);
+        }
+
+        public static bool IsFilterOn(this string value)
+        {
+            return value.EqualsSeo(Filter.On);
+        }
+
         public static int ToInt(this string value)
         {
             return int.TryParse(value, out int result) ? result : default;
@@ -92,13 +107,5 @@ namespace DST.Models.Extensions
 
         [GeneratedRegex("[-]{2,}", RegexOptions.Compiled | RegexOptions.CultureInvariant)]
         private static partial Regex RepeatDash();
-
-        [Obsolete("Not adding geolocation information to routing service at this time.")]
-        [GeneratedRegex("^[N|S][0-9]+([-][0-9]+)?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)]
-        private static partial Regex LatitudeSeo();
-
-        [Obsolete("Not adding geolocation information to routing service at this time.")]
-        [GeneratedRegex("^[E|W][0-9]+([-][0-9]+)?$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)]
-        private static partial Regex LongitudeSeo();
     }
 }

@@ -18,6 +18,20 @@ namespace DST.Models.Routes
 
         #endregion
 
+        #region Constructors
+
+        public PageSortRoute() { }
+
+        public PageSortRoute(PageSortRoute values)
+        {
+            PageNumber = values.PageNumber;
+            PageSize = values.PageSize;
+            SortField = values.SortField;
+            SortDirection = values.SortDirection;
+        }
+
+        #endregion
+
         #region Methods
 
         public void SetPageSize(int size)
@@ -45,14 +59,14 @@ namespace DST.Models.Routes
                 SetSort(fieldName);
             }
 
-            if (current.SortField.EqualsSeo(fieldName) && current.SortDirection.EqualsSeo(OrderDirection.Ascending))
+            if (current.SortField.EqualsSeo(fieldName) && current.SortDirection.EqualsSeo(OrderDirection.AscendingAbbr))
             {
-                SortDirection = OrderDirection.Descending;
+                SortDirection = OrderDirection.DescendingAbbr;
             }
             else
             {
                 // Always start in ascending order.
-                SortDirection = OrderDirection.Ascending;
+                SortDirection = OrderDirection.AscendingAbbr;
             }
         }
 

@@ -110,14 +110,14 @@ namespace DST.Core.Tests
                 rightAscension: Angle.Zero, declination: new Angle(90.0));
 
             // Test equatorial coordinate
-            //RightAscension = 16.6947889, Declination = 36.4598611
+            // RightAscension = 0.8072222, Declination = 85.255
             IEquatorialCoordinate test = CoordinateFactory.CreateEquatorial(
-                rightAscension: new(TimeSpan.FromHours(16.6947889)), declination: new(36.4598611));
+                rightAscension: new(TimeSpan.FromHours(0.8072222)), declination: new(85.255));
 
             // My timezone: America/Chicago
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
-            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.ERA);
-            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m42, timeKeeper);
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, test, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
 
             Console.WriteLine($"Location: {observer.Origin}");

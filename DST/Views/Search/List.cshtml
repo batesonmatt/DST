@@ -69,9 +69,9 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.Type.Active("all");
-            routes.Type = "all";
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
+            active = current.Type.Active(Filter.All);
+            routes.Type = Filter.All;
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
 
             foreach (var type in Model.Types)
             {
@@ -87,9 +87,9 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.Catalog.Active("all");
-            routes.Catalog = "all";
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
+            active = current.Catalog.Active(Filter.All);
+            routes.Catalog = Filter.All;
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
 
             foreach (var catalog in Model.Catalogs)
             {
@@ -105,9 +105,9 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.Constellation.Active("all");
-            routes.Constellation = "all";
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
+            active = current.Constellation.Active(Filter.All);
+            routes.Constellation = Filter.All;
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
 
             foreach (var constellation in Model.Constellations)
             {
@@ -123,9 +123,9 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.Season.Active("all");
-            routes.Season = "all";
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
+            active = current.Season.Active(Filter.All);
+            routes.Season = Filter.All;
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
 
             foreach (var season in Model.Seasons)
             {
@@ -141,9 +141,9 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.Trajectory.Active("all");
-            routes.Trajectory = "all";
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
+            active = current.Trajectory.Active(Filter.All);
+            routes.Trajectory = Filter.All;
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
 
             foreach (var trajectory in Model.Trajectories)
             {
@@ -159,16 +159,16 @@
             routes = current.Clone();
             routes.PageNumber = 1;
             
-            if (current.Local == "on")
+            if (current.Local.IsFilterOn())
             {
-                routes.Local = "off";
+                routes.Local = Filter.Off;
                 <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Local</a>
             }
             else
             {
-                routes.Visible = "off";
-                routes.Rising = "off";
-                routes.Local = "on";
+                routes.Visible = Filter.Off;
+                routes.Rising = Filter.Off;
+                routes.Local = Filter.On;
                 <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Local</a>
             }
         }
@@ -179,16 +179,16 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            if (current.Visible == "on")
+            if (current.Visible.IsFilterOn())
             {
-                routes.Visible = "off";
+                routes.Visible = Filter.Off;
                 <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Visible</a>
             }
             else
             {
-                routes.Local = "off";
-                routes.Rising = "off";
-                routes.Visible = "on";
+                routes.Local = Filter.Off;
+                routes.Rising = Filter.Off;
+                routes.Visible = Filter.On;
                 <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Visible</a>
             }
         }
@@ -199,16 +199,16 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            if (current.Rising == "on")
+            if (current.Rising.IsFilterOn())
             {
-                routes.Rising = "off";
+                routes.Rising = Filter.Off;
                 <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Rising</a>
             }
             else
             {
-                routes.Local = "off";
-                routes.Visible = "off";
-                routes.Rising = "on";
+                routes.Local = Filter.Off;
+                routes.Visible = Filter.Off;
+                routes.Rising = Filter.On;
                 <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Rising</a>
             }
         }
@@ -219,14 +219,14 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            if (current.HasName == "on")
+            if (current.HasName.IsFilterOn())
             {
-                routes.HasName = "off";
+                routes.HasName = Filter.Off;
                 <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Has Name</a>
             }
             else
             {
-                routes.HasName = "on";
+                routes.HasName = Filter.On;
                 <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Has Name</a>
             }
         }
@@ -333,7 +333,7 @@
                             {
                                 <h3>@dso.CompoundId</h3>
                             }
-                            @if (current.SortField.EqualsSeo(Sort.RiseTime))
+                            @if (current.IsSortByRiseTime)
                             {
                                 <i>@Model.GetSortTag(new DsoObserverOptions(dso, Model.Geolocation))</i>
                             }
