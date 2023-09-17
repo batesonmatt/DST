@@ -1,9 +1,8 @@
 ﻿using DST.Models.DomainModels;
-using DST.Models.DataLayer.Query;
 using System.Collections.Generic;
-using DST.Models.Builders.Routing;
 using DST.Models.BusinessLogic;
 using System;
+using DST.Models.Routes;
 
 namespace DST.Models.ViewModels
 {
@@ -14,7 +13,7 @@ namespace DST.Models.ViewModels
         public GeolocationModel Geolocation { get; set; }
         public IEnumerable<TimeZoneItem> TimeZoneItems { get; set; }
 
-        public RouteDictionary CurrentRoute { get; set; }
+        public SearchRoute CurrentRoute { get; set; }
         public int TotalPages { get; set; }
 
         public IEnumerable<DsoModel> DsoItems { get; set; }

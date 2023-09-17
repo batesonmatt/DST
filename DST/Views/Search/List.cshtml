@@ -4,8 +4,8 @@
     ViewBag.Title = "Search";
     Layout = "_BannerLayout";
 
-    RouteDictionary current = Model.CurrentRoute;
-    RouteDictionary routes = current.Clone();
+    SearchRoute current = Model.CurrentRoute;
+    SearchRoute routes = current.Clone();
     string active;
 }
 
@@ -26,7 +26,7 @@
     @{
         routes.PageNumber = 1;
     }
-    <form id="form-geolocation" class="mb-3" asp-action="CreateGeolocation" asp-all-route-data="@routes" method="post" onchange="enableGeoSubmit()" oninput="enableGeoSubmit()">
+    <form id="form-geolocation" class="mb-3" asp-action="CreateGeolocation" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableGeoSubmit()" oninput="enableGeoSubmit()">
         <div class="mb-3">
             <label class="form-label" asp-for="Geolocation.TimeZoneId">Time Zone</label>
             <input id="input-timezone" class="form-control" type="hidden" asp-for="Geolocation.UserTimeZoneId" value="@Model.Geolocation.TimeZoneId" />
@@ -59,7 +59,7 @@
             {
                 active = current.SortField.Active(sortField);
                 routes.SetSort(sortField.ToKebabCase());
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">@sortField</a>
+                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@sortField</a>
             }
         }
     </div>
@@ -69,15 +69,15 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.TypeFilter.Value.Active(ListFilter.All);
-            routes.TypeFilter = new ListFilter();
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">All</a>
+            active = current.Type.Active("all");
+            routes.Type = "all";
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
 
             foreach (var type in Model.Types)
             {
-                active = current.TypeFilter.Value.Active(type.Type);
-                routes.TypeFilter = new ListFilter(nameof(SearchDTO.Type), type.Type);
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">@type.Type</a>
+                active = current.Type.Active(type.Type);
+                routes.Type = type.Type;
+                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@type.Type</a>
             }
         }
     </div>
@@ -87,15 +87,15 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.CatalogFilter.Value.Active(ListFilter.All);
-            routes.CatalogFilter = new ListFilter();
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">All</a>
+            active = current.Catalog.Active("all");
+            routes.Catalog = "all";
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
 
             foreach (var catalog in Model.Catalogs)
             {
-                active = current.CatalogFilter.Value.Active(catalog.Name);
-                routes.CatalogFilter = new ListFilter(nameof(SearchDTO.Catalog), catalog.Name);
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">@catalog.Name</a>
+                active = current.Catalog.Active(catalog.Name);
+                routes.Catalog = catalog.Name;
+                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@catalog.Name</a>
             }
         }
     </div>
@@ -105,15 +105,15 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.ConstellationFilter.Value.Active(ListFilter.All);
-            routes.ConstellationFilter = new ListFilter();
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">All</a>
+            active = current.Constellation.Active("all");
+            routes.Constellation = "all";
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
 
             foreach (var constellation in Model.Constellations)
             {
-                active = current.ConstellationFilter.Value.Active(constellation.Name);
-                routes.ConstellationFilter = new ListFilter(nameof(SearchDTO.Constellation), constellation.Name);
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">@constellation.Name</a>
+                active = current.Constellation.Active(constellation.Name);
+                routes.Constellation = constellation.Name;
+                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@constellation.Name</a>
             }
         }
     </div>
@@ -123,15 +123,15 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.SeasonFilter.Value.Active(ListFilter.All);
-            routes.SeasonFilter = new ListFilter();
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">All</a>
+            active = current.Season.Active("all");
+            routes.Season = "all";
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
 
             foreach (var season in Model.Seasons)
             {
-                active = current.SeasonFilter.Value.Active(season.Name);
-                routes.SeasonFilter = new ListFilter(nameof(SearchDTO.Season), season.Name);
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">@season.Name</a>
+                active = current.Season.Active(season.Name);
+                routes.Season = season.Name;
+                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@season.Name</a>
             }
         }
     </div>
@@ -141,15 +141,15 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            active = current.TrajectoryFilter.Value.Active(ListFilter.All);
-            routes.TrajectoryFilter = new ListFilter();
-            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">All</a>
+            active = current.Trajectory.Active("all");
+            routes.Trajectory = "all";
+            <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">All</a>
 
             foreach (var trajectory in Model.Trajectories)
             {
-                active = current.TrajectoryFilter.Value.Active(trajectory);
-                routes.TrajectoryFilter = new ListFilter(nameof(SearchDTO.Trajectory), trajectory);
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes">@trajectory</a>
+                active = current.Trajectory.Active(trajectory);
+                routes.Trajectory = trajectory;
+                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@trajectory</a>
             }
         }
     </div>
@@ -159,17 +159,17 @@
             routes = current.Clone();
             routes.PageNumber = 1;
             
-            if (current.LocalFilter.IsOn())
+            if (current.Local == "on")
             {
-                routes.LocalFilter = new ToggleFilter(nameof(SearchDTO.Local), ToggleFilter.Off);
-                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes">Local</a>
+                routes.Local = "off";
+                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Local</a>
             }
             else
             {
-                routes.VisibleFilter = new ToggleFilter(nameof(SearchDTO.Visible), ToggleFilter.Off);
-                routes.RisingFilter = new ToggleFilter(nameof(SearchDTO.Rising), ToggleFilter.Off);
-                routes.LocalFilter = new ToggleFilter(nameof(SearchDTO.Local), ToggleFilter.On);
-                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Local</a>
+                routes.Visible = "off";
+                routes.Rising = "off";
+                routes.Local = "on";
+                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Local</a>
             }
         }
     </div>
@@ -179,17 +179,17 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            if (current.VisibleFilter.IsOn())
+            if (current.Visible == "on")
             {
-                routes.VisibleFilter = new ToggleFilter(nameof(SearchDTO.Visible), ToggleFilter.Off);
-                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes">Visible</a>
+                routes.Visible = "off";
+                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Visible</a>
             }
             else
             {
-                routes.LocalFilter = new ToggleFilter(nameof(SearchDTO.Local), ToggleFilter.Off);
-                routes.RisingFilter = new ToggleFilter(nameof(SearchDTO.Rising), ToggleFilter.Off);
-                routes.VisibleFilter = new ToggleFilter(nameof(SearchDTO.Visible), ToggleFilter.On);
-                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Visible</a>
+                routes.Local = "off";
+                routes.Rising = "off";
+                routes.Visible = "on";
+                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Visible</a>
             }
         }
     </div>
@@ -199,17 +199,17 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            if (current.RisingFilter.IsOn())
+            if (current.Rising == "on")
             {
-                routes.RisingFilter = new ToggleFilter(nameof(SearchDTO.Rising), ToggleFilter.Off);
-                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes">Rising</a>
+                routes.Rising = "off";
+                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Rising</a>
             }
             else
             {
-                routes.LocalFilter = new ToggleFilter(nameof(SearchDTO.Local), ToggleFilter.Off);
-                routes.VisibleFilter = new ToggleFilter(nameof(SearchDTO.Visible), ToggleFilter.Off);
-                routes.RisingFilter = new ToggleFilter(nameof(SearchDTO.Rising), ToggleFilter.On);
-                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Rising</a>
+                routes.Local = "off";
+                routes.Visible = "off";
+                routes.Rising = "on";
+                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Rising</a>
             }
         }
     </div>
@@ -219,15 +219,15 @@
             routes = current.Clone();
             routes.PageNumber = 1;
 
-            if (current.HasNameFilter.IsOn())
+            if (current.HasName == "on")
             {
-                routes.HasNameFilter = new ToggleFilter(nameof(SearchDTO.HasName), ToggleFilter.Off);
-                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes">Has Name</a>
+                routes.HasName = "off";
+                <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Has Name</a>
             }
             else
             {
-                routes.HasNameFilter = new ToggleFilter(nameof(SearchDTO.HasName), ToggleFilter.On);
-                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes">Has Name</a>
+                routes.HasName = "on";
+                <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Has Name</a>
             }
         }
     </div>
@@ -380,14 +380,14 @@
             {
                 routes.PageNumber = current.PageNumber - 1;
                 // class="btn text-white"
-                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start">Previous</a>
+                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">Previous</a>
             }
 
             if (current.PageNumber < Model.TotalPages)
             {
                 routes.PageNumber = current.PageNumber + 1;
                 // class="btn text-white"
-                <a asp-action="List" asp-all-route-data="@routes" asp-fragment="start">Next</a>
+                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">Next</a>
             }
         }
     </div>

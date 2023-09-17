@@ -3,13 +3,11 @@
 using DST.Models.DomainModels;
 using DST.Models.DataLayer;
 using DST.Models.DataLayer.Repositories;
-using DST.Models.DTOs;
-using DST.Models.Builders.Routing;
 using DST.Models.DataLayer.Query;
 using DST.Models.ViewModels;
-using Microsoft.AspNetCore.Http;
 using DST.Models.Builders;
 using DST.Models.BusinessLogic;
+using DST.Models.Routes;
 
 namespace DST.Controllers
 {
@@ -41,7 +39,7 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchDTO values, bool reset = false)
+        public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchRoute values, bool reset = false)
         {
             // Set the location coordinates.
             _geoBuilder.CurrentGeolocation.Latitude = geolocation.Latitude;
@@ -71,18 +69,13 @@ namespace DST.Controllers
             // Save the geolocation in session and create a persistent cookie.
             _geoBuilder.Save();
 
-            return RedirectToAction("List", values);
+            return RedirectToAction("List", values.ToDictionary());
         }
 
-        public ViewResult List(SearchDTO values)
+        public ViewResult List(SearchRoute values)
         {
-            // Get a new GridBuilder object, load route segments, and store in the current session.
-            SearchRouteBuilder builder = new(HttpContext.Session, values);
-
             // if clear filters:
-            // builder.ClearFilterSegments();
-            // else:
-            builder.SaveRouteSegments();
+            // values.ClearFilters();
 
             // Set initial options from the route segments.
             SearchQueryOptions options = new()
@@ -90,12 +83,12 @@ namespace DST.Controllers
                 // Include any initial navigation properties.
                 //IncludeAll = "",
 
-                PageNumber = builder.CurrentRoute.PageNumber,
-                PageSize = builder.CurrentRoute.PageSize,
-                SortDirection = builder.CurrentRoute.SortDirection
+                PageNumber = values.PageNumber,
+                PageSize = values.PageSize,
+                SortDirection = values.SortDirection
             };
 
-            options.SortFilter(builder, _geoBuilder.CurrentGeolocation);
+            options.SortFilter(values, _geoBuilder.CurrentGeolocation);
 
             SearchListViewModel viewModel = new()
             {
@@ -126,8 +119,8 @@ namespace DST.Controllers
 
                 GetSortTag = Utilities.GetInfoFunc(values.SortField),
 
-                CurrentRoute = builder.CurrentRoute,
-                TotalPages = builder.GetTotalPages(_data.DsoItems.Count)
+                CurrentRoute = values,
+                TotalPages = values.GetTotalPages(_data.DsoItems.Count)
             };
 
             return View(viewModel);

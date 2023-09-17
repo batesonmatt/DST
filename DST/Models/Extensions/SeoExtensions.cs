@@ -1,8 +1,5 @@
-﻿using DST.Core.Physics;
-using DST.Models.DataLayer.Query;
-using System;
+﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DST.Models.Extensions
@@ -88,86 +85,6 @@ namespace DST.Models.Extensions
         public static double ToDouble(this string value)
         {
             return double.TryParse(value, out double result) ? result : default;
-        }
-
-        [Obsolete("Not adding geolocation information to routing service at this time.")]
-        public static bool IsLatitudeSeo(this string value)
-        {
-            return LatitudeSeo().IsMatch(value);
-        }
-
-        [Obsolete("Not adding geolocation information to routing service at this time.")]
-        public static bool IsLongitudeSeo(this string value)
-        {
-            return LongitudeSeo().IsMatch(value);
-        }
-
-        [Obsolete("Not adding geolocation information to routing service at this time.")]
-        public static double ToLatitude(this string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return default;
-            }
-
-            if (value.IsLatitudeSeo() == false)
-            {
-                return default;
-            }
-
-            int sign = value.ToUpperInvariant().First().ToString() == GeoIndicator.North ? 1 : -1;
-
-            string number = value.Substring(1).Replace('-', '.');
-
-            return sign * number.ToDouble();
-        }
-
-        [Obsolete("Not adding geolocation information to routing service at this time.")]
-        public static double ToLongitude(this string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return default;
-            }
-
-            if (value.IsLongitudeSeo() == false)
-            {
-                return default;
-            }
-
-            int sign = value.ToUpperInvariant().First().ToString() == GeoIndicator.East ? 1 : -1;
-
-            string number = value.Substring(1).Replace('-', '.');
-
-            return sign * number.ToDouble();
-        }
-
-        [Obsolete("Not adding geolocation information to routing service at this time.")]
-        public static string ToLatitudeSeo(this double value)
-        {
-            if (value.IsFiniteRealNumber() == false)
-            {
-                return GeoIndicator.DefaultLatitude;
-            }
-
-            string result = (value < 0 ? GeoIndicator.South : GeoIndicator.North)
-                + Math.Abs(value).ToString(CultureInfo.InvariantCulture).ToKebabCase();
-
-            return result;
-        }
-
-        [Obsolete("Not adding geolocation information to routing service at this time.")]
-        public static string ToLongitudeSeo(this double value)
-        {
-            if (value.IsFiniteRealNumber() == false)
-            {
-                return GeoIndicator.DefaultLongitude;
-            }
-
-            string result = (value < 0 ? GeoIndicator.West : GeoIndicator.East)
-                + Math.Abs(value).ToString(CultureInfo.InvariantCulture).ToKebabCase();
-
-            return result;
         }
 
         [GeneratedRegex("[^0-9a-zA-Z\\p{L}]", RegexOptions.Compiled | RegexOptions.CultureInvariant)]

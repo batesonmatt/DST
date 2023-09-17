@@ -4,57 +4,10 @@ Update VS
 
 -------------------------------------------------------------------------
 
-RouteDictionary and RouteBuilder
-- I will need to redesign/rename these types so that I may use them for the Track DTO classes.
-- Consider interfaces and abstract design.
-
-***** Consider omitting the abstract base classes due to calling virtual methods in the concrete ctors. *****
-***** Just implement the interface in the concrete types directly *****
-
-- Consider interface IRouteBuilder
-    - IRouteDictionary CurrentRoute { get; }
-    - void Save()
-    - void Load(ISession session)
-
-- Consider abstract class BaseRouteBuilder : IRouteBuilder
-    - public abstract IRouteDictionary CurrentRoute { get; }
-    - protected const string _routeKey = "currentroute";
-    - protected ISession _session;
-    - public void Save() => _session.SetObject(_routeKey, CurrentRoute);
-    - public abstract void Load(ISession session);
-
-- Consider changing RouteBuilder to PageSortRouteBuilder : BaseRouteBuilder, IRouteBuilder
-    - public override IRouteDictionary CurrentRoute => _routes;
-    - private PageSortRouteDictionary _routes;
-    - public override void Load(ISession session)
-        _session = session;
-        _routes = _session.GetObject<PageSortRouteDictionary>(_routeKey) ?? new PageSortRouteDictionary();
-    - public PageSortRouteBuilder(ISession session) => Load(session);
-    - public PageSortRouteBuilder(ISession session, PageSortDTO values)
-        _session = session;
-        _routes = new RouteDictionary
-        {
-            PageNumber = values.PageNumber,
-            PageSize = values.PageSize,
-            SortField = values.SortField,
-            SortDirection = values.SortDirection
-        };
-        Save();
-
-- Consider class SearchRouteBuilder : PageSortRouteBuilder, IRouteBuilder
-- Consider class TrackRouteBuilder : BaseRouteBuilder, IRouteBuilder
-
-- For RouteBuilder.CurrentRoute property, consider an interface IRouteDictionary
-- Consider interface IRouteDictionary
-  - Get(string)
-  - Set(string, string)
-  - Clone()
-
-- Consider abstract class BaseRouteDictionary : Dictionary<string, string>, IRouteDictionary
-- Consider class PageSortRouteDictionary : BaseRouteDictionary, IRouteDictionary
-- Consider class SearchRouteDictionary : PageSortRouteDictionary, IRouteDictionary
-- Consider class TrackRouteDictionary : BaseRouteDictionary, IRouteDictionary
-
+DST.Models.Routes.SearchRoute
+- Use static class/const values for the default values, "All"=>"all", "Off"=>"off", "On"=>"on"
+  Consider adding to SeoExtensions class
+- Add ClearFilters() method
 
 -------------------------------------------------------------------------
 
@@ -81,24 +34,26 @@ Routes
 - Ex: "/track/main/messier/13/gast/13011995/sidereal-time/days/period-10/interval-3/historical-off/"
 - Ex: "/track/main/messier/13/era/13011995/stellar-time/weeks/period-50/interval-5/historical-off/"
 
+? Create class DST.Models.Routes.TrackRoute : IRouteDictionary<TrackRoute>
+...
 
-TrackSummaryDTO
+TrackSummaryRoute
 - Catalog       Default => "Messier"
 - Id            Default => 1
 - Algorithm     Default => "GMST"
 
-TrackVectorDTO : TrackSummaryDTO
+TrackVectorRoute : TrackSummaryRoute
 - Start         Default => Empty string, then get current client datetime in the route builder if value is null or whitespace.
 - Cycles        Default => 1
-- Historical    Default => "off" (Use ToggleFilter?)
+- Historical    Default => "off"
 
-TrackMainDTO
+TrackRoute
 - Start         Default => Empty string, then get current client datetime in the route builder if value is null or whitespace.
 - TimeScale     Default => "Mean solar time"
 - TimeUnit      Default => "Hours"
 - Period        Default => 0
 - Interval      Default => 0
-- Historical    Default => "off" (Use ToggleFilter?)
+- Historical    Default => "off"
 - By default if timeunit, period, or interval is invalid, then track for the current client datetime.
 
 TrackViewModel
@@ -200,6 +155,12 @@ Graphing support (?)
 - Graph the trajectory of a tracked object as a sinosoidal wave (position over time)
 
 ___________________________________________________________
+
+Project -> Propeties -> Code Analysis
+
+    Change level to "Latest All" and fix warnings.
+
+----------------------------------------------------------
 
 Localization
 - Add resource strings for the views' harcoded text.

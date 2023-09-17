@@ -1,4 +1,4 @@
-﻿namespace DST.Models.DataLayer.Query
+﻿namespace DST.Models.BusinessLogic
 {
     public class TimeZoneItem
     {
