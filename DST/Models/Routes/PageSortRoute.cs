@@ -37,13 +37,15 @@ namespace DST.Models.Routes
         public void SetDirection(string direction)
             => SortDirection = string.IsNullOrWhiteSpace(direction) ? OrderDirection.Default : direction;
 
-        // Sets the sorting field for a table and toggles the sorting direction on subsequent calls.
+        // Sets the sorting field for a table column control and toggles the sorting direction on subsequent calls.
         public void SetTableSort(string fieldName, PageSortRoute current)
         {
-            SortField = fieldName;
+            if (SortField != fieldName)
+            {
+                SetSort(fieldName);
+            }
 
-            /* Might eventually need to use EqualsSeo on SortDirection */
-            if (SortField.EqualsSeo(fieldName) && current.SortDirection == OrderDirection.Ascending)
+            if (current.SortField.EqualsSeo(fieldName) && current.SortDirection.EqualsSeo(OrderDirection.Ascending))
             {
                 SortDirection = OrderDirection.Descending;
             }

@@ -58,7 +58,7 @@
             foreach (var sortField in Sort.GetFields())
             {
                 active = current.SortField.Active(sortField);
-                routes.SetSort(sortField.ToKebabCase());
+                routes.SetSort(sortField);
                 <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@sortField</a>
             }
         }
