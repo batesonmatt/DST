@@ -35,6 +35,8 @@ namespace DST.Controllers
 
         public IActionResult Index()
         {
+            /* Load routes from session state. */
+
             return RedirectToAction("List");
         }
 

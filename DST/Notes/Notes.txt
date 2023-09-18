@@ -4,6 +4,29 @@ Update VS
 
 -------------------------------------------------------------------------
 
+List view
+- Add sort direction controls (Ascending and Descending)
+- Add clear filters control
+- Add any other necessary controls
+- Add button to the dso items that navigates to the Track view.
+- Consider saving SearchRoute values to session when navigating away from the SearchController,
+  then attempt to load from session when navigating to the SearchController.
+  Load SearchRoute values from session inside SearchController.Index()
+  Save SearchRoute values to session inside SearchController.List()
+  Consider a new builder class, SearchBuilder, that takes a SearchRoute object and overwrites to session.
+  Consider dependency injecting the SearchBuilder in the SearchController ctor.
+  Consider a base interface, IBuilder, and have IGeolocationBuilder and ISearchBuilder inherit it.
+
+    IBuilder
+    - void Save()
+    - void Load()
+
+Details view
+- Add all displayable information here
+- Add button to navigate to the Track view
+
+-------------------------------------------------------------------------
+
 Track view/Controller
 
 Linking to Track page/Controller
@@ -40,7 +63,7 @@ TrackVectorRoute : TrackSummaryRoute
 - Cycles        Default => 1
 - Historical    Default => "off"
 
-TrackRoute
+TrackMainRoute : TrackSummaryRoute
 - Start         Default => Empty string, then get current client datetime in the route builder if value is null or whitespace.
 - TimeScale     Default => "Mean solar time"
 - TimeUnit      Default => "Hours"
@@ -112,9 +135,6 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 -------------------------------------------------------------------------
 
 Redesign List view
-- Add sort direction controls (Ascending and Descending)
-- Add clear filters control
-- Add any other necessary controls
 - Consider expanding/collapsable controls for the filter/sort lists
 - Consider using Bootstrap Cards for the list items
     https://getbootstrap.com/docs/5.0/components/card/#grid-cards
