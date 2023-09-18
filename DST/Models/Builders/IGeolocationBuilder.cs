@@ -2,11 +2,8 @@
 
 namespace DST.Models.Builders
 {
-    public interface IGeolocationBuilder
+    public interface IGeolocationBuilder : IBuilder
     {
         GeolocationModel CurrentGeolocation { get; set; }
-
-        void Load();
-        void Save();
     }
 }

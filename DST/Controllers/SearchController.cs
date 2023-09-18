@@ -16,15 +16,19 @@ namespace DST.Controllers
         #region Fields
 
         private readonly SearchUnitOfWork _data;
+        private readonly ISearchBuilder _builder;
         private readonly IGeolocationBuilder _geoBuilder;
 
         #endregion
 
         #region Constructors
 
-        public SearchController(MainDbContext context, IGeolocationBuilder geoBuilder)
+        public SearchController(MainDbContext context, ISearchBuilder searchBuilder, IGeolocationBuilder geoBuilder)
         {
             _data = new SearchUnitOfWork(context);
+            _builder = searchBuilder;
+
+            // Load the client geolocation, if any.
             _geoBuilder = geoBuilder;
             _geoBuilder.Load();
         }
@@ -35,9 +39,10 @@ namespace DST.Controllers
 
         public IActionResult Index()
         {
-            /* Load routes from session state. */
+            // Load a saved route from session state, if any.
+            _builder.Load();
 
-            return RedirectToAction("List");
+            return RedirectToAction("List", _builder.Route.ToDictionary());
         }
 
         [HttpPost]
@@ -81,6 +86,10 @@ namespace DST.Controllers
                 // Clear the filters, but retain the paging and sorting values.
                 values = values.Reset();
             }
+
+            // Save the current route to session state.
+            _builder.Route = values;
+            _builder.Save();
 
             // Set initial options from the route segments.
             SearchQueryOptions options = new()

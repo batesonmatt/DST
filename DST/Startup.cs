@@ -46,8 +46,9 @@ namespace DST
             // Configure dependency injection for the IHttpContextAccessor service.
             services.AddHttpContextAccessor();
 
-            // Enable dependency injection for IGeolocationBuilder objects.
+            // Enable dependency injection for miscellaneous objects.
             services.AddTransient<IGeolocationBuilder, GeolocationBuilder>();
+            services.AddTransient<ISearchBuilder, SearchBuilder>();
 
             // Make URLs lowercase and end with a trailing slash.
             services.AddRouting(options =>
