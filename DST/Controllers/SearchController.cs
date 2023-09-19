@@ -79,14 +79,17 @@ namespace DST.Controllers
             return RedirectToAction("List", values.ToDictionary());
         }
 
+        [HttpGet]
+        public IActionResult Clear(SearchRoute values)
+        {
+            // Clear the filters, but retain the paging and sorting values.
+            values = values.Reset();
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
         public ViewResult List(SearchRoute values)
         {
-            if (values.ClearFilters)
-            {
-                // Clear the filters, but retain the paging and sorting values.
-                values = values.Reset();
-            }
-
             // Save the current route to session state.
             _builder.Route = values;
             _builder.Save();

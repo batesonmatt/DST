@@ -1,7 +1,6 @@
 ﻿To Do:
 
 List view
-- Add clear filters control
 - Add results per page (PageSize) control
 - Add results count label (Ex: "1-10 of 200 results")
 - Add a search bar control
@@ -14,7 +13,8 @@ Add TrackController.Summary action method
 Add tracksummary route endpoint
 
 List view
-- Add button to the dso items that navigates to the Track view.
+- Add button to the dso items that navigates to the Track view
+  (see pg. 531 for form submit button).
 
 Details view
 - Add all displayable information here

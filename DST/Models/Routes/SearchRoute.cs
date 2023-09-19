@@ -37,8 +37,6 @@ namespace DST.Models.Routes
         [JsonIgnore] public bool IsFilterByRising => Rising.IsFilterOn();
         [JsonIgnore] public bool IsFilterByHasName => HasName.IsFilterOn();
 
-        [JsonIgnore] public bool ClearFilters { get; set; } = false;
-
         #endregion
 
         #region Constructors
@@ -50,6 +48,20 @@ namespace DST.Models.Routes
         #endregion
 
         #region Methods
+
+        public bool HasFilters()
+        {
+            if (IsFilterByType) return true;
+            if (IsFilterByCatalog) return true;
+            if (IsFilterByConstellation) return true;
+            if (IsFilterBySeason) return true;
+            if (IsFilterByTrajectory) return true;
+            if (IsFilterByLocal) return true;
+            if (IsFilterByVisible) return true;
+            if (IsFilterByRising) return true;
+            if (IsFilterByHasName) return true;
+            return false;
+        }
 
         public SearchRoute Reset()
         {
