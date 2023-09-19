@@ -140,50 +140,6 @@ namespace DST.Controllers
             return View(viewModel);
         }
 
-        // Argument filterIds contains the posted values for ListFilter.Id.
-        // Argument filters contains the posted values for ListFilter.Value in the order defined by filterIds.
-        // Argument options contains the posted values for ToggleFilter.Id.
-        //[HttpPost]
-        //public RedirectToActionResult Filter(string[] filterIds, string[] filters, string[] options, bool clear = false)
-        //{
-        //    SearchRouteBuilder builder = new(HttpContext.Session);
-
-        //    if (clear)
-        //    {
-        //        builder.ClearFilterSegments();
-        //    }
-        //    else
-        //    {
-        //        List<IFilter> form = new();
-
-        //        if (filters?.Length <= filterIds?.Length)
-        //        {
-        //            for (int i = 0; i < filters.Length; i++)
-        //            {
-        //                form.Add(new ListFilter(filterIds[i], filters[i]));
-        //            }
-        //        }
-
-        //        if (options?.Length > 0)
-        //        {
-        //            // The length of the array is variable since the input elements are posted only if they are checked.
-        //            foreach (string id in options)
-        //            {
-        //                if (id is not null)
-        //                {
-        //                    form.Add(new ToggleFilter(id, ToggleFilter.On));
-        //                }
-        //            }
-        //        }
-
-        //        builder.LoadFilterSegments(form.ToArray());
-        //    }
-
-        //    builder.SaveRouteSegments();
-
-        //    return RedirectToAction("List", builder.CurrentRoute);
-        //}
-
         [HttpGet]
         public IActionResult Details(string catalog, int id)
         {

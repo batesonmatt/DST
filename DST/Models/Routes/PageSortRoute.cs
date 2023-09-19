@@ -1,6 +1,7 @@
 ﻿using DST.Models.DataLayer.Query;
 using DST.Models.Extensions;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace DST.Models.Routes
 {
@@ -9,12 +10,12 @@ namespace DST.Models.Routes
         #region Properties
 
         public int PageNumber { get; set; } = 1;
-
         public int PageSize { get; set; } = 10;
-
         public string SortField { get; set; } = Sort.Default;
-
         public string SortDirection { get; set; } = OrderDirection.Default;
+
+        [JsonIgnore] public bool IsSortAscending => SortDirection.EqualsSeo(OrderDirection.AscendingAbbr);
+        [JsonIgnore] public bool IsSortDescending => SortDirection.EqualsSeo(OrderDirection.DescendingAbbr);
 
         #endregion
 
@@ -48,8 +49,11 @@ namespace DST.Models.Routes
         public void SetSort(string fieldName)
             => SortField = string.IsNullOrWhiteSpace(fieldName) ? Sort.Default : fieldName;
 
-        public void SetDirection(string direction)
-            => SortDirection = string.IsNullOrWhiteSpace(direction) ? OrderDirection.Default : direction;
+        public void SortAscending()
+            => SortDirection = OrderDirection.AscendingAbbr;
+
+        public void SortDescending()
+            => SortDirection = OrderDirection.DescendingAbbr;
 
         // Sets the sorting field for a table column control and toggles the sorting direction on subsequent calls.
         public void SetTableSort(string fieldName, PageSortRoute current)
@@ -59,14 +63,14 @@ namespace DST.Models.Routes
                 SetSort(fieldName);
             }
 
-            if (current.SortField.EqualsSeo(fieldName) && current.SortDirection.EqualsSeo(OrderDirection.AscendingAbbr))
+            if (current.SortField.EqualsSeo(fieldName) && current.IsSortAscending)
             {
-                SortDirection = OrderDirection.DescendingAbbr;
+                SortDescending();
             }
             else
             {
                 // Always start in ascending order.
-                SortDirection = OrderDirection.AscendingAbbr;
+                SortAscending();
             }
         }
 

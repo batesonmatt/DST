@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DST.Models.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -14,6 +15,10 @@ namespace DST.Models.DataLayer.Query
         public int PageNumber { get; set; }
 
         public int PageSize { get; set; }
+
+        public bool IsSortAscending => SortDirection.EqualsSeo(OrderDirection.AscendingAbbr);
+
+        public bool IsSortDescending => SortDirection.EqualsSeo(OrderDirection.DescendingAbbr);
 
         public List<string> Includes { get; set; } = null!;
 

@@ -1,9 +1,19 @@
 ﻿To Do:
 
 List view
-- Add sort direction controls (Ascending and Descending)
 - Add clear filters control
-- Add any other necessary controls
+- Add results per page (PageSize) control
+- Add results count label (Ex: "1-10 of 200 results")
+- Add a search bar control
+- For the DsoItems, Check if Model.DsoItems is empty in this first if statement. 
+  Add else block to display message such as "No objects found that match your filters", etc.
+
+Add Controllers.TrackController
+Add Views.Track.Index
+Add TrackController.Summary action method
+Add tracksummary route endpoint
+
+List view
 - Add button to the dso items that navigates to the Track view.
 
 Details view
@@ -124,7 +134,6 @@ Redesign List view
 - Consider using Bootstrap Cards for the list items
     https://getbootstrap.com/docs/5.0/components/card/#grid-cards
     https://getbootstrap.com/docs/5.0/components/list-group/#custom-content
-- Consider a search bar control
 - For the navbar, redesign styles for navbar-toggler and navbar-dark. (?)
 
 Redesign Details view
