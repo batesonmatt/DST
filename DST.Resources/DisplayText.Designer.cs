@@ -214,6 +214,15 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} per page.
+        /// </summary>
+        public static string PageSizeFormat {
+            get {
+                return ResourceManager.GetString("PageSizeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rise time not available.
         /// </summary>
         public static string RiseTimeDefault {

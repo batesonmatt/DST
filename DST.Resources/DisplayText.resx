@@ -185,6 +185,10 @@
     <value>Longitude must be in the range from -180.0 to 180.0</value>
     <comment>The validation message for a longitudinal coordinate value.</comment>
   </data>
+  <data name="PageSizeFormat" xml:space="preserve">
+    <value>{0} per page</value>
+    <comment>Formats the display text for the number of items shown per page. Expects argument {0} to be an integer value type.</comment>
+  </data>
   <data name="RiseTimeDefault" xml:space="preserve">
     <value>Rise time not available</value>
     <comment>The default text for a particular deep-sky object's rising time.</comment>

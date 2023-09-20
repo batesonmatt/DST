@@ -124,6 +124,15 @@ namespace DST.Models.BusinessLogic
                 .Select(t => new TimeZoneItem(t.Id, t.DisplayName));
         }
 
+        // Returns all the allowable page sizes and the display text for the Search controller, List view.
+        public static IEnumerable<PageSizeItem> GetSearchListPageSizeItems()
+        {
+            return Enumerable.Range(1, 5).Select(
+                    i => new PageSizeItem(
+                        i * 10,
+                        string.Format(Resources.DisplayText.PageSizeFormat, i * 10)));
+        }
+
         // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation.
         public static bool IsLocal(DsoModel dso, GeolocationModel geolocation)
         {

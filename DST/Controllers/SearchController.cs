@@ -88,6 +88,14 @@ namespace DST.Controllers
             return RedirectToAction("List", values.ToDictionary());
         }
 
+        [HttpPost]
+        public IActionResult PageSize(SearchRoute values, int size)
+        {
+            values.SetPageSize(size);
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
         public ViewResult List(SearchRoute values)
         {
             // Save the current route to session state.
@@ -133,12 +141,11 @@ namespace DST.Controllers
                 }),
 
                 Trajectories = Utilities.GetTrajectoryNames(),
-
                 GetSortTag = Utilities.GetInfoFunc(values.SortField),
-
                 CurrentRoute = values,
-                TotalPages = values.GetTotalPages(_data.DsoItems.Count)
-            };
+                TotalPages = values.GetTotalPages(_data.DsoItems.Count),
+                PageSizes = Utilities.GetSearchListPageSizeItems()
+        };
 
             return View(viewModel);
         }

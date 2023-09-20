@@ -37,7 +37,7 @@ namespace DST.Models.Routes
 
         public void SetPageSize(int size)
         {
-            if (size is >= 0 and < int.MaxValue)
+            if (size is >= 0 and <= 100)
             {
                 PageSize = size;
             }

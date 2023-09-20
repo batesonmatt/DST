@@ -1,9 +1,11 @@
 ﻿To Do:
 
 List view
-- Add results per page (PageSize) control
 - Add results count label (Ex: "1-10 of 200 results")
-- Add a search bar control
+- Add a search bar control (action method "Find")
+  Consider a slug for the search string.
+  See pg. 548, 1st ed. "SearchData"
+  https://learn.microsoft.com/en-us/aspnet/mvc/overview/getting-started/introduction/adding-search
 - For the DsoItems, Check if Model.DsoItems is empty in this first if statement. 
   Add else block to display message such as "No objects found that match your filters", etc.
 
