@@ -1,7 +1,12 @@
 ﻿To Do:
 
+- Consider const fields for the min/max page number and page size values.
+- Consider if page size falls below minimum, use default size (10)
+- Consider breaking up PageSortRoute.GetResultsInfo into separate methods, then
+  add Utilities.GetResults(SearchRoute, int count) => string
+
+
 List view
-- Add results count label (Ex: "1-10 of 200 results")
 - Add a search bar control (action method "Find")
   Consider a slug for the search string.
   See pg. 548, 1st ed. "SearchData"
@@ -162,6 +167,12 @@ Add admin pages so that I may keep the Dso items up to date (?)
 
 Graphing support (?)
 - Graph the trajectory of a tracked object as a sinosoidal wave (position over time)
+
+___________________________________________________________
+
+Create powershell script(s) to remove/update the database, rebuild the migrations, etc.
+- Run from PMC in visual studio
+- Keep commented out when not running, then uncomment when ready.
 
 ___________________________________________________________
 

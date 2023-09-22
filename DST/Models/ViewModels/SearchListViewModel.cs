@@ -16,6 +16,7 @@ namespace DST.Models.ViewModels
         public SearchRoute CurrentRoute { get; set; }
         public int TotalPages { get; set; }
         public IEnumerable<PageSizeItem> PageSizes { get; set; }
+        public string Results { get; set; }
 
         public IEnumerable<DsoModel> DsoItems { get; set; }
         public IEnumerable<DsoTypeModel> Types { get; set; }

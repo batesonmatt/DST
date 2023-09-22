@@ -82,9 +82,11 @@ namespace DST.Models.DataLayer.Repositories
             // Get a subset of the results for the page.
             if (options.HasPaging)
             {
-                query = query.PageBy(options.PageNumber, options.PageSize);
-            }
+                // Validate the requested page number using the requested page size and the final item count.
+                int pageNumber = Paging.ClampPageNumber(Count, options.PageSize, options.PageNumber);
 
+                query = query.PageBy(pageNumber, options.PageSize);
+            }
             return query;
         }
 

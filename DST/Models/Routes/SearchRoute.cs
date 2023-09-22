@@ -93,6 +93,37 @@ namespace DST.Models.Routes
                 .ToDictionary(segment => segment.Key, segment => segment.Value);
         }
 
+        public override void Validate()
+        {
+            base.Validate();
+
+            if (!(IsSortById || IsSortByName || IsSortByType || IsSortByConstellation || 
+                IsSortByDistance || IsSortByBrightness || IsSortByRiseTime))
+            {
+                SortField = Sort.Default;
+            }
+
+            if (!(Local.IsFilterOn() || Local.IsFilterOff()))
+            {
+                Local = Filter.Off;
+            }
+
+            if (!(Visible.IsFilterOn() || Visible.IsFilterOff()))
+            {
+                Visible = Filter.Off;
+            }
+
+            if (!(Rising.IsFilterOn() || Rising.IsFilterOff()))
+            {
+                Rising = Filter.Off;
+            }
+
+            if (!(HasName.IsFilterOn() || HasName.IsFilterOff()))
+            {
+                HasName = Filter.Off;
+            }
+        }
+
         #endregion
     }
 }

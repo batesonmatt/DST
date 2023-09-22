@@ -37,17 +37,60 @@ namespace DST.Models.Routes
 
         public void SetPageSize(int size)
         {
-            if (size is >= 0 and <= 100)
-            {
-                PageSize = size;
-            }
+            PageSize = int.Clamp(size, 10, 100);
+        }
+
+        public void SetPageNumber(int number)
+        {
+            PageNumber = number < 1 ? 1 : number;
         }
 
         public int GetTotalPages(int count)
-            => PageSize > 0 ? (count + PageSize - 1) / PageSize : 0;
+            => Paging.GetTotalPages(count, PageSize);
+
+        public string GetResultsInfo(int count)
+        {
+            int pages = GetTotalPages(count);
+
+            if (pages <= 1 && count <= PageSize)
+            {
+                if (count == 1)
+                {
+                    return "1 result";
+                }
+                else
+                {
+                    return string.Format("{0} results", count);
+                }
+            }
+            else
+            {
+                int fullPages = count / PageSize;
+                int first = ((PageSize * PageNumber) - PageSize) + 1;
+                int last = PageNumber <= fullPages ? PageSize * PageNumber : first + (count % PageSize) - 1;
+
+                return string.Format("{0}-{1} of {2} results", first, last, count);
+            }
+        }
 
         public void SetSort(string fieldName)
             => SortField = string.IsNullOrWhiteSpace(fieldName) ? Sort.Default : fieldName;
+
+        public void SetSortDirection(string direction)
+        {
+            if (direction.EqualsSeo(OrderDirection.AscendingAbbr))
+            {
+                SortDirection = OrderDirection.AscendingAbbr;
+            }
+            else if (direction.EqualsSeo(OrderDirection.DescendingAbbr))
+            {
+                SortDirection = OrderDirection.DescendingAbbr;
+            }
+            else
+            {
+                SortDirection = OrderDirection.Default;
+            }
+        }
 
         public void SortAscending()
             => SortDirection = OrderDirection.AscendingAbbr;
@@ -88,6 +131,14 @@ namespace DST.Models.Routes
                 { nameof(SortField), SortField.ToKebabCase() },
                 { nameof(SortDirection), SortDirection.ToKebabCase() },
             };
+        }
+
+        public virtual void Validate()
+        {
+            SetPageSize(PageSize);
+            SetPageNumber(PageNumber);
+            SetSort(SortField);
+            SetSortDirection(SortDirection);
         }
 
         #endregion

@@ -72,6 +72,7 @@
                 <form asp-action="PageSize" asp-all-route-data="@routes.ToDictionary()" method="post">
                     <select name="size" class="form-select" onchange="this.form.submit();"
                         asp-items="@(new SelectList(Model.PageSizes, "Size", "Text", current.PageSize))"></select>
+                    <label class="form-label" asp-for="Results">@Model.Results</label>
                 </form>
             }
         </div>

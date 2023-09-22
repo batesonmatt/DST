@@ -98,9 +98,8 @@ namespace DST.Controllers
 
         public ViewResult List(SearchRoute values)
         {
-            // Save the current route to session state.
-            _builder.Route = values;
-            _builder.Save();
+            // Validate route values.
+            values.Validate();
 
             // Set initial options from the route segments.
             SearchQueryOptions options = new()
@@ -118,7 +117,6 @@ namespace DST.Controllers
             SearchListViewModel viewModel = new()
             {
                 Geolocation = _geoBuilder.CurrentGeolocation,
-
                 TimeZoneItems = Utilities.GetTimeZoneItems(),
 
                 DsoItems = _data.DsoItems.List(options),
@@ -142,10 +140,21 @@ namespace DST.Controllers
 
                 Trajectories = Utilities.GetTrajectoryNames(),
                 GetSortTag = Utilities.GetInfoFunc(values.SortField),
-                CurrentRoute = values,
-                TotalPages = values.GetTotalPages(_data.DsoItems.Count),
                 PageSizes = Utilities.GetSearchListPageSizeItems()
-        };
+            };
+
+            int count = _data.DsoItems.Count;
+
+            // The requested paging values are subject to user error when attempting to modify the URL directly.
+            // Calculate the page number again, now that we know the total number of items after filtering.
+            values.PageNumber = Paging.ClampPageNumber(count, values.PageSize, values.PageNumber);
+            viewModel.TotalPages = values.GetTotalPages(count);
+            viewModel.Results = values.GetResultsInfo(count);
+            viewModel.CurrentRoute = values;
+
+            // Save the current route to session state.
+            _builder.Route = values;
+            _builder.Save();
 
             return View(viewModel);
         }

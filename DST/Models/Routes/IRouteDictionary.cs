@@ -7,5 +7,6 @@ namespace DST.Models.Routes
     {
         TRoute Clone();
         IDictionary<string, string> ToDictionary();
+        void Validate();
     }
 }
