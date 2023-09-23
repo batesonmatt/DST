@@ -185,6 +185,18 @@
     <value>Longitude must be in the range from -180.0 to 180.0</value>
     <comment>The validation message for a longitudinal coordinate value.</comment>
   </data>
+  <data name="PageResultsFormatMultiple" xml:space="preserve">
+    <value>{0} results</value>
+    <comment>Formats the item results for a page, where argument {0} represents zero or multiple items.</comment>
+  </data>
+  <data name="PageResultsFormatRange" xml:space="preserve">
+    <value>{0}-{1} of {2} results</value>
+    <comment>Formats the item results for a page, where argument {0} represents the index of the first item on the page, {1} represents the index of the last item on the page, and {2} represents the total number of items across all pages.</comment>
+  </data>
+  <data name="PageResultsFormatSingle" xml:space="preserve">
+    <value>1 result</value>
+    <comment>The displayable text for a single item result for a page.</comment>
+  </data>
   <data name="PageSizeFormat" xml:space="preserve">
     <value>{0} per page</value>
     <comment>Formats the display text for the number of items shown per page. Expects argument {0} to be an integer value type.</comment>

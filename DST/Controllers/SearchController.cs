@@ -149,7 +149,7 @@ namespace DST.Controllers
             // Calculate the page number again, now that we know the total number of items after filtering.
             values.PageNumber = Paging.ClampPageNumber(count, values.PageSize, values.PageNumber);
             viewModel.TotalPages = values.GetTotalPages(count);
-            viewModel.Results = values.GetResultsInfo(count);
+            viewModel.Results = values.GetResults(count);
             viewModel.CurrentRoute = values;
 
             // Save the current route to session state.

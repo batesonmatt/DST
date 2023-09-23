@@ -10,7 +10,7 @@ namespace DST.Models.Routes
         #region Properties
 
         public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = Paging.DefaultPageSize;
         public string SortField { get; set; } = Sort.Default;
         public string SortDirection { get; set; } = OrderDirection.Default;
 
@@ -37,7 +37,7 @@ namespace DST.Models.Routes
 
         public void SetPageSize(int size)
         {
-            PageSize = int.Clamp(size, 10, 100);
+            PageSize = Paging.ClampPageSize(size);
         }
 
         public void SetPageNumber(int number)
@@ -46,9 +46,11 @@ namespace DST.Models.Routes
         }
 
         public int GetTotalPages(int count)
-            => Paging.GetTotalPages(count, PageSize);
+        {
+            return Paging.GetTotalPages(count, PageSize);
+        }
 
-        public string GetResultsInfo(int count)
+        public string GetResults(int count)
         {
             int pages = GetTotalPages(count);
 
@@ -56,25 +58,27 @@ namespace DST.Models.Routes
             {
                 if (count == 1)
                 {
-                    return "1 result";
+                    return Resources.DisplayText.PageResultsFormatSingle;
                 }
                 else
                 {
-                    return string.Format("{0} results", count);
+                    return string.Format(Resources.DisplayText.PageResultsFormatMultiple, count);
                 }
             }
             else
             {
                 int fullPages = count / PageSize;
-                int first = ((PageSize * PageNumber) - PageSize) + 1;
+                int first = (PageSize * PageNumber) - PageSize + 1;
                 int last = PageNumber <= fullPages ? PageSize * PageNumber : first + (count % PageSize) - 1;
 
-                return string.Format("{0}-{1} of {2} results", first, last, count);
+                return string.Format(Resources.DisplayText.PageResultsFormatRange, first, last, count);
             }
         }
 
         public void SetSort(string fieldName)
-            => SortField = string.IsNullOrWhiteSpace(fieldName) ? Sort.Default : fieldName;
+        {
+            SortField = string.IsNullOrWhiteSpace(fieldName) ? Sort.Default : fieldName;
+        }
 
         public void SetSortDirection(string direction)
         {
@@ -93,10 +97,14 @@ namespace DST.Models.Routes
         }
 
         public void SortAscending()
-            => SortDirection = OrderDirection.AscendingAbbr;
+        {
+            SortDirection = OrderDirection.AscendingAbbr;
+        }
 
         public void SortDescending()
-            => SortDirection = OrderDirection.DescendingAbbr;
+        {
+            SortDirection = OrderDirection.DescendingAbbr;
+        }
 
         // Sets the sorting field for a table column control and toggles the sorting direction on subsequent calls.
         public void SetTableSort(string fieldName, PageSortRoute current)

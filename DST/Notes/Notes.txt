@@ -1,11 +1,5 @@
 ﻿To Do:
 
-- Consider const fields for the min/max page number and page size values.
-- Consider if page size falls below minimum, use default size (10)
-- Consider breaking up PageSortRoute.GetResultsInfo into separate methods, then
-  add Utilities.GetResults(SearchRoute, int count) => string
-
-
 List view
 - Add a search bar control (action method "Find")
   Consider a slug for the search string.

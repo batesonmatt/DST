@@ -214,6 +214,33 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        public static string PageResultsFormatMultiple {
+            get {
+                return ResourceManager.GetString("PageResultsFormatMultiple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}-{1} of {2} results.
+        /// </summary>
+        public static string PageResultsFormatRange {
+            get {
+                return ResourceManager.GetString("PageResultsFormatRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 result.
+        /// </summary>
+        public static string PageResultsFormatSingle {
+            get {
+                return ResourceManager.GetString("PageResultsFormatSingle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} per page.
         /// </summary>
         public static string PageSizeFormat {
