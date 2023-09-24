@@ -13,6 +13,8 @@ namespace DST.Models.ViewModels
         public GeolocationModel Geolocation { get; set; }
         public IEnumerable<TimeZoneItem> TimeZoneItems { get; set; }
 
+        public SearchModel Search { get; set; }
+
         public SearchRoute CurrentRoute { get; set; }
         public int TotalPages { get; set; }
         public IEnumerable<PageSizeItem> PageSizes { get; set; }

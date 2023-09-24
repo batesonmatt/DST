@@ -18,6 +18,10 @@
       "provider": "jsdelivr",
       "library": "bootstrap@5.2.3",
       "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "bootstrap-icons@1.11.1",
+      "destination": "wwwroot/lib/bootstrap/"
     }
   ]
 }

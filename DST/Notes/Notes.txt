@@ -1,8 +1,23 @@
 ﻿To Do:
 
+Rename ISearchBuilder and SearchBuilder to ISearchRouteBuilder and SearchRouteBuilder
+- Then consider ISearchBuilder and SearchBuilder for the search control and SearchModel.
+- Implement DI for injecting ISearchBuilder into the SearchController
+- Set the input control value to @Model.Search.Input, instead of @current.Search
+- I can still keep the search slug route segment for looks.
+- Disable/enable the search submit and clear buttons, similar to the Geolocation form.
+  Research Bootstrap for different styles for search bar stuff.
+- Consider renaming 'Clear' to 'Remove' or 'Remove search'
+  Or, consider an button in the group before the search button to clear.
+  Show/hide this when there is a SearchModel stored in session. 
+  Might need a boolean property or method. (Works similar to SeoExtensions.Active)
+
+---------------------------------------------------------------------------
+
 List view
-- Add a search bar control (action method "Find")
+- Add a search bar control (action method "SubmitSearch")
   Consider a slug for the search string.
+    The search string will not be loaded from the slug in the route values, but rather from DI using a new builder.
   See pg. 548, 1st ed. "SearchData"
   https://learn.microsoft.com/en-us/aspnet/mvc/overview/getting-started/introduction/adding-search
 - For the DsoItems, Check if Model.DsoItems is empty in this first if statement. 

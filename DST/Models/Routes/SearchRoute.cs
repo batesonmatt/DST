@@ -1,4 +1,5 @@
 ﻿using DST.Models.DataLayer.Query;
+using DST.Models.DomainModels;
 using DST.Models.Extensions;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace DST.Models.Routes
         public string Visible { get; set; } = Filter.Off;
         public string Rising { get; set; } = Filter.Off;
         public string HasName { get; set; } = Filter.Off;
+        public string Search {  get; set; } = string.Empty;
 
         [JsonIgnore] public bool IsSortById => SortField.EqualsSeo(Sort.Id);
         [JsonIgnore] public bool IsSortByName => SortField.EqualsSeo(Sort.Name);
@@ -36,6 +38,7 @@ namespace DST.Models.Routes
         [JsonIgnore] public bool IsFilterByVisible => Visible.IsFilterOn();
         [JsonIgnore] public bool IsFilterByRising => Rising.IsFilterOn();
         [JsonIgnore] public bool IsFilterByHasName => HasName.IsFilterOn();
+        [JsonIgnore] public bool HasSearch => !string.IsNullOrWhiteSpace(Search);
 
         #endregion
 
@@ -60,12 +63,24 @@ namespace DST.Models.Routes
             if (IsFilterByVisible) return true;
             if (IsFilterByRising) return true;
             if (IsFilterByHasName) return true;
+            if (HasSearch) return true;
+
             return false;
         }
 
         public SearchRoute Reset()
         {
             return new SearchRoute(this as PageSortRoute);
+        }
+
+        public void SetSearch(string input)
+        {
+            Search = string.IsNullOrWhiteSpace(input) ? string.Empty : input;
+        }
+
+        public void ClearSearch()
+        {
+            Search = string.Empty;
         }
 
         public new SearchRoute Clone()
@@ -86,6 +101,7 @@ namespace DST.Models.Routes
                 { nameof(Visible), Visible.ToKebabCase() },
                 { nameof(Rising), Rising.ToKebabCase() },
                 { nameof(HasName), HasName.ToKebabCase() },
+                { nameof(Search), Search.ToKebabCase() },
             };
 
             return base.ToDictionary()
@@ -121,6 +137,16 @@ namespace DST.Models.Routes
             if (!(HasName.IsFilterOn() || HasName.IsFilterOff()))
             {
                 HasName = Filter.Off;
+            }
+
+            if (HasSearch)
+            {
+                Search = Search.Trim();
+
+                if (Search.Length > SearchModel.MaxInputLength)
+                {
+                    Search = Search[..SearchModel.MaxInputLength];
+                }
             }
         }
 

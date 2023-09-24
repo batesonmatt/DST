@@ -129,7 +129,7 @@ namespace DST
                     name: "filtering",
                     pattern: "{controller}/{action}/page/{pagenumber}/size/{pagesize}/sort/{sortfield}/{sortdirection}/" +
                     "filter/type-{type}/catalog-{catalog}/constellation-{constellation}/season-{season}/trajectory-{trajectory}/" +
-                    "local-{local}/visible-{visible}/rising-{rising}/hasname-{hasname}");
+                    "local-{local}/visible-{visible}/rising-{rising}/hasname-{hasname}/{search?}");
 
                 // Paging route
                 endpoints.MapControllerRoute(

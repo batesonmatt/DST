@@ -46,8 +46,13 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateGeolocation(GeolocationModel geolocation, SearchRoute values, bool reset = false)
+        public IActionResult SubmitGeolocation(GeolocationModel geolocation, SearchRoute values, bool reset = false)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("List", values.ToDictionary());
+            }
+
             // Set the location coordinates.
             _geoBuilder.CurrentGeolocation.Latitude = geolocation.Latitude;
             _geoBuilder.CurrentGeolocation.Longitude = geolocation.Longitude;
@@ -96,6 +101,26 @@ namespace DST.Controllers
             return RedirectToAction("List", values.ToDictionary());
         }
 
+        [HttpPost]
+        public IActionResult SubmitSearch(SearchModel search, SearchRoute values, bool clear = false)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("List", values.ToDictionary());
+            }
+
+            if (clear)
+            {
+                values.ClearSearch();
+            }
+            else
+            {
+                values.SetSearch(search.Input);
+            }
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
         public ViewResult List(SearchRoute values)
         {
             // Validate route values.
@@ -118,6 +143,8 @@ namespace DST.Controllers
             {
                 Geolocation = _geoBuilder.CurrentGeolocation,
                 TimeZoneItems = Utilities.GetTimeZoneItems(),
+
+                Search = new(),
 
                 DsoItems = _data.DsoItems.List(options),
 

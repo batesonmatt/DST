@@ -229,6 +229,14 @@
     <value>{0} sec ago</value>
     <comment>Formats the past rising time for a particular deep-sky object measured in integral seconds.</comment>
   </data>
+  <data name="SearchLengthValidationMessage" xml:space="preserve">
+    <value>Maximum 50 characters allowed</value>
+    <comment>The validation message for a search input length.</comment>
+  </data>
+  <data name="SearchRegexValidationMessage" xml:space="preserve">
+    <value>Special characters are not allowed</value>
+    <comment>The validation message for the allowed characters of a search input.</comment>
+  </data>
   <data name="SortAsc" xml:space="preserve">
     <value>Asc</value>
     <comment>The abbreviated display text for an ascending sort order.</comment>

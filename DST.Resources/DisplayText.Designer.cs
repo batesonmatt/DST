@@ -313,6 +313,24 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum 50 characters allowed.
+        /// </summary>
+        public static string SearchLengthValidationMessage {
+            get {
+                return ResourceManager.GetString("SearchLengthValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special characters are not allowed.
+        /// </summary>
+        public static string SearchRegexValidationMessage {
+            get {
+                return ResourceManager.GetString("SearchRegexValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asc.
         /// </summary>
         public static string SortAsc {

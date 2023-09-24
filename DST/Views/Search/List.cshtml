@@ -26,7 +26,7 @@
     @{
         routes.PageNumber = 1;
     }
-    <form id="form-geolocation" class="mb-3" asp-action="CreateGeolocation" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableGeoSubmit()" oninput="enableGeoSubmit()">
+    <form id="form-geolocation" class="mb-3" asp-action="SubmitGeolocation" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableGeoSubmit()" oninput="enableGeoSubmit()">
         <div class="mb-3">
             <label class="form-label" asp-for="Geolocation.TimeZoneId">Time Zone</label>
             <input id="input-timezone" class="form-control" type="hidden" asp-for="Geolocation.UserTimeZoneId" value="@Model.Geolocation.TimeZoneId" />
@@ -46,12 +46,29 @@
         </div>
         <div class="mb-3">
             <button id="form-geo-submit" class="btn btn-primary" type="submit" disabled>Submit</button>
-            <button class="btn btn-outline-secondary" type="button" onclick="getLocation()">Use my location</button>
-            <button class="btn btn-secondary" type="submit" name="reset" value="true">Reset</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="getLocation()" formnovalidate>Use my location</button>
+            <button class="btn btn-secondary" type="submit" name="reset" value="true" formnovalidate>Reset</button>
         </div>
     </form>
 
     <div>
+        <div class="mb-3">
+            @{
+                routes = current.Clone();
+
+                <form id="form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()" method="post">
+                    <div class="input-group mb-3">
+                        <input id="input-search" class="form-control" placeholder="Search" asp-for="Search.Input" type="text" value="@current.Search" />
+                        <button id="form-search-submit" class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-secondary" type="submit" name="clear" value="true" formnovalidate>Clear</button>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </form>
+            }
+        </div>
+
         <div class="list-group mb-3">
             @{
                 routes = current.Clone();
