@@ -68,6 +68,50 @@ namespace DST.Models.Routes
             return false;
         }
 
+        public bool TryClearFilter(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return false;
+            }
+
+            switch (name)
+            {
+                case nameof(Type) when IsFilterByType:
+                    Type = Filter.All;
+                    return true;
+                case nameof(Catalog) when IsFilterByCatalog:
+                    Catalog = Filter.All;
+                    return true;
+                case nameof(Constellation) when IsFilterByConstellation:
+                    Catalog = Filter.All;
+                    return true;
+                case nameof(Season) when IsFilterBySeason:
+                    Season = Filter.All;
+                    return true;
+                case nameof(Trajectory) when IsFilterByTrajectory:
+                    Trajectory = Filter.All;
+                    return true;
+                case nameof(Local) when IsFilterByLocal:
+                    Local = Filter.Off;
+                    return true;
+                case nameof(Visible) when IsFilterByVisible:
+                    Visible = Filter.Off;
+                    return true;
+                case nameof(Rising) when IsFilterByRising:
+                    Rising = Filter.Off;
+                    return true;
+                case nameof(HasName) when IsFilterByHasName:
+                    HasName = Filter.Off;
+                    return true;
+                case nameof(Search) when HasSearch:
+                    ClearSearch();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public SearchRoute Reset()
         {
             return new SearchRoute(this as PageSortRoute);
@@ -75,12 +119,30 @@ namespace DST.Models.Routes
 
         public void SetSearch(string input)
         {
-            Search = string.IsNullOrWhiteSpace(input) ? string.Empty : input;
+            Search = string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim();
         }
 
         public void ClearSearch()
         {
             Search = string.Empty;
+        }
+
+        public IDictionary<string, string> GetActiveFilters()
+        {
+            Dictionary<string, string> filters = new() { };
+
+            if (IsFilterByType) filters.Add(nameof(Type), Resources.DisplayText.FilterType);
+            if (IsFilterByCatalog) filters.Add(nameof(Catalog), Resources.DisplayText.FilterCatalog);
+            if (IsFilterByConstellation) filters.Add(nameof(Constellation), Resources.DisplayText.FilterConstellation);
+            if (IsFilterBySeason) filters.Add(nameof(Season), Resources.DisplayText.FilterSeason);
+            if (IsFilterByTrajectory) filters.Add(nameof(Trajectory), Resources.DisplayText.FilterTrajectory);
+            if (IsFilterByLocal) filters.Add(nameof(Local), Resources.DisplayText.FilterLocal);
+            if (IsFilterByVisible) filters.Add(nameof(Visible), Resources.DisplayText.FilterVisible);
+            if (IsFilterByRising) filters.Add(nameof(Rising), Resources.DisplayText.FilterRising);
+            if (IsFilterByHasName) filters.Add(nameof(HasName), Resources.DisplayText.FilterName);
+            if (HasSearch) filters.Add(nameof(Search), Resources.DisplayText.FilterSearch);
+
+            return filters;
         }
 
         public new SearchRoute Clone()
@@ -141,12 +203,12 @@ namespace DST.Models.Routes
 
             if (HasSearch)
             {
-                Search = Search.Trim();
-
                 if (Search.Length > SearchModel.MaxInputLength)
                 {
                     Search = Search[..SearchModel.MaxInputLength];
                 }
+
+                Search = Search.Trim();
             }
         }
 

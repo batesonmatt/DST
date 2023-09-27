@@ -26,7 +26,7 @@
     @{
         routes.PageNumber = 1;
     }
-    <form id="form-geolocation" class="mb-3" asp-action="SubmitGeolocation" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableGeoSubmit()" oninput="enableGeoSubmit()">
+    <form id="form-geolocation" class="mb-3" asp-action="SubmitGeolocation" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableElement('form-geo-submit')" oninput="enableElement('form-geo-submit')">
         <div class="mb-3">
             <label class="form-label" asp-for="Geolocation.TimeZoneId">Time Zone</label>
             <input id="input-timezone" class="form-control" type="hidden" asp-for="Geolocation.UserTimeZoneId" value="@Model.Geolocation.TimeZoneId" />
@@ -52,23 +52,6 @@
     </form>
 
     <div>
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-
-                <form id="form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()" method="post">
-                    <div class="input-group mb-3">
-                        <input id="input-search" class="form-control" placeholder="Search" asp-for="Search.Input" type="text" value="@current.Search" />
-                        <button id="form-search-submit" class="btn btn-primary" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                    <button class="btn btn-secondary" type="submit" name="clear" value="true" formnovalidate>Clear</button>
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                </form>
-            }
-        </div>
-
         <div class="list-group mb-3">
             @{
                 routes = current.Clone();
@@ -85,14 +68,13 @@
         <div class="mb-3">
             @{
                 routes = current.Clone();
-
-                <form asp-action="PageSize" asp-all-route-data="@routes.ToDictionary()" method="post">
-                    <select name="size" class="form-select" onchange="this.form.submit();"
-                        asp-items="@(new SelectList(Model.PageSizes, "Size", "Text", current.PageSize))"></select>
-                    <br />
-                    <label class="form-label" asp-for="Results">@Model.Results</label>
-                </form>
             }
+            <form asp-action="PageSize" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <select name="size" class="form-select" onchange="this.form.submit();"
+                    asp-items="@(new SelectList(Model.PageSizes, "Size", "Text", current.PageSize))"></select>
+                <br />
+                <label class="form-label" asp-for="Results">@Model.Results</label>
+            </form>
         </div>
 
         <hr />
@@ -103,9 +85,40 @@
 
                 if (routes.HasFilters())
                 {
-                    <a class="btn btn-outline-primary" asp-action="Clear" asp-all-route-data="@routes.ToDictionary()">Clear Filters</a>
+                    <div class="d-flex flex-wrap gap-2">
+                        
+                        @foreach (var filter in current.GetActiveFilters())
+                        {
+                            <a asp-action="ClearFilter" asp-all-route-data="@routes.ToDictionary()" asp-route-name="@filter.Key">
+                                <span class="badge bg-secondary"><i class="bi bi-x"></i>&nbsp;@filter.Value</span>
+                            </a>
+                        }
+
+                        <a asp-action="ClearFilters" asp-all-route-data="@routes.ToDictionary()">
+                            <span class="badge bg-secondary"><i class="bi bi-x"></i>&nbsp;Clear all</span>
+                        </a>
+
+                    </div>
                 }
             }
+        </div>
+
+        <hr />
+
+        <div class="mb-3">
+            @{
+                routes = current.Clone();
+                routes.PageNumber = 1;
+            }
+            <form id="form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()" method="post" oninput="enableElement('form-search-submit')">
+                <div class="input-group mb-3">
+                    <input id="input-search" class="form-control" placeholder="Search" asp-for="Search.Input" type="text" value="@Model.Search.Input" />
+                    <button id="form-search-submit" class="btn btn-primary" type="submit" disabled>
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </form>
         </div>
 
         <div class="list-group mb-3">

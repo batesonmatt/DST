@@ -1,9 +1,9 @@
-﻿using DST.Models.Routes;
+﻿using DST.Models.DomainModels;
 
 namespace DST.Models.Builders
 {
     public interface ISearchBuilder : IBuilder
     {
-        SearchRoute Route { get; set; }
+        SearchModel CurrentSearch { get; set; }
     }
 }

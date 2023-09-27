@@ -54,9 +54,9 @@ function showError(error)
     }
 }
 
-function enableGeoSubmit()
+function enableElement(elementId)
 {
-    let e = document.getElementById("form-geo-submit");
+    let e = document.getElementById(elementId);
 
     if (e.hasAttribute("disabled"))
     {

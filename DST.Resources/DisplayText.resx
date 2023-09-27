@@ -169,6 +169,22 @@
     <value>All</value>
     <comment>The display text for enabling all options in a filter.</comment>
   </data>
+  <data name="FilterCatalog" xml:space="preserve">
+    <value>Catalog</value>
+    <comment>The display text for a Catalog filter.</comment>
+  </data>
+  <data name="FilterConstellation" xml:space="preserve">
+    <value>Constellation</value>
+    <comment>The display text for a Constellation filter.</comment>
+  </data>
+  <data name="FilterLocal" xml:space="preserve">
+    <value>Local</value>
+    <comment>The display text for a Local filter.</comment>
+  </data>
+  <data name="FilterName" xml:space="preserve">
+    <value>Name</value>
+    <comment>The display text for a Name filter.</comment>
+  </data>
   <data name="FilterOff" xml:space="preserve">
     <value>Off</value>
     <comment>The display text for disabling a particular filter option.</comment>
@@ -176,6 +192,30 @@
   <data name="FilterOn" xml:space="preserve">
     <value>On</value>
     <comment>The display text for enabling a particular filter option.</comment>
+  </data>
+  <data name="FilterRising" xml:space="preserve">
+    <value>Rising</value>
+    <comment>The display text for a Rising filter.</comment>
+  </data>
+  <data name="FilterSearch" xml:space="preserve">
+    <value>Search</value>
+    <comment>The display text for a Search filter.</comment>
+  </data>
+  <data name="FilterSeason" xml:space="preserve">
+    <value>Season</value>
+    <comment>The display text for a Season filter.</comment>
+  </data>
+  <data name="FilterTrajectory" xml:space="preserve">
+    <value>Trajectory</value>
+    <comment>The display text for a Trajectory filter.</comment>
+  </data>
+  <data name="FilterType" xml:space="preserve">
+    <value>Type</value>
+    <comment>The display text for a Type filter.</comment>
+  </data>
+  <data name="FilterVisible" xml:space="preserve">
+    <value>Visible</value>
+    <comment>The display text for a Visible filter.</comment>
   </data>
   <data name="LatitudeValidationMessage" xml:space="preserve">
     <value>Latitude must be in the range from -90.0 to 90.0</value>
@@ -236,6 +276,10 @@
   <data name="SearchRegexValidationMessage" xml:space="preserve">
     <value>Special characters are not allowed</value>
     <comment>The validation message for the allowed characters of a search input.</comment>
+  </data>
+  <data name="SearchRequiredValidationMessage" xml:space="preserve">
+    <value>The search input cannot be empty</value>
+    <comment>The validation message for a required search input.</comment>
   </data>
   <data name="SortAsc" xml:space="preserve">
     <value>Asc</value>

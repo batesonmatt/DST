@@ -178,6 +178,42 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Catalog.
+        /// </summary>
+        public static string FilterCatalog {
+            get {
+                return ResourceManager.GetString("FilterCatalog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constellation.
+        /// </summary>
+        public static string FilterConstellation {
+            get {
+                return ResourceManager.GetString("FilterConstellation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local.
+        /// </summary>
+        public static string FilterLocal {
+            get {
+                return ResourceManager.GetString("FilterLocal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string FilterName {
+            get {
+                return ResourceManager.GetString("FilterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Off.
         /// </summary>
         public static string FilterOff {
@@ -192,6 +228,60 @@ namespace DST.Resources {
         public static string FilterOn {
             get {
                 return ResourceManager.GetString("FilterOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rising.
+        /// </summary>
+        public static string FilterRising {
+            get {
+                return ResourceManager.GetString("FilterRising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string FilterSearch {
+            get {
+                return ResourceManager.GetString("FilterSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Season.
+        /// </summary>
+        public static string FilterSeason {
+            get {
+                return ResourceManager.GetString("FilterSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trajectory.
+        /// </summary>
+        public static string FilterTrajectory {
+            get {
+                return ResourceManager.GetString("FilterTrajectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string FilterType {
+            get {
+                return ResourceManager.GetString("FilterType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visible.
+        /// </summary>
+        public static string FilterVisible {
+            get {
+                return ResourceManager.GetString("FilterVisible", resourceCulture);
             }
         }
         
@@ -327,6 +417,15 @@ namespace DST.Resources {
         public static string SearchRegexValidationMessage {
             get {
                 return ResourceManager.GetString("SearchRegexValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The search input cannot be empty.
+        /// </summary>
+        public static string SearchRequiredValidationMessage {
+            get {
+                return ResourceManager.GetString("SearchRequiredValidationMessage", resourceCulture);
             }
         }
         

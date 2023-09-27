@@ -1,5 +1,5 @@
-﻿using DST.Models.Extensions;
-using DST.Models.Routes;
+﻿using DST.Models.DomainModels;
+using DST.Models.Extensions;
 using Microsoft.AspNetCore.Http;
 
 namespace DST.Models.Builders
@@ -8,13 +8,13 @@ namespace DST.Models.Builders
     {
         #region Properties
 
-        public SearchRoute Route { get; set; }
+        public SearchModel CurrentSearch { get; set; } = null!;
 
         #endregion
 
         #region Fields
 
-        private const string _routeKey = "searchrouteKey";
+        private const string _searchKey = "searchKey";
         private readonly ISession _session;
 
         #endregion
@@ -33,27 +33,27 @@ namespace DST.Models.Builders
         public void Load()
         {
             // Try to load from session state.
-            // Create new SearchRoute object if no value is stored.
-            Route =
-                _session.GetObject<SearchRoute>(_routeKey)
-                ?? new SearchRoute();
+            // Create new object if no value is stored.
+            CurrentSearch =
+                _session.GetObject<SearchModel>(_searchKey)
+                ?? new SearchModel();
 
-            // Save the current route to session state.
+            // Save the current object to session state.
             Save();
         }
 
         public void Save()
         {
-            switch (Route)
+            switch (CurrentSearch)
             {
-                // If set to null, remove the route from session state.
+                // If set to null, remove the object from session state.
                 case null:
-                    _session.Remove(_routeKey);
+                    _session.Remove(_searchKey);
                     break;
 
                 // Save to session state.
                 default:
-                    _session.SetObject(_routeKey, Route);
+                    _session.SetObject(_searchKey, CurrentSearch);
                     break;
             }
         }
