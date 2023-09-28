@@ -178,7 +178,7 @@ namespace DST.Controllers
                 SortDirection = values.SortDirection
             };
 
-            options.SortFilter(values, _geoBuilder.CurrentGeolocation);
+            options.SortFilter(values, _geoBuilder.CurrentGeolocation, _searchBuilder.CurrentSearch);
 
             SearchListViewModel viewModel = new()
             {

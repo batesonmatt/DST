@@ -84,7 +84,7 @@ namespace DST.Models.Routes
                     Catalog = Filter.All;
                     return true;
                 case nameof(Constellation) when IsFilterByConstellation:
-                    Catalog = Filter.All;
+                    Constellation = Filter.All;
                     return true;
                 case nameof(Season) when IsFilterBySeason:
                     Season = Filter.All;

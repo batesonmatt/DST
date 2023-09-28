@@ -2,6 +2,7 @@
 using DST.Models.BusinessLogic;
 using DST.Models.Extensions;
 using DST.Models.Routes;
+using System;
 
 namespace DST.Models.DataLayer.Query
 {
@@ -9,7 +10,7 @@ namespace DST.Models.DataLayer.Query
     {
         #region Methods
 
-        public void SortFilter(SearchRoute values, GeolocationModel geolocation)
+        public void SortFilter(SearchRoute values, GeolocationModel geolocation, SearchModel search)
         {
             if (values is null)
             {
@@ -77,6 +78,17 @@ namespace DST.Models.DataLayer.Query
             if (values.IsFilterByHasName)
             {
                 Where = dso => dso.HasName;
+            }
+            if (values.HasSearch)
+            {
+                Where = dso =>
+                    dso.CatalogName.Contains(search.Input, StringComparison.CurrentCultureIgnoreCase) ||
+                    dso.Id.ToString().Contains(search.Input, StringComparison.CurrentCultureIgnoreCase) ||
+                    dso.CompoundId.Contains(search.Input, StringComparison.CurrentCultureIgnoreCase) ||
+                    (dso.Common != null && dso.Common.Contains(search.Input, StringComparison.CurrentCultureIgnoreCase)) ||
+                    (dso.Description != null && dso.Description.Contains(search.Input, StringComparison.CurrentCultureIgnoreCase)) ||
+                    dso.Type.Contains(search.Input, StringComparison.CurrentCultureIgnoreCase) ||
+                    dso.ConstellationName.Contains(search.Input, StringComparison.CurrentCultureIgnoreCase);
             }
 
             // Sorting

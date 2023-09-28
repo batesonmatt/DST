@@ -1,11 +1,5 @@
 ﻿To Do:
 
-Add query in SearchQueryOptions for the Search filter
-- See pg. 548, 1st ed. "SearchData"
-- https://learn.microsoft.com/en-us/aspnet/mvc/overview/getting-started/introduction/adding-search
-
-Move the Results label out of the pagesize selector
-
 Revise the JS files (wwwroot\js\...)
 - Consider separate files
 
