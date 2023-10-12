@@ -370,19 +370,164 @@
         @{
             routes = current.Clone();
 
-            if (current.PageNumber > 1)
-            {
-                routes.PageNumber = current.PageNumber - 1;
-                // class="btn text-white"
-                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">Previous</a>
-            }
+            <nav>
+                <ul class="pagination justify-content-center">
+                    @if (current.PageNumber > 1)
+                    {
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = current.PageNumber - 1;
+                            }
+                            <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+                        </li>
+                    }
 
-            if (current.PageNumber < Model.TotalPages)
-            {
-                routes.PageNumber = current.PageNumber + 1;
-                // class="btn text-white"
-                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">Next</a>
-            }
+                    @if (Model.TotalPages <= 1)
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">1</span>
+                        </li>
+                    }
+                    else if (Model.TotalPages <= 6)
+                    {
+                        for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            active = current.PageNumber.Active(i);
+                            <li class="page-item @active">
+                                @{
+                                    routes.PageNumber = i;
+                                }
+                                <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">@i</a>
+                            </li>
+                        }
+                    }
+                    else if (Model.TotalPages > 6 && current.PageNumber <= 4)
+                    {
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            active = current.PageNumber.Active(i);
+                            <li class="page-item @active">
+                                @{
+                                    routes.PageNumber = i;
+                                }
+                                <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">@i</a>
+                            </li>
+                        }
+
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = 6;
+                            }
+                            <a class="page-link align-bottom" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">&hellip;</a>
+                        </li>
+
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = Model.TotalPages;
+                            }
+                            <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">
+                                @Model.TotalPages
+                            </a>
+                        </li>
+                    }
+                    else if (Model.TotalPages > 8 && current.PageNumber > 4 && current.PageNumber <= Model.TotalPages - 4)
+                    {
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = 1;
+                            }
+                            <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">1</a>
+                        </li>
+
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = current.PageNumber - 2;
+                            }
+                            <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">&hellip;</a>
+                        </li>
+
+                        for (int i = current.PageNumber - 1; i <= current.PageNumber + 1; i++)
+                        {
+                            active = current.PageNumber.Active(i);
+                            <li class="page-item @active">
+                                @{
+                                    routes.PageNumber = i;
+                                }
+                                <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">@i</a>
+                            </li>
+                        }
+
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = current.PageNumber + 2;
+                            }
+                            <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">&hellip;</a>
+                        </li>
+
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = Model.TotalPages;
+                            }
+                            <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">
+                                @Model.TotalPages
+                            </a>
+                        </li>
+                    }
+                    else if (Model.TotalPages > 6 && current.PageNumber > Model.TotalPages - 4 && current.PageNumber <= Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = 1;
+                            }
+                            <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">1</a>
+                        </li>
+
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = Model.TotalPages - 5;
+                            }
+                            <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">&hellip;</a>
+                        </li>
+
+                        for (int i = Model.TotalPages - 4; i <= Model.TotalPages; i++)
+                        {
+                            active = current.PageNumber.Active(i);
+                            <li class="page-item @active">
+                                @{
+                                    routes.PageNumber = i;
+                                }
+                                <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">@i</a>
+                            </li>
+                        }
+                    }
+
+                    @if (current.PageNumber < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            @{
+                                routes.PageNumber = current.PageNumber + 1;
+                            }
+                            <a class="page-link" asp-action="List" asp-all-route-data="@routes.ToDictionary()" asp-fragment="start">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+                        </li>
+                    }
+                </ul>
+            </nav>
         }
     </div>
 </div>

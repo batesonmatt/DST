@@ -1,5 +1,9 @@
 ﻿To Do:
 
+https://icons.getbootstrap.com/
+
+----------------------------------------------------------------------------
+
 Revise the JS files (wwwroot\js\...)
 - Consider separate files
 
@@ -10,9 +14,13 @@ List view
 Rearrange the filters
 - Catalog, Type, Constellation, Season, Trajectory, Local, Visible, Rising, HasName, Search
 
-List view
-- Pagination
-- https://getbootstrap.com/docs/5.0/components/pagination/
+Consider a new control near the top of the list to set the page number:
+- Page [ 1 ] / 100
+  Page [ 1 ]
+- Disable the text box if TotalPages == 1
+- Hide if TotalPages == 0
+- Set input type = number and use validation attributes (regex, range, etc.)
+- Check input > 0 && <= TotalPages
 
 ---------------------------------------------------------------------------
 

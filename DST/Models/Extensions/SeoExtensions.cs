@@ -77,6 +77,18 @@ namespace DST.Models.Extensions
             }
         }
 
+        public static string Active(this int a, int b)
+        {
+            if (a == b)
+            {
+                return "active";
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
         public static bool IsFilterAll(this string value)
         {
             return value.EqualsSeo(Filter.All);
