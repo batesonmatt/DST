@@ -4,23 +4,16 @@ https://icons.getbootstrap.com/
 
 ----------------------------------------------------------------------------
 
+Bug?
+- When 0 results are returned, the PageSortRoute.PageNumber is 0.
+  Then clearing filters, sorting, setting sort direction, and other actions post this 0 PageNumber.
+  This causes the PAgeNumber route segment to appear as 0 in the URL.
+  The PageNumber should be clamped in the SearchController.
+- Possible solution:
+  Revise Paging.GetTotalPages so that if result = 0, return 1
+
 Revise the JS files (wwwroot\js\...)
 - Consider separate files
-
-List view
-- For the DsoItems, Check if Model.DsoItems is empty in this first if statement. 
-  Add else block to display message such as "No objects found that match your filters", etc.
-
-Rearrange the filters
-- Catalog, Type, Constellation, Season, Trajectory, Local, Visible, Rising, HasName, Search
-
-Consider a new control near the top of the list to set the page number:
-- Page [ 1 ] / 100
-  Page [ 1 ]
-- Disable the text box if TotalPages == 1
-- Hide if TotalPages == 0
-- Set input type = number and use validation attributes (regex, range, etc.)
-- Check input > 0 && <= TotalPages
 
 ---------------------------------------------------------------------------
 

@@ -9,7 +9,7 @@ namespace DST.Models.Routes
     {
         #region Properties
 
-        public int PageNumber { get; set; } = 1;
+        public int PageNumber { get; set; } = Paging.MinPageNumber;
         public int PageSize { get; set; } = Paging.DefaultPageSize;
         public string SortField { get; set; } = Sort.Default;
         public string SortDirection { get; set; } = OrderDirection.Default;
@@ -42,7 +42,7 @@ namespace DST.Models.Routes
 
         public void SetPageNumber(int number)
         {
-            PageNumber = number < 1 ? 1 : number;
+            PageNumber = number < Paging.MinPageNumber ? Paging.MinPageNumber : number;
         }
 
         public int GetTotalPages(int count)
@@ -54,7 +54,7 @@ namespace DST.Models.Routes
         {
             int pages = GetTotalPages(count);
 
-            if (pages <= 1 && count <= PageSize)
+            if (pages <= Paging.MinPageNumber && count <= PageSize)
             {
                 if (count == 1)
                 {

@@ -65,20 +65,6 @@
             }
         </div>
 
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-            }
-            <form asp-action="PageSize" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <select name="size" class="form-select" onchange="this.form.submit();"
-                    asp-items="@(new SelectList(Model.PageSizes, "Size", "Text", current.PageSize))"></select>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Results">@Model.Results</label>
-        </div>
-
         <hr />
 
         <div class="mb-3">
@@ -123,23 +109,7 @@
             </form>
         </div>
 
-        <div class="list-group mb-3">
-            @{
-                routes = current.Clone();
-                routes.PageNumber = 1;
-
-                active = current.Type.Active(Filter.All);
-                routes.Type = Filter.All;
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
-
-                foreach (var type in Model.Types)
-                {
-                    active = current.Type.Active(type.Type);
-                    routes.Type = type.Type;
-                    <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@type.Type</a>
-                }
-            }
-        </div>
+        <hr />
 
         <div class="list-group mb-3">
             @{
@@ -155,6 +125,24 @@
                     active = current.Catalog.Active(catalog.Name);
                     routes.Catalog = catalog.Name;
                     <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@catalog.Name</a>
+                }
+            }
+        </div>
+
+        <div class="list-group mb-3">
+            @{
+                routes = current.Clone();
+                routes.PageNumber = 1;
+
+                active = current.Type.Active(Filter.All);
+                routes.Type = Filter.All;
+                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
+
+                foreach (var type in Model.Types)
+                {
+                    active = current.Type.Active(type.Type);
+                    routes.Type = type.Type;
+                    <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@type.Type</a>
                 }
             }
         </div>
@@ -294,6 +282,20 @@
 
     <hr />
 
+    <div class="mb-3">
+        @{
+            routes = current.Clone();
+        }
+        <form asp-action="PageSize" asp-all-route-data="@routes.ToDictionary()" method="post">
+            <select name="size" class="form-select" onchange="this.form.submit();"
+                    asp-items="@(new SelectList(Model.PageSizes, "Size", "Text", current.PageSize))"></select>
+        </form>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Results">@Model.Results</label>
+    </div>
+
     <div>
         @{
             routes = current.Clone();
@@ -308,10 +310,8 @@
 
     <hr />
 
-    @* Check if Model.DsoItems is empty in this first if statement. 
-    Add else block to display message such as "No objects found that match your filters", etc. *@
     <div id="start">
-        @if (Model.DsoItems is not null)
+        @if (Model.DsoItems is not null && Model.DsoItems.Any())
         {
             @foreach (DsoModel dso in Model.DsoItems)
             {
@@ -345,22 +345,28 @@
                                 @dso.ConstellationName
                             </p>
                             @*@if (dso.HasMultipleNames)
-                {
-                <p>
-                <strong>Other names: </strong>
-                <br />
-                <ul>
-                @foreach (string name in dso.GetOtherNames())
-                {
-                <li>@name</li>
-                }
-                </ul>
-                </p>
-                }*@
+                            {
+                            <p>
+                            <strong>Other names: </strong>
+                            <br />
+                            <ul>
+                            @foreach (string name in dso.GetOtherNames())
+                            {
+                            <li>@name</li>
+                            }
+                            </ul>
+                            </p>
+                            }*@
                         </div>
                     </a>
                 }
             }
+        }
+        else
+        {
+            <div>
+                <p>Nothing found. Try to broaden your search filters.</p>
+            </div>
         }
     </div>
 
