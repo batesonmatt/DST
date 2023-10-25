@@ -4,14 +4,6 @@ https://icons.getbootstrap.com/
 
 ----------------------------------------------------------------------------
 
-Bug?
-- When 0 results are returned, the PageSortRoute.PageNumber is 0.
-  Then clearing filters, sorting, setting sort direction, and other actions post this 0 PageNumber.
-  This causes the PAgeNumber route segment to appear as 0 in the URL.
-  The PageNumber should be clamped in the SearchController.
-- Possible solution:
-  Revise Paging.GetTotalPages so that if result = 0, return 1
-
 Revise the JS files (wwwroot\js\...)
 - Consider separate files
 
@@ -20,7 +12,14 @@ Revise the JS files (wwwroot\js\...)
 Add Controllers.TrackController
 Add Views.Track.Index
 Add TrackController.Summary action method
+- Also add Rise, Set, Apex, and Period action methods.
+  These will take in their appropriate route objects and NOT redirect to Summary.
+  Return View(viewModel) for each of these action methods.
 Add tracksummary route endpoint
+- Also add trackvector and trackperiod endpoints
+- Finalize the segments before adding these.
+Add route classes.
+- Finalize the segments before adding these.
 
 List view
 - Add button to the dso items that navigates to the Track view
@@ -49,11 +48,11 @@ Routes
 - Ex: "/track/apex/messier/13/gmst/25122023/cycles-15/historical-off/"
 - Ex: "/track/set/messier/13/gmst/14042004/cycles-2/historical-off/"
 ...
-- name = "trackmain"
+- name = "trackperiod"
 - pattern = "{controller}/{action}/{catalog}/{id}/{algorithm}/{start}/{timescale}/{timeunit}/period-{period}/interval-{interval}/historical-{historical}"
-- Ex: "/track/main/messier/13/gmst/13011995/mean-solar-time/hours/period-24/interval-2/historical-on/"
-- Ex: "/track/main/messier/13/gast/13011995/sidereal-time/days/period-10/interval-3/historical-off/"
-- Ex: "/track/main/messier/13/era/13011995/stellar-time/weeks/period-50/interval-5/historical-off/"
+- Ex: "/track/period/messier/13/gmst/13011995/mean-solar-time/hours/period-24/interval-2/historical-on/"
+- Ex: "/track/period/messier/13/gast/13011995/sidereal-time/days/period-10/interval-3/historical-off/"
+- Ex: "/track/period/messier/13/era/13011995/stellar-time/weeks/period-50/interval-5/historical-off/"
 
 ? Create class DST.Models.Routes.TrackRoute : IRouteDictionary<TrackRoute>
 ...
@@ -93,16 +92,17 @@ Features (Track/"Summary", or "Main", action method)
 - Display current tracking info (The trajectory name, local?, visible?, current rise/apex/set cycle - datetime and position,
   current altaz track position)
 - Refresh button to refresh the datetime, timekeeper, local timekeeper, LHA, and current tracking info.
-- Track Rise vectors over time
+Track selector (Rise, Set, Apex, Period):
+- Track "Rise" vectors over time
   Select the starting datetime and the number of cycles, then click "Track" to see the results
-- Track Apex vectors over time
+- Track "Apex" vectors over time
   Select the starting datetime and the number of cycles, then click "Track" to see the results
-- Track Set vectors over time
+- Track "Set" vectors over time
   Select the starting datetime and the number of cycles, then click "Track" to see the results
-- Track horizontal position over time
+- Track horizontal "Period" over time/specified datetime
   Select the starting datetime, time scale, time unit, period, interval, add from start?, then click "Track" to see the results
-- Consider a results section for the rise, apex, set, and track results.
-  Otherwise, I will need to have separate action methods for these that redirect to their own views/routes.
+- Results List section for the rise, apex, set, and period track results.
+  For each list item, display: Local DateTime, position, is visible (Above horizon), is rising/setting
 - Need to disable/hide certain controls and information if the trajectory is never rise or circumpolar.
 
 ....................................................................
