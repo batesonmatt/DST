@@ -10,14 +10,26 @@ Revise the JS files (wwwroot\js\...)
 ---------------------------------------------------------------------------
 
 Add Controllers.TrackController
-Add Views.Track.Index
-Add TrackController.Summary action method
-- Also add Rise, Set, Apex, and Period action methods.
-  These will take in their appropriate route objects and NOT redirect to Summary.
-  Return View(viewModel) for each of these action methods.
+
+Add Views.Track.<ViewName>
+- Consider just Index.cshtml, Index()->ViewResult, and redirect to this from other action methods.
+  Or, consider Calculate.cshtml and Calculate()->ViewResult
+
+Add a ViewResult action method, with good name.
+- This will take in the base route class (TrackRoute, etc.)
+  And have appropriate validation to determine what to do.
+- Also add Rise, Set, Apex, and Period IActionResult methods.
+  These may take their appropriate route class object.
+
+  ** I don't want separate ViewResult action methods because I would have to add more views.
+     I just want one view and one ViewResult action method.
+     I can use several IActionResult action methods that redirect to the ViewResult method.
+     I don't need to display the action method in the route endpoint, unless it has a good name.
+
 Add tracksummary route endpoint
 - Also add trackvector and trackperiod endpoints
 - Finalize the segments before adding these.
+
 Add route classes.
 - Finalize the segments before adding these.
 
@@ -39,20 +51,24 @@ Linking to Track page/Controller
 
 Routes
 - name = "tracksummary"
-- pattern = "{controller}/{action}/{catalog}/{id}/{algorithm}"
-- Ex: "/track/summary/messier/13/gmst/"
+- pattern = "{controller}/{catalog}/{id}/{algorithm}"
+- Ex: "/track/messier/13/gmst/"
+
 ...
+
 - name = "trackvector"
-- pattern = "{controller}/{action}/{catalog}/{id}/{algorithm}/{start}/cycles-{cycles}/historical-{historical}"
-- Ex: "/track/rise/messier/13/gmst/13011995/cycles-10/historical-on/"
-- Ex: "/track/apex/messier/13/gmst/25122023/cycles-15/historical-off/"
-- Ex: "/track/set/messier/13/gmst/14042004/cycles-2/historical-off/"
+- pattern = "{controller}/{catalog}/{id}/{algorithm}/{vectortype}/{start}/cycles/{cycles}"
+- Ex: "/track/messier/13/gmst/rise/13011995/cycles/-10/"
+
 ...
+
 - name = "trackperiod"
-- pattern = "{controller}/{action}/{catalog}/{id}/{algorithm}/{start}/{timescale}/{timeunit}/period-{period}/interval-{interval}/historical-{historical}"
-- Ex: "/track/period/messier/13/gmst/13011995/mean-solar-time/hours/period-24/interval-2/historical-on/"
-- Ex: "/track/period/messier/13/gast/13011995/sidereal-time/days/period-10/interval-3/historical-off/"
-- Ex: "/track/period/messier/13/era/13011995/stellar-time/weeks/period-50/interval-5/historical-off/"
+- pattern = "{controller}/{catalog}/{id}/{algorithm}/period/{start}/{timescale}/{timeunit}/{period}/interval/{interval}"
+- Ex: "/track/messier/13/gmst/period/13011995/mean-solar-time/hours/-24/interval/2/"
+
+  interval will have validation for >= 0. So default to 0 if negative.
+
+...
 
 ? Create class DST.Models.Routes.TrackRoute : IRouteDictionary<TrackRoute>
 ...
@@ -93,6 +109,7 @@ Features (Track/"Summary", or "Main", action method)
   current altaz track position)
 - Refresh button to refresh the datetime, timekeeper, local timekeeper, LHA, and current tracking info.
 Track selector (Rise, Set, Apex, Period):
+- Track vectors in full cycles in the underlying timescale (user does not choose timescale; it must use full days for the algorithm type)
 - Track "Rise" vectors over time
   Select the starting datetime and the number of cycles, then click "Track" to see the results
 - Track "Apex" vectors over time
