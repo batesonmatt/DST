@@ -34,36 +34,50 @@ Add route classes.
 - Finalize the segments before adding these.
 
 List view
-- Add button to the dso items that navigates to the Track view
-  (see pg. 531 for form submit button).
+- Add button to the dso items that navigates to the Track controller
+  (see pg 531 for form submit button and controller link, and pg 519 for example controller).
 
 Details view
 - Add all displayable information here
-- Add button to navigate to the Track view
+- Add button to navigate to the Track controller
 
 -------------------------------------------------------------------------
 
 Track view/Controller
 
-Linking to Track page/Controller
-- HttpGet Action method in SearchController to link to Track page.
-- Add link to Track page in the Details page (Add action method to SearchController).
+**************************************************************************************
+
+Reconsider separate action methods and views for the Track controller.
+
+    IActionResult Index()
+        => RedirectToAction("Summary")
+
+    [HttpGet] Summary(string catalog, int id, string algorithm)
+        ...
+        return View(viewModel)
+
+    ViewResult
+
+**************************************************************************************
 
 Routes
 - name = "tracksummary"
 - pattern = "{controller}/{catalog}/{id}/{algorithm}"
+- default = new { action = "Calculate" }
 - Ex: "/track/messier/13/gmst/"
 
 ...
 
 - name = "trackvector"
 - pattern = "{controller}/{catalog}/{id}/{algorithm}/{vectortype}/{start}/cycles/{cycles}"
+- default = new { action = "Calculate" }
 - Ex: "/track/messier/13/gmst/rise/13011995/cycles/-10/"
 
 ...
 
 - name = "trackperiod"
 - pattern = "{controller}/{catalog}/{id}/{algorithm}/period/{start}/{timescale}/{timeunit}/{period}/interval/{interval}"
+- default = new { action = "Calculate" }
 - Ex: "/track/messier/13/gmst/period/13011995/mean-solar-time/hours/-24/interval/2/"
 
   interval will have validation for >= 0. So default to 0 if negative.
@@ -83,7 +97,7 @@ TrackVectorRoute : TrackSummaryRoute
 - Cycles        Default => 1
 - Historical    Default => "off"
 
-TrackMainRoute : TrackSummaryRoute
+TrackPeriodRoute : TrackSummaryRoute
 - Start         Default => Empty string, then get current client datetime in the route builder if value is null or whitespace.
 - TimeScale     Default => "Mean solar time"
 - TimeUnit      Default => "Hours"
@@ -96,7 +110,7 @@ TrackViewModel
 - GeolocationModel Geolocation (? - If I use a partial view, do I need to include this property for the viewmodels?)
 - IEnumerable<TimeZoneItem> TimeZoneItems (? - Same question for above)
 - ILocalObserver ClientObserver
-- RouteDictionary CurrentRoute
+- ... CurrentRoute
 
 Features (Track/"Summary", or "Main", action method)
 - Form to change geolocation/timezone (consider shared view or partial view)
