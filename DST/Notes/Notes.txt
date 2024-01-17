@@ -1,37 +1,36 @@
 ﻿To Do:
 
-https://icons.getbootstrap.com/
+Plan:
+- Use tabular navbar for separate views (Summary/Overview, Vector/Phase, and Period)
 
-----------------------------------------------------------------------------
-
-Revise the JS files (wwwroot\js\...)
-- Consider separate files
-
----------------------------------------------------------------------------
-
-Add Controllers.TrackController
-
-Add Views.Track.<ViewName>
-- Consider just Index.cshtml, Index()->ViewResult, and redirect to this from other action methods.
-  Or, consider Calculate.cshtml and Calculate()->ViewResult
-
-Add a ViewResult action method, with good name.
-- This will take in the base route class (TrackRoute, etc.)
-  And have appropriate validation to determine what to do.
-- Also add Rise, Set, Apex, and Period IActionResult methods.
-  These may take their appropriate route class object.
-
-  ** I don't want separate ViewResult action methods because I would have to add more views.
-     I just want one view and one ViewResult action method.
-     I can use several IActionResult action methods that redirect to the ViewResult method.
-     I don't need to display the action method in the route endpoint, unless it has a good name.
-
-Add tracksummary route endpoint
-- Also add trackvector and trackperiod endpoints
+Add route endpoints: tracksummary, trackphase, and trackperiod
 - Finalize the segments before adding these.
 
 Add route classes.
 - Finalize the segments before adding these.
+
+SearchController
+- Consider IActionResult method in SearchController to return RedirectToAction(action, controller, routeValues) to TrackController.<action>
+  
+    [HttpGet]
+    public IActionResult GetTrackSummary(string catalog, int id)
+    {
+        // Verify the object exists.
+        DsoModel dso = _data.DsoItems.Get(catalog, id);
+
+        TrackSummaryRoute values = new();
+
+        if (dso is not null)
+        {
+            // TrackSummaryRoute.Algorithm defaults to GMST.
+            values.Catalog = catalog;
+            values.Id = id;
+        }
+            
+        return RedirectToAction("Summary", "Track", values);
+    }
+
+- Then, the buttons in the List and Details view below can call this action method.
 
 List view
 - Add button to the dso items that navigates to the Track controller
@@ -41,7 +40,7 @@ Details view
 - Add all displayable information here
 - Add button to navigate to the Track controller
 
--------------------------------------------------------------------------
+----------------------------------------------------------------------------
 
 Track view/Controller
 
@@ -52,7 +51,7 @@ Reconsider separate action methods and views for the Track controller.
     IActionResult Index()
         => RedirectToAction("Summary")
 
-    [HttpGet] Summary(string catalog, int id, string algorithm)
+    [HttpGet] ViewResult Summary(TrackSummaryRoute values)
         ...
         return View(viewModel)
 
@@ -60,27 +59,35 @@ Reconsider separate action methods and views for the Track controller.
 
 **************************************************************************************
 
-Routes
+NOTE - "start" segment represents the Ticks in string format.
+        Validate range from (Epoch - 200 years inclusive) up to (Epoch + 200 years exclusive)
+        [Jan. 1, 1800 0H ... Jan. 1, 2200 0H)
+        Get these values as Ticks.
+        Try parse the segment as long, or use long value type for the Start route property value.
+
+
+Routes:
+
 - name = "tracksummary"
 - pattern = "{controller}/{catalog}/{id}/{algorithm}"
-- default = new { action = "Calculate" }
+- default = new { action = "Summary" }
 - Ex: "/track/messier/13/gmst/"
 
 ...
 
-- name = "trackvector"
-- pattern = "{controller}/{catalog}/{id}/{algorithm}/{vectortype}/{start}/cycles/{cycles}"
-- default = new { action = "Calculate" }
+- name = "trackphase"
+- pattern = "{controller}/{catalog}/{id}/{algorithm}/{phasetype}/{start}/cycles/{cycles}"
+- default = new { action = "Phase" }
 - Ex: "/track/messier/13/gmst/rise/13011995/cycles/-10/"
 
 ...
 
 - name = "trackperiod"
 - pattern = "{controller}/{catalog}/{id}/{algorithm}/period/{start}/{timescale}/{timeunit}/{period}/interval/{interval}"
-- default = new { action = "Calculate" }
+- default = new { action = "Period" }
 - Ex: "/track/messier/13/gmst/period/13011995/mean-solar-time/hours/-24/interval/2/"
 
-  interval will have validation for >= 0. So default to 0 if negative.
+  interval will have validation for >= 0 and <= period. So default to 0 if out of range.
 
 ...
 
@@ -88,34 +95,60 @@ Routes
 ...
 
 TrackSummaryRoute
-- Catalog       Default => "Messier"
+- Catalog       Default => "messier"
 - Id            Default => 1
-- Algorithm     Default => "GMST"
 
-TrackVectorRoute : TrackSummaryRoute
-- Start         Default => Empty string, then get current client datetime in the route builder if value is null or whitespace.
+                Catalog and Id are validated by checking the IRepository<DsoModel> TrackController._data
+                if _data.Get(catalog, id) is null, use default route values.
+
+- Algorithm     Default => "gmst"
+
+........
+
+TrackPhaseRoute : TrackSummaryRoute
+- PhaseType    Default => "rise"
+- Start         Default =>  Can I use a long value type for this? Default to J2000 Epoch in ticks. Validate +-200 years.
+                            OR
+                            Empty string, then get current client datetime in the route builder if value is null or whitespace.
+                            Make sure to validate range.
 - Cycles        Default => 1
-- Historical    Default => "off"
+                            Validate based on DaysAdder.Min and .Max values. (Just hardcode +-100)
+                            Validate based on Tick range, see Start property.
+
+........
 
 TrackPeriodRoute : TrackSummaryRoute
-- Start         Default => Empty string, then get current client datetime in the route builder if value is null or whitespace.
-- TimeScale     Default => "Mean solar time"
-- TimeUnit      Default => "Hours"
-- Period        Default => 0
-- Interval      Default => 0
-- Historical    Default => "off"
-- By default if timeunit, period, or interval is invalid, then track for the current client datetime.
+- Start         Default =>  Can I use a long value type for this? Default to J2000 Epoch in ticks. Validate +-500 years.
+                            OR
+                            Empty string, then get current client datetime in the route builder if value is null or whitespace.
+                            Make sure to validate range.
+- TimeScale     Default => "mean-solar-time"
+- TimeUnit      Default => "hours"
+- Period        Default => 0, Validate based on IDateTimeAdder.Min and .Max values.
+- Interval      Default => 0, Validate for >= 0 and <= validated period.
+- By default if timeunit, period, or interval is invalid, then track for only the validated Start datetime.
+
+
 
 TrackViewModel
 - GeolocationModel Geolocation (? - If I use a partial view, do I need to include this property for the viewmodels?)
 - IEnumerable<TimeZoneItem> TimeZoneItems (? - Same question for above)
-- ILocalObserver ClientObserver
-- ... CurrentRoute
+    For Geolocation and TimeZoneItems, consider a separate viewmodel, GeolocationViewModel.
+    Consider a View Component (pg. 632-635)
+- DsoModel Model (Necessary for displaying the object info)
+- ILocalObserver ClientObserver (Necessary for displaying all other relative info)
+- ... CurrentRoute (Use base class or interface track Route)
 
-Features (Track/"Summary", or "Main", action method)
+
+** Revise this based on the new layout design (Summary, Phase, Period)
+
+Features
+Geo
 - Form to change geolocation/timezone (consider shared view or partial view)
+Summary
 - Display details (Compound Id, names, catalog, type, description, constellation, RA, DEC, 
   distance, magnitude, ideal viewing season)
+  ** Consider a button to navigate to the Details view ?? Or, use shared/partial view ??
 - Display client observer info (geolocation, timezone, current datetime, algorithm type, current timekeeper, 
   current local timekeeper, LHA)
 - Option to change the algorithm type.
@@ -168,7 +201,26 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 - This could cause a bug where the datetime would eventually run to min/max value, or to a point where
   the results are not trustworthy.
 
--------------------------------------------------------------------------
+----------------------------------------------------------------------------
+
+https://icons.getbootstrap.com/
+
+----------------------------------------------------------------------------
+
+Revise the JS files (wwwroot\js\...)
+- Consider separate files
+
+----------------------------------------------------------------------------
+
+Consider DI ISearchUnitOfWork or IUnitOfWork in SearchController, instead of DI MainDbContext.
+
+----------------------------------------------------------------------------
+
+Consider removing the paging endpoint, since it is never used.
+
+----------------------------------------------------------------------------
+
+----------------------------------------------------------------------------
 
 Redesign List view
 - Pagination
@@ -192,14 +244,14 @@ Redesign Shared views
 
 Redesign Home and About views
 
--------------------------------------------------------------------------
+----------------------------------------------------------------------------
 
 Disable geo-dependent sort/filter controls until the client either allows it,
 or fills in their location manually. (?)
 
 Enable client-side/server-side validation for GeolocationModel and view form.
 
-___________________________________________________________
+----------------------------------------------------------------------------
 
 For the home page, consider selecting a random object and display its info
 Or perhaps a random object, and a random track or vector calculation, etc.
@@ -213,19 +265,19 @@ Add admin pages so that I may keep the Dso items up to date (?)
 Graphing support (?)
 - Graph the trajectory of a tracked object as a sinosoidal wave (position over time)
 
-___________________________________________________________
+----------------------------------------------------------------------------
 
 Create powershell script(s) to remove/update the database, rebuild the migrations, etc.
 - Run from PMC in visual studio
 - Keep commented out when not running, then uncomment when ready.
 
-___________________________________________________________
+----------------------------------------------------------------------------
 
 Project -> Propeties -> Code Analysis
 
     Change level to "Latest All" and fix warnings.
 
-----------------------------------------------------------
+----------------------------------------------------------------------------
 
 Localization
 - Add resource strings for the views' harcoded text.
@@ -240,7 +292,7 @@ Localization
 - https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization/
 - https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization/make-content-localizable?view=aspnetcore-7.0
 
-----------------------------------------------------------
+----------------------------------------------------------------------------
 
 Exception handling and reporting
 

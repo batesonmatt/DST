@@ -213,6 +213,10 @@
     <value>Type</value>
     <comment>The display text for a Type filter.</comment>
   </data>
+  <data name="FilterUnknown" xml:space="preserve">
+    <value>Unknown</value>
+    <comment>The display text when a filter option is not known.</comment>
+  </data>
   <data name="FilterVisible" xml:space="preserve">
     <value>Visible</value>
     <comment>The display text for a Visible filter.</comment>

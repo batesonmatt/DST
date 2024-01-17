@@ -6,4 +6,11 @@
     @RenderBody()
 </main>
 
-<a class="btn-custom">Track</a>
+<a 
+    asp-controller="Track"
+    asp-action="Summary"
+    asp-route-catalog="@Model.CatalogName"
+    asp-route-id="@Model.Id"
+    asp-route-algorithm="@AlgorithmName.DefaultShort">
+    <h3>Track</h3>
+</a>

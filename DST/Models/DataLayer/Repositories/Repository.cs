@@ -98,7 +98,7 @@ namespace DST.Models.DataLayer.Repositories
 
         public virtual IEnumerable<T> List(QueryOptions<T> options) => BuildQuery(options).ToList();
 
-        public virtual T Get(params object[] keyValues) => _dbset.Find(keyValues);
+        public virtual T Get(params object[] keyValues) => _dbset.Find(keyValues) ?? _dbset.First();
 
         public virtual void Insert(T entity) => _dbset.Add(entity);
 

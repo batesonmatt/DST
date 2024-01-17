@@ -1,5 +1,6 @@
 using DST.Models.Builders;
 using DST.Models.DataLayer;
+using DST.Models.DataLayer.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -50,6 +51,7 @@ namespace DST
             services.AddTransient<ISearchRouteBuilder, SearchRouteBuilder>();
             services.AddTransient<IGeolocationBuilder, GeolocationBuilder>();
             services.AddTransient<ISearchBuilder, SearchBuilder>();
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
             // Make URLs lowercase and end with a trailing slash.
             services.AddRouting(options =>
@@ -125,6 +127,24 @@ namespace DST
             
             app.UseEndpoints(endpoints =>
             {
+                // Track Period route
+                endpoints.MapControllerRoute(
+                    name: "trackperiod",
+                    pattern: "{controller}/{catalog}/{id}/{algorithm}/period/{start}/{timescale}/{timeunit}/{period}/interval/{interval}",
+                    defaults: new { action = "Period" });
+
+                // Track Phase route
+                endpoints.MapControllerRoute(
+                    name: "trackphase",
+                    pattern: "{controller}/{catalog}/{id}/{algorithm}/{phasetype}/{start}/cycles/{cycles}",
+                    defaults: new { action = "Phase" });
+
+                // Track Summary route
+                endpoints.MapControllerRoute(
+                    name: "tracksummary",
+                    pattern: "{controller}/{catalog}/{id}/{algorithm}",
+                    defaults: new { action = "Summary" });
+
                 // Filtering route
                 endpoints.MapControllerRoute(
                     name: "filtering",

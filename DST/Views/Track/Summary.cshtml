@@ -1,0 +1,53 @@
+﻿@model TrackViewModel
+
+@{
+    ViewBag.Title = "Summary";
+    Layout = "_BannerLayout";
+
+    TrackSummaryRoute current = Model.CurrentRoute;
+    TrackSummaryRoute routes = current.Clone();
+}
+
+<div class="container">
+    <h1>Summary</h1>
+
+    @if (Model.Dso.HasName)
+    {
+        <h3>@Model.Dso.CompoundId - @Model.Dso.Name</h3>
+    }
+    else
+    {
+        <h3>@Model.Dso.CompoundId</h3>
+    }
+
+    @if (Model.Dso.HasMultipleNames)
+    {
+        <p>
+            <strong>Other names:</strong>
+            <br />
+            <ul>
+                @foreach (string name in Model.Dso.GetOtherNames())
+                {
+                    <li>@name</li>
+                }
+            </ul>
+        </p>
+    }
+
+    <h4><i>@Model.Dso.RightAscension,&nbsp;@Model.Dso.Declination</i></h4>
+
+    <p>
+        <strong>Catalog:&nbsp;</strong>@Model.Dso.CatalogName
+        <br />
+        <strong>Description:&nbsp;</strong>@Model.Dso.Description
+        <br />
+        <strong>Type:&nbsp;</strong>@Model.Dso.Type
+        <br />
+        <strong>Constellation:&nbsp;</strong>@Model.Dso.ConstellationName
+        <br />
+        <strong>Distance:&nbsp;</strong>@Model.Dso.Distance
+        <br />
+        <strong>Magnitude:&nbsp;</strong>@Model.Dso.Magnitude
+    </p>
+
+</div>

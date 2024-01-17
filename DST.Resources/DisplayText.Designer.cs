@@ -277,6 +277,15 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown.
+        /// </summary>
+        public static string FilterUnknown {
+            get {
+                return ResourceManager.GetString("FilterUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Visible.
         /// </summary>
         public static string FilterVisible {
