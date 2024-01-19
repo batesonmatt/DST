@@ -8,6 +8,10 @@
     TrackSummaryRoute routes = current.Clone();
 }
 
+<vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>"></vc:geolocation-form>
+
+<h4>Tabular navbar goes here</h4>
+
 <div class="container">
     <h1>Summary</h1>
 
@@ -49,5 +53,4 @@
         <br />
         <strong>Magnitude:&nbsp;</strong>@Model.Dso.Magnitude
     </p>
-
 </div>

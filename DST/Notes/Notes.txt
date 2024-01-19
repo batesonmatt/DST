@@ -1,5 +1,21 @@
 ﻿To Do:
 
+GeolocationBuilder
+- Add new method to rebuild properties to reduce code duplication in the controllers' SubmitGeolocation action.
+
+**************************************************************************************
+
+Use a new view component for displaying the sort tags in the List view.
+- Use DI for IGeolocationBuilder.
+- Pass in the DsoModel object
+
+**************************************************************************************
+
+SearchListViewModel and SearchController
+- remove Geolocation, TimeZoneItems, and GetSortTag properties.
+
+**************************************************************************************
+
 Plan:
 - Use tabular navbar for separate views (Summary/Overview, Vector/Phase, and Period)
 
@@ -8,29 +24,6 @@ Add route endpoints: tracksummary, trackphase, and trackperiod
 
 Add route classes.
 - Finalize the segments before adding these.
-
-SearchController
-- Consider IActionResult method in SearchController to return RedirectToAction(action, controller, routeValues) to TrackController.<action>
-  
-    [HttpGet]
-    public IActionResult GetTrackSummary(string catalog, int id)
-    {
-        // Verify the object exists.
-        DsoModel dso = _data.DsoItems.Get(catalog, id);
-
-        TrackSummaryRoute values = new();
-
-        if (dso is not null)
-        {
-            // TrackSummaryRoute.Algorithm defaults to GMST.
-            values.Catalog = catalog;
-            values.Id = id;
-        }
-            
-        return RedirectToAction("Summary", "Track", values);
-    }
-
-- Then, the buttons in the List and Details view below can call this action method.
 
 List view
 - Add button to the dso items that navigates to the Track controller
