@@ -154,6 +154,33 @@ namespace DST.Models.DomainModels
             return IsDefaultTimeZone() && IsDefaultLocation();
         }
 
+        public void SetGeolocation(GeolocationModel other)
+        {
+            if (other is null)
+            {
+                return;
+            }
+
+            Latitude = other.Latitude;
+            Longitude = other.Longitude;
+
+            if (other.TimeZoneId != string.Empty)
+            {
+                // Verify the selected id.
+                VerifyAndUpdateTimeZone(other.TimeZoneId);
+            }
+            else if (other.UserTimeZoneId != string.Empty)
+            {
+                // Try to verify the retrieved IANA id.
+                VerifyAndUpdateTimeZone(other.UserTimeZoneId);
+            }
+            else
+            {
+                // No timezone was selected or found. Default to UTC.
+                ResetTimeZone();
+            }
+        }
+
         #endregion
     }
 }

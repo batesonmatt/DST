@@ -1,21 +1,5 @@
 ﻿To Do:
 
-GeolocationBuilder
-- Add new method to rebuild properties to reduce code duplication in the controllers' SubmitGeolocation action.
-
-**************************************************************************************
-
-Use a new view component for displaying the sort tags in the List view.
-- Use DI for IGeolocationBuilder.
-- Pass in the DsoModel object
-
-**************************************************************************************
-
-SearchListViewModel and SearchController
-- remove Geolocation, TimeZoneItems, and GetSortTag properties.
-
-**************************************************************************************
-
 Plan:
 - Use tabular navbar for separate views (Summary/Overview, Vector/Phase, and Period)
 

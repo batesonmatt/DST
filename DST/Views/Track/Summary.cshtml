@@ -8,11 +8,12 @@
     TrackSummaryRoute routes = current.Clone();
 }
 
-<vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>"></vc:geolocation-form>
-
-<h4>Tabular navbar goes here</h4>
-
 <div class="container">
+
+    <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>"></vc:geolocation-form>
+
+    <h4>Tabular navbar goes here</h4>
+
     <h1>Summary</h1>
 
     @if (Model.Dso.HasName)

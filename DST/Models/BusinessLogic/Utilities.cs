@@ -50,36 +50,16 @@ namespace DST.Models.BusinessLogic
             return observer;
         }
 
-        /* Consider optional Algorithm algorithm = Algorithm.GMST */
-        /* Consider calling Utilities.GetObserver() */
         // Calculates and returns the type of trajectory for the specified DsoModel and GeolocationModel objects.
-        public static ITrajectory GetTrajectory(DsoModel dso, GeolocationModel geolocation)
+        public static ITrajectory GetTrajectory(DsoModel dso, GeolocationModel geolocation, Algorithm algorithm = Algorithm.GMST)
         {
-            IEquatorialCoordinate target;
-            IGeographicCoordinate location;
-            IDateTimeInfo dateTimeInfo;
-            ITimeKeeper timeKeeper;
             IObserver observer;
             ITrajectory trajectory;
 
             try
             {
-                // Get the equatorial coordinate of the DsoModel.
-                target = CoordinateFactory.CreateEquatorial(
-                    rightAscension: new Angle(TimeSpan.FromHours(dso.RightAscension)), declination: new Angle(dso.Declination));
-
-                // Get the client's geographic coordinate.
-                location = CoordinateFactory.CreateGeographic(
-                    latitude: new Angle(geolocation.Latitude), longitude: new Angle(geolocation.Longitude));
-
-                // Get the client's date and time info.
-                dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(geolocation.TimeZoneId);
-
-                // Use the basic Greenwich Mean Sidereal Time (GMST) timekeeping algorithm.
-                timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
-
                 // Create the observer.
-                observer = ObserverFactory.Create(dateTimeInfo, location, target, timeKeeper);
+                observer = GetObserver(dso, geolocation, algorithm);
 
                 // Calculate the trajectory of the equatorial object relative to the observer's geographic location.
                 trajectory = TrajectoryCalculator.Calculate(observer);
@@ -531,14 +511,14 @@ namespace DST.Models.BusinessLogic
             return result;
         }
 
-        public static Func<DsoObserverOptions, string> GetInfoFunc(string sortField)
+        public static string GetSortTag(DsoObserverOptions options, string sortField)
         {
-            if (sortField.EqualsSeo(Sort.Type)) return GetTypeInfo;
-            if (sortField.EqualsSeo(Sort.Constellation)) return GetConstellationInfo;
-            if (sortField.EqualsSeo(Sort.Distance)) return GetDistanceInfo;
-            if (sortField.EqualsSeo(Sort.Brightness)) return GetBrightnessInfo;
-            if (sortField.EqualsSeo(Sort.RiseTime)) return GetRiseTimeInfo;
-            return x => string.Empty;
+            if (sortField.EqualsSeo(Sort.Type)) return GetTypeInfo(options);
+            if (sortField.EqualsSeo(Sort.Constellation)) return GetConstellationInfo(options);
+            if (sortField.EqualsSeo(Sort.Distance)) return GetDistanceInfo(options);
+            if (sortField.EqualsSeo(Sort.Brightness)) return GetBrightnessInfo(options);
+            if (sortField.EqualsSeo(Sort.RiseTime)) return GetRiseTimeInfo(options);
+            return string.Empty;
         }
     }
 }

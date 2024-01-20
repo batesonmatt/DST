@@ -48,29 +48,15 @@ namespace DST.Controllers
                 return RedirectToAction("Summary", values.ToDictionary());
             }
 
-            // Set the location coordinates.
-            _geoBuilder.CurrentGeolocation.Latitude = geolocation.Latitude;
-            _geoBuilder.CurrentGeolocation.Longitude = geolocation.Longitude;
-
             if (reset)
             {
                 // Reset geolocation and timezone to defaults.
                 _geoBuilder.CurrentGeolocation.Reset();
             }
-            else if (geolocation.TimeZoneId != string.Empty)
-            {
-                // Verify the selected id.
-                _geoBuilder.CurrentGeolocation.VerifyAndUpdateTimeZone(geolocation.TimeZoneId);
-            }
-            else if (geolocation.UserTimeZoneId != string.Empty)
-            {
-                // Try to verify the retrieved IANA id.
-                _geoBuilder.CurrentGeolocation.VerifyAndUpdateTimeZone(geolocation.UserTimeZoneId);
-            }
             else
             {
-                // No timezone was selected or found. Default to UTC.
-                _geoBuilder.CurrentGeolocation.ResetTimeZone();
+                // Update geolocation and timezone.
+                _geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
             }
 
             // Save the geolocation in session and create a persistent cookie.

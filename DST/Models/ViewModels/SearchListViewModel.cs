@@ -10,9 +10,6 @@ namespace DST.Models.ViewModels
     {
         #region Properties
 
-        public GeolocationModel Geolocation { get; set; }
-        public IEnumerable<TimeZoneItem> TimeZoneItems { get; set; }
-
         public SearchModel Search { get; set; }
 
         public SearchRoute CurrentRoute { get; set; }
@@ -26,8 +23,6 @@ namespace DST.Models.ViewModels
         public IEnumerable<ConstellationModel> Constellations { get; set; }
         public IEnumerable<SeasonModel> Seasons { get; set; }
         public IEnumerable<string> Trajectories { get; set; }
-
-        public Func<DsoObserverOptions, string> GetSortTag { get; set; }
 
         #endregion
     }

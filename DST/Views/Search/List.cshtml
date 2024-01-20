@@ -300,15 +300,9 @@
                             {
                                 <h3>@dso.CompoundId</h3>
                             }
-                            @if (current.IsSortByRiseTime)
-                            {
-                                @* Consider view component, inject IGeolocationBuilder, and pass in DsoModel *@
-                                <i>@Model.GetSortTag(new DsoObserverOptions(dso, Model.Geolocation))</i>
-                            }
-                            else
-                            {
-                                <i>@Model.GetSortTag(new DsoObserverOptions(dso))</i>
-                            }
+
+                            <vc:dso-sort-tag dso="@dso" sort-field="@current.SortField"></vc:dso-sort-tag>
+
                             <p>
                                 @dso.CatalogName
                                 <br />
