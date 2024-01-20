@@ -19,11 +19,8 @@ namespace DST.Models.ViewModels
     {
         #region Properties
 
-        public GeolocationModel Geolocation { get; set; }
-        public IEnumerable<TimeZoneItem> TimeZoneItems { get; set; }
-
         public DsoModel Dso { get; set; }
-        public IObserver ClientObserver { get; set; }
+        public ILocalObserver ClientObserver { get; set; }
 
         public TrackSummaryRoute CurrentRoute { get; set; }
 

@@ -70,23 +70,20 @@ namespace DST.Controllers
             // Validate route values.
             values.Validate();
 
-            GeolocationModel geolocation = _geoBuilder.CurrentGeolocation;
             DsoModel dso = _data.Get(values.Catalog, values.Id);
 
             /* Allow the client to choose the algorithm by using a separate HttpPost action that redirects to Summary(). */
-            IObserver observer = Utilities.GetObserver(dso, geolocation, Core.TimeKeeper.Algorithm.GMST);
+            ILocalObserver localObserver = 
+                Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, Core.TimeKeeper.Algorithm.GMST);
 
             TrackViewModel viewModel = new()
             {
-                Geolocation = geolocation,
-                TimeZoneItems = Utilities.GetTimeZoneItems(),
                 Dso = dso,
-                ClientObserver = observer,
+                ClientObserver = localObserver,
                 CurrentRoute = values
             };
 
             return View(viewModel);
-            //return RedirectToAction("Summary", values.ToDictionary());
         }
 
         /* Takes TrackPhaseRoute */

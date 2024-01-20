@@ -21,21 +21,6 @@ Details view
 
 Track view/Controller
 
-**************************************************************************************
-
-Reconsider separate action methods and views for the Track controller.
-
-    IActionResult Index()
-        => RedirectToAction("Summary")
-
-    [HttpGet] ViewResult Summary(TrackSummaryRoute values)
-        ...
-        return View(viewModel)
-
-    ViewResult
-
-**************************************************************************************
-
 NOTE - "start" segment represents the Ticks in string format.
         Validate range from (Epoch - 200 years inclusive) up to (Epoch + 200 years exclusive)
         [Jan. 1, 1800 0H ... Jan. 1, 2200 0H)
@@ -131,7 +116,10 @@ Summary
 - Option to change the algorithm type.
 - Display current tracking info (The trajectory name, local?, visible?, current rise/apex/set cycle - datetime and position,
   current altaz track position)
-- Refresh button to refresh the datetime, timekeeper, local timekeeper, LHA, and current tracking info.
+? Refresh button to refresh the datetime, timekeeper, local timekeeper, LHA, and current tracking info.
+* Consider storing client datetime to session state, and check whenever the Summary view is loaded.
+  If it's been >= 5 minutes, save new datetime to session state and refresh calculated values.
+  Make a label saying when the last time it was refreshed, "Refreshed 2 minutes ago."
 Track selector (Rise, Set, Apex, Period):
 - Track vectors in full cycles in the underlying timescale (user does not choose timescale; it must use full days for the algorithm type)
 - Track "Rise" vectors over time

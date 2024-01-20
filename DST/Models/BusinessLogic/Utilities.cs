@@ -15,13 +15,48 @@ namespace DST.Models.BusinessLogic
 {
     public class Utilities
     {
-        public static IObserver GetObserver(DsoModel dso, GeolocationModel geolocation, Algorithm algorithm)
+        public static ILocalObserver GetLocalObserver(DsoModel dso, GeolocationModel geolocation, Algorithm algorithm)
         {
-            IObserver observer;
             IEquatorialCoordinate target;
             IGeographicCoordinate location;
             IDateTimeInfo dateTimeInfo;
             ITimeKeeper timeKeeper;
+            ILocalObserver localObserver;
+
+            try
+            {
+                // Get the equatorial coordinate of the DsoModel.
+                target = CoordinateFactory.CreateEquatorial(
+                    rightAscension: new Angle(TimeSpan.FromHours(dso.RightAscension)), declination: new Angle(dso.Declination));
+
+                // Get the client's geographic coordinate.
+                location = CoordinateFactory.CreateGeographic(
+                    latitude: new Angle(geolocation.Latitude), longitude: new Angle(geolocation.Longitude));
+
+                // Get the client's date and time info.
+                dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(geolocation.TimeZoneId);
+
+                // Create the timekeeping algorithm.
+                timeKeeper = TimeKeeperFactory.Create(algorithm);
+
+                // Create the local observer.
+                localObserver = ObserverFactory.CreateLocal(dateTimeInfo, location, target, timeKeeper);
+            }
+            catch
+            {
+                localObserver = null;
+            }
+
+            return localObserver;
+        }
+
+        public static IObserver GetObserver(DsoModel dso, GeolocationModel geolocation, Algorithm algorithm)
+        {
+            IEquatorialCoordinate target;
+            IGeographicCoordinate location;
+            IDateTimeInfo dateTimeInfo;
+            ITimeKeeper timeKeeper;
+            IObserver observer;
 
             try
             {

@@ -17,7 +17,7 @@ namespace DST.Core.Observer
             return origin switch
             {
                 IGeographicCoordinate location when destination is IEquatorialCoordinate target
-                    => Create(dateTimeInfo, location, target, timeKeeper),
+                    => CreateLocal(dateTimeInfo, location, target, timeKeeper),
                 _ => throw new NotSupportedException(
                     $"{nameof(ICoordinate)} types '{origin.GetType()}' and '{destination.GetType()}' are not supported.")
             };
@@ -25,7 +25,7 @@ namespace DST.Core.Observer
 
         // Returns a new ILocalObserver object given the specified IDateTimeInfo, IGeographicCoordinate,
         // IEquatorialCoordinate, and ITimeKeeper.
-        private static ILocalObserver Create(IDateTimeInfo dateTimeInfo, IGeographicCoordinate location, IEquatorialCoordinate target, ITimeKeeper timeKeeper)
+        public static ILocalObserver CreateLocal(IDateTimeInfo dateTimeInfo, IGeographicCoordinate location, IEquatorialCoordinate target, ITimeKeeper timeKeeper)
         {
             _ = dateTimeInfo ?? throw new ArgumentNullException(nameof(dateTimeInfo));
             _ = location ?? throw new ArgumentNullException(nameof(location));
