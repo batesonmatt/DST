@@ -10,9 +10,13 @@
 
 <div class="container">
 
-    <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>"></vc:geolocation-form>
+    <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitSummaryGeolocation"></vc:geolocation-form>
 
-    <h4>Tabular navbar goes here</h4>
+    <nav class="nav nav-tabs">
+        <a class="nav-item nav-link active">Summary</a>
+        <a class="nav-item nav-link" asp-controller="Track" asp-action="Phase" asp-all-route-data="@routes.ToDictionary()">Phase</a>
+        @* <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a> *@
+    </nav>
 
     <h1>Summary</h1>
 
@@ -39,19 +43,48 @@
         </p>
     }
 
-    <h4><i>@Model.Dso.RightAscension,&nbsp;@Model.Dso.Declination</i></h4>
+    @* Consider using a form with labels to display the strings. Use type attribute for datetimes, etc. *@
 
+    <h4>Target</h4>
     <p>
+        <strong>RA,DEC:&nbsp;</strong>@Model.ClientObserver.Target.Format(DST.Core.Coordinate.FormatType.Component)
+        <br />
         <strong>Catalog:&nbsp;</strong>@Model.Dso.CatalogName
         <br />
-        <strong>Description:&nbsp;</strong>@Model.Dso.Description
-        <br />
         <strong>Type:&nbsp;</strong>@Model.Dso.Type
+        <br />
+        <strong>Description:&nbsp;</strong>@Model.Dso.Description
         <br />
         <strong>Constellation:&nbsp;</strong>@Model.Dso.ConstellationName
         <br />
         <strong>Distance:&nbsp;</strong>@Model.Dso.Distance
         <br />
         <strong>Magnitude:&nbsp;</strong>@Model.Dso.Magnitude
+    </p>
+
+    <h4>Observer</h4>
+    <p>
+        <strong>LAT,LON:&nbsp;</strong>@Model.ClientObserver.Location.Format(DST.Core.Coordinate.FormatType.Component)
+        <br />
+        <strong>Time Zone:&nbsp;</strong>@Model.ClientObserver.DateTimeInfo.ClientTimeZoneInfo.DisplayName
+        <br />
+        <strong>Now:&nbsp;</strong>@Model.ClientObserver.DateTimeInfo.Now.Value.ToLocalTime().ToString()
+        <br />
+        <strong>UTC:&nbsp;</strong>@Model.ClientObserver.DateTimeInfo.Now.Value.ToString()
+    </p>
+
+    <h4>Current Tracking</h4>
+    <p>
+        <strong>Timekeeping Algorithm:&nbsp;</strong>&hellip;
+        <br />
+        <strong>Trajectory:&nbsp;</strong>&hellip;
+        <br />
+        <strong>Timekeeper:&nbsp;</strong>&hellip;
+        <br />
+        <strong>Local Timekeeper:&nbsp;</strong>&hellip;
+        <br />
+        <strong>LHA:&nbsp;</strong>&hellip;
+        <br />
+        <strong>Position:&nbsp;</strong>&hellip;
     </p>
 </div>

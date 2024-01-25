@@ -22,7 +22,7 @@
     @{
         routes.PageNumber = 1;
     }
-    <vc:geolocation-form route="@routes.ToDictionary() as Dictionary<string, string>"></vc:geolocation-form>
+    <vc:geolocation-form route="@routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitGeolocation"></vc:geolocation-form>
 
     <div>
         <div class="list-group mb-3">

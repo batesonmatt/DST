@@ -66,7 +66,7 @@ namespace DST.Models.Routes
             };
         }
 
-        public void Validate()
+        public virtual void Validate()
         {
             SetCatalog(Catalog);
             SetId(Id);

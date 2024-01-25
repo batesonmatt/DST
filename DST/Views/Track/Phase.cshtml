@@ -1,0 +1,42 @@
+﻿@model TrackPhaseViewModel
+
+@{
+    ViewBag.Title = "Phase";
+    Layout = "_BannerLayout";
+
+    TrackPhaseRoute current = Model.CurrentRoute;
+    TrackPhaseRoute routes = current.Clone();
+}
+
+<div class="container">
+
+    <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitPhaseGeolocation"></vc:geolocation-form>
+
+    <nav class="nav nav-tabs">
+        <a class="nav-item nav-link" asp-controller="Track" asp-action="Summary" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">Summary</a>
+        <a class="nav-item nav-link active">Phase</a>
+        @* <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a> *@
+    </nav>
+
+    <h1>Phase</h1>
+
+    <form id="form-phase" class="mb-3" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableElement('form-phase-submit')" oninput="enableElement('form-phase-submit')">
+        <div class="mb-3">
+            <label class="form-label" asp-for="PhaseModel.Phase">Phase</label>
+            <select id="select-phase" class="form-control" asp-for="PhaseModel.Phase" asp-items="@(new SelectList(Model.Phases, "Id", "Text", Model.PhaseModel.Phase))"></select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" asp-for="PhaseModel.Start">Start</label>
+            <input id="input-phase-start" class="form-control" asp-for="PhaseModel.Start" type="datetime-local" value="@Model.PhaseModel.GetFormattedStart()" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" asp-for="PhaseModel.Cycles">Cycles</label>
+            <input id="input-phase-cycles" class="form-control" asp-for="PhaseModel.Cycles" type="number" value="@Model.PhaseModel.Cycles" />
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="mb-3">
+            <button id="form-phase-submit" class="btn btn-primary" type="submit" disabled>Submit</button>
+        </div>
+    </form>
+
+</div>

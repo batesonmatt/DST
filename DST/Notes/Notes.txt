@@ -1,5 +1,135 @@
 ﻿To Do:
 
+*******************************************************************************************************
+
+Implement fixed tracking support (For Period tracking):
+
+Fixed tracking is already built in for Phase tracking, so it won't be an option in the Phase form.
+
+By default, fixed tracking is disabled for Period tracking, and the tracker should use the Mean Solar Time timescale.
+
+If the user enables fixed tracking in the period tracking form, then the timescale option should 
+either be hidden or disabled and set to the appropriate timescale in the front-end.
+
+When using the GMST/GAST timekeeping algorithms, fixed tracking will use the Sidereal timescale.
+When using the ERA timekeeping algorithm, fixed tracking will use the Stellar timescale.
+
+Fixed tracking will only be available as an option for timeunits of Days, Weeks, Months, and Years.
+If the user selects a timeunit of Seconds, Minutes, or Hours, then the tracker MUST use the Mean Solar timescale.
+See below for further explanation.
+
+----------------------------------------------------------------------------------------------
+
+Using IDateTimeAdder and/or ITimeScalable
+
+When adding in seconds, minutes, and hours in sidereal time and stellar time, 
+the datetimes are all the same.
+
+This is actually due to the ITimeScalable implementations converting the ticks
+to total days, then truncating the fractional part.
+	
+Since each interval being added is less than a whole day, the value will almost always be 0.
+
+Test a 24 hour period for 1 hour intervals, where each interval is based on the 
+starting datetime. Only the last interval will be different, since it is 24 hours
+from the start, which is 1 whole day.
+Likewise, testing a 168 hour period for 12 hour intervals, every two datetimes are the same.
+
+Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time if
+			tracking in days, weeks, months, and years.
+			This will be accomplished in the front-end.
+
+			The user may, however, still choose the Earth-rotational algorithm, 
+			but can only track in mean solar time if using seconds, minutes, and hours.
+
+*******************************************************************************************************
+
+The Algorithm select control should be available in the Phase/Period forms.
+- The builders/routes will use this value that gets posted from the form, instead of the one already selected in the current route.
+- The current selection in the select list will be initially set to the Algorithm value in the current route.
+  This could affect the other controls in the Period form.
+  A similar thing will happen for the Phase form if the Dso (Catalog, Id) in the route is NeverRise or Circumpolar.
+  Use razor code to disable/hide certain options and display messages based on the route values.
+  There will also be server-side validation to ensure bad data doesn't get sent in.
+- The Summary view may still have an Algorithm select control.
+
+~~~ DONE ~~~
+Geolocation view component/partial view
+- Consider updating so that in addition to taking the route values, it may also take a string of the redirect action name.
+- The various track views will each have routebuilders, so the SubmitGeolocation action can switch on the redirect string
+  to determine which routebuilder to get the route values from.
+
+Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
+- Takes DsoModel, GeolocationModel, and Algorithm
+- Inject into TrackController.
+- Save to session state
+- Provide methods to set the Target (takes DsoModel), the Location (takes GeolocationModel), and the TimeKeeper (takes Algorithm)
+
+Consider a TrackPhaseModel and TrackPeriodModel with custom server-side validation attributes for the properties.
+- See pg. 418
+- To use DI in validation attribute classes: 
+
+    IPhaseBuilder b = (IPhaseBuilder)validationContext.GetService(typeof(IPhaseBuilder));
+  
+    OR:
+
+    using Microsoft.Extensions.DependencyInjection;
+    ...
+    IPhaseBuilder b = validationContext.GetService<IPhaseBuilder>()
+
+
+Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteBuilder and TrackPeriodRouteBuilder)
+- Because the route values are prone to user error
+- When navigating Phase and Period views, we should call different action methods, LoadPhase and LoadPeriod, and also pass the TrackSummaryRoute values.
+  These actions would load the previously saved routes, if any, for those views before redirecting to the appropriate action method with the routes.
+  If there is no saved routes, we need to use the TrackSummaryRoute values passed in.
+  The routes will be saved to session in the regular actions methods that build the viewmodels and return the views.
+- We don't need a route builder for the summary view.
+- The Start segment will be treated in the client's local time
+- The Start segment must be validated within +-200 years of the J2000 Epoch
+- The initial validation in the route classes (TrackPhaseRoute.Validate() and TrackPeriodRoute.Validate())
+  will only perform basic validation, but are not responsible for determining timezone checks for local/UTC conversions.
+  See SearchController.List() for an example of how the SearchRoute values are initially validated, modified,
+  then saved back into session state in the SearchRouteBuilder object.
+- Consider route builders for Phase and Period views so that switching between the Track views, it remembers the client's last settings.
+
+When visiting the Phase and Period views for the first time (i.e., from the Summary view), use the tracksummary route values.
+Then when posting from those views, use their respective route values (TrackPhaseRoute and TrackPeriodRoute).
+
+When navigating back to the Summary view from the Phase and Period views, use the TrackSummaryRoute values.
+
+Might need separate view models for the track views
+- Consider TrackPhaseViewModel : TrackSummaryViewModel that has a collection of IVector objects
+
+Consider making the Details view a Partial view, and display it in a popup inside the List view.
+- Or consider the result items in the List view to be expandable controls, and expand it to show the details.
+    |---------------------------------------------|
+    | ID - Name                             Track |
+    | ...                                         |
+    |              Expand Details                 |
+    |---------------------------------------------|
+
+Revise the JS files (wwwroot\js\...)
+- Consider separate files
+- Move the <script> declarations to _Layout?
+
+Consider removing TrackPhaseRoute routes = current.Clone(); from the Phase and Period views if not used.
+
+PageSizeItem, TimeZoneItem, TrackPhaseItem, etc.
+- These types are used in select lists
+- Consider using a single class, SelectItem.
+  => string Id, string Text, int Value
+
+Consider moving AlgorithmName and PhaseName out of the Query namespace, and into BusinessLogic?
+
+Consider renaming Utilities.GetSearchListPageSizeItems() to .GetPageSizeItems()
+
+Consider using DI in certain action methods, instead of through the controller constructor. See pg. 568.
+
+For the IVector list sections in Phase and Period views, consider limiting results to ~50 by default, with a Show More button at the bottom.
+
+---------------------------------------------------------------------------
+
 Plan:
 - Use tabular navbar for separate views (Summary/Overview, Vector/Phase, and Period)
 
@@ -110,7 +240,6 @@ Geo
 Summary
 - Display details (Compound Id, names, catalog, type, description, constellation, RA, DEC, 
   distance, magnitude, ideal viewing season)
-  ** Consider a button to navigate to the Details view ?? Or, use shared/partial view ??
 - Display client observer info (geolocation, timezone, current datetime, algorithm type, current timekeeper, 
   current local timekeeper, LHA)
 - Option to change the algorithm type.
@@ -136,30 +265,6 @@ Track selector (Rise, Set, Apex, Period):
 
 ....................................................................
 
-Using IDateTimeAdder and/or ITimeScalable
-
-When adding in seconds, minutes, and hours in sidereal time and stellar time, 
-the datetimes are all the same.
-
-This is actually due to the ITimeScalable implementations converting the ticks
-to total days, then truncating the fractional part.
-	
-Since each interval being added is less than a whole day, the value will almost always be 0.
-
-Test a 24 hour period for 1 hour intervals, where each interval is based on the 
-starting datetime. Only the last interval will be different, since it is 24 hours
-from the start, which is 1 whole day.
-Likewise, testing a 168 hour period for 12 hour intervals, every two datetimes are the same.
-
-Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time if
-			tracking in days, weeks, months, and years.
-			This will be accomplished in the front-end.
-
-			The user may, however, still choose the Earth-rotational algorithm, 
-			but can only track in mean solar time if using seconds, minutes, and hours.
-
-....................................................................
-
 "Continuous" Tracking
 - After tracking over time, allow the user to click a button to continue tracking for the same period/interval, 
   but starting at the last DateTime value.
@@ -172,18 +277,11 @@ https://icons.getbootstrap.com/
 
 ----------------------------------------------------------------------------
 
-Revise the JS files (wwwroot\js\...)
-- Consider separate files
-
-----------------------------------------------------------------------------
-
 Consider DI ISearchUnitOfWork or IUnitOfWork in SearchController, instead of DI MainDbContext.
 
 ----------------------------------------------------------------------------
 
 Consider removing the paging endpoint, since it is never used.
-
-----------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------
 
@@ -208,13 +306,6 @@ Redesign Track views
 Redesign Shared views
 
 Redesign Home and About views
-
-----------------------------------------------------------------------------
-
-Disable geo-dependent sort/filter controls until the client either allows it,
-or fills in their location manually. (?)
-
-Enable client-side/server-side validation for GeolocationModel and view form.
 
 ----------------------------------------------------------------------------
 

@@ -1,17 +1,38 @@
 ﻿using DST.Core.Observer;
-using DST.Models.BusinessLogic;
 using DST.Models.DomainModels;
 using DST.Models.Routes;
-using System.Collections.Generic;
 
 namespace DST.Models.ViewModels
 {
-    /* Use ClientObserver to display Geolocation and RA and DEC so that we can display in DMS format, etc. */
-    /* 
-     * Display:
+    /* Display:
+     * 
+     * Compound Id
+     * names
+     * 
+     *      Target:
+     * RA, DEC
+     * catalog
+     * type
+     * description
+     * constellation
+     * distance
+     * magnitude
      * ideal viewing season (including start and end months)
-     * Geolocation, timezone, current datetime, algorithm type, current timekeeper, current local timekeeper, LHA,
-     * Trajectory name, local?, visible?, current rise/apex/set datetime and position,
+     * 
+     *      Observer:
+     * Geolocation
+     * timezone
+     * current local datetime
+     * current UTC datetime
+     * 
+     *      Current Tracking info:
+     * Trajectory name
+     * current timekeeper
+     * current local timekeeper
+     * LHA
+     * local?
+     * visible?
+     * current rise/apex/set datetimes and positions
      * current altaz track position
      */
     /* Use Resources for formatting values */
@@ -21,7 +42,6 @@ namespace DST.Models.ViewModels
 
         public DsoModel Dso { get; set; }
         public ILocalObserver ClientObserver { get; set; }
-
         public TrackSummaryRoute CurrentRoute { get; set; }
 
         #endregion

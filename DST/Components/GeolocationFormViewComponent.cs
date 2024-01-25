@@ -28,13 +28,14 @@ namespace DST.Components
 
         #region Methods
 
-        public IViewComponentResult Invoke(Dictionary<string, string> route)
+        public IViewComponentResult Invoke(Dictionary<string, string> route, string actionMethod)
         {
             GeolocationViewModel viewModel = new()
             {
                 Geolocation = _geoBuilder.CurrentGeolocation,
                 TimeZoneItems = Utilities.GetTimeZoneItems(),
-                Route = route
+                Route = route,
+                ActionMethod = actionMethod
             };
 
             return View("~/Views/Shared/_GeolocationFormPartial.cshtml", viewModel);
