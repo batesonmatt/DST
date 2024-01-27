@@ -11,6 +11,8 @@ namespace DST.Models.DataLayer.Repositories
     {
         #region Properties
 
+        public DbSet<T> Items => _dbset;
+
         public int Count => _count ?? _dbset.Count();
 
         #endregion
@@ -87,6 +89,7 @@ namespace DST.Models.DataLayer.Repositories
 
                 query = query.PageBy(pageNumber, options.PageSize);
             }
+
             return query;
         }
 

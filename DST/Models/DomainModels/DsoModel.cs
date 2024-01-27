@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace DST.Models.DomainModels
 {
@@ -103,7 +104,7 @@ namespace DST.Models.DomainModels
         {
             if (_names?.Length > 1)
             {
-                foreach (string name in _names)
+                foreach (string name in _names.Skip(1))
                 {
                     yield return name;
                 }

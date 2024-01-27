@@ -20,36 +20,92 @@ namespace DST.Core.Coordinate
         // Returns the string-representation of this GeographicCoordinate formatted with the specified FormatType in the current culture.
         public override string Format(FormatType format)
         {
-            string latitude;
-            string longitude;
+            string latitude = Format(format, ComponentType.Inclination);
+            string longitude = Format(format, ComponentType.Rotation);
+
+            return string.Format(Resources.AngleFormats.CoordinateFormatNoDelimiter, latitude, longitude);
+        }
+
+        // Returns the string-representation of this GeographicCoordinate formatted with the specified FormatType and ComponentType in the current culture.
+        public override string Format(FormatType format, ComponentType component)
+        {
+            string result;
 
             switch (format)
             {
                 case FormatType.Component:
                 default:
                     {
-                        latitude = Latitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Latitude);
-                        longitude = Longitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Longitude);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = Longitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Longitude);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Latitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Latitude);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
                 case FormatType.Decimal:
                     {
-                        latitude = Latitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Latitude);
-                        longitude = Longitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Longitude);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = Longitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Longitude);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Latitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Latitude);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
                 case FormatType.Compact:
                     {
-                        latitude = Latitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Latitude);
-                        longitude = Longitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Longitude);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = Longitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Longitude);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Latitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Latitude);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
             }
 
-            return string.Format(DST.Resources.AngleFormats.CoordinateFormatNoDelimiter, latitude, longitude);
+            return result;
         }
 
         // Returns true when this GeographicCoordinate's latitudinal component is either -90° or 90°; false otherwise.

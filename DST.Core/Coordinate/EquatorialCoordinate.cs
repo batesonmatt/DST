@@ -21,36 +21,92 @@ namespace DST.Core.Coordinate
         // Returns the string-representation of this EquatorialCoordinate formatted with the specified FormatType in the current culture.
         public override string Format(FormatType format)
         {
-            string rightAscension;
-            string declination;
+            string rightAscension = Format(format, ComponentType.Rotation);
+            string declination = Format(format, ComponentType.Inclination);
+
+            return string.Format(Resources.AngleFormats.CoordinateFormatWithDelimiter, rightAscension, declination);
+        }
+
+        // Returns the string-representation of this EquatorialCoordinate formatted with the specified FormatType and ComponentType in the current culture.
+        public override string Format(FormatType format, ComponentType component)
+        {
+            string result;
 
             switch (format)
             {
                 case FormatType.Component:
                 default:
                     {
-                        rightAscension = RightAscension.ToString(Angle.FormatType.ComponentHours, Angle.FormatModifierType.None);
-                        declination = Declination.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Signed);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = RightAscension.ToString(Angle.FormatType.ComponentHours, Angle.FormatModifierType.None);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Declination.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Signed);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
                 case FormatType.Decimal:
                     {
-                        rightAscension = RightAscension.ToString(Angle.FormatType.DecimalHours, Angle.FormatModifierType.None);
-                        declination = Declination.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Signed);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = RightAscension.ToString(Angle.FormatType.DecimalHours, Angle.FormatModifierType.None);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Declination.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Signed);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
                 case FormatType.Compact:
                     {
-                        rightAscension = RightAscension.ToString(Angle.FormatType.CompactHours, Angle.FormatModifierType.None);
-                        declination = Declination.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Signed);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = RightAscension.ToString(Angle.FormatType.CompactHours, Angle.FormatModifierType.None);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Declination.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Signed);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
             }
 
-            return string.Format(DST.Resources.AngleFormats.CoordinateFormatWithDelimiter, rightAscension, declination);
+            return result;
         }
 
         // Returns the intermediate right ascension of this EquatorialCoordinate, adjusted by the Celestial Intermediate Origin (CIO).

@@ -12,5 +12,11 @@ namespace DST.Core.TimeKeeper
 
             return dateTime.GetSiderealTime();
         }
+
+        // Returns the string-representation of this SiderealTimeKeeper instance.
+        public override string ToString()
+        {
+            return Resources.DisplayText.AlgorithmGASTFull;
+        }
     }
 }

@@ -21,36 +21,92 @@ namespace DST.Core.Coordinate
         // Returns the string-representation of this EclipticCoordinate formatted with the specified FormatType in the current culture.
         public override string Format(FormatType format)
         {
-            string longitude;
-            string latitude;
+            string longitude = Format(format, ComponentType.Rotation);
+            string latitude = Format(format, ComponentType.Inclination);
+
+            return string.Format(Resources.AngleFormats.CoordinateFormatWithDelimiter, longitude, latitude);
+        }
+
+        // Returns the string-representation of this EclipticCoordinate formatted with the specified FormatType and ComponentType in the current culture.
+        public override string Format(FormatType format, ComponentType component)
+        {
+            string result;
 
             switch (format)
             {
                 case FormatType.Component:
                 default:
                     {
-                        longitude = Longitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.None);
-                        latitude = Latitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Signed);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = Longitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.None);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Latitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Signed);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
                 case FormatType.Decimal:
                     {
-                        longitude = Longitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.None);
-                        latitude = Latitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Signed);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = Longitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.None);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Latitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Signed);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
                 case FormatType.Compact:
                     {
-                        longitude = Longitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.None);
-                        latitude = Latitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Signed);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = Longitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.None);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Latitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Signed);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
             }
 
-            return string.Format(DST.Resources.AngleFormats.CoordinateFormatWithDelimiter, longitude, latitude);
+            return result;
         }
 
         // Returns the nutated components of this EclipticCoordinate, for the specified date and time.

@@ -117,41 +117,101 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AlgorithmERAFull" xml:space="preserve">
+    <value>Earth Rotation Angle (ERA)</value>
+    <comment>The full display text for the ERA algorithm.</comment>
+  </data>
   <data name="AlgorithmERALong" xml:space="preserve">
     <value>Earth Rotation Angle</value>
-    <comment>A timekeeping algorithm in stellar time</comment>
+    <comment>A timekeeping algorithm in stellar time.</comment>
   </data>
   <data name="AlgorithmERAShort" xml:space="preserve">
     <value>ERA</value>
-    <comment>Acronym for Earth Rotation Angle</comment>
+    <comment>Acronym for Earth Rotation Angle.</comment>
+  </data>
+  <data name="AlgorithmGASTFull" xml:space="preserve">
+    <value>Greenwich Apparent Sidereal Time (GAST)</value>
+    <comment>The full display text for the GAST algorithm.</comment>
   </data>
   <data name="AlgorithmGASTLong" xml:space="preserve">
     <value>Greenwich Apparent Sidereal Time</value>
-    <comment>A timekeeping algorithm in sidereal time, with nutation</comment>
+    <comment>A timekeeping algorithm in sidereal time, with nutation.</comment>
   </data>
   <data name="AlgorithmGASTShort" xml:space="preserve">
     <value>GAST</value>
-    <comment>Acronym for Greenwich Apparent Sidereal Time</comment>
+    <comment>Acronym for Greenwich Apparent Sidereal Time.</comment>
+  </data>
+  <data name="AlgorithmGMSTFull" xml:space="preserve">
+    <value>Greenwich Mean Sidereal Time (GMST)</value>
+    <comment>The full display text for the GMST algorithm.</comment>
   </data>
   <data name="AlgorithmGMSTLong" xml:space="preserve">
     <value>Greenwich Mean Sidereal Time</value>
-    <comment>A timekeeping algorithm in sidereal time</comment>
+    <comment>A timekeeping algorithm in sidereal time.</comment>
   </data>
   <data name="AlgorithmGMSTShort" xml:space="preserve">
     <value>GMST</value>
-    <comment>Acronym for Greenwich Mean Sidereal Time</comment>
+    <comment>Acronym for Greenwich Mean Sidereal Time.</comment>
+  </data>
+  <data name="AlgorithmLASTFull" xml:space="preserve">
+    <value>Local Apparent Sidereal Time (LAST)</value>
+    <comment>The full display text for the LAST algorithm.</comment>
+  </data>
+  <data name="AlgorithmLASTLong" xml:space="preserve">
+    <value>Local Apparent Sidereal Time</value>
+    <comment>A local timekeeping algorithm in sidereal time, with nutation.</comment>
+  </data>
+  <data name="AlgorithmLASTShort" xml:space="preserve">
+    <value>LAST</value>
+    <comment>Acronym for Local Apparent Sidereal Time.</comment>
+  </data>
+  <data name="AlgorithmLERAFull" xml:space="preserve">
+    <value>Local Earth Rotation Angle (LERA)</value>
+    <comment>The full display text for the LERA algorithm.</comment>
+  </data>
+  <data name="AlgorithmLERALong" xml:space="preserve">
+    <value>Local Earth Rotation Angle</value>
+    <comment>A local timekeeping algorithm in stellar time.</comment>
+  </data>
+  <data name="AlgorithmLERAShort" xml:space="preserve">
+    <value>LERA</value>
+    <comment>Acronym for Local Earth Rotation Angle.</comment>
+  </data>
+  <data name="AlgorithmLHAFull" xml:space="preserve">
+    <value>Local Hour Angle (LHA)</value>
+    <comment>The full display text for the LHA algorithm.</comment>
+  </data>
+  <data name="AlgorithmLHALong" xml:space="preserve">
+    <value>Local Hour Angle</value>
+    <comment>A positional algorithm comprised of a local rotation angle and and equatorial right ascension.</comment>
+  </data>
+  <data name="AlgorithmLHAShort" xml:space="preserve">
+    <value>LHA</value>
+    <comment>Acronym for Local Hour Angle</comment>
+  </data>
+  <data name="AlgorithmLMSTFull" xml:space="preserve">
+    <value>Local Mean Sidereal Time (LMST)</value>
+    <comment>The full display text for the LMST algorithm.</comment>
+  </data>
+  <data name="AlgorithmLMSTLong" xml:space="preserve">
+    <value>Local Mean Sidereal Time</value>
+    <comment>A local timekeeping algorithm in sidereal time.</comment>
+  </data>
+  <data name="AlgorithmLMSTShort" xml:space="preserve">
+    <value>LMST</value>
+    <comment>Acronym for Local Mean Sidereal Time.</comment>
   </data>
   <data name="AltitudeApex" xml:space="preserve">
     <value>Apex</value>
-    <comment>The peak altitude of a tracked object in an observer's sky</comment>
+    <comment>The peak altitude of a tracked object in an observer's sky.</comment>
   </data>
   <data name="AltitudeRise" xml:space="preserve">
     <value>Rise</value>
-    <comment>The rising altitude of a tracked object at an observer's horizon</comment>
+    <comment>The rising altitude of a tracked object at an observer's horizon.</comment>
   </data>
   <data name="AltitudeSet" xml:space="preserve">
     <value>Set</value>
-    <comment>The setting altitude of a tracked object at an observer's horizon</comment>
+    <comment>The setting altitude of a tracked object at an observer's horizon.</comment>
   </data>
   <data name="ApparentMagnitudeDefault" xml:space="preserve">
     <value>Apparent Magnitude: none</value>
@@ -371,18 +431,18 @@
   </data>
   <data name="TrajectoryCircumpolar" xml:space="preserve">
     <value>Circumpolar</value>
-    <comment>A type of diurnal arc in which a tracked object is always above an observer's horizon</comment>
+    <comment>A type of diurnal arc in which a tracked object is always above an observer's horizon.</comment>
   </data>
   <data name="TrajectoryCircumpolarOffset" xml:space="preserve">
     <value>Circumpolar Offset</value>
-    <comment>A type of diurnal arc in which a tracked object is always above an observer's horizon, where the observer is not located at either of the geographic poles</comment>
+    <comment>A type of diurnal arc in which a tracked object is always above an observer's horizon, where the observer is not located at either of the geographic poles.</comment>
   </data>
   <data name="TrajectoryNeverRise" xml:space="preserve">
     <value>Never Rise</value>
-    <comment>A type of diurnal arc in which a tracked object never rises above an observer's horizon</comment>
+    <comment>A type of diurnal arc in which a tracked object never rises above an observer's horizon.</comment>
   </data>
   <data name="TrajectoryRiseAndSet" xml:space="preserve">
     <value>Rise and Set</value>
-    <comment>A type of diurnal arc in which a tracked object periodically rises from and sets at an observer's horizon</comment>
+    <comment>A type of diurnal arc in which a tracked object periodically rises from and sets at an observer's horizon.</comment>
   </data>
 </root>

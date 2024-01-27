@@ -1,4 +1,4 @@
-﻿@model TrackViewModel
+﻿@model TrackSummaryViewModel
 
 @{
     ViewBag.Title = "Summary";
@@ -8,83 +8,91 @@
     TrackSummaryRoute routes = current.Clone();
 }
 
-<div class="container">
+<div class="container pt-3">
 
-    <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitSummaryGeolocation"></vc:geolocation-form>
+    <div class="mb-3">
+        <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitSummaryGeolocation"></vc:geolocation-form>
+    </div>
 
-    <nav class="nav nav-tabs">
+    @* Consider view component or partial view *@
+    <div class="mb-3">
+        @if (Model.Dso.HasName)
+        {
+            <h1>@Model.Dso.CompoundId - @Model.Dso.Name</h1>
+        }
+        else
+        {
+            <h1>@Model.Dso.CompoundId</h1>
+        }
+
+        @if (Model.Dso.HasMultipleNames)
+        {
+            <p>Other names:&nbsp;&nbsp;<i>@string.Join(", ", Model.Dso.GetOtherNames())</i></p>
+        }
+    </div>
+
+    <nav class="nav nav-tabs mb-3">
         <a class="nav-item nav-link active">Summary</a>
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Phase" asp-all-route-data="@routes.ToDictionary()">Phase</a>
         @* <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a> *@
     </nav>
 
-    <h1>Summary</h1>
-
-    @if (Model.Dso.HasName)
-    {
-        <h3>@Model.Dso.CompoundId - @Model.Dso.Name</h3>
-    }
-    else
-    {
-        <h3>@Model.Dso.CompoundId</h3>
-    }
-
-    @if (Model.Dso.HasMultipleNames)
-    {
+    <div class="mb-3">
+        <h4>Target</h4>
+        <div class="row mb-3">
+            <label for="target-first" class="col-md col-form-label">@Model.TargetInfo.First().Key</label>
+            <label id="target-first" class="col-md col-form-label lead">@Model.TargetInfo.First().Value</label>
+        </div>
+        <div class="row mb-3">
+            <label for="target-second" class="col-md col-form-label">@Model.TargetInfo.ElementAt(1).Key</label>
+            <label id="target-second" class="col-md col-form-label lead">@Model.TargetInfo.ElementAt(1).Value</label>
+        </div>
         <p>
-            <strong>Other names:</strong>
+            <strong>RA, DEC:&nbsp;</strong>@Model.ClientObserver.Target.Format(DST.Core.Coordinate.FormatType.Component)
             <br />
-            <ul>
-                @foreach (string name in Model.Dso.GetOtherNames())
-                {
-                    <li>@name</li>
-                }
-            </ul>
+            <strong>Catalog:&nbsp;</strong>@Model.Dso.CatalogName
+            <br />
+            <strong>Type:&nbsp;</strong>@Model.Dso.Type
+            <br />
+            <strong>Description:&nbsp;</strong>@Model.Dso.Description
+            <br />
+            <strong>Constellation:&nbsp;</strong>@Model.Dso.ConstellationName
+            <br />
+            <strong>Distance:&nbsp;</strong>@Model.Dso.Distance
+            <br />
+            <strong>Magnitude:&nbsp;</strong>@Model.Dso.Magnitude
+            <br />
+            <strong>Season:&nbsp;</strong>&hellip;
         </p>
-    }
+    </div>
 
-    @* Consider using a form with labels to display the strings. Use type attribute for datetimes, etc. *@
+    <div class="mb-3">
+        <h4>Observer</h4>
+        <p>
+            <strong>LAT, LON:&nbsp;</strong>@Model.ClientObserver.Location.Format(DST.Core.Coordinate.FormatType.Component)
+            <br />
+            <strong>Time Zone:&nbsp;</strong>@Model.ClientObserver.DateTimeInfo.ClientTimeZoneInfo.DisplayName
+            <br />
+            <strong>Now:&nbsp;</strong>@Model.ClientObserver.DateTimeInfo.Now.Value.ToLocalTime().ToString()
+            <br />
+            <strong>UTC:&nbsp;</strong>@Model.ClientObserver.DateTimeInfo.Now.Value.ToString()
+        </p>
+    </div>
 
-    <h4>Target</h4>
-    <p>
-        <strong>RA,DEC:&nbsp;</strong>@Model.ClientObserver.Target.Format(DST.Core.Coordinate.FormatType.Component)
-        <br />
-        <strong>Catalog:&nbsp;</strong>@Model.Dso.CatalogName
-        <br />
-        <strong>Type:&nbsp;</strong>@Model.Dso.Type
-        <br />
-        <strong>Description:&nbsp;</strong>@Model.Dso.Description
-        <br />
-        <strong>Constellation:&nbsp;</strong>@Model.Dso.ConstellationName
-        <br />
-        <strong>Distance:&nbsp;</strong>@Model.Dso.Distance
-        <br />
-        <strong>Magnitude:&nbsp;</strong>@Model.Dso.Magnitude
-    </p>
-
-    <h4>Observer</h4>
-    <p>
-        <strong>LAT,LON:&nbsp;</strong>@Model.ClientObserver.Location.Format(DST.Core.Coordinate.FormatType.Component)
-        <br />
-        <strong>Time Zone:&nbsp;</strong>@Model.ClientObserver.DateTimeInfo.ClientTimeZoneInfo.DisplayName
-        <br />
-        <strong>Now:&nbsp;</strong>@Model.ClientObserver.DateTimeInfo.Now.Value.ToLocalTime().ToString()
-        <br />
-        <strong>UTC:&nbsp;</strong>@Model.ClientObserver.DateTimeInfo.Now.Value.ToString()
-    </p>
-
-    <h4>Current Tracking</h4>
-    <p>
-        <strong>Timekeeping Algorithm:&nbsp;</strong>&hellip;
-        <br />
-        <strong>Trajectory:&nbsp;</strong>&hellip;
-        <br />
-        <strong>Timekeeper:&nbsp;</strong>&hellip;
-        <br />
-        <strong>Local Timekeeper:&nbsp;</strong>&hellip;
-        <br />
-        <strong>LHA:&nbsp;</strong>&hellip;
-        <br />
-        <strong>Position:&nbsp;</strong>&hellip;
-    </p>
+    <div class="mb-3">
+        <h4>Tracker</h4>
+        <p>
+            <strong>Timekeeping Algorithm:&nbsp;</strong>&hellip;
+            <br />
+            <strong>Trajectory:&nbsp;</strong>&hellip;
+            <br />
+            <strong>Timekeeper:&nbsp;</strong>&hellip;
+            <br />
+            <strong>Local Timekeeper:&nbsp;</strong>&hellip;
+            <br />
+            <strong>LHA:&nbsp;</strong>&hellip;
+            <br />
+            <strong>Position:&nbsp;</strong>&hellip;
+        </p>
+    </div>
 </div>

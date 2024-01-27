@@ -348,6 +348,12 @@
             return ToString(FormatType.DecimalDegrees, FormatModifierType.None);
         }
 
+        // Returns the string-representation of this current Angle instance, formatted by the specified FormatType.
+        public string ToString(FormatType format)
+        {
+            return ToString(format, FormatModifierType.None);
+        }
+
         // Returns the string-representation of this current Angle instance, formatted by the specified
         // FormatType and with the FormatModifierType.
         public string ToString(FormatType format, FormatModifierType modifier)
@@ -359,13 +365,13 @@
                 case FormatType.DecimalDegrees:
                 default:
                     {
-                        result = string.Format(DST.Resources.AngleFormats.DecimalFormatDegrees, Math.Abs(TotalDegrees));
+                        result = string.Format(Resources.AngleFormats.DecimalFormatDegrees, Math.Abs(TotalDegrees));
                         break;
                     }
 
                 case FormatType.DecimalHours:
                     {
-                        result = string.Format(DST.Resources.AngleFormats.DecimalFormatHours, Math.Abs(ToTime().TotalHours));
+                        result = string.Format(Resources.AngleFormats.DecimalFormatHours, Math.Abs(ToTime().TotalHours));
                         break;
                     }
 
@@ -377,7 +383,7 @@
                         // Decimal seconds = Seconds + (Milliseconds / 1000.0)
                         double remainingSeconds = components.ElementAtOrDefault(2) + components.ElementAtOrDefault(3) / 1000.0;
 
-                        result = string.Format(DST.Resources.AngleFormats.ComponentFormatDegrees,
+                        result = string.Format(Resources.AngleFormats.ComponentFormatDegrees,
                             Math.Abs(components.ElementAtOrDefault(0)),
                             Math.Abs(components.ElementAtOrDefault(1)),
                             Math.Abs(remainingSeconds));
@@ -391,7 +397,7 @@
 
                         double remainingSeconds = value.Seconds + value.Milliseconds / 1000.0;
 
-                        result = string.Format(DST.Resources.AngleFormats.ComponentFormatHours,
+                        result = string.Format(Resources.AngleFormats.ComponentFormatHours,
                             Math.Abs(value.Hours),
                             Math.Abs(value.Minutes),
                             Math.Abs(remainingSeconds));
@@ -401,13 +407,13 @@
 
                 case FormatType.CompactDegrees:
                     {
-                        result = string.Format(DST.Resources.AngleFormats.CompactFormatDegrees, Math.Abs(TotalDegrees));
+                        result = string.Format(Resources.AngleFormats.CompactFormatDegrees, Math.Abs(TotalDegrees));
                         break;
                     }
 
                 case FormatType.CompactHours:
                     {
-                        result = string.Format(DST.Resources.AngleFormats.CompactFormatHours, Math.Abs(ToTime().TotalHours));
+                        result = string.Format(Resources.AngleFormats.CompactFormatHours, Math.Abs(ToTime().TotalHours));
                         break;
                     }
             }
@@ -420,7 +426,7 @@
                         // Include only the negative sign if the angle is negative.
                         if (TotalDegrees < 0.0)
                         {
-                            result = string.Format(DST.Resources.AngleFormats.SignedFormatNegativeValue, result);
+                            result = string.Format(Resources.AngleFormats.SignedFormatNegativeValue, result);
                         }
 
                         break;
@@ -431,11 +437,11 @@
                         // Include a negative sign if the angle is negative, or a positive sign if the angle is positive or zero.
                         if (TotalDegrees < 0.0)
                         {
-                            result = string.Format(DST.Resources.AngleFormats.SignedFormatNegativeValue, result);
+                            result = string.Format(Resources.AngleFormats.SignedFormatNegativeValue, result);
                         }
                         else
                         {
-                            result = string.Format(DST.Resources.AngleFormats.SignedFormatPositiveValue, result);
+                            result = string.Format(Resources.AngleFormats.SignedFormatPositiveValue, result);
                         }
 
                         break;
@@ -453,11 +459,11 @@
                         // or a North bearing indicator if the angle is positive or zero.
                         if (TotalDegrees < 0.0)
                         {
-                            result = string.Format(DST.Resources.AngleFormats.BearingFormatSouth, result);
+                            result = string.Format(Resources.AngleFormats.BearingFormatSouth, result);
                         }
                         else
                         {
-                            result = string.Format(DST.Resources.AngleFormats.BearingFormatNorth, result);
+                            result = string.Format(Resources.AngleFormats.BearingFormatNorth, result);
                         }
 
                         break;
@@ -469,11 +475,11 @@
                         // or an East bearing indicator if the angle is positive or zero.
                         if (TotalDegrees < 0.0)
                         {
-                            result = string.Format(DST.Resources.AngleFormats.BearingFormatWest, result);
+                            result = string.Format(Resources.AngleFormats.BearingFormatWest, result);
                         }
                         else
                         {
-                            result = string.Format(DST.Resources.AngleFormats.BearingFormatEast, result);
+                            result = string.Format(Resources.AngleFormats.BearingFormatEast, result);
                         }
 
                         break;

@@ -39,5 +39,11 @@ namespace DST.Core.LocalHourAngle
         {
             return Angle.Coterminal(localTime - rightAscension);
         }
+
+        // Returns the string-representation of this BaseLocalHourAngle instance.
+        public override string ToString()
+        {
+            return Resources.DisplayText.AlgorithmLHAFull;
+        }
     }
 }

@@ -12,5 +12,11 @@ namespace DST.Core.TimeKeeper
 
             return dateTime.GetMeanSiderealTime();
         }
+
+        // Returns the string-representation of this MeanSiderealTimeKeeper instance.
+        public override string ToString()
+        {
+            return Resources.DisplayText.AlgorithmGMSTFull;
+        }
     }
 }

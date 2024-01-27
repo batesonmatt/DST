@@ -23,36 +23,92 @@ namespace DST.Core.Coordinate
         // Returns the string-representation of this HorizontalIRMCoordinate formatted with the specified FormatType in the current culture.
         public override string Format(FormatType format)
         {
-            string altitude;
-            string azimuth;
+            string altitude = Format(format, ComponentType.Inclination);
+            string azimuth = Format(format, ComponentType.Rotation);
+
+            return string.Format(Resources.AngleFormats.CoordinateFormatWithDelimiter, altitude, azimuth);
+        }
+
+        // Returns the string-representation of this HorizontalIRMCoordinate formatted with the specified FormatType and ComponentType in the current culture.
+        public override string Format(FormatType format, ComponentType component)
+        {
+            string result;
 
             switch (format)
             {
                 case FormatType.Component:
                 default:
                     {
-                        altitude = Altitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Signed);
-                        azimuth = Azimuth.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Longitude);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = Azimuth.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Longitude);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Altitude.ToString(Angle.FormatType.ComponentDegrees, Angle.FormatModifierType.Signed);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
                 case FormatType.Decimal:
                     {
-                        altitude = Altitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Signed);
-                        azimuth = Azimuth.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Longitude);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = Azimuth.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Longitude);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Altitude.ToString(Angle.FormatType.DecimalDegrees, Angle.FormatModifierType.Signed);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
                 case FormatType.Compact:
                     {
-                        altitude = Altitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Signed);
-                        azimuth = Azimuth.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Longitude);
+                        switch (component)
+                        {
+                            case ComponentType.Rotation:
+                                {
+                                    result = Azimuth.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Longitude);
+                                    break;
+                                }
+                            case ComponentType.Inclination:
+                                {
+                                    result = Altitude.ToString(Angle.FormatType.CompactDegrees, Angle.FormatModifierType.Signed);
+                                    break;
+                                }
+                            default:
+                                {
+                                    result = string.Empty;
+                                    break;
+                                }
+                        }
 
                         break;
                     }
             }
 
-            return string.Format(DST.Resources.AngleFormats.CoordinateFormatWithDelimiter, altitude, azimuth);
+            return result;
         }
     }
 }

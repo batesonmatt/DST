@@ -17,5 +17,11 @@ namespace DST.Core.LocalTimeKeeper
         {
             return base.Calculate(localObserver, dateTime);
         }
+
+        // Returns the string-representation of this LocalStellarTimeKeeper instance.
+        public override string ToString()
+        {
+            return Resources.DisplayText.AlgorithmLERAFull;
+        }
     }
 }

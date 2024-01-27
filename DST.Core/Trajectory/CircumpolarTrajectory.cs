@@ -27,7 +27,7 @@ namespace DST.Core.Trajectory
         // Returns the string-representation of this CircumpolarTrajectory instance.
         public override string ToString()
         {
-            return DST.Resources.DisplayText.TrajectoryCircumpolar;
+            return Resources.DisplayText.TrajectoryCircumpolar;
         }
     }
 }

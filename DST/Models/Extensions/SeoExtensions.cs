@@ -15,7 +15,7 @@ namespace DST.Models.Extensions
 
             char[] array = value.ToCharArray();
 
-            array[0] = char.ToUpper(array[0]);
+            array[0] = char.ToUpper(array[0], CultureInfo.CurrentCulture);
 
             return new string(array);
         }
@@ -27,7 +27,7 @@ namespace DST.Models.Extensions
                 return string.Empty;
             }
 
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLower());
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLower(CultureInfo.CurrentCulture));
         }
 
         public static string ToKebabCase(this string value)

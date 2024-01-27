@@ -61,6 +61,15 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Earth Rotation Angle (ERA).
+        /// </summary>
+        public static string AlgorithmERAFull {
+            get {
+                return ResourceManager.GetString("AlgorithmERAFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Earth Rotation Angle.
         /// </summary>
         public static string AlgorithmERALong {
@@ -75,6 +84,15 @@ namespace DST.Resources {
         public static string AlgorithmERAShort {
             get {
                 return ResourceManager.GetString("AlgorithmERAShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Greenwich Apparent Sidereal Time (GAST).
+        /// </summary>
+        public static string AlgorithmGASTFull {
+            get {
+                return ResourceManager.GetString("AlgorithmGASTFull", resourceCulture);
             }
         }
         
@@ -97,6 +115,15 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Greenwich Mean Sidereal Time (GMST).
+        /// </summary>
+        public static string AlgorithmGMSTFull {
+            get {
+                return ResourceManager.GetString("AlgorithmGMSTFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Greenwich Mean Sidereal Time.
         /// </summary>
         public static string AlgorithmGMSTLong {
@@ -111,6 +138,114 @@ namespace DST.Resources {
         public static string AlgorithmGMSTShort {
             get {
                 return ResourceManager.GetString("AlgorithmGMSTShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Apparent Sidereal Time (LAST).
+        /// </summary>
+        public static string AlgorithmLASTFull {
+            get {
+                return ResourceManager.GetString("AlgorithmLASTFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Apparent Sidereal Time.
+        /// </summary>
+        public static string AlgorithmLASTLong {
+            get {
+                return ResourceManager.GetString("AlgorithmLASTLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LAST.
+        /// </summary>
+        public static string AlgorithmLASTShort {
+            get {
+                return ResourceManager.GetString("AlgorithmLASTShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Earth Rotation Angle (LERA).
+        /// </summary>
+        public static string AlgorithmLERAFull {
+            get {
+                return ResourceManager.GetString("AlgorithmLERAFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Earth Rotation Angle.
+        /// </summary>
+        public static string AlgorithmLERALong {
+            get {
+                return ResourceManager.GetString("AlgorithmLERALong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LERA.
+        /// </summary>
+        public static string AlgorithmLERAShort {
+            get {
+                return ResourceManager.GetString("AlgorithmLERAShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Hour Angle (LHA).
+        /// </summary>
+        public static string AlgorithmLHAFull {
+            get {
+                return ResourceManager.GetString("AlgorithmLHAFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Hour Angle.
+        /// </summary>
+        public static string AlgorithmLHALong {
+            get {
+                return ResourceManager.GetString("AlgorithmLHALong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LHA.
+        /// </summary>
+        public static string AlgorithmLHAShort {
+            get {
+                return ResourceManager.GetString("AlgorithmLHAShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Mean Sidereal Time (LMST).
+        /// </summary>
+        public static string AlgorithmLMSTFull {
+            get {
+                return ResourceManager.GetString("AlgorithmLMSTFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Mean Sidereal Time.
+        /// </summary>
+        public static string AlgorithmLMSTLong {
+            get {
+                return ResourceManager.GetString("AlgorithmLMSTLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LMST.
+        /// </summary>
+        public static string AlgorithmLMSTShort {
+            get {
+                return ResourceManager.GetString("AlgorithmLMSTShort", resourceCulture);
             }
         }
         

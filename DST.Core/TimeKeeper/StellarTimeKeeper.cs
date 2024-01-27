@@ -12,5 +12,11 @@ namespace DST.Core.TimeKeeper
 
             return dateTime.GetEarthRotationAngle();
         }
+
+        // Returns the string-representation of this StellarTimeKeeper instance.
+        public override string ToString()
+        {
+            return Resources.DisplayText.AlgorithmERAFull;
+        }
     }
 }

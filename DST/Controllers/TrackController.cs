@@ -10,6 +10,15 @@ using DST.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Extensions;
 using System.Collections.Generic;
+using DST.Core.Physics;
+using DST.Core.Components;
+using System.Globalization;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using DST.Core.Coordinate;
+using System;
+using DST.Core.DateAndTime;
+using DST.Core.Tracker;
 
 namespace DST.Controllers
 {
@@ -113,11 +122,75 @@ namespace DST.Controllers
             ILocalObserver localObserver = 
                 Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, Core.TimeKeeper.Algorithm.GMST);
 
-            TrackViewModel viewModel = new()
+            /* ------------------------------------------------------------------------------------------------------------------------------------- */
+            string seasonNameWithRangeFormat = "{0} ({1} - {2})";
+
+            SeasonModel season = _data.Items
+                .Where(d => d == dso) //d.CatalogName == dso.CatalogName && d.Id == dso.Id
+                .Include(i => i.Constellation)
+                .ThenInclude(i => i.Season)
+                .Select(s => s.Constellation.Season)
+                .FirstOrDefault();
+
+            Dictionary<string, string> targetInfo = new()
+            {
+                { "Right Ascension", localObserver.Target.Format(FormatType.Component, ComponentType.Rotation) },
+                { "Declination", localObserver.Target.Format(FormatType.Component, ComponentType.Inclination) },
+                { "Catalog", dso.CatalogName },
+                { "Type", dso.Type },
+                { "Description", dso.Description },
+                { "Constellation", dso.ConstellationName },
+                { "Distance", string.Format(Resources.DisplayText.DistanceFormatDecimalKly, dso.Distance) },
+                { "Magnitude", dso.Magnitude?.ToString(CultureInfo.CurrentCulture) ?? "None" },
+                {
+                    "Season", 
+                    string.Format(seasonNameWithRangeFormat,
+                        localObserver.Location.Latitude >= 0.0 ? season.North : season.South,
+                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.StartMonth),
+                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.EndMonth))
+                }
+            };
+            /* ------------------------------------------------------------------------------------------------------------------------------------- */
+            IMutableDateTime clientDateTime = DateTimeFactory.CreateMutable(DateTime.UtcNow, localObserver.DateTimeInfo);
+
+            Dictionary<string, string> observerInfo = new()
+            {
+                { "Latitude", localObserver.Location.Format(FormatType.Component, ComponentType.Inclination) },
+                { "Longitude", localObserver.Location.Format(FormatType.Component, ComponentType.Rotation) },
+                { "Time Zone", localObserver.DateTimeInfo.ClientTimeZoneInfo.DisplayName },
+                { "Local Time", clientDateTime.ToLocalTime().ToString(CultureInfo.CurrentCulture) },
+                { "Universal Time", clientDateTime.Value.ToString(CultureInfo.CurrentCulture) }
+            };
+            /* ------------------------------------------------------------------------------------------------------------------------------------- */
+
+            IAstronomicalDateTime astronomicalDateTime = DateTimeFactory.ConvertToAstronomical(clientDateTime);
+
+            ITracker tracker = TrackerFactory.Create(localObserver);
+            IHorizontalCoordinate position = tracker.Track(astronomicalDateTime) as IHorizontalCoordinate;
+
+            Dictionary<string, string> trackerInfo = new()
+            {
+                { "Timekeeper", localObserver.TimeKeeper.ToString() },
+                { localObserver.TimeKeeper.ToString(), localObserver.TimeKeeper.Calculate(astronomicalDateTime).ToString(Angle.FormatType.ComponentDegrees) },
+                { localObserver.LocalTimeKeeper.ToString(), localObserver.LocalTimeKeeper.Calculate(localObserver, astronomicalDateTime).ToString(Angle.FormatType.ComponentDegrees) },
+                { localObserver.LocalHourAngle.ToString(), localObserver.LocalHourAngle.Calculate(localObserver, astronomicalDateTime).ToString(Angle.FormatType.ComponentDegrees) },
+                { "Altitude", position.Format(FormatType.Component, ComponentType.Inclination) },
+                { "Azimuth", position.Format(FormatType.Component, ComponentType.Rotation) },
+                { "Trajectory", Utilities.GetPrimaryTrajectoryName(dso, _geoBuilder.CurrentGeolocation) },
+                { "Local", "" },
+                { "Visible", "" }
+            };
+
+            /* ------------------------------------------------------------------------------------------------------------------------------------- */
+
+            TrackSummaryViewModel viewModel = new()
             {
                 Dso = dso,
                 ClientObserver = localObserver,
-                CurrentRoute = values
+                CurrentRoute = values,
+                TargetInfo = targetInfo,
+                ObserverInfo = observerInfo,
+                TrackerInfo = trackerInfo
             };
 
             return View(viewModel);

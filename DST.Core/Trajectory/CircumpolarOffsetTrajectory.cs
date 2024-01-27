@@ -45,13 +45,13 @@ namespace DST.Core.Trajectory
         // Returns the primary name for this CircumpolarOffsetTrajectory instance.
         public string GetPrimaryName()
         {
-            return DST.Resources.DisplayText.TrajectoryCircumpolar;
+            return Resources.DisplayText.TrajectoryCircumpolar;
         }
 
         // Returns the secondary name for this CircumpolarOffsetTrajectory instance.
         public string GetSecondaryName()
         {
-            return DST.Resources.DisplayText.TrajectoryCircumpolarOffset;
+            return Resources.DisplayText.TrajectoryCircumpolarOffset;
         }
     }
 }

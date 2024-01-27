@@ -27,5 +27,8 @@ namespace DST.Core.Coordinate
 
         // Returns the string-representation of this IFormattableCoordinate, formatted by the specified FormatType.
         public abstract string Format(FormatType format);
+
+        // Returns the string-representation of this IFormattableCoordinate, formatted by the specified FormatType and ComponentType.
+        public abstract string Format(FormatType format, ComponentType component);
     }
 }

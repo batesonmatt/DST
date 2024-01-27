@@ -174,7 +174,7 @@ namespace DST.Core.Trajectory
         // Returns the string-representation of this RiseSetTrajectory instance.
         public override string ToString()
         {
-            return DST.Resources.DisplayText.TrajectoryRiseAndSet;
+            return Resources.DisplayText.TrajectoryRiseAndSet;
         }
     }
 }

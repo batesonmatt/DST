@@ -1,4 +1,5 @@
 ﻿using DST.Models.DataLayer.Query;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace DST.Models.DataLayer.Repositories
@@ -6,6 +7,12 @@ namespace DST.Models.DataLayer.Repositories
     public interface IRepository<T> 
         where T : class
     {
+        #region Properties
+
+        DbSet<T> Items { get; }
+
+        #endregion
+
         #region Methods
 
         IEnumerable<T> List(QueryOptions<T> options);

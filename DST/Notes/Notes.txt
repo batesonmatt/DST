@@ -44,6 +44,13 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 
 *******************************************************************************************************
 
+Consider revising the Track viewmodels
+- I might not need the DsoModel and ILocalObserver properties in the viewmodels.
+
+Use floating labels for the form controls.
+
+Consider a Bootstrap OffCanvas for the Geolocation and Details partial views ?.
+
 The Algorithm select control should be available in the Phase/Period forms.
 - The builders/routes will use this value that gets posted from the form, instead of the one already selected in the current route.
 - The current selection in the select list will be initially set to the Algorithm value in the current route.
@@ -52,12 +59,6 @@ The Algorithm select control should be available in the Phase/Period forms.
   Use razor code to disable/hide certain options and display messages based on the route values.
   There will also be server-side validation to ensure bad data doesn't get sent in.
 - The Summary view may still have an Algorithm select control.
-
-~~~ DONE ~~~
-Geolocation view component/partial view
-- Consider updating so that in addition to taking the route values, it may also take a string of the redirect action name.
-- The various track views will each have routebuilders, so the SubmitGeolocation action can switch on the redirect string
-  to determine which routebuilder to get the route values from.
 
 Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Takes DsoModel, GeolocationModel, and Algorithm
@@ -125,6 +126,9 @@ Consider moving AlgorithmName and PhaseName out of the Query namespace, and into
 Consider renaming Utilities.GetSearchListPageSizeItems() to .GetPageSizeItems()
 
 Consider using DI in certain action methods, instead of through the controller constructor. See pg. 568.
+
+Consider revising Utilities.GetSortTag and its helper methods.
+- Consider moving methods to DsoSortTagViewComponent.
 
 For the IVector list sections in Phase and Period views, consider limiting results to ~50 by default, with a Show More button at the bottom.
 
