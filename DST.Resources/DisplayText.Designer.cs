@@ -448,6 +448,96 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string None {
+            get {
+                return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Latitude.
+        /// </summary>
+        public static string ObserverLatitudeLong {
+            get {
+                return ResourceManager.GetString("ObserverLatitudeLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LAT.
+        /// </summary>
+        public static string ObserverLatitudeShort {
+            get {
+                return ResourceManager.GetString("ObserverLatitudeShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Time.
+        /// </summary>
+        public static string ObserverLocalTime {
+            get {
+                return ResourceManager.GetString("ObserverLocalTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Longitude.
+        /// </summary>
+        public static string ObserverLongitudeLong {
+            get {
+                return ResourceManager.GetString("ObserverLongitudeLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LON.
+        /// </summary>
+        public static string ObserverLongitudeShort {
+            get {
+                return ResourceManager.GetString("ObserverLongitudeShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timekeeper.
+        /// </summary>
+        public static string ObserverTimeKeeper {
+            get {
+                return ResourceManager.GetString("ObserverTimeKeeper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time Zone.
+        /// </summary>
+        public static string ObserverTimeZone {
+            get {
+                return ResourceManager.GetString("ObserverTimeZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Universal Time.
+        /// </summary>
+        public static string ObserverUniversalTimeLong {
+            get {
+                return ResourceManager.GetString("ObserverUniversalTimeLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UTC.
+        /// </summary>
+        public static string ObserverUniversalTimeShort {
+            get {
+                return ResourceManager.GetString("ObserverUniversalTimeShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} results.
         /// </summary>
         public static string PageResultsFormatMultiple {
@@ -669,6 +759,168 @@ namespace DST.Resources {
         public static string SortFieldType {
             get {
                 return ResourceManager.GetString("SortFieldType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Altitude.
+        /// </summary>
+        public static string TargetAltitudeLong {
+            get {
+                return ResourceManager.GetString("TargetAltitudeLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ALT.
+        /// </summary>
+        public static string TargetAltitudeShort {
+            get {
+                return ResourceManager.GetString("TargetAltitudeShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Azimuth.
+        /// </summary>
+        public static string TargetAzimuthLong {
+            get {
+                return ResourceManager.GetString("TargetAzimuthLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AZ.
+        /// </summary>
+        public static string TargetAzimuthShort {
+            get {
+                return ResourceManager.GetString("TargetAzimuthShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Catalog.
+        /// </summary>
+        public static string TargetCatalog {
+            get {
+                return ResourceManager.GetString("TargetCatalog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constellation.
+        /// </summary>
+        public static string TargetConstellation {
+            get {
+                return ResourceManager.GetString("TargetConstellation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Declination.
+        /// </summary>
+        public static string TargetDeclinationLong {
+            get {
+                return ResourceManager.GetString("TargetDeclinationLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DEC.
+        /// </summary>
+        public static string TargetDeclinationShort {
+            get {
+                return ResourceManager.GetString("TargetDeclinationShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string TargetDescription {
+            get {
+                return ResourceManager.GetString("TargetDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance.
+        /// </summary>
+        public static string TargetDistance {
+            get {
+                return ResourceManager.GetString("TargetDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local.
+        /// </summary>
+        public static string TargetLocal {
+            get {
+                return ResourceManager.GetString("TargetLocal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magnitude.
+        /// </summary>
+        public static string TargetMagnitude {
+            get {
+                return ResourceManager.GetString("TargetMagnitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right Ascension.
+        /// </summary>
+        public static string TargetRightAscensionLong {
+            get {
+                return ResourceManager.GetString("TargetRightAscensionLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RA.
+        /// </summary>
+        public static string TargetRightAscensionShort {
+            get {
+                return ResourceManager.GetString("TargetRightAscensionShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Season.
+        /// </summary>
+        public static string TargetSeason {
+            get {
+                return ResourceManager.GetString("TargetSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} ({1} - {2}).
+        /// </summary>
+        public static string TargetSeasonDetailsFormat {
+            get {
+                return ResourceManager.GetString("TargetSeasonDetailsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trajectory.
+        /// </summary>
+        public static string TargetTrajectory {
+            get {
+                return ResourceManager.GetString("TargetTrajectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string TargetType {
+            get {
+                return ResourceManager.GetString("TargetType", resourceCulture);
             }
         }
         

@@ -289,6 +289,46 @@
     <value>Longitude must be in the range from -180.0 to 180.0</value>
     <comment>The validation message for a longitudinal coordinate value.</comment>
   </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+    <comment>A generic display text.</comment>
+  </data>
+  <data name="ObserverLatitudeLong" xml:space="preserve">
+    <value>Latitude</value>
+    <comment>The display text for an observer's geographic latitude.</comment>
+  </data>
+  <data name="ObserverLatitudeShort" xml:space="preserve">
+    <value>LAT</value>
+    <comment>The abbreviated display text for an observer's geographic latitude.</comment>
+  </data>
+  <data name="ObserverLocalTime" xml:space="preserve">
+    <value>Local Time</value>
+    <comment>The display text for an observer's local time.</comment>
+  </data>
+  <data name="ObserverLongitudeLong" xml:space="preserve">
+    <value>Longitude</value>
+    <comment>The display text for an observer's geographic longitude.</comment>
+  </data>
+  <data name="ObserverLongitudeShort" xml:space="preserve">
+    <value>LON</value>
+    <comment>The abbreviated display text for an observer's geographic longitude.</comment>
+  </data>
+  <data name="ObserverTimeKeeper" xml:space="preserve">
+    <value>Timekeeper</value>
+    <comment>The display text for an observer's timekeeper.</comment>
+  </data>
+  <data name="ObserverTimeZone" xml:space="preserve">
+    <value>Time Zone</value>
+    <comment>The display text for an observer's geographic time zone.</comment>
+  </data>
+  <data name="ObserverUniversalTimeLong" xml:space="preserve">
+    <value>Universal Time</value>
+    <comment>The display text for an observer's universal time.</comment>
+  </data>
+  <data name="ObserverUniversalTimeShort" xml:space="preserve">
+    <value>UTC</value>
+    <comment>The abbreviated display text for an observer's universal time.</comment>
+  </data>
   <data name="PageResultsFormatMultiple" xml:space="preserve">
     <value>{0} results</value>
     <comment>Formats the item results for a page, where argument {0} represents zero or multiple items.</comment>
@@ -388,6 +428,78 @@
   <data name="SortFieldType" xml:space="preserve">
     <value>Type</value>
     <comment>The display text for sorting by type.</comment>
+  </data>
+  <data name="TargetAltitudeLong" xml:space="preserve">
+    <value>Altitude</value>
+    <comment>The display text for a deep-sky object's altitude.</comment>
+  </data>
+  <data name="TargetAltitudeShort" xml:space="preserve">
+    <value>ALT</value>
+    <comment>The abbreviated display text for a deep-sky object's altitude.</comment>
+  </data>
+  <data name="TargetAzimuthLong" xml:space="preserve">
+    <value>Azimuth</value>
+    <comment>The display text for a deep-sky object's azimuth.</comment>
+  </data>
+  <data name="TargetAzimuthShort" xml:space="preserve">
+    <value>AZ</value>
+    <comment>The abbreviated display text for a deep-sky object's azimuth.</comment>
+  </data>
+  <data name="TargetCatalog" xml:space="preserve">
+    <value>Catalog</value>
+    <comment>The display text for a deep-sky object's catalog.</comment>
+  </data>
+  <data name="TargetConstellation" xml:space="preserve">
+    <value>Constellation</value>
+    <comment>The display text for a deep-sky object's constellation.</comment>
+  </data>
+  <data name="TargetDeclinationLong" xml:space="preserve">
+    <value>Declination</value>
+    <comment>The display text for a deep-sky object's declination.</comment>
+  </data>
+  <data name="TargetDeclinationShort" xml:space="preserve">
+    <value>DEC</value>
+    <comment>The abbreviated display text for a deep-sky object's declination.</comment>
+  </data>
+  <data name="TargetDescription" xml:space="preserve">
+    <value>Description</value>
+    <comment>The display text for a deep-sky object's description.</comment>
+  </data>
+  <data name="TargetDistance" xml:space="preserve">
+    <value>Distance</value>
+    <comment>The display text for a deep-sky object's distance.</comment>
+  </data>
+  <data name="TargetLocal" xml:space="preserve">
+    <value>Local</value>
+    <comment>The display text for a deep-sky object's local visibility.</comment>
+  </data>
+  <data name="TargetMagnitude" xml:space="preserve">
+    <value>Magnitude</value>
+    <comment>The display text for a deep-sky object's apparent magnitude.</comment>
+  </data>
+  <data name="TargetRightAscensionLong" xml:space="preserve">
+    <value>Right Ascension</value>
+    <comment>The display text for a deep-sky object's right ascension.</comment>
+  </data>
+  <data name="TargetRightAscensionShort" xml:space="preserve">
+    <value>RA</value>
+    <comment>The abbreviated display text for a deep-sky object's right ascension.</comment>
+  </data>
+  <data name="TargetSeason" xml:space="preserve">
+    <value>Season</value>
+    <comment>The display text for a deep-sky object's visible season.</comment>
+  </data>
+  <data name="TargetSeasonDetailsFormat" xml:space="preserve">
+    <value>{0} ({1} - {2})</value>
+    <comment>Formats a deep-sky object's detailed season information, where item 0 is the season name, item 1 is the season's starting month, and item 2 is the season's ending month.</comment>
+  </data>
+  <data name="TargetTrajectory" xml:space="preserve">
+    <value>Trajectory</value>
+    <comment>The display text for a deep-sky object's trajectory.</comment>
+  </data>
+  <data name="TargetType" xml:space="preserve">
+    <value>Type</value>
+    <comment>The display text for a deep-sky object's type.</comment>
   </data>
   <data name="TimeScaleSidereal" xml:space="preserve">
     <value>Sidereal Time</value>

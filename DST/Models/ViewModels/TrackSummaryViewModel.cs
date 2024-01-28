@@ -12,10 +12,7 @@ namespace DST.Models.ViewModels
         public DsoModel Dso { get; set; }
         public ILocalObserver ClientObserver { get; set; }
         public TrackSummaryRoute CurrentRoute { get; set; }
-        
-        public IDictionary<string, string> TargetInfo { get; set; }
-        public IDictionary<string, string> ObserverInfo { get; set; }
-        public IDictionary<string, string> TrackerInfo { get; set; }
+        public IDictionary<string, string> DisplayInfo { get; set; }
 
         #endregion
     }

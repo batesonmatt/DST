@@ -10,15 +10,13 @@ using DST.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Extensions;
 using System.Collections.Generic;
-using DST.Core.Physics;
 using DST.Core.Components;
 using System.Globalization;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using DST.Core.Coordinate;
 using System;
 using DST.Core.DateAndTime;
 using DST.Core.Tracker;
+using DST.Models.DataLayer;
 
 namespace DST.Controllers
 {
@@ -26,16 +24,16 @@ namespace DST.Controllers
     {
         #region Fields
 
-        private readonly IRepository<DsoModel> _data;
+        private readonly TrackUnitOfWork _data;
         private readonly IGeolocationBuilder _geoBuilder;
 
         #endregion
 
         #region Constructors
 
-        public TrackController(IRepository<DsoModel> data, IGeolocationBuilder geoBuilder)
+        public TrackController(MainDbContext context, IGeolocationBuilder geoBuilder)
         {
-            _data = data;
+            _data = new TrackUnitOfWork(context);
             _geoBuilder = geoBuilder;
 
             // Load the client geolocation, if any.
@@ -116,81 +114,59 @@ namespace DST.Controllers
             // Validate route values.
             values.Validate();
 
-            DsoModel dso = _data.Get(values.Catalog, values.Id);
+            DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
 
             /* Allow the client to choose the algorithm by using a separate HttpPost action that redirects to Summary(TrackSummaryRoute). */
             ILocalObserver localObserver = 
                 Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, Core.TimeKeeper.Algorithm.GMST);
 
-            /* ------------------------------------------------------------------------------------------------------------------------------------- */
-            string seasonNameWithRangeFormat = "{0} ({1} - {2})";
+            SeasonModel season = _data.GetSeason(dso);
 
-            SeasonModel season = _data.Items
-                .Where(d => d == dso) //d.CatalogName == dso.CatalogName && d.Id == dso.Id
-                .Include(i => i.Constellation)
-                .ThenInclude(i => i.Season)
-                .Select(s => s.Constellation.Season)
-                .FirstOrDefault();
-
-            Dictionary<string, string> targetInfo = new()
-            {
-                { "Right Ascension", localObserver.Target.Format(FormatType.Component, ComponentType.Rotation) },
-                { "Declination", localObserver.Target.Format(FormatType.Component, ComponentType.Inclination) },
-                { "Catalog", dso.CatalogName },
-                { "Type", dso.Type },
-                { "Description", dso.Description },
-                { "Constellation", dso.ConstellationName },
-                { "Distance", string.Format(Resources.DisplayText.DistanceFormatDecimalKly, dso.Distance) },
-                { "Magnitude", dso.Magnitude?.ToString(CultureInfo.CurrentCulture) ?? "None" },
-                {
-                    "Season", 
-                    string.Format(seasonNameWithRangeFormat,
-                        localObserver.Location.Latitude >= 0.0 ? season.North : season.South,
-                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.StartMonth),
-                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.EndMonth))
-                }
-            };
-            /* ------------------------------------------------------------------------------------------------------------------------------------- */
             IMutableDateTime clientDateTime = DateTimeFactory.CreateMutable(DateTime.UtcNow, localObserver.DateTimeInfo);
-
-            Dictionary<string, string> observerInfo = new()
-            {
-                { "Latitude", localObserver.Location.Format(FormatType.Component, ComponentType.Inclination) },
-                { "Longitude", localObserver.Location.Format(FormatType.Component, ComponentType.Rotation) },
-                { "Time Zone", localObserver.DateTimeInfo.ClientTimeZoneInfo.DisplayName },
-                { "Local Time", clientDateTime.ToLocalTime().ToString(CultureInfo.CurrentCulture) },
-                { "Universal Time", clientDateTime.Value.ToString(CultureInfo.CurrentCulture) }
-            };
-            /* ------------------------------------------------------------------------------------------------------------------------------------- */
-
             IAstronomicalDateTime astronomicalDateTime = DateTimeFactory.ConvertToAstronomical(clientDateTime);
-
             ITracker tracker = TrackerFactory.Create(localObserver);
             IHorizontalCoordinate position = tracker.Track(astronomicalDateTime) as IHorizontalCoordinate;
 
-            Dictionary<string, string> trackerInfo = new()
+            Dictionary<string, string> info = new()
             {
-                { "Timekeeper", localObserver.TimeKeeper.ToString() },
-                { localObserver.TimeKeeper.ToString(), localObserver.TimeKeeper.Calculate(astronomicalDateTime).ToString(Angle.FormatType.ComponentDegrees) },
-                { localObserver.LocalTimeKeeper.ToString(), localObserver.LocalTimeKeeper.Calculate(localObserver, astronomicalDateTime).ToString(Angle.FormatType.ComponentDegrees) },
-                { localObserver.LocalHourAngle.ToString(), localObserver.LocalHourAngle.Calculate(localObserver, astronomicalDateTime).ToString(Angle.FormatType.ComponentDegrees) },
-                { "Altitude", position.Format(FormatType.Component, ComponentType.Inclination) },
-                { "Azimuth", position.Format(FormatType.Component, ComponentType.Rotation) },
-                { "Trajectory", Utilities.GetPrimaryTrajectoryName(dso, _geoBuilder.CurrentGeolocation) },
-                { "Local", "" },
-                { "Visible", "" }
-            };
+                { Resources.DisplayText.TargetRightAscensionLong, localObserver.Target.Format(FormatType.Component, ComponentType.Rotation) },
+                { Resources.DisplayText.TargetDeclinationLong, localObserver.Target.Format(FormatType.Component, ComponentType.Inclination) },
+                { Resources.DisplayText.TargetCatalog, dso.CatalogName },
+                { Resources.DisplayText.TargetType, dso.Type },
+                { Resources.DisplayText.TargetDescription, dso.Description },
+                { Resources.DisplayText.TargetConstellation, dso.ConstellationName },
+                { Resources.DisplayText.TargetDistance, string.Format(Resources.DisplayText.DistanceFormatDecimalKly, dso.Distance) },
+                { Resources.DisplayText.TargetMagnitude, dso.Magnitude?.ToString(CultureInfo.CurrentCulture) ?? Resources.DisplayText.None },
+                {
+                    Resources.DisplayText.TargetSeason, 
+                    string.Format(Resources.DisplayText.TargetSeasonDetailsFormat,
+                        localObserver.Location.Latitude >= 0.0 ? season.North : season.South,
+                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.StartMonth),
+                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.EndMonth))
+                },
 
-            /* ------------------------------------------------------------------------------------------------------------------------------------- */
+                { Resources.DisplayText.ObserverLatitudeLong, localObserver.Location.Format(FormatType.Component, ComponentType.Inclination) },
+                { Resources.DisplayText.ObserverLongitudeLong, localObserver.Location.Format(FormatType.Component, ComponentType.Rotation) },
+                { Resources.DisplayText.ObserverTimeZone, localObserver.DateTimeInfo.ClientTimeZoneInfo.DisplayName },
+                { Resources.DisplayText.ObserverLocalTime, clientDateTime.ToLocalTime().ToString(CultureInfo.CurrentCulture) },
+                { Resources.DisplayText.ObserverUniversalTimeLong, clientDateTime.Value.ToString(CultureInfo.CurrentCulture) },
+
+                { Resources.DisplayText.ObserverTimeKeeper, localObserver.TimeKeeper.ToString() },
+                { localObserver.TimeKeeper.ToString(), localObserver.TimeKeeper.Calculate(astronomicalDateTime).ToString() },
+                { localObserver.LocalTimeKeeper.ToString(), localObserver.LocalTimeKeeper.Calculate(localObserver, astronomicalDateTime).ToString() },
+                { localObserver.LocalHourAngle.ToString(), localObserver.LocalHourAngle.Calculate(localObserver, astronomicalDateTime).ToString() },
+                { Resources.DisplayText.TargetAltitudeLong, position.Format(FormatType.Component, ComponentType.Inclination) },
+                { Resources.DisplayText.TargetAzimuthLong, position.Format(FormatType.Component, ComponentType.Rotation) },
+                { Resources.DisplayText.TargetTrajectory, Utilities.GetPrimaryTrajectoryName(dso, _geoBuilder.CurrentGeolocation) },
+                { Resources.DisplayText.TargetLocal, ""}
+            };
 
             TrackSummaryViewModel viewModel = new()
             {
                 Dso = dso,
                 ClientObserver = localObserver,
                 CurrentRoute = values,
-                TargetInfo = targetInfo,
-                ObserverInfo = observerInfo,
-                TrackerInfo = trackerInfo
+                DisplayInfo = info
             };
 
             return View(viewModel);
@@ -223,7 +199,7 @@ namespace DST.Controllers
             // Validate route values.
             values.Validate();
 
-            DsoModel dso = _data.Get(values.Catalog, values.Id);
+            DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
 
             /* Allow the client to choose the algorithm by using a separate HttpPost action that redirects to POST Phase(TrackPhaseRoute). */
             ILocalObserver localObserver =

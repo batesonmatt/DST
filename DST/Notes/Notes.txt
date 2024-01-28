@@ -65,6 +65,7 @@ Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Inject into TrackController.
 - Save to session state
 - Provide methods to set the Target (takes DsoModel), the Location (takes GeolocationModel), and the TimeKeeper (takes Algorithm)
+- Provide methods/properties for dealing with the Season, Trajectory, etc.
 
 Consider a TrackPhaseModel and TrackPeriodModel with custom server-side validation attributes for the properties.
 - See pg. 418

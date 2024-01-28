@@ -184,7 +184,8 @@ namespace DST.Models.BusinessLogic
                         string.Format(Resources.DisplayText.PageSizeFormat, i * 10)));
         }
 
-        // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation.
+        // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation during the current season.
+        // This does not consider the affects of light pollution, nor the magnitude of the object.
         public static bool IsLocal(DsoModel dso, GeolocationModel geolocation)
         {
             bool result = true;
@@ -242,7 +243,7 @@ namespace DST.Models.BusinessLogic
         }
 
         // Returns a value indicating whether the specified deep-sky object is currently visible from the specified geolocation.
-        // This does not consider the affects of light pollution.
+        // This does not consider the affects of light pollution, nor the magnitude of the object.
         public static bool IsVisible(DsoModel dso, GeolocationModel geolocation)
         {
             bool result;

@@ -40,12 +40,12 @@
     <div class="mb-3">
         <h4>Target</h4>
         <div class="row mb-3">
-            <label for="target-first" class="col-md col-form-label">@Model.TargetInfo.First().Key</label>
-            <label id="target-first" class="col-md col-form-label lead">@Model.TargetInfo.First().Value</label>
+            <label for="target-first" class="col-md col-form-label">@Model.DisplayInfo.First().Key</label>
+            <label id="target-first" class="col-md col-form-label lead">@Model.DisplayInfo.First().Value</label>
         </div>
         <div class="row mb-3">
-            <label for="target-second" class="col-md col-form-label">@Model.TargetInfo.ElementAt(1).Key</label>
-            <label id="target-second" class="col-md col-form-label lead">@Model.TargetInfo.ElementAt(1).Value</label>
+            <label for="target-second" class="col-md col-form-label">@Model.DisplayInfo.ElementAt(1).Key</label>
+            <label id="target-second" class="col-md col-form-label lead">@Model.DisplayInfo.ElementAt(1).Value</label>
         </div>
         <p>
             <strong>RA, DEC:&nbsp;</strong>@Model.ClientObserver.Target.Format(DST.Core.Coordinate.FormatType.Component)

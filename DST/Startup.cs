@@ -51,7 +51,6 @@ namespace DST
             services.AddTransient<ISearchRouteBuilder, SearchRouteBuilder>();
             services.AddTransient<IGeolocationBuilder, GeolocationBuilder>();
             services.AddTransient<ISearchBuilder, SearchBuilder>();
-            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
             // Make URLs lowercase and end with a trailing slash.
             services.AddRouting(options =>
