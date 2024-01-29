@@ -10,7 +10,7 @@ namespace DST.Models.Routes
 
         public string Catalog { get; set; } = Filter.Unknown;
         public int Id { get; set; } = 1;
-        public string Algorithm { get; set; } = AlgorithmName.DefaultShort;
+        public string Algorithm { get; set; } = AlgorithmName.Default;
 
         #endregion
 
@@ -41,13 +41,21 @@ namespace DST.Models.Routes
 
         public void SetAlgorithm(string algorithm)
         {
-            if (algorithm == AlgorithmName.GMST1 || algorithm == AlgorithmName.GAST1 || algorithm == AlgorithmName.ERA1)
+            if (algorithm.EqualsSeo(AlgorithmName.GMST))
             {
-                Algorithm = algorithm;
+                Algorithm = AlgorithmName.GMST;
+            }
+            else if (algorithm.EqualsSeo(AlgorithmName.GAST))
+            {
+                Algorithm = AlgorithmName.GAST;
+            }
+            else if (algorithm.EqualsSeo(AlgorithmName.ERA))
+            {
+                Algorithm = AlgorithmName.ERA;
             }
             else
             {
-                Algorithm = AlgorithmName.DefaultShort;
+                Algorithm = AlgorithmName.Default;
             }
         }
 

@@ -104,9 +104,11 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetAlgorithm(/* route values here, */ string algorithm)
+        public IActionResult SetAlgorithm(TrackSummaryRoute values, string algorithm)
         {
-            return View();
+            values.SetAlgorithm(algorithm);
+
+            return RedirectToAction("Summary", values.ToDictionary());
         }
 
         [HttpGet]
@@ -117,41 +119,59 @@ namespace DST.Controllers
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
 
-            /* Allow the client to choose the algorithm by using a separate HttpPost action that redirects to Summary(TrackSummaryRoute). */
+            Core.TimeKeeper.Algorithm algorithm;
+
+            if (values.Algorithm.EqualsSeo(AlgorithmName.GMST))
+            {
+                algorithm = Core.TimeKeeper.Algorithm.GMST;
+            }
+            else if (values.Algorithm.EqualsSeo(AlgorithmName.GAST))
+            {
+                algorithm = Core.TimeKeeper.Algorithm.GAST;
+            }
+            else if (values.Algorithm.EqualsSeo(AlgorithmName.ERA))
+            {
+                algorithm= Core.TimeKeeper.Algorithm.ERA;
+            }
+            else
+            {
+                algorithm = Core.TimeKeeper.Algorithm.Default;
+            }
+
             ILocalObserver localObserver = 
-                Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, Core.TimeKeeper.Algorithm.GMST);
+                Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
 
             SeasonModel season = _data.GetSeason(dso);
             ConstellationModel constellation = _data.GetConstellation(dso);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
             IMutableDateTime clientDateTime = DateTimeFactory.CreateMutable(DateTime.UtcNow, localObserver.DateTimeInfo);
+            DateTime clientLocalTime = clientDateTime.ToLocalTime();
             IAstronomicalDateTime astronomicalDateTime = DateTimeFactory.ConvertToAstronomical(clientDateTime);
             ITracker tracker = TrackerFactory.Create(localObserver);
             IHorizontalCoordinate position = tracker.Track(astronomicalDateTime) as IHorizontalCoordinate;
-            int clientMonth = clientDateTime.ToLocalTime().Month;
 
-            string trajectoryInfo;
+            string visibility;
 
             if (trajectory is null or NeverRiseTrajectory)
             {
-                trajectoryInfo = Resources.DisplayText.TargetVisibilityNeverRise;
+                visibility = Resources.DisplayText.TargetVisibilityNeverRise;
             }
             else if (trajectory is ICircumpolarTrajectory)
             {
-                trajectoryInfo = Resources.DisplayText.TargetVisibilityCircumpolar;
+                visibility = Resources.DisplayText.TargetVisibilityCircumpolar;
             }
-            else if (localObserver.Location.Latitude > constellation.NorthernLatitude || 
+            else if (localObserver.Location.Latitude > constellation.NorthernLatitude ||
                      localObserver.Location.Latitude < -constellation.SouthernLatitude)
             {
-                trajectoryInfo = Resources.DisplayText.TargetVisibilityOutOfRange;
+                visibility = Resources.DisplayText.TargetVisibilityOutOfRange;
             }
-            else if (clientMonth < season.StartMonth || clientMonth > season.EndMonth)
+            else if (!season.ContainsDate(clientLocalTime))
             {
-                trajectoryInfo = Resources.DisplayText.TargetVisibilityOutOfSeason;
+                visibility = Resources.DisplayText.TargetVisibilityOutOfSeason;
             }
             else
             {
-                trajectoryInfo = Resources.DisplayText.TargetVisibilityInRange;
+                visibility = Resources.DisplayText.TargetVisibilityInRange;
             }
 
             TrackSummaryInfo info = new()
@@ -175,22 +195,24 @@ namespace DST.Controllers
                 { TrackSummaryItem.Latitude, new(Resources.DisplayText.ObserverLatitudeLong, localObserver.Location.Format(FormatType.Component, ComponentType.Inclination)) },
                 { TrackSummaryItem.Longitude, new(Resources.DisplayText.ObserverLongitudeLong, localObserver.Location.Format(FormatType.Component, ComponentType.Rotation)) },
                 { TrackSummaryItem.TimeZone, new(Resources.DisplayText.ObserverTimeZone, localObserver.DateTimeInfo.ClientTimeZoneInfo.DisplayName) },
-                { TrackSummaryItem.LocalTime, new(Resources.DisplayText.ObserverLocalTime, clientDateTime.ToLocalTime().ToString(CultureInfo.CurrentCulture)) },
+                { TrackSummaryItem.LocalTime, new(Resources.DisplayText.ObserverLocalTime, clientLocalTime.ToString(CultureInfo.CurrentCulture)) },
                 { TrackSummaryItem.UniversalTime, new(Resources.DisplayText.ObserverUniversalTimeLong, clientDateTime.Value.ToString(CultureInfo.CurrentCulture)) },
+                { TrackSummaryItem.Algorithm, new(Resources.DisplayText.ObserverAlgorithm, string.Empty) },
                 { TrackSummaryItem.TimeKeeper, new(localObserver.TimeKeeper.ToString(), localObserver.TimeKeeper.Calculate(astronomicalDateTime).ToString()) },
                 { TrackSummaryItem.LocalTimeKeeper, new(localObserver.LocalTimeKeeper.ToString(), localObserver.LocalTimeKeeper.Calculate(localObserver, astronomicalDateTime).ToString()) },
                 { TrackSummaryItem.LocalHourAngle, new(localObserver.LocalHourAngle.ToString(), localObserver.LocalHourAngle.Calculate(localObserver, astronomicalDateTime).ToString()) },
                 { TrackSummaryItem.Altitude, new(Resources.DisplayText.TargetAltitudeLong, position.Format(FormatType.Component, ComponentType.Inclination)) },
                 { TrackSummaryItem.Azimuth, new(Resources.DisplayText.TargetAzimuthLong, position.Format(FormatType.Component, ComponentType.Rotation)) },
                 { TrackSummaryItem.Trajectory, new(Resources.DisplayText.TargetTrajectory, Utilities.GetPrimaryTrajectoryName(trajectory)) },
-                { TrackSummaryItem.Visibility, new(Resources.DisplayText.TargetVisibility, trajectoryInfo) }
+                { TrackSummaryItem.Visibility, new(Resources.DisplayText.TargetVisibility, visibility) }
             };
 
             TrackSummaryViewModel viewModel = new()
             {
                 Dso = dso,
                 CurrentRoute = values,
-                DisplayInfo = info
+                DisplayInfo = info,
+                Algorithms = Utilities.GetAlgorithmItems()
             };
 
             return View(viewModel);

@@ -293,6 +293,10 @@
     <value>None</value>
     <comment>A generic display text.</comment>
   </data>
+  <data name="ObserverAlgorithm" xml:space="preserve">
+    <value>Timekeeping Algorithm</value>
+    <comment>The display text for an observer's timekeeping algorithm.</comment>
+  </data>
   <data name="ObserverLatitudeLong" xml:space="preserve">
     <value>Latitude</value>
     <comment>The display text for an observer's geographic latitude.</comment>

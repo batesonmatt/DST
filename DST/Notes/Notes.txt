@@ -67,6 +67,8 @@ Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Provide methods to set the Target (takes DsoModel), the Location (takes GeolocationModel), and the TimeKeeper (takes Algorithm)
 - Provide methods/properties for dealing with the Season, Trajectory, etc.
 
+OR, Consider a builder for storing at least the client date time.
+
 Consider a TrackPhaseModel and TrackPeriodModel with custom server-side validation attributes for the properties.
 - See pg. 418
 - To use DI in validation attribute classes: 
@@ -117,7 +119,7 @@ Revise the JS files (wwwroot\js\...)
 
 Consider removing TrackPhaseRoute routes = current.Clone(); from the Phase and Period views if not used.
 
-PageSizeItem, TimeZoneItem, TrackPhaseItem, etc.
+PageSizeItem, TimeZoneItem, TrackPhaseItem, TrackAlgorithmItem, etc.
 - These types are used in select lists
 - Consider using a single class, SelectItem.
   => string Id, string Text, int Value

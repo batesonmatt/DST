@@ -190,7 +190,7 @@ namespace DST.Controllers
                 }),
 
                 Trajectories = Utilities.GetTrajectoryNames(),
-                PageSizes = Utilities.GetSearchListPageSizeItems()
+                PageSizes = Utilities.GetPageSizeItems()
             };
 
             int count = _data.DsoItems.Count;

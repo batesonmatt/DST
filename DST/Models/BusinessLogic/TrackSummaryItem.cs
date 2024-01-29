@@ -16,6 +16,7 @@
         TimeZone,
         LocalTime,
         UniversalTime,
+        Algorithm,
         TimeKeeper,
         LocalTimeKeeper,
         LocalHourAngle,

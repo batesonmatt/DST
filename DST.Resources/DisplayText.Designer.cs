@@ -457,6 +457,15 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Timekeeping Algorithm.
+        /// </summary>
+        public static string ObserverAlgorithm {
+            get {
+                return ResourceManager.GetString("ObserverAlgorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Latitude.
         /// </summary>
         public static string ObserverLatitudeLong {

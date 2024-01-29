@@ -15,7 +15,7 @@
     </div>
 
     @* Consider view component or partial view *@
-    <div class="mb-3">
+    <div class="mb-5">
         @if (Model.Dso.HasName)
         {
             <h1>@Model.Dso.CompoundId - @Model.Dso.Name</h1>
@@ -33,7 +33,7 @@
         }
     </div>
 
-    <nav class="nav nav-tabs mb-3">
+    <nav class="nav nav-tabs mb-5">
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Summary" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">Summary</a>
         <a class="nav-item nav-link active">Phase</a>
         @* <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a> *@

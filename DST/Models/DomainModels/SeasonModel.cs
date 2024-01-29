@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -33,6 +34,22 @@ namespace DST.Models.DomainModels
         #region Constructors
 
         public SeasonModel() => Children = new HashSet<ConstellationModel>();
+
+        #endregion
+
+        #region Methods
+
+        public bool ContainsDate(DateTime dateTime)
+        {
+            int month = dateTime.Month;
+
+            if (EndMonth < StartMonth)
+            {
+                return month <= EndMonth || month >= StartMonth;
+            }
+
+            return month >= StartMonth && month <= EndMonth;
+        }
 
         #endregion
     }

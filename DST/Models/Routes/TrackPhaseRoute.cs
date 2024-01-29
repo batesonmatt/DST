@@ -34,7 +34,22 @@ namespace DST.Models.Routes
 
         public void SetPhase(string phase)
         {
-            Phase = string.IsNullOrWhiteSpace(phase) ? PhaseName.Default : phase;
+            if (phase.EqualsSeo(PhaseName.Rise))
+            {
+                Phase = PhaseName.Rise;
+            }
+            else if (phase.EqualsSeo(PhaseName.Apex))
+            {
+                Phase = PhaseName.Apex;
+            }
+            else if (phase.EqualsSeo(PhaseName.Set))
+            {
+                Phase = PhaseName.Set;
+            }
+            else
+            {
+                Phase = PhaseName.Default;
+            }
         }
 
         public void SetStart(long start)

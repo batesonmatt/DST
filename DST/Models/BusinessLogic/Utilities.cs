@@ -198,12 +198,22 @@ namespace DST.Models.BusinessLogic
         }
 
         // Returns all the allowable page sizes and the display text for the Search controller, List view.
-        public static IEnumerable<PageSizeItem> GetSearchListPageSizeItems()
+        public static IEnumerable<PageSizeItem> GetPageSizeItems()
         {
             return Enumerable.Range(1, 5).Select(
                     i => new PageSizeItem(
                         i * 10,
                         string.Format(Resources.DisplayText.PageSizeFormat, i * 10)));
+        }
+
+        public static IEnumerable<TrackAlgorithmItem> GetAlgorithmItems()
+        {
+            return new TrackAlgorithmItem[]
+            {
+                new TrackAlgorithmItem(AlgorithmName.GMST.ToKebabCase(), Resources.DisplayText.AlgorithmGMSTLong),
+                new TrackAlgorithmItem(AlgorithmName.GAST.ToKebabCase(), Resources.DisplayText.AlgorithmGASTLong),
+                new TrackAlgorithmItem(AlgorithmName.ERA.ToKebabCase(), Resources.DisplayText.AlgorithmERALong)
+            };
         }
 
         // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation during the current season.
@@ -214,7 +224,6 @@ namespace DST.Models.BusinessLogic
             ITrajectory trajectory;
             IDateTimeInfo dateTimeInfo;
             IMutableDateTime clientDateTime;
-            int clientMonth;
 
             try
             {
@@ -246,12 +255,8 @@ namespace DST.Models.BusinessLogic
                 // Get the client's current date and time represented in universal time.
                 clientDateTime = DateTimeFactory.CreateMutable(DateTime.UtcNow, dateTimeInfo);
 
-                // Get the current month in the client's local timezone.
-                clientMonth = clientDateTime.ToLocalTime().Month;
-
-                // The observer's current month must fall within the constellation's seasonal timespan.
-                if (clientMonth < dso.Constellation.Season.StartMonth ||
-                    clientMonth > dso.Constellation.Season.EndMonth)
+                // The observer's current month in the client's local timezone must fall within the constellation's seasonal timespan.
+                if (!dso.Constellation.Season.ContainsDate(clientDateTime.ToLocalTime()))
                 {
                     return false;
                 }
@@ -273,7 +278,6 @@ namespace DST.Models.BusinessLogic
             IDateTimeInfo dateTimeInfo;
             IMutableDateTime clientDateTime;
             IAstronomicalDateTime astronomicalDateTime;
-            int clientMonth;
 
             try
             {
@@ -305,12 +309,8 @@ namespace DST.Models.BusinessLogic
                 // Get the client's current date and time represented in universal time.
                 clientDateTime = DateTimeFactory.CreateMutable(DateTime.UtcNow, dateTimeInfo);
 
-                // Get the current month in the client's local timezone.
-                clientMonth = clientDateTime.ToLocalTime().Month;
-
-                // The observer's current month must fall within the constellation's seasonal timespan.
-                if (clientMonth < dso.Constellation.Season.StartMonth ||
-                    clientMonth > dso.Constellation.Season.EndMonth)
+                // The observer's current month in the client's local timezone must fall within the constellation's seasonal timespan.
+                if (!dso.Constellation.Season.ContainsDate(clientDateTime.ToLocalTime()))
                 {
                     return false;
                 }
@@ -338,7 +338,6 @@ namespace DST.Models.BusinessLogic
             IDateTimeInfo dateTimeInfo;
             IMutableDateTime clientDateTime;
             IAstronomicalDateTime astronomicalDateTime;
-            int clientMonth;
 
             try
             {
@@ -364,12 +363,8 @@ namespace DST.Models.BusinessLogic
                 // Get the client's current date and time represented in universal time.
                 clientDateTime = DateTimeFactory.CreateMutable(DateTime.UtcNow, dateTimeInfo);
 
-                // Get the current month in the client's local timezone.
-                clientMonth = clientDateTime.ToLocalTime().Month;
-
-                // The observer's current month must fall within the constellation's seasonal timespan.
-                if (clientMonth < dso.Constellation.Season.StartMonth ||
-                    clientMonth > dso.Constellation.Season.EndMonth)
+                // The observer's current month in the client's local timezone must fall within the constellation's seasonal timespan.
+                if (!dso.Constellation.Season.ContainsDate(clientDateTime.ToLocalTime()))
                 {
                     return false;
                 }
@@ -405,7 +400,6 @@ namespace DST.Models.BusinessLogic
             DateTime localTime;
             DateTime riseTime;
             TimeSpan timeSpan;
-            int clientMonth;
 
             try
             {
@@ -431,12 +425,8 @@ namespace DST.Models.BusinessLogic
                 // Get the client's current date and time represented in universal time.
                 clientDateTime = DateTimeFactory.CreateMutable(DateTime.UtcNow, dateTimeInfo);
 
-                // Get the current month in the client's local timezone.
-                clientMonth = clientDateTime.ToLocalTime().Month;
-
-                // The observer's current month must fall within the constellation's seasonal timespan.
-                if (clientMonth < dso.Constellation.Season.StartMonth ||
-                    clientMonth > dso.Constellation.Season.EndMonth)
+                // The observer's current month in the client's local timezone must fall within the constellation's seasonal timespan.
+                if (!dso.Constellation.Season.ContainsDate(clientDateTime.ToLocalTime()))
                 {
                     return long.MaxValue;
                 }

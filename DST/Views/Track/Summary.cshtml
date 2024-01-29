@@ -15,7 +15,7 @@
     </div>
 
     @* Consider view component or partial view *@
-    <div class="mb-3">
+    <div class="mb-5">
         @if (Model.Dso.HasName)
         {
             <h1>@Model.Dso.CompoundId - @Model.Dso.Name</h1>
@@ -31,14 +31,14 @@
         }
     </div>
 
-    <nav class="nav nav-tabs mb-3">
+    <nav class="nav nav-tabs mb-5">
         <a class="nav-item nav-link active">Summary</a>
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Phase" asp-all-route-data="@routes.ToDictionary()">Phase</a>
         @* <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a> *@
     </nav>
 
     <div class="mb-3">
-        <h4>Target</h4>
+        <h3>Target</h3>
         <div class="row">
             <label for="summary-right-ascension" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.RightAscension].Item1</label>
             <label id="summary-right-ascension" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.RightAscension].Item2</label>
@@ -78,7 +78,7 @@
     </div>
 
     <div class="mb-3">
-        <h4>Observer</h4>
+        <h3>Observer</h3>
         <div class="row">
             <label for="summary-latitude" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Latitude].Item1</label>
             <label id="summary-latitude" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Latitude].Item2</label>
@@ -102,12 +102,18 @@
     </div>
 
     <div class="mb-3">
-        <h4>Tracker</h4>
+        <h3>Tracker</h3>
 
-        <p>
-            <strong>Timekeeping Algorithm:&nbsp;</strong>&hellip;
-            <br />
-        </p>
+        <div class="row">
+            <label for="summary-algorithm" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Algorithm].Item1</label>
+            @{
+                routes = current.Clone();
+            }
+            <form asp-action="SetAlgorithm" asp-all-route-data="@routes.ToDictionary()" method="post" id="summary-algorithm" class="col-md">
+                <select name="algorithm" class="form-select" onchange="this.form.submit();"
+                        asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", current.Algorithm))"></select>
+            </form>
+        </div>
 
         <div class="row">
             <label for="summary-timekeeper" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.TimeKeeper].Item1</label>
