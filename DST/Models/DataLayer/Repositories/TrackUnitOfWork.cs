@@ -37,6 +37,8 @@ namespace DST.Models.DataLayer.Repositories
 
         #endregion
 
+        #region Methods
+
         public SeasonModel GetSeason(DsoModel dso)
         {
             if (dso is null || _context is null)
@@ -62,5 +64,32 @@ namespace DST.Models.DataLayer.Repositories
 
             return season;
         }
+
+        public ConstellationModel GetConstellation(DsoModel dso)
+        {
+            if (dso is null || _context is null)
+            {
+                return null;
+            }
+
+            ConstellationModel constellation;
+
+            try
+            {
+                constellation = _context.DsoItems
+                    .Where(d => d == dso)
+                    .Include(i => i.Constellation)
+                    .Select(d => d.Constellation)
+                    .FirstOrDefault();
+            }
+            catch
+            {
+                constellation = null;
+            }
+
+            return constellation;
+        }
+
+        #endregion
     }
 }

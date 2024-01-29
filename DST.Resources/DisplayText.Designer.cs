@@ -853,15 +853,6 @@ namespace DST.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local.
-        /// </summary>
-        public static string TargetLocal {
-            get {
-                return ResourceManager.GetString("TargetLocal", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Magnitude.
         /// </summary>
         public static string TargetMagnitude {
@@ -921,6 +912,60 @@ namespace DST.Resources {
         public static string TargetType {
             get {
                 return ResourceManager.GetString("TargetType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visibility.
+        /// </summary>
+        public static string TargetVisibility {
+            get {
+                return ResourceManager.GetString("TargetVisibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This object is above the horizon at your location at all times..
+        /// </summary>
+        public static string TargetVisibilityCircumpolar {
+            get {
+                return ResourceManager.GetString("TargetVisibilityCircumpolar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This object&apos;s constellation is currently in range this season and may be seen periodically at your location..
+        /// </summary>
+        public static string TargetVisibilityInRange {
+            get {
+                return ResourceManager.GetString("TargetVisibilityInRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This object will never rise above the horizon at your location..
+        /// </summary>
+        public static string TargetVisibilityNeverRise {
+            get {
+                return ResourceManager.GetString("TargetVisibilityNeverRise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This object&apos;s constellation is currently out of visible range at your location..
+        /// </summary>
+        public static string TargetVisibilityOutOfRange {
+            get {
+                return ResourceManager.GetString("TargetVisibilityOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This object&apos;s constellation is currently out of seasonal range for best viewing conditions and may be difficult to see..
+        /// </summary>
+        public static string TargetVisibilityOutOfSeason {
+            get {
+                return ResourceManager.GetString("TargetVisibilityOutOfSeason", resourceCulture);
             }
         }
         

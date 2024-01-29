@@ -17,6 +17,7 @@ using System;
 using DST.Core.DateAndTime;
 using DST.Core.Tracker;
 using DST.Models.DataLayer;
+using DST.Core.Trajectory;
 
 namespace DST.Controllers
 {
@@ -121,50 +122,73 @@ namespace DST.Controllers
                 Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, Core.TimeKeeper.Algorithm.GMST);
 
             SeasonModel season = _data.GetSeason(dso);
-
+            ConstellationModel constellation = _data.GetConstellation(dso);
+            ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
             IMutableDateTime clientDateTime = DateTimeFactory.CreateMutable(DateTime.UtcNow, localObserver.DateTimeInfo);
             IAstronomicalDateTime astronomicalDateTime = DateTimeFactory.ConvertToAstronomical(clientDateTime);
             ITracker tracker = TrackerFactory.Create(localObserver);
             IHorizontalCoordinate position = tracker.Track(astronomicalDateTime) as IHorizontalCoordinate;
+            int clientMonth = clientDateTime.ToLocalTime().Month;
 
-            Dictionary<string, string> info = new()
+            string trajectoryInfo;
+
+            if (trajectory is null or NeverRiseTrajectory)
             {
-                { Resources.DisplayText.TargetRightAscensionLong, localObserver.Target.Format(FormatType.Component, ComponentType.Rotation) },
-                { Resources.DisplayText.TargetDeclinationLong, localObserver.Target.Format(FormatType.Component, ComponentType.Inclination) },
-                { Resources.DisplayText.TargetCatalog, dso.CatalogName },
-                { Resources.DisplayText.TargetType, dso.Type },
-                { Resources.DisplayText.TargetDescription, dso.Description },
-                { Resources.DisplayText.TargetConstellation, dso.ConstellationName },
-                { Resources.DisplayText.TargetDistance, string.Format(Resources.DisplayText.DistanceFormatDecimalKly, dso.Distance) },
-                { Resources.DisplayText.TargetMagnitude, dso.Magnitude?.ToString(CultureInfo.CurrentCulture) ?? Resources.DisplayText.None },
+                trajectoryInfo = Resources.DisplayText.TargetVisibilityNeverRise;
+            }
+            else if (trajectory is ICircumpolarTrajectory)
+            {
+                trajectoryInfo = Resources.DisplayText.TargetVisibilityCircumpolar;
+            }
+            else if (localObserver.Location.Latitude > constellation.NorthernLatitude || 
+                     localObserver.Location.Latitude < -constellation.SouthernLatitude)
+            {
+                trajectoryInfo = Resources.DisplayText.TargetVisibilityOutOfRange;
+            }
+            else if (clientMonth < season.StartMonth || clientMonth > season.EndMonth)
+            {
+                trajectoryInfo = Resources.DisplayText.TargetVisibilityOutOfSeason;
+            }
+            else
+            {
+                trajectoryInfo = Resources.DisplayText.TargetVisibilityInRange;
+            }
+
+            TrackSummaryInfo info = new()
+            {
+                { TrackSummaryItem.RightAscension, new(Resources.DisplayText.TargetRightAscensionLong, localObserver.Target.Format(FormatType.Component, ComponentType.Rotation)) },
+                { TrackSummaryItem.Declination, new(Resources.DisplayText.TargetDeclinationLong, localObserver.Target.Format(FormatType.Component, ComponentType.Inclination)) },
+                { TrackSummaryItem.Catalog, new(Resources.DisplayText.TargetCatalog, dso.CatalogName) },
+                { TrackSummaryItem.Type, new(Resources.DisplayText.TargetType, dso.Type) },
+                { TrackSummaryItem.Description, new(Resources.DisplayText.TargetDescription, dso.Description) },
+                { TrackSummaryItem.Constellation, new(Resources.DisplayText.TargetConstellation, dso.ConstellationName) },
+                { TrackSummaryItem.Distance, new(Resources.DisplayText.TargetDistance, string.Format(Resources.DisplayText.DistanceFormatDecimalKly, dso.Distance)) },
+                { TrackSummaryItem.Magnitude, new(Resources.DisplayText.TargetMagnitude, dso.Magnitude ?.ToString(CultureInfo.CurrentCulture) ?? Resources.DisplayText.None) },
                 {
-                    Resources.DisplayText.TargetSeason, 
-                    string.Format(Resources.DisplayText.TargetSeasonDetailsFormat,
-                        localObserver.Location.Latitude >= 0.0 ? season.North : season.South,
-                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.StartMonth),
-                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.EndMonth))
+                    TrackSummaryItem.Season,
+                    new(Resources.DisplayText.TargetSeason, 
+                        string.Format(Resources.DisplayText.TargetSeasonDetailsFormat,
+                            localObserver.Location.Latitude >= 0.0 ? season.North : season.South,
+                            CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.StartMonth),
+                            CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(season.EndMonth)))
                 },
-
-                { Resources.DisplayText.ObserverLatitudeLong, localObserver.Location.Format(FormatType.Component, ComponentType.Inclination) },
-                { Resources.DisplayText.ObserverLongitudeLong, localObserver.Location.Format(FormatType.Component, ComponentType.Rotation) },
-                { Resources.DisplayText.ObserverTimeZone, localObserver.DateTimeInfo.ClientTimeZoneInfo.DisplayName },
-                { Resources.DisplayText.ObserverLocalTime, clientDateTime.ToLocalTime().ToString(CultureInfo.CurrentCulture) },
-                { Resources.DisplayText.ObserverUniversalTimeLong, clientDateTime.Value.ToString(CultureInfo.CurrentCulture) },
-
-                { Resources.DisplayText.ObserverTimeKeeper, localObserver.TimeKeeper.ToString() },
-                { localObserver.TimeKeeper.ToString(), localObserver.TimeKeeper.Calculate(astronomicalDateTime).ToString() },
-                { localObserver.LocalTimeKeeper.ToString(), localObserver.LocalTimeKeeper.Calculate(localObserver, astronomicalDateTime).ToString() },
-                { localObserver.LocalHourAngle.ToString(), localObserver.LocalHourAngle.Calculate(localObserver, astronomicalDateTime).ToString() },
-                { Resources.DisplayText.TargetAltitudeLong, position.Format(FormatType.Component, ComponentType.Inclination) },
-                { Resources.DisplayText.TargetAzimuthLong, position.Format(FormatType.Component, ComponentType.Rotation) },
-                { Resources.DisplayText.TargetTrajectory, Utilities.GetPrimaryTrajectoryName(dso, _geoBuilder.CurrentGeolocation) },
-                { Resources.DisplayText.TargetLocal, ""}
+                { TrackSummaryItem.Latitude, new(Resources.DisplayText.ObserverLatitudeLong, localObserver.Location.Format(FormatType.Component, ComponentType.Inclination)) },
+                { TrackSummaryItem.Longitude, new(Resources.DisplayText.ObserverLongitudeLong, localObserver.Location.Format(FormatType.Component, ComponentType.Rotation)) },
+                { TrackSummaryItem.TimeZone, new(Resources.DisplayText.ObserverTimeZone, localObserver.DateTimeInfo.ClientTimeZoneInfo.DisplayName) },
+                { TrackSummaryItem.LocalTime, new(Resources.DisplayText.ObserverLocalTime, clientDateTime.ToLocalTime().ToString(CultureInfo.CurrentCulture)) },
+                { TrackSummaryItem.UniversalTime, new(Resources.DisplayText.ObserverUniversalTimeLong, clientDateTime.Value.ToString(CultureInfo.CurrentCulture)) },
+                { TrackSummaryItem.TimeKeeper, new(localObserver.TimeKeeper.ToString(), localObserver.TimeKeeper.Calculate(astronomicalDateTime).ToString()) },
+                { TrackSummaryItem.LocalTimeKeeper, new(localObserver.LocalTimeKeeper.ToString(), localObserver.LocalTimeKeeper.Calculate(localObserver, astronomicalDateTime).ToString()) },
+                { TrackSummaryItem.LocalHourAngle, new(localObserver.LocalHourAngle.ToString(), localObserver.LocalHourAngle.Calculate(localObserver, astronomicalDateTime).ToString()) },
+                { TrackSummaryItem.Altitude, new(Resources.DisplayText.TargetAltitudeLong, position.Format(FormatType.Component, ComponentType.Inclination)) },
+                { TrackSummaryItem.Azimuth, new(Resources.DisplayText.TargetAzimuthLong, position.Format(FormatType.Component, ComponentType.Rotation)) },
+                { TrackSummaryItem.Trajectory, new(Resources.DisplayText.TargetTrajectory, Utilities.GetPrimaryTrajectoryName(trajectory)) },
+                { TrackSummaryItem.Visibility, new(Resources.DisplayText.TargetVisibility, trajectoryInfo) }
             };
 
             TrackSummaryViewModel viewModel = new()
             {
                 Dso = dso,
-                ClientObserver = localObserver,
                 CurrentRoute = values,
                 DisplayInfo = info
             };

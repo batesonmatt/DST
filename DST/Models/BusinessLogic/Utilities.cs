@@ -155,6 +155,28 @@ namespace DST.Models.BusinessLogic
             return result;
         }
 
+        // Returns the primary trajectory name for the specified ITrajectory object.
+        public static string GetPrimaryTrajectoryName(ITrajectory trajectory)
+        {
+            string result;
+
+            try
+            {
+                result = trajectory switch
+                {
+                    null => string.Empty,
+                    IMultipleNameTrajectory trajectoryName => trajectoryName.GetPrimaryName(),
+                    _ => trajectory.ToString(),
+                };
+            }
+            catch
+            {
+                result = string.Empty;
+            }
+
+            return result;
+        }
+
         // Returns all the displayable Trajectory names.
         public static IEnumerable<string> GetTrajectoryNames()
         {

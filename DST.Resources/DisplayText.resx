@@ -469,10 +469,6 @@
     <value>Distance</value>
     <comment>The display text for a deep-sky object's distance.</comment>
   </data>
-  <data name="TargetLocal" xml:space="preserve">
-    <value>Local</value>
-    <comment>The display text for a deep-sky object's local visibility.</comment>
-  </data>
   <data name="TargetMagnitude" xml:space="preserve">
     <value>Magnitude</value>
     <comment>The display text for a deep-sky object's apparent magnitude.</comment>
@@ -500,6 +496,30 @@
   <data name="TargetType" xml:space="preserve">
     <value>Type</value>
     <comment>The display text for a deep-sky object's type.</comment>
+  </data>
+  <data name="TargetVisibility" xml:space="preserve">
+    <value>Visibility</value>
+    <comment>The display text for a deep-sky object's local visibility.</comment>
+  </data>
+  <data name="TargetVisibilityCircumpolar" xml:space="preserve">
+    <value>This object is above the horizon at your location at all times.</value>
+    <comment>The display text for a deep-sky object that is always above the horizon at an observer's geographic location.</comment>
+  </data>
+  <data name="TargetVisibilityInRange" xml:space="preserve">
+    <value>This object's constellation is currently in range this season and may be seen periodically at your location.</value>
+    <comment>The display text for a deep-sky object whose constellation is currently in range at an observer's geographic location.</comment>
+  </data>
+  <data name="TargetVisibilityNeverRise" xml:space="preserve">
+    <value>This object will never rise above the horizon at your location.</value>
+    <comment>The display text for a deep-sky object that will never rise at an observer's geographic location.</comment>
+  </data>
+  <data name="TargetVisibilityOutOfRange" xml:space="preserve">
+    <value>This object's constellation is currently out of visible range at your location.</value>
+    <comment>The display text for a deep-sky object whose constellation is currently out of visible range at an observer's geographic location.</comment>
+  </data>
+  <data name="TargetVisibilityOutOfSeason" xml:space="preserve">
+    <value>This object's constellation is currently out of seasonal range for best viewing conditions and may be difficult to see.</value>
+    <comment>The display text for a deep-sky object whose constellation is currently out of seasonal range at an observer's geographic location.</comment>
   </data>
   <data name="TimeScaleSidereal" xml:space="preserve">
     <value>Sidereal Time</value>
