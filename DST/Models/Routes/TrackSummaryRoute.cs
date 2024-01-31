@@ -59,6 +59,30 @@ namespace DST.Models.Routes
             }
         }
 
+        public Core.TimeKeeper.Algorithm GetAlgorithm()
+        {
+            Core.TimeKeeper.Algorithm algorithm;
+
+            if (Algorithm.EqualsSeo(AlgorithmName.GMST))
+            {
+                algorithm = Core.TimeKeeper.Algorithm.GMST;
+            }
+            else if (Algorithm.EqualsSeo(AlgorithmName.GAST))
+            {
+                algorithm = Core.TimeKeeper.Algorithm.GAST;
+            }
+            else if (Algorithm.EqualsSeo(AlgorithmName.ERA))
+            {
+                algorithm = Core.TimeKeeper.Algorithm.ERA;
+            }
+            else
+            {
+                algorithm = Core.TimeKeeper.Algorithm.Default;
+            }
+
+            return algorithm;
+        }
+
         public TrackSummaryRoute Clone()
         {
             return (TrackSummaryRoute)MemberwiseClone();

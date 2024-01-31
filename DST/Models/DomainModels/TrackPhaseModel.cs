@@ -1,4 +1,5 @@
 ﻿using DST.Models.DataLayer.Query;
+using DST.Models.Extensions;
 using System;
 
 namespace DST.Models.DomainModels
@@ -7,11 +8,15 @@ namespace DST.Models.DomainModels
     {
         #region Properties
 
+        public string Algorithm { get; set; } = AlgorithmName.Default;
+
         public string Phase { get; set; } = PhaseName.Default;
 
         public DateTime? Start { get; set; }
 
         public int Cycles { get; set; } = 1;
+
+        public bool IsReady { get; set; } = false;
 
         #endregion
 

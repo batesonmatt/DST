@@ -18,6 +18,9 @@ using DST.Core.DateAndTime;
 using DST.Core.Tracker;
 using DST.Models.DataLayer;
 using DST.Core.Trajectory;
+using DST.Core.TimeKeeper;
+using System.Security.Cryptography;
+using DST.Core.Vector;
 
 namespace DST.Controllers
 {
@@ -27,15 +30,17 @@ namespace DST.Controllers
 
         private readonly TrackUnitOfWork _data;
         private readonly IGeolocationBuilder _geoBuilder;
+        private readonly ITrackPhaseBuilder _phaseBuilder;
 
         #endregion
 
         #region Constructors
 
-        public TrackController(MainDbContext context, IGeolocationBuilder geoBuilder)
+        public TrackController(MainDbContext context, IGeolocationBuilder geoBuilder, ITrackPhaseBuilder phaseBuilder)
         {
             _data = new TrackUnitOfWork(context);
             _geoBuilder = geoBuilder;
+            _phaseBuilder = phaseBuilder;
 
             // Load the client geolocation, if any.
             _geoBuilder.Load();
@@ -118,29 +123,8 @@ namespace DST.Controllers
             values.Validate();
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
-
-            Core.TimeKeeper.Algorithm algorithm;
-
-            if (values.Algorithm.EqualsSeo(AlgorithmName.GMST))
-            {
-                algorithm = Core.TimeKeeper.Algorithm.GMST;
-            }
-            else if (values.Algorithm.EqualsSeo(AlgorithmName.GAST))
-            {
-                algorithm = Core.TimeKeeper.Algorithm.GAST;
-            }
-            else if (values.Algorithm.EqualsSeo(AlgorithmName.ERA))
-            {
-                algorithm= Core.TimeKeeper.Algorithm.ERA;
-            }
-            else
-            {
-                algorithm = Core.TimeKeeper.Algorithm.Default;
-            }
-
-            ILocalObserver localObserver = 
-                Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
-
+            Algorithm algorithm = values.GetAlgorithm();
+            ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             SeasonModel season = _data.GetSeason(dso);
             ConstellationModel constellation = _data.GetConstellation(dso);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
@@ -230,11 +214,19 @@ namespace DST.Controllers
 
             /* perform validation */
 
+            values.SetAlgorithm(phaseModel.Algorithm);
             values.SetPhase(phaseModel.Phase);
             values.SetStart(phaseModel.GetTicks());
             values.SetCycles(phaseModel.Cycles);
 
-            /* save to session state */
+            // Mark the entry as ready so we can calculate the results.
+            phaseModel.IsReady = true;
+
+            // Set the current phase entry.
+            _phaseBuilder.Current = phaseModel;
+
+            // Save the phase entry to session state.
+            _phaseBuilder.Save();
 
             return RedirectToAction("Phase", values.ToDictionary());
         }
@@ -247,27 +239,55 @@ namespace DST.Controllers
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
 
-            /* Allow the client to choose the algorithm by using a separate HttpPost action that redirects to POST Phase(TrackPhaseRoute). */
-            ILocalObserver localObserver =
-                Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, Core.TimeKeeper.Algorithm.GMST);
+            /* Consider allowing client to choose "Now" or "Current Time" instead of entering a datetime.
+             * Or consider defaulting to the current client datetime.
+             */
+
+            // Load the previous phase entry, if any.
+            _phaseBuilder.Load();
+
+            // Calculate the phase tracking results if an entry was submitted.
+            if (_phaseBuilder.Current.IsReady)
+            {
+                Algorithm algorithm = values.GetAlgorithm();
+                ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
+                ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
+                IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical((DateTime)_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
+                IVector[] results;
+
+                if (trajectory is IVariableTrajectory variableTrajectory)
+                {
+                    if (trajectory is IRiseSetTrajectory riseSetTrajectory)
+                    {
+                        if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Rise))
+                        {
+                            results = riseSetTrajectory.GetRise(start, _phaseBuilder.Current.Cycles);
+                        }
+                        else if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Set))
+                        {
+                            results = riseSetTrajectory.GetSet(start, _phaseBuilder.Current.Cycles);
+                        }
+                    }
+                    else if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Apex))
+                    {
+                        results = variableTrajectory.GetApex(start, _phaseBuilder.Current.Cycles);
+                    }
+                }
+            }
 
             TrackPhaseViewModel viewModel = new()
             {
                 Dso = dso,
-                ClientObserver = localObserver,
                 CurrentRoute = values,
+                Algorithms = Utilities.GetAlgorithmItems(),
+                Phases = Utilities.GetPhaseItems(),
 
                 PhaseModel = new TrackPhaseModel()
                 {
+                    Algorithm = values.Algorithm,
                     Phase = values.Phase,
                     Start = values.Start == 0 ? null : values.Start.ToDateTime(), /* I want to default this to null so that the input control displays the cleared format. */
                     Cycles = values.Cycles
-                },
-
-                Phases = new List<TrackPhaseItem> {
-                    new TrackPhaseItem(PhaseName.Rise.ToKebabCase(), PhaseName.Rise),
-                    new TrackPhaseItem(PhaseName.Apex.ToKebabCase(), PhaseName.Apex),
-                    new TrackPhaseItem(PhaseName.Set.ToKebabCase(), PhaseName.Set)
                 }
             };
 

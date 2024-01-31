@@ -34,9 +34,7 @@ namespace DST.Models.Builders
         {
             // Try to load from session state.
             // Create new SearchRoute object if no value is stored.
-            Route =
-                _session.GetObject<SearchRoute>(_routeKey)
-                ?? new SearchRoute();
+            Route = _session.GetObject<SearchRoute>(_routeKey) ?? new SearchRoute();
 
             // Save the current route to session state.
             Save();

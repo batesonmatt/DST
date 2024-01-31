@@ -206,6 +206,7 @@ namespace DST.Models.BusinessLogic
                         string.Format(Resources.DisplayText.PageSizeFormat, i * 10)));
         }
 
+        // Returns all the displayable timekeeping algorithm names.
         public static IEnumerable<TrackAlgorithmItem> GetAlgorithmItems()
         {
             return new TrackAlgorithmItem[]
@@ -213,6 +214,17 @@ namespace DST.Models.BusinessLogic
                 new TrackAlgorithmItem(AlgorithmName.GMST.ToKebabCase(), Resources.DisplayText.AlgorithmGMSTLong),
                 new TrackAlgorithmItem(AlgorithmName.GAST.ToKebabCase(), Resources.DisplayText.AlgorithmGASTLong),
                 new TrackAlgorithmItem(AlgorithmName.ERA.ToKebabCase(), Resources.DisplayText.AlgorithmERALong)
+            };
+        }
+
+        // Returns all the displayable tracking phase names.
+        public static IEnumerable<TrackPhaseItem> GetPhaseItems()
+        {
+            return new TrackPhaseItem[]
+            {
+                new TrackPhaseItem(PhaseName.Rise.ToKebabCase(), PhaseName.Rise),
+                new TrackPhaseItem(PhaseName.Apex.ToKebabCase(), PhaseName.Apex),
+                new TrackPhaseItem(PhaseName.Set.ToKebabCase(), PhaseName.Set)
             };
         }
 

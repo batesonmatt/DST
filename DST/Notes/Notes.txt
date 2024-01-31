@@ -44,8 +44,6 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 
 *******************************************************************************************************
 
-Consider revising the Track viewmodels
-- I might not need the DsoModel and ILocalObserver properties in the viewmodels.
 
 Use floating labels for the form controls.
 
@@ -83,19 +81,21 @@ Consider a TrackPhaseModel and TrackPeriodModel with custom server-side validati
 
 
 Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteBuilder and TrackPeriodRouteBuilder)
-- Because the route values are prone to user error
-- When navigating Phase and Period views, we should call different action methods, LoadPhase and LoadPeriod, and also pass the TrackSummaryRoute values.
+1. so that switching between the Track views, it remembers the client's last settings.
+2. Because the route values are prone to user error
+3. When navigating Phase and Period views, we should call different action methods, LoadPhase and LoadPeriod, and also pass the TrackSummaryRoute values.
   These actions would load the previously saved routes, if any, for those views before redirecting to the appropriate action method with the routes.
   If there is no saved routes, we need to use the TrackSummaryRoute values passed in.
   The routes will be saved to session in the regular actions methods that build the viewmodels and return the views.
 - We don't need a route builder for the summary view.
+
+Validation
 - The Start segment will be treated in the client's local time
 - The Start segment must be validated within +-200 years of the J2000 Epoch
 - The initial validation in the route classes (TrackPhaseRoute.Validate() and TrackPeriodRoute.Validate())
   will only perform basic validation, but are not responsible for determining timezone checks for local/UTC conversions.
   See SearchController.List() for an example of how the SearchRoute values are initially validated, modified,
   then saved back into session state in the SearchRouteBuilder object.
-- Consider route builders for Phase and Period views so that switching between the Track views, it remembers the client's last settings.
 
 When visiting the Phase and Period views for the first time (i.e., from the Summary view), use the tracksummary route values.
 Then when posting from those views, use their respective route values (TrackPhaseRoute and TrackPeriodRoute).

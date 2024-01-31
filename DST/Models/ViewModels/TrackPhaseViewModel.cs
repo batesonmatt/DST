@@ -11,10 +11,10 @@ namespace DST.Models.ViewModels
         #region Properties
 
         public DsoModel Dso { get; set; }
-        public ILocalObserver ClientObserver { get; set; }
         public TrackPhaseRoute CurrentRoute { get; set; }
-        public TrackPhaseModel PhaseModel { get; set; }
+        public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
         public IEnumerable<TrackPhaseItem> Phases { get; set; }
+        public TrackPhaseModel PhaseModel { get; set; }
 
         #endregion
     }

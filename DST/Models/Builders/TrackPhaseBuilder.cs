@@ -4,24 +4,24 @@ using Microsoft.AspNetCore.Http;
 
 namespace DST.Models.Builders
 {
-    public class SearchBuilder : ISearchBuilder
+    public class TrackPhaseBuilder : ITrackPhaseBuilder
     {
         #region Properties
 
-        public SearchModel CurrentSearch { get; set; } = null!;
+        public TrackPhaseModel Current { get; set; }
 
         #endregion
 
         #region Fields
 
-        private const string _searchKey = "searchKey";
+        private const string _phaseKey = "phaseKey";
         private readonly ISession _session;
 
         #endregion
 
         #region Constructors
 
-        public SearchBuilder(IHttpContextAccessor context)
+        public TrackPhaseBuilder(IHttpContextAccessor context)
         {
             _session = context.HttpContext!.Session;
         }
@@ -34,7 +34,7 @@ namespace DST.Models.Builders
         {
             // Try to load from session state.
             // Create new object if no value is stored.
-            CurrentSearch = _session.GetObject<SearchModel>(_searchKey) ?? new SearchModel();
+            Current = _session.GetObject<TrackPhaseModel>(_phaseKey) ?? new TrackPhaseModel();
 
             // Save the current object to session state.
             Save();
@@ -42,16 +42,16 @@ namespace DST.Models.Builders
 
         public void Save()
         {
-            switch (CurrentSearch)
+            switch (Current)
             {
                 // If set to null, remove the object from session state.
                 case null:
-                    _session.Remove(_searchKey);
+                    _session.Remove(_phaseKey);
                     break;
 
                 // Save to session state.
                 default:
-                    _session.SetObject(_searchKey, CurrentSearch);
+                    _session.SetObject(_phaseKey, Current);
                     break;
             }
         }
