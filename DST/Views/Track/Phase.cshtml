@@ -39,7 +39,7 @@
         @* <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a> *@
     </nav>
 
-    <form id="form-phase" class="mb-3" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableElement('form-phase-submit')" oninput="enableElement('form-phase-submit')">
+    <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableElement('form-phase-submit')" oninput="enableElement('form-phase-submit')">
         <div class="mb-3">
             <label class="form-label" asp-for="PhaseModel.Algorithm">Timekeeping Algorithm</label>
             <select id="select-phase-algorithm" class="form-control" asp-for="PhaseModel.Algorithm" asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", Model.PhaseModel.Algorithm))"></select>
@@ -61,4 +61,39 @@
             <button id="form-phase-submit" class="btn btn-primary" type="submit" disabled>Submit</button>
         </div>
     </form>
+
+    <div class="mb-3">
+        @if (Model.Results is not null && Model.Results.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped caption-top align-middle">
+                    <caption>Track results</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Date/Time</th>
+                            <th scope="col">Position</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int resultNumber = 1;
+                            foreach (var result in Model.Results)
+                            {
+                                if (result is not null)
+                                {
+                                    <tr>
+                                        <th scope="row">@resultNumber</th>
+                                        <td>@result.DateTime.ToString()</td>
+                                        <td>@result.Coordinate.Format(DST.Core.Coordinate.FormatType.Component)</td>
+                                    </tr>
+                                }
+                                resultNumber++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
 </div>

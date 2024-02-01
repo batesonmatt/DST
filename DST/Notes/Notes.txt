@@ -1,5 +1,42 @@
 ﻿To Do:
 
+BUG => In LocalTracker.Track(IAstronomicalDateTime)
+
+Bad:
+ticks = 638426158225270000
+LHA = 359.99999983437169 degrees or 6.2831853042888275 radians
+
+azimuthRadians = Acos(
+	Sin(0.086102909183277176) - 
+	Sin(1.1420663137161635) * Sin(0.51483292226201038) /
+	(Cos(1.1420663137161635) * Cos(0.51483292226201038))
+)
+
+= Acos(-1.0000000000000002)
+~> 180 degrees
+
+-------------------------------------------------------------------
+
+Good:
+ticks = 638423573302550000
+LHA = 359.99999813180125 degrees or 6.2831852745733672 radians
+
+azimuthRadians = Acos(
+	Sin(0.086102909183277176) - 
+	Sin(1.1420663137161624) * Sin(0.51483292226201038) /
+	(Cos(1.1420663137161624) * Cos(0.51483292226201038))
+)
+
+--------------------------------------------------------------
+
+cos(90° - declination) = cos(90° - latitude) * cos(90° - altitude) + sin(90° - latitude) * sin(90° - altitude) * cos(360° - azimuth)
+sin(dec) = [sin(lat) * sin(alt)] + [cos(lat) * cos(alt) * cos(360 - az)]
+sin(dec) - [cos(lat) * cos(alt) * cos(360 - az)] = [sin(lat) * sin(alt)]
+-[cos(lat) * cos(alt) * cos(360 - az)] = [sin(lat) * sin(alt)] - sin(dec)
+[cos(lat) * cos(alt) * cos(360 - az)] = sin(dec) - [sin(lat) * sin(alt)]
+cos(360 - az) = [sin(dec) - sin(lat) * sin(alt)] / [cos(alt) * cos(360 - az)]
+
+
 *******************************************************************************************************
 
 Implement fixed tracking support (For Period tracking):

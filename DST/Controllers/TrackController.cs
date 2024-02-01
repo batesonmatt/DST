@@ -239,6 +239,11 @@ namespace DST.Controllers
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
 
+            /* Consider allowing Cycles = 0 for getting the next single phase. 
+             * Or, consider allowing an option for the user to choose to track successive Cycles.
+             * Or, consider Cycles to represent the number of results. Cycles = 1 will return 1 result, etc.
+             */
+
             /* Consider allowing client to choose "Now" or "Current Time" instead of entering a datetime.
              * Or consider defaulting to the current client datetime.
              */
@@ -246,6 +251,9 @@ namespace DST.Controllers
             // Load the previous phase entry, if any.
             _phaseBuilder.Load();
 
+            IVector[] results = Array.Empty<IVector>();
+
+            /* Consider calculating this in the TrackPhaseBuilder or the TrackPhaseModel. Just pass in the ILocalObserver object. */
             // Calculate the phase tracking results if an entry was submitted.
             if (_phaseBuilder.Current.IsReady)
             {
@@ -253,11 +261,14 @@ namespace DST.Controllers
                 ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
                 ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
                 IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical((DateTime)_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
-                IVector[] results;
 
                 if (trajectory is IVariableTrajectory variableTrajectory)
                 {
-                    if (trajectory is IRiseSetTrajectory riseSetTrajectory)
+                    if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Apex))
+                    {
+                        results = variableTrajectory.GetApex(start, _phaseBuilder.Current.Cycles);
+                    }
+                    else if (trajectory is IRiseSetTrajectory riseSetTrajectory)
                     {
                         if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Rise))
                         {
@@ -268,11 +279,15 @@ namespace DST.Controllers
                             results = riseSetTrajectory.GetSet(start, _phaseBuilder.Current.Cycles);
                         }
                     }
-                    else if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Apex))
-                    {
-                        results = variableTrajectory.GetApex(start, _phaseBuilder.Current.Cycles);
-                    }
                 }
+
+                if (results is not null)
+                {
+                    /* Format data for the viewmodel */
+                }
+
+                // Force the client to resubmit the form
+                _phaseBuilder.Current.IsReady = false;
             }
 
             TrackPhaseViewModel viewModel = new()
@@ -288,7 +303,9 @@ namespace DST.Controllers
                     Phase = values.Phase,
                     Start = values.Start == 0 ? null : values.Start.ToDateTime(), /* I want to default this to null so that the input control displays the cleared format. */
                     Cycles = values.Cycles
-                }
+                },
+
+                Results = results
             };
 
             return View(viewModel);
