@@ -2,6 +2,7 @@
 using DST.Core.DateAndTime;
 using DST.Core.Observer;
 using DST.Core.Physics;
+using System.Diagnostics;
 
 namespace DST.Core.Tracker
 {
@@ -144,17 +145,31 @@ namespace DST.Core.Tracker
                 // Apply the complementary angle theorem and rearrange to solve for azimuth:
                 // azimuth = arccos(sin(declination) - [sin(latitude) * sin(altitude)] / [cos(latitude) * cos(altitude)])
                 //
+                // First, calculate cos(azimuth) in radians:
+                double cosineAzimuthRadians =
+                    (Math.Sin(delta) - Math.Sin(altitudeRadians) * Math.Sin(phi)) / (Math.Cos(altitudeRadians) * Math.Cos(phi));
+
+                // We must be cautious when performing the inverse cosine when the operand goes beyond the domain.
+                // If necessary, we should truncate the fractional part of the operand in radians, perform the operation, then rotate
+                // the resultant angle by 180° if the operand was less than -1, or subtract from 360° if it was greater than 1.
+                //
                 // This returns the azimuth in radians:
-                double azimuthRadians = Math.Acos(
-                    (Math.Sin(delta) -
-                    Math.Sin(altitudeRadians) * Math.Sin(phi)) /
-                    (Math.Cos(altitudeRadians) * Math.Cos(phi)));
+                var azimuthRadians = cosineAzimuthRadians switch
+                {
+                    < -1.0 => Math.PI + Math.Acos(1.0 - (Math.Abs(cosineAzimuthRadians) - 1.0)),
+                    > 1.0 => (2.0 * Math.PI) - Math.Acos(1.0 - (Math.Abs(cosineAzimuthRadians) - 1.0)),
+                    _ => Math.Acos(cosineAzimuthRadians),
+                };
+
+#if DEBUG
+                Debug.Assert(!double.IsNaN(azimuthRadians));
+#endif
 
                 // Evaluate the azimuth in degrees.
                 azimuth = Angle.FromRadians(azimuthRadians);
 
                 // Fix the azimuth, if necessary.
-                // Note that the result of Math.Acos(double) ranges from 0 to pi, or 0° to 180°. 
+                // Note that the result of the inverse cosine ranges from 0 to pi, or 0° to 180°. 
                 // Azimuth runs clockwise (Eastward) from 0° to 360°.
                 // This essentially mirrors the azimuth angle from quadrants I and II onto quadrants IV and III, respectively.
                 if (Math.Sin(omega) > 0.0)

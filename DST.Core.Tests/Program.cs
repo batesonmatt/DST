@@ -117,7 +117,7 @@ namespace DST.Core.Tests
             // My timezone: America/Chicago
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
-            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, test, timeKeeper);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m42, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
 
             Console.WriteLine($"Location: {observer.Origin}");
@@ -185,11 +185,11 @@ namespace DST.Core.Tests
 
             Console.WriteLine();
 
-            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.StellarTime);
-            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Months);
+            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.MeanSolarTime);
+            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Hours);
             IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, true);
             IAstronomicalDateTime[] dateTimes = DateTimeFactory.ConvertToAstronomical(
-                dateTimesBuilder.Build(start, 12, 1));
+                dateTimesBuilder.Build(start, 24, 1));
 
             ITracker tracker = TrackerFactory.Create(observer);
 
@@ -313,6 +313,10 @@ namespace DST.Core.Tests
             //longitude: Angle.Zero, latitude: new Angle(90.0));
             //longitude: Angle.Zero, latitude: new Angle(-80.0));
 
+            // C50: Satallite Cluster
+            IEquatorialCoordinate c50 = CoordinateFactory.CreateEquatorial(
+                rightAscension : new Angle(TimeSpan.FromHours(6.5316667)), declination: new Angle(4.9333333));
+
             // M42: Orion Diffuse Nebula
             IEquatorialCoordinate m42 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(new TimeSpan(5, 35, 17)), declination: new Angle(-5, -23, -28));
@@ -352,7 +356,7 @@ namespace DST.Core.Tests
             //AstronomicalDateTime start =
             //    new(new DateTime(2022, 12, 13, 19, 32, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
 
-            int cycles = 10;
+            int cycles = 24;
 
             if (trajectory is IVariableTrajectory variableTrajectory)
             {
@@ -400,7 +404,8 @@ namespace DST.Core.Tests
 
         static void Main(string[] args)
         {
-            TestTrack();
+            //TestTrack();
+            TestTrackVectors();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
             //NullIsland_M17_ERA_Trajectory_AntiSetting_August19_2023_1300();
