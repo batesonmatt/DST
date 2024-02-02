@@ -14,23 +14,23 @@ namespace DST.Core.Tests
 {
     internal class Program
     {
-        private static void NullIsland_M17_ERA_Trajectory_AntiSetting_August19_2023_1300()
+        private static void UnitTest_TrackVector_Harness()
         {
             // Arrange
 
-            // LAT: 0.0, LON: 0.0 (Null Island)
+            // LAT: -30.0, LON: -60.0 (San Javier, Santa Fe, Argentina)
             IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
-                longitude: new Angle(0.0), latitude: new Angle(0.0));
+                longitude: new Angle(-60.0), latitude: new Angle(-30.0));
 
             // RA: 18.3405556hr, DEC: -16.1766667° (M17)
             IEquatorialCoordinate m17 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(TimeSpan.FromHours(18.3405556)), declination: new Angle(-16.1766667));
 
-            // Universal Coordinated Time (IANA: UTC)
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("UTC");
+            // Argentina Standard Time (IANA: America/Buenos_Aires)
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Buenos_Aires");
 
-            // Earth Rotation Angle (ERA)
-            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.ERA);
+            // Greenwich Mean Sidereal Time (GMST)
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 PM
@@ -52,7 +52,7 @@ namespace DST.Core.Tests
             DateTime localRiseDateTime = riseDateTime.ToLocalTime();
             DateTime localApexDateTime = apexDateTime.ToLocalTime();
             DateTime localSetDateTime = setDateTime.ToLocalTime();
-            
+
             bool isRiseSet = trajectory is IRiseSetTrajectory;
             bool isNotAboveHorizon = !riseSet.IsAboveHorizon(dateTime);
             bool isNotRising = !riseSet.IsRising(dateTime);
@@ -85,6 +85,14 @@ namespace DST.Core.Tests
             //longitude: Angle.Zero, latitude: new Angle(90.0));
             //longitude: Angle.Zero, latitude: new Angle(-80.0));
 
+            // LAT: -30.0, LON: 150.0 (Couradda, New South Wales, Australia)
+            IGeographicCoordinate location2 = CoordinateFactory.CreateGeographic(
+                longitude: new Angle(150.0), latitude: new Angle(-30.0));
+
+            // M17
+            IEquatorialCoordinate m17 = CoordinateFactory.CreateEquatorial(
+                rightAscension: new Angle(TimeSpan.FromHours(18.3405556)), declination: new Angle(-16.1766667));
+
             // M42: Orion Diffuse Nebula
             IEquatorialCoordinate m42 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(new TimeSpan(5, 35, 17)), declination: new Angle(-5, -23, -28));
@@ -115,9 +123,9 @@ namespace DST.Core.Tests
                 rightAscension: new(TimeSpan.FromHours(0.8072222)), declination: new(85.255));
 
             // My timezone: America/Chicago
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Australia/Sydney");
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
-            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m42, timeKeeper);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location2, m17, timeKeeper);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
 
             Console.WriteLine($"Location: {observer.Origin}");
@@ -131,7 +139,11 @@ namespace DST.Core.Tests
             //IAstronomicalDateTime now = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
             //IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
 
-            AstronomicalDateTime start = new(new DateTime(2023, 10, 1, 22, 0, 0), dateTimeInfo);
+            // August 19, 2023, 1:00 AM
+            DateTime localDateTime = new(2023, 8, 19, 1, 0, 0, DateTimeKind.Unspecified);
+
+            //AstronomicalDateTime start = new(new DateTime(2023, 10, 1, 22, 0, 0), dateTimeInfo);
+            IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             IMutableDateTime mutable;
 
@@ -405,10 +417,12 @@ namespace DST.Core.Tests
         static void Main(string[] args)
         {
             //TestTrack();
-            TestTrackVectors();
+            //TestTrackVectors();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
-            //NullIsland_M17_ERA_Trajectory_AntiSetting_August19_2023_1300();
+            //UnitTest_TrackVector_Harness();
+
+            Console.ReadLine();
         }
     }
 }

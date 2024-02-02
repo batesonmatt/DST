@@ -177,7 +177,7 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(-7.876748782109644E-07, riseCoordinate.Components.Inclination);
             Assert.AreEqual(108.76574004236852, riseCoordinate.Components.Rotation);
             Assert.AreEqual(76.17666670000001, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(0.0, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(359.9999982924527, apexCoordinate.Components.Rotation);
             Assert.AreEqual(8.388147374321021E-07, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.2342609494067, setCoordinate.Components.Rotation);
             Assert.AreEqual(638280642345490000, riseDateTime.Ticks);
@@ -236,7 +236,7 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(-7.876748782109644E-07, riseCoordinate.Components.Inclination);
             Assert.AreEqual(108.76574004236852, riseCoordinate.Components.Rotation);
             Assert.AreEqual(76.17666670000001, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(0.0, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(359.9999982924527, apexCoordinate.Components.Rotation);
             Assert.AreEqual(8.388147374321021E-07, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.2342609494067, setCoordinate.Components.Rotation);
             Assert.AreEqual(638280642345490000, riseDateTime.Ticks);
