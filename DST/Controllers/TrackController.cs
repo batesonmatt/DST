@@ -57,12 +57,12 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitSummaryGeolocation(GeolocationModel geolocation, TrackSummaryRoute values, bool reset = false)
+        public IActionResult SubmitGeolocation(GeolocationModel geolocation, TrackSummaryRoute values, string redirect, bool reset = false)
         {
             // Check model state.
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Summary", values.ToDictionary());
+                return RedirectToAction(redirect, values.ToDictionary());
             }
 
             if (reset)
@@ -79,33 +79,7 @@ namespace DST.Controllers
             // Save the geolocation in session and create a persistent cookie.
             _geoBuilder.Save();
 
-            return RedirectToAction("Summary", values.ToDictionary());
-        }
-
-        [HttpPost]
-        public IActionResult SubmitPhaseGeolocation(GeolocationModel geolocation, TrackPhaseRoute values, bool reset = false)
-        {
-            // Check model state.
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Phase", values.ToDictionary());
-            }
-
-            if (reset)
-            {
-                // Reset geolocation and timezone to defaults.
-                _geoBuilder.CurrentGeolocation.Reset();
-            }
-            else
-            {
-                // Update geolocation and timezone.
-                _geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
-            }
-
-            // Save the geolocation in session and create a persistent cookie.
-            _geoBuilder.Save();
-
-            return RedirectToAction("Phase", values.ToDictionary());
+            return RedirectToAction(redirect, values.ToDictionary());
         }
 
         [HttpPost]
@@ -241,7 +215,6 @@ namespace DST.Controllers
 
             /* Consider allowing Cycles = 0 for getting the next single phase. 
              * Or, consider allowing an option for the user to choose to track successive Cycles.
-             * Or, consider Cycles to represent the number of results. Cycles = 1 will return 1 result, etc.
              */
 
             /* Consider allowing client to choose "Now" or "Current Time" instead of entering a datetime.
@@ -288,6 +261,7 @@ namespace DST.Controllers
 
                 // Force the client to resubmit the form
                 _phaseBuilder.Current.IsReady = false;
+                _phaseBuilder.Save();
             }
 
             TrackPhaseViewModel viewModel = new()

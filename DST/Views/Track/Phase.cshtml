@@ -11,7 +11,8 @@
 <div class="container pt-3">
 
     <div class="mb-3">
-        <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitPhaseGeolocation"></vc:geolocation-form>
+        <vc:geolocation-form route="routes.GetSummaryRoute().ToDictionary() as Dictionary<string, string>" 
+            action-method="SubmitGeolocation" redirect-method="Phase"></vc:geolocation-form>
     </div>
 
     @* Consider view component or partial view *@

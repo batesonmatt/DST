@@ -65,12 +65,12 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitGeolocation(GeolocationModel geolocation, SearchRoute values, bool reset = false)
+        public IActionResult SubmitGeolocation(GeolocationModel geolocation, SearchRoute values, string redirect, bool reset = false)
         {
             // Check model state.
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("List", values.ToDictionary());
+                return RedirectToAction(redirect, values.ToDictionary());
             }
 
             if (reset)
@@ -87,7 +87,7 @@ namespace DST.Controllers
             // Save the geolocation in session and create a persistent cookie.
             _geoBuilder.Save();
 
-            return RedirectToAction("List", values.ToDictionary());
+            return RedirectToAction(redirect, values.ToDictionary());
         }
 
         [HttpGet]

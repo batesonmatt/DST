@@ -44,6 +44,13 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 
 *******************************************************************************************************
 
+Phase and Period forms:
+- Updating/resetting the geolocation form causes the route to be set to the summary route values.
+  Thus, the results list will be hidden, and the phase/period form will need to be resubmitted.
+  However, the submit button is disabled by default, because the form values are still the same despite the list still being hidden.
+- The submit button should be enabled by default?
+  If so, then all form controls need a default value.
+- Change the submit button text to "Track"
 
 Use floating labels for the form controls.
 
