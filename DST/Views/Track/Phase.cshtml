@@ -11,8 +11,7 @@
 <div class="container pt-3">
 
     <div class="mb-3">
-        <vc:geolocation-form route="routes.GetSummaryRoute().ToDictionary() as Dictionary<string, string>" 
-            action-method="SubmitGeolocation" redirect-method="Phase"></vc:geolocation-form>
+        <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitPhaseGeolocation"></vc:geolocation-form>
     </div>
 
     @* Consider view component or partial view *@
@@ -40,7 +39,7 @@
         @* <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a> *@
     </nav>
 
-    <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableElement('form-phase-submit')" oninput="enableElement('form-phase-submit')">
+    <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post">
         <div class="mb-3">
             <label class="form-label" asp-for="PhaseModel.Algorithm">Timekeeping Algorithm</label>
             <select id="select-phase-algorithm" class="form-control" asp-for="PhaseModel.Algorithm" asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", Model.PhaseModel.Algorithm))"></select>
@@ -59,7 +58,7 @@
         </div>
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="mb-3">
-            <button id="form-phase-submit" class="btn btn-primary" type="submit" disabled>Submit</button>
+            <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
         </div>
     </form>
 

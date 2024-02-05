@@ -56,7 +56,7 @@ namespace DST.Core.Trajectory
 
             if (cycles == 0)
             {
-                return Array.Empty<IAstronomicalDateTime>();
+                return new IAstronomicalDateTime[] { DateTimeFactory.ConvertToAstronomical(start) };
             }
 
             // The current tracking algorithms perform in either sidereal time (GMST and GAST) or stellar time (ERA).

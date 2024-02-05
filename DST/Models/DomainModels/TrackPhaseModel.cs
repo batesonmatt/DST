@@ -1,5 +1,4 @@
 ﻿using DST.Models.DataLayer.Query;
-using DST.Models.Extensions;
 using System;
 
 namespace DST.Models.DomainModels
@@ -14,7 +13,7 @@ namespace DST.Models.DomainModels
 
         public DateTime? Start { get; set; }
 
-        public int Cycles { get; set; } = 1;
+        public int Cycles { get; set; } = 0;
 
         public bool IsReady { get; set; } = false;
 

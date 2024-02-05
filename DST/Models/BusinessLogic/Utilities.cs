@@ -15,6 +15,55 @@ namespace DST.Models.BusinessLogic
 {
     public class Utilities
     {
+        // Returns the current local DateTime in the client's timezone.
+        public static DateTime GetClientDateTime(GeolocationModel geolocation)
+        {
+            IDateTimeInfo dateTimeInfo;
+            DateTime clientDateTime;
+
+            try
+            {
+                // Get the date and time info for the client.
+                dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(geolocation.TimeZoneId);
+
+                // Get the client's current date and time represented in local time.
+                clientDateTime = DateTimeFactory.CreateLocal(dateTimeInfo);
+            }
+            catch
+            {
+                clientDateTime = DateTime.MinValue;
+            }
+
+            return clientDateTime;
+        }
+
+        // Returns a new DateTime value from the given number of ticks, represented in local time for the client's timezone.
+        public static DateTime GetClientDateTime(GeolocationModel geolocation, long ticks)
+        {
+            if (ticks <= 0)
+            {
+                return GetClientDateTime(geolocation);
+            }
+
+            IDateTimeInfo dateTimeInfo;
+            DateTime clientDateTime;
+
+            try
+            {
+                // Get the date and time info for the client.
+                dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(geolocation.TimeZoneId);
+
+                // Get the client's current date and time represented in local time.
+                clientDateTime = DateTimeFactory.CreateLocal(ticks, dateTimeInfo);
+            }
+            catch
+            {
+                clientDateTime = DateTime.MinValue;
+            }
+
+            return clientDateTime;
+        }
+
         public static ILocalObserver GetLocalObserver(DsoModel dso, GeolocationModel geolocation, Algorithm algorithm)
         {
             IEquatorialCoordinate target;

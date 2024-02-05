@@ -11,7 +11,7 @@ namespace DST.Models.Routes
 
         public string Phase { get; set; } = PhaseName.Default;
         public long Start { get; set; }
-        public int Cycles { get; set; } = 1;
+        public int Cycles { get; set; }
 
         #endregion
 
@@ -59,7 +59,7 @@ namespace DST.Models.Routes
 
         public void SetCycles(int cycles)
         {
-            Cycles = cycles is >= 1 and < int.MaxValue ? cycles : 1;
+            Cycles = cycles is > int.MinValue and < int.MaxValue ? cycles : 0;
         }
 
         public new TrackPhaseRoute Clone()
@@ -73,7 +73,9 @@ namespace DST.Models.Routes
             {
                 { nameof(Phase), Phase.ToKebabCase() },
                 { nameof(Start), Start.ToString().ToKebabCase() },
-                { nameof(Cycles), Cycles.ToString().ToKebabCase() }
+
+                // Do not call ToKebabCase() because we want negative numbers represented in the route URL.
+                { nameof(Cycles), Cycles.ToString() }
             };
 
             return base.ToDictionary()

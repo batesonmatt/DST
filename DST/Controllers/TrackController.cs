@@ -8,8 +8,6 @@ using DST.Models.Extensions;
 using DST.Models.Routes;
 using DST.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Elfie.Extensions;
-using System.Collections.Generic;
 using DST.Core.Components;
 using System.Globalization;
 using DST.Core.Coordinate;
@@ -19,7 +17,6 @@ using DST.Core.Tracker;
 using DST.Models.DataLayer;
 using DST.Core.Trajectory;
 using DST.Core.TimeKeeper;
-using System.Security.Cryptography;
 using DST.Core.Vector;
 
 namespace DST.Controllers
@@ -57,12 +54,12 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitGeolocation(GeolocationModel geolocation, TrackSummaryRoute values, string redirect, bool reset = false)
+        public IActionResult SubmitSummaryGeolocation(GeolocationModel geolocation, TrackSummaryRoute values, bool reset = false)
         {
             // Check model state.
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(redirect, values.ToDictionary());
+                return RedirectToAction("Summary", values.ToDictionary());
             }
 
             if (reset)
@@ -79,7 +76,33 @@ namespace DST.Controllers
             // Save the geolocation in session and create a persistent cookie.
             _geoBuilder.Save();
 
-            return RedirectToAction(redirect, values.ToDictionary());
+            return RedirectToAction("Summary", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitPhaseGeolocation(GeolocationModel geolocation, TrackPhaseRoute values, bool reset = false)
+        {
+            // Check model state.
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Phase", values.ToDictionary());
+            }
+
+            if (reset)
+            {
+                // Reset geolocation and timezone to defaults.
+                _geoBuilder.CurrentGeolocation.Reset();
+            }
+            else
+            {
+                // Update geolocation and timezone.
+                _geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
+            }
+
+            // Save the geolocation in session and create a persistent cookie.
+            _geoBuilder.Save();
+
+            return RedirectToAction("Phase", values.ToDictionary());
         }
 
         [HttpPost]
@@ -226,7 +249,6 @@ namespace DST.Controllers
 
             IVector[] results = Array.Empty<IVector>();
 
-            /* Consider calculating this in the TrackPhaseBuilder or the TrackPhaseModel. Just pass in the ILocalObserver object. */
             // Calculate the phase tracking results if an entry was submitted.
             if (_phaseBuilder.Current.IsReady)
             {
@@ -275,7 +297,7 @@ namespace DST.Controllers
                 {
                     Algorithm = values.Algorithm,
                     Phase = values.Phase,
-                    Start = values.Start == 0 ? null : values.Start.ToDateTime(), /* I want to default this to null so that the input control displays the cleared format. */
+                    Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
                     Cycles = values.Cycles
                 },
 

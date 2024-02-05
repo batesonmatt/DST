@@ -1,5 +1,4 @@
-﻿using DST.Core.Observer;
-using DST.Core.Vector;
+﻿using DST.Core.Vector;
 using DST.Models.BusinessLogic;
 using DST.Models.DomainModels;
 using DST.Models.Routes;

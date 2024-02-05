@@ -32,6 +32,18 @@
             return CreateAstronomicalDateTime(dateTime, dateTimeInfo);
         }
 
+        // Creates a new DateTime value in local time for the current date and time, in the timezone of the specified IDateTimeInfo object.
+        public static DateTime CreateLocal(IDateTimeInfo dateTimeInfo)
+        {
+            return CreateAstronomicalDateTime(DateTime.UtcNow, dateTimeInfo).ToLocalTime();
+        }
+
+        // Creates a new DateTime value in local time from the given number of ticks, in the timezone of the specified IDateTimeInfo object.
+        public static DateTime CreateLocal(long ticks, IDateTimeInfo dateTimeInfo)
+        {
+            return CreateAstronomicalDateTime(new DateTime(ticks), dateTimeInfo).ToLocalTime();
+        }
+
         // Returns a new IMutableDateTime object with the same value of the specified IBaseDateTime object.
         public static IMutableDateTime ConvertToMutable(IBaseDateTime dateTime)
         {

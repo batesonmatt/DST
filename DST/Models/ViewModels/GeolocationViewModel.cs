@@ -12,7 +12,6 @@ namespace DST.Models.ViewModels
         public IEnumerable<TimeZoneItem> TimeZoneItems { get; set; }
         public IDictionary<string, string> Route { get; set; }
         public string ActionMethod { get; set; }
-        public string RedirectMethod { get; set; }
 
         #endregion
     }
