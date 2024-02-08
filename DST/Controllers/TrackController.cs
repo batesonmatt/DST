@@ -202,11 +202,32 @@ namespace DST.Controllers
         [HttpPost]
         public IActionResult SubmitPhase(TrackPhaseModel phaseModel, TrackPhaseRoute values)
         {
-            /* Test this. */
-            // Check model state.
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Phase", values.ToDictionary());
+                //ModelState.AddModelError(nameof(phaseModel.Start), "bad");
+
+                DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
+
+                TrackPhaseViewModel viewModel = new()
+                {
+                    Dso = dso,
+                    CurrentRoute = values,
+                    Algorithms = Utilities.GetAlgorithmItems(),
+                    Phases = Utilities.GetPhaseItems(),
+
+                    PhaseModel = new TrackPhaseModel()
+                    {
+                        Algorithm = values.Algorithm,
+                        Phase = values.Phase,
+                        Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
+                        Cycles = values.Cycles
+                    },
+
+                    Results = Array.Empty<IVector>()
+                };
+
+                // Re-render the view so that the validation error messages get displayed.
+                return View("Phase", viewModel);
             }
 
             /* perform validation */

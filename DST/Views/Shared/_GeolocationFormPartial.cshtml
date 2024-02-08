@@ -11,12 +11,13 @@
     <div class="mb-3">
         <label class="form-label" asp-for="Geolocation.Latitude">Latitude</label>
         <input id="input-latitude" class="form-control" asp-for="Geolocation.Latitude" type="number" value="@Model.Geolocation.Latitude" />
+        <span asp-validation-for="Geolocation.Latitude" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label class="form-label" asp-for="Geolocation.Longitude">Longitude</label>
         <input id="input-longitude" class="form-control" asp-for="Geolocation.Longitude" type="number" value="@Model.Geolocation.Longitude" />
+        <span asp-validation-for="Geolocation.Longitude" class="text-danger"></span>
     </div>
-    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <div id="location-help" class="form-text">Your location will not be shared.</div>
     </div>

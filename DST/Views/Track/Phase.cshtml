@@ -51,12 +51,13 @@
         <div class="mb-3">
             <label class="form-label" asp-for="PhaseModel.Start">Start</label>
             <input id="input-phase-start" class="form-control" asp-for="PhaseModel.Start" type="datetime-local" value="@Model.PhaseModel.GetFormattedStart()" />
+            <span asp-validation-for="PhaseModel.Start" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label class="form-label" asp-for="PhaseModel.Cycles">Cycles</label>
             <input id="input-phase-cycles" class="form-control" asp-for="PhaseModel.Cycles" type="number" value="@Model.PhaseModel.Cycles" />
+            <span asp-validation-for="PhaseModel.Cycles" class="text-danger"></span>
         </div>
-        <div asp-validation-summary="All" class="text-danger"></div>
         <div class="mb-3">
             <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
         </div>

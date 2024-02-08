@@ -1,5 +1,8 @@
 ﻿using DST.Models.DataLayer.Query;
+using DST.Models.Validation;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 
 namespace DST.Models.DomainModels
 {
@@ -11,8 +14,12 @@ namespace DST.Models.DomainModels
 
         public string Phase { get; set; } = PhaseName.Default;
 
-        public DateTime? Start { get; set; }
+        [Required(ErrorMessage = "Please enter the start date.")]
+        [EpochDateRange]
+        public DateTime Start { get; set; }
 
+        [Required(ErrorMessage = "Please enter the number of cycles.")]
+        [Range(-100, 100, ErrorMessage = "The number of cycles must be between -100 and 100.")]
         public int Cycles { get; set; } = 0;
 
         public bool IsReady { get; set; } = false;
@@ -23,12 +30,12 @@ namespace DST.Models.DomainModels
 
         public long GetTicks()
         {
-            return Start is null ? 0 : (long)Start?.Ticks;
+            return Start.Ticks;
         }
 
         public string GetFormattedStart()
         {
-            return Start?.ToString("yyyy-MM-ddTHH:mm:ss");
+            return Start.ToString("yyyy-MM-ddTHH:mm:ss");
         }
 
         #endregion
