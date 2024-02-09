@@ -52,13 +52,13 @@ namespace DST.Core.Tracker
             //
             // The spherical triangle contains the following points and their angles:
             // 1. Zenith - The azimuth's explementary angle (360° - azimuth)
-            // 2. Celestial Body - The parallactic angle(angle between the observer's zenith and the North Celestial Pole)
-            // 3. North Celestial Pole, or Celestial Intermediate Pole(CIP) - The local hour angle
+            // 2. Celestial Body - The parallactic angle (angle between the observer's zenith and the North Celestial Pole)
+            // 3. North Celestial Pole, or Celestial Intermediate Pole (CIP) - The local hour angle
             //
-            // And the following opposite sides(great circle arc lengths):
-            // 1. The North polar distance(90° -declination)
+            // And the following opposite sides (great circle arc lengths):
+            // 1. The North polar distance (90° - declination)
             // 2. The observer's co-latitude (90° - latitude)
-            // 3. The zenith distance(90° -altitude)
+            // 3. The zenith distance (90° - altitude)
 
             // Calculate the local hour angle (LHA) of the IObserver.Target relative to the IObserver.Location at the specified date/time.
             Angle lha = _localObserver.LocalHourAngle.Calculate(_localObserver, dateTime);
