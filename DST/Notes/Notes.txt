@@ -51,6 +51,10 @@ BUG: In DST.Core
 - The min/max datetimes (See DateTimeConstants) are fine as-is, but the DateTimesBuilder.IsReady and 
   AstronomicalDateTime.IsMinOrMaxValue and .GetAdjustedDateTime need to do more validation for accomodating 
   calls to DateTime.Date.
+* This is mostly due to the ILocalHourAngleDateTime.Calculate implementations calling .Date during ConvertTimeFromStandard()
+* Consider a new set of min/max workable datetime values, or min/max date values.
+* Consider a new AstronomicalDateTime.IsMinOrMaxValue method to determine whether the time portion on the underlying value may be truncated.
+  This may be used in IDateTimesBuilder implementations, or just DateTimesBuilder.IsReady.
 
 Consider class-level validation (IValidatableObject) for TrackPhaseModel and TrackPeriodModel.
 - Need to validate Cycles does not go beyond the min/max (Or just display the number results that were tracked before running out of bounds)
