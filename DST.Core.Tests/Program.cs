@@ -46,12 +46,9 @@ namespace DST.Core.Tests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             bool isRiseSet = trajectory is IRiseSetTrajectory;
             bool isNotAboveHorizon = !riseSet.IsAboveHorizon(dateTime);
@@ -69,9 +66,9 @@ namespace DST.Core.Tests
             Console.WriteLine($"Assert.AreEqual({apexCoordinate.Components.Rotation.TotalDegrees}, apexCoordinate.Components.Rotation);");
             Console.WriteLine($"Assert.AreEqual({setCoordinate.Components.Inclination.TotalDegrees}, setCoordinate.Components.Inclination);");
             Console.WriteLine($"Assert.AreEqual({setCoordinate.Components.Rotation.TotalDegrees}, setCoordinate.Components.Rotation);");
-            Console.WriteLine($"Assert.AreEqual({riseDateTime.Ticks}, riseDateTime.Ticks);");
-            Console.WriteLine($"Assert.AreEqual({apexDateTime.Ticks}, apexDateTime.Ticks);");
-            Console.WriteLine($"Assert.AreEqual({setDateTime.Ticks}, setDateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({rise.DateTime.Ticks}, riseDateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({apex.DateTime.Ticks}, apexDateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({set.DateTime.Ticks}, setDateTime.Ticks);");
             Console.WriteLine($"Assert.AreEqual({localRiseDateTime.Ticks}, localRiseDateTime.Ticks);");
             Console.WriteLine($"Assert.AreEqual({localApexDateTime.Ticks}, localApexDateTime.Ticks);");
             Console.WriteLine($"Assert.AreEqual({localSetDateTime.Ticks}, localSetDateTime.Ticks);");
@@ -166,21 +163,14 @@ namespace DST.Core.Tests
                     IVector apex = riseSetTrajectory.GetApex(DateTimeFactory.ConvertToAstronomical(rise.DateTime));
                     IVector set = riseSetTrajectory.GetSet(DateTimeFactory.ConvertToAstronomical(rise.DateTime));
 
-                    mutable = DateTimeFactory.ConvertToMutable(rise.DateTime);
-                    Console.WriteLine($"Rise: {mutable.ToLocalTime()}\tPosition: {rise.Coordinate}");
-
-                    mutable = DateTimeFactory.ConvertToMutable(apex.DateTime);
-                    Console.WriteLine($"Apex: {mutable.ToLocalTime()}\tPosition: {apex.Coordinate}");
-
-                    mutable = DateTimeFactory.ConvertToMutable(set.DateTime);
-                    Console.WriteLine($"Set: {mutable.ToLocalTime()}\tPosition: {set.Coordinate}");
+                    Console.WriteLine($"Rise: {rise.DateTime.ToLocalTime()}\tPosition: {rise.Coordinate}");
+                    Console.WriteLine($"Apex: {apex.DateTime.ToLocalTime()}\tPosition: {apex.Coordinate}");
+                    Console.WriteLine($"Set: {set.DateTime.ToLocalTime()}\tPosition: {set.Coordinate}");
                 }
                 else
                 {
                     IVector apex = variableTrajectory.GetApex(start);
-
-                    mutable = DateTimeFactory.ConvertToMutable(apex.DateTime);
-                    Console.WriteLine($"Apex: {mutable.ToLocalTime()}\tPosition: {apex.Coordinate}");
+                    Console.WriteLine($"Apex: {apex.DateTime.ToLocalTime()}\tPosition: {apex.Coordinate}");
                 }
             }
             else
@@ -363,7 +353,6 @@ namespace DST.Core.Tests
             Console.WriteLine($"Visibility: {trajectory}\n");
 
             IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
-            IMutableDateTime mutable;
 
             //AstronomicalDateTime start =
             //    new(new DateTime(2022, 12, 13, 19, 32, 0, DateTimeKind.Local), AstronomicalDateTime.UnspecifiedKind.IsLocal);
@@ -382,18 +371,15 @@ namespace DST.Core.Tests
                     {
                         if (rise[i] != null)
                         {
-                            mutable = DateTimeFactory.ConvertToMutable(rise[i].DateTime);
-                            Console.WriteLine($"Rise {i}:\t\tDateTime: {mutable.ToLocalTime()}\t\tPosition: {rise[i].Coordinate}");
+                            Console.WriteLine($"Rise {i}:\t\tDateTime: {rise[i].DateTime.ToLocalTime()}\t\tPosition: {rise[i].Coordinate}");
                         }
                         if (apex[i] != null)
                         {
-                            mutable = DateTimeFactory.ConvertToMutable(apex[i].DateTime);
-                            Console.WriteLine($"Apex {i}:\t\tDateTime: {mutable.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
+                            Console.WriteLine($"Apex {i}:\t\tDateTime: {apex[i].DateTime.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
                         }
                         if (set[i] != null)
                         {
-                            mutable = DateTimeFactory.ConvertToMutable(set[i].DateTime);
-                            Console.WriteLine($"Set {i}:\t\tDateTime: {mutable.ToLocalTime()}\t\tPosition: {set[i].Coordinate}");
+                            Console.WriteLine($"Set {i}:\t\tDateTime: {set[i].DateTime.ToLocalTime()}\t\tPosition: {set[i].Coordinate}");
                         }
                         Console.WriteLine("--------------------");
                     }
@@ -406,8 +392,7 @@ namespace DST.Core.Tests
                     {
                         if (apex[i] != null)
                         {
-                            mutable = DateTimeFactory.ConvertToMutable(apex[i].DateTime);
-                            Console.WriteLine($"Apex {i}:\t\tDateTime: {mutable.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
+                            Console.WriteLine($"Apex {i}:\t\tDateTime: {apex[i].DateTime.ToLocalTime()}\t\tPosition: {apex[i].Coordinate}");
                         }
                     }
                 }
