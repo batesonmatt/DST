@@ -48,6 +48,12 @@ namespace DST.Core.Tracker
         {
             _ = dateTime ?? throw new ArgumentNullException(nameof(dateTime));
 
+            // We should not attempt to track at the min/max datetime values.
+            if (DateTimeFactory.ConvertToMutable(dateTime).IsMinOrMaxValue())
+            {
+                return CoordinateFactory.CreateNonTrackable();
+            }
+
             // Calculate the angles of altitude and azimuth using the spherical triangle.
             //
             // The spherical triangle contains the following points and their angles:
