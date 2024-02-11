@@ -173,4 +173,8 @@
     <value>+{0}</value>
     <comment>A positive sign "+" to prefix the string value (representing some numerical value) at position 0, with no whitespace in between.</comment>
   </data>
+  <data name="Unown" xml:space="preserve">
+    <value>--</value>
+    <comment>Represents an unknown coordinate or angle value.</comment>
+  </data>
 </root>

@@ -185,5 +185,14 @@ namespace DST.Resources {
                 return ResourceManager.GetString("SignedFormatPositiveValue", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --.
+        /// </summary>
+        public static string Unown {
+            get {
+                return ResourceManager.GetString("Unown", resourceCulture);
+            }
+        }
     }
 }
