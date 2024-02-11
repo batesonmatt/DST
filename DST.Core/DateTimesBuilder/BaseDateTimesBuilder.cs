@@ -23,8 +23,12 @@ namespace DST.Core.DateTimesBuilder
         {
             _ = previous ?? throw new ArgumentNullException(nameof(previous));
 
-            // Stop if the previous datetime has reached the minimum or maximum supported datetime.
-            if (previous.IsMinOrMaxValue()) return false;
+            // Stop if the previous datetime has reached the minimum or maximum supported datetime,
+            // and all remaining possible datetimes in this period are out of range.
+            if ((previous.IsMinValue() && period <= 0) || (previous.IsMaxValue() && period >= 0))
+            {
+                return false;
+            }
 
             // Stop if the total elapsed time has reached the minimum or maximum allowable time.
             if (timeElapsed <= _dateTimeAdder.Min || timeElapsed >= _dateTimeAdder.Max) return false;
