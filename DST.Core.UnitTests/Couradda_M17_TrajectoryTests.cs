@@ -44,15 +44,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsTrue(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
@@ -62,9 +62,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(9.155702348202485E-06, apexCoordinate.Components.Rotation);
             Assert.AreEqual(1.9563044281388136E-06, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23426163081194, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279278080720000, riseDateTime.Ticks);
-            Assert.AreEqual(638279516567080000, apexDateTime.Ticks);
-            Assert.AreEqual(638279755053440000, setDateTime.Ticks);
+            Assert.AreEqual(638279278080720000, rise.DateTime.Ticks);
+            Assert.AreEqual(638279516567080000, apex.DateTime.Ticks);
+            Assert.AreEqual(638279755053440000, set.DateTime.Ticks);
             Assert.AreEqual(638279638080720000, localRiseDateTime.Ticks);
             Assert.AreEqual(638279876567080000, localApexDateTime.Ticks);
             Assert.AreEqual(638280115053440000, localSetDateTime.Ticks);
@@ -103,15 +103,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsTrue(riseSet.IsSetting(dateTime));
@@ -121,9 +121,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(9.155702348202485E-06, apexCoordinate.Components.Rotation);
             Assert.AreEqual(1.9563044281388136E-06, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23426163081194, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279278080720000, riseDateTime.Ticks);
-            Assert.AreEqual(638279516567080000, apexDateTime.Ticks);
-            Assert.AreEqual(638279755053440000, setDateTime.Ticks);
+            Assert.AreEqual(638279278080720000, rise.DateTime.Ticks);
+            Assert.AreEqual(638279516567080000, apex.DateTime.Ticks);
+            Assert.AreEqual(638279755053440000, set.DateTime.Ticks);
             Assert.AreEqual(638279638080720000, localRiseDateTime.Ticks);
             Assert.AreEqual(638279876567080000, localApexDateTime.Ticks);
             Assert.AreEqual(638280115053440000, localSetDateTime.Ticks);
@@ -162,15 +162,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
@@ -180,9 +180,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(359.9999982924527, apexCoordinate.Components.Rotation);
             Assert.AreEqual(3.4894899408663184E-07, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23426065070407, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280139721630000, riseDateTime.Ticks);
-            Assert.AreEqual(638280378207990000, apexDateTime.Ticks);
-            Assert.AreEqual(638280616694350000, setDateTime.Ticks);
+            Assert.AreEqual(638280139721630000, rise.DateTime.Ticks);
+            Assert.AreEqual(638280378207990000, apex.DateTime.Ticks);
+            Assert.AreEqual(638280616694350000, set.DateTime.Ticks);
             Assert.AreEqual(638280499721630000, localRiseDateTime.Ticks);
             Assert.AreEqual(638280738207990000, localApexDateTime.Ticks);
             Assert.AreEqual(638280976694350000, localSetDateTime.Ticks);
@@ -221,15 +221,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
@@ -239,9 +239,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(359.9999982924527, apexCoordinate.Components.Rotation);
             Assert.AreEqual(3.4894899408663184E-07, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23426065070407, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280139721630000, riseDateTime.Ticks);
-            Assert.AreEqual(638280378207990000, apexDateTime.Ticks);
-            Assert.AreEqual(638280616694350000, setDateTime.Ticks);
+            Assert.AreEqual(638280139721630000, rise.DateTime.Ticks);
+            Assert.AreEqual(638280378207990000, apex.DateTime.Ticks);
+            Assert.AreEqual(638280616694350000, set.DateTime.Ticks);
             Assert.AreEqual(638280499721630000, localRiseDateTime.Ticks);
             Assert.AreEqual(638280738207990000, localApexDateTime.Ticks);
             Assert.AreEqual(638280976694350000, localSetDateTime.Ticks);
@@ -280,15 +280,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsTrue(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
@@ -298,9 +298,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(3.129985888245142E-05, apexCoordinate.Components.Rotation);
             Assert.AreEqual(0.0012551597360380535, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23222850184587, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279280280390000, riseDateTime.Ticks);
-            Assert.AreEqual(638279518766740000, apexDateTime.Ticks);
-            Assert.AreEqual(638279757253100000, setDateTime.Ticks);
+            Assert.AreEqual(638279280280390000, rise.DateTime.Ticks);
+            Assert.AreEqual(638279518766740000, apex.DateTime.Ticks);
+            Assert.AreEqual(638279757253100000, set.DateTime.Ticks);
             Assert.AreEqual(638279640280390000, localRiseDateTime.Ticks);
             Assert.AreEqual(638279878766740000, localApexDateTime.Ticks);
             Assert.AreEqual(638280117253100000, localSetDateTime.Ticks);
@@ -339,15 +339,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsTrue(riseSet.IsSetting(dateTime));
@@ -357,9 +357,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(3.129985888245142E-05, apexCoordinate.Components.Rotation);
             Assert.AreEqual(0.0012551597360380535, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23222850184587, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279280280400000, riseDateTime.Ticks);
-            Assert.AreEqual(638279518766740000, apexDateTime.Ticks);
-            Assert.AreEqual(638279757253100000, setDateTime.Ticks);
+            Assert.AreEqual(638279280280400000, rise.DateTime.Ticks);
+            Assert.AreEqual(638279518766740000, apex.DateTime.Ticks);
+            Assert.AreEqual(638279757253100000, set.DateTime.Ticks);
             Assert.AreEqual(638279640280400000, localRiseDateTime.Ticks);
             Assert.AreEqual(638279878766740000, localApexDateTime.Ticks);
             Assert.AreEqual(638280117253100000, localSetDateTime.Ticks);
@@ -398,15 +398,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
@@ -416,9 +416,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(3.757574115580966E-05, apexCoordinate.Components.Rotation);
             Assert.AreEqual(0.0012602575149960546, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23222337775002, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280141921320000, riseDateTime.Ticks);
-            Assert.AreEqual(638280380407700000, apexDateTime.Ticks);
-            Assert.AreEqual(638280618894060000, setDateTime.Ticks);
+            Assert.AreEqual(638280141921320000, rise.DateTime.Ticks);
+            Assert.AreEqual(638280380407700000, apex.DateTime.Ticks);
+            Assert.AreEqual(638280618894060000, set.DateTime.Ticks);
             Assert.AreEqual(638280501921320000, localRiseDateTime.Ticks);
             Assert.AreEqual(638280740407700000, localApexDateTime.Ticks);
             Assert.AreEqual(638280978894060000, localSetDateTime.Ticks);
@@ -457,15 +457,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
@@ -475,9 +475,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(3.757574115580966E-05, apexCoordinate.Components.Rotation);
             Assert.AreEqual(0.0012602575149960546, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23222337775002, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280141921340000, riseDateTime.Ticks);
-            Assert.AreEqual(638280380407700000, apexDateTime.Ticks);
-            Assert.AreEqual(638280618894060000, setDateTime.Ticks);
+            Assert.AreEqual(638280141921340000, rise.DateTime.Ticks);
+            Assert.AreEqual(638280380407700000, apex.DateTime.Ticks);
+            Assert.AreEqual(638280618894060000, set.DateTime.Ticks);
             Assert.AreEqual(638280501921340000, localRiseDateTime.Ticks);
             Assert.AreEqual(638280740407700000, localApexDateTime.Ticks);
             Assert.AreEqual(638280978894060000, localSetDateTime.Ticks);
@@ -516,15 +516,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsTrue(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
@@ -534,9 +534,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(359.99999084429766, apexCoordinate.Components.Rotation);
             Assert.AreEqual(-2.5793074200919364E-06, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23425886515798, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279278084740000, riseDateTime.Ticks);
-            Assert.AreEqual(638279516571130000, apexDateTime.Ticks);
-            Assert.AreEqual(638279755057510000, setDateTime.Ticks);
+            Assert.AreEqual(638279278084740000, rise.DateTime.Ticks);
+            Assert.AreEqual(638279516571130000, apex.DateTime.Ticks);
+            Assert.AreEqual(638279755057510000, set.DateTime.Ticks);
             Assert.AreEqual(638279638084740000, localRiseDateTime.Ticks);
             Assert.AreEqual(638279876571130000, localApexDateTime.Ticks);
             Assert.AreEqual(638280115057510000, localSetDateTime.Ticks);
@@ -575,15 +575,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsTrue(riseSet.IsSetting(dateTime));
@@ -593,9 +593,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(359.99999084429766, apexCoordinate.Components.Rotation);
             Assert.AreEqual(-2.5793074200919364E-06, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23425886515798, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279278084730000, riseDateTime.Ticks);
-            Assert.AreEqual(638279516571130000, apexDateTime.Ticks);
-            Assert.AreEqual(638279755057510000, setDateTime.Ticks);
+            Assert.AreEqual(638279278084730000, rise.DateTime.Ticks);
+            Assert.AreEqual(638279516571130000, apex.DateTime.Ticks);
+            Assert.AreEqual(638279755057510000, set.DateTime.Ticks);
             Assert.AreEqual(638279638084730000, localRiseDateTime.Ticks);
             Assert.AreEqual(638279876571130000, localApexDateTime.Ticks);
             Assert.AreEqual(638280115057510000, localSetDateTime.Ticks);
@@ -634,15 +634,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
@@ -652,9 +652,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(359.99999460026135, apexCoordinate.Components.Rotation);
             Assert.AreEqual(-1.8255762483931903E-06, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23425932475632, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280139725720000, riseDateTime.Ticks);
-            Assert.AreEqual(638280378212100000, apexDateTime.Ticks);
-            Assert.AreEqual(638280616698480000, setDateTime.Ticks);
+            Assert.AreEqual(638280139725720000, rise.DateTime.Ticks);
+            Assert.AreEqual(638280378212100000, apex.DateTime.Ticks);
+            Assert.AreEqual(638280616698480000, set.DateTime.Ticks);
             Assert.AreEqual(638280499725720000, localRiseDateTime.Ticks);
             Assert.AreEqual(638280738212100000, localApexDateTime.Ticks);
             Assert.AreEqual(638280976698480000, localSetDateTime.Ticks);
@@ -693,15 +693,15 @@ namespace DST.Core.UnitTests
             ICoordinate riseCoordinate = rise.Coordinate;
             ICoordinate apexCoordinate = apex.Coordinate;
             ICoordinate setCoordinate = set.Coordinate;
-            IMutableDateTime riseDateTime = DateTimeFactory.ConvertToMutable(rise.DateTime);
-            IMutableDateTime apexDateTime = DateTimeFactory.ConvertToMutable(apex.DateTime);
-            IMutableDateTime setDateTime = DateTimeFactory.ConvertToMutable(set.DateTime);
-            DateTime localRiseDateTime = riseDateTime.ToLocalTime();
-            DateTime localApexDateTime = apexDateTime.ToLocalTime();
-            DateTime localSetDateTime = setDateTime.ToLocalTime();
+            DateTime localRiseDateTime = rise.DateTime.ToLocalTime();
+            DateTime localApexDateTime = apex.DateTime.ToLocalTime();
+            DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
             // Assert
             Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));
+            Assert.IsInstanceOfType(rise, typeof(LocalVector));
+            Assert.IsInstanceOfType(apex, typeof(LocalVector));
+            Assert.IsInstanceOfType(set, typeof(LocalVector));
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
@@ -711,9 +711,9 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(359.99999460026135, apexCoordinate.Components.Rotation);
             Assert.AreEqual(-1.8255762483931903E-06, setCoordinate.Components.Inclination);
             Assert.AreEqual(251.23425932475632, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280139725710000, riseDateTime.Ticks);
-            Assert.AreEqual(638280378212100000, apexDateTime.Ticks);
-            Assert.AreEqual(638280616698480000, setDateTime.Ticks);
+            Assert.AreEqual(638280139725710000, rise.DateTime.Ticks);
+            Assert.AreEqual(638280378212100000, apex.DateTime.Ticks);
+            Assert.AreEqual(638280616698480000, set.DateTime.Ticks);
             Assert.AreEqual(638280499725710000, localRiseDateTime.Ticks);
             Assert.AreEqual(638280738212100000, localApexDateTime.Ticks);
             Assert.AreEqual(638280976698480000, localSetDateTime.Ticks);
