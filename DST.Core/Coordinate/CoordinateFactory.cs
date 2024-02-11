@@ -37,6 +37,13 @@ namespace DST.Core.Coordinate
             };
         }
 
+        // Creates a new NonTrackableCoordinate object with default values.
+        public static ICoordinate CreateNonTrackable()
+        {
+            return new NonTrackableCoordinate();
+        }
+
+        [Obsolete("ICoordinate already inherits IFormattableCoordinate.")]
         // Returns a new IFormattableCoordinate object with the same value of the specified ICoordinate object.
         public static IFormattableCoordinate ConvertToFormattable(ICoordinate coordinate)
         {
