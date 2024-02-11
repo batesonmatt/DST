@@ -132,11 +132,22 @@ namespace DST.Core.DateAndTime
             return result;
         }
 
-        // Returns a value that determines whether this instance is equal to either the minimum or maximum supported
-        // AstronomicalDateTime values.
+        // Returns a value that determines whether this instance is equal to the minimum supported AstronomicalDateTime value.
+        public bool IsMinValue()
+        {
+            return Ticks == Info.MinAstronomicalDateTime.Ticks;
+        }
+
+        // Returns a value that determines whether this instance is equal to the maximum supported AstronomicalDateTime value.
+        public bool IsMaxValue()
+        {
+            return Ticks == Info.MaxAstronomicalDateTime.Ticks;
+        }
+
+        // Returns a value that determines whether this instance is equal to either the minimum or maximum supported AstronomicalDateTime values.
         public bool IsMinOrMaxValue()
         {
-            return Ticks == Info.MinAstronomicalDateTime.Ticks || Ticks == Info.MaxAstronomicalDateTime.Ticks;
+            return IsMinValue() || IsMaxValue();
         }
 
         // Returns a new IMutableDateTime that adds the specified number of seconds to the value of this instance.

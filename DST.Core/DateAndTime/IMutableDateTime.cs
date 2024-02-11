@@ -6,6 +6,8 @@
         long MinTickSpan { get; }
         long MaxTickSpan { get; }
 
+        bool IsMinValue();
+        bool IsMaxValue();
         bool IsMinOrMaxValue();
         IMutableDateTime AddSeconds(double value);
         IMutableDateTime AddMinutes(double value);
