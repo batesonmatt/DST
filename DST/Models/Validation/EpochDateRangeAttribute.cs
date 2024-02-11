@@ -3,17 +3,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
 using DST.Models.Builders;
+using System.Globalization;
 
 namespace DST.Models.Validation
 {
     public class EpochDateRangeAttribute : ValidationAttribute
     {
-        #region Properties
-
-        protected int Years => 1000;
-
-        #endregion
-
         #region Methods
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
@@ -21,7 +16,6 @@ namespace DST.Models.Validation
             ValidationResult result;
             IGeolocationBuilder geoBuilder;
             IDateTimeInfo dateTimeInfo;
-            IMutableDateTime epoch;
             DateTime minLocal;
             DateTime maxLocal;
 
@@ -32,9 +26,6 @@ namespace DST.Models.Validation
 
                 dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(geoBuilder.CurrentGeolocation.TimeZoneId);
 
-                epoch = DateTimeFactory.CreateMutable(DateTimeConstants.Epoch.Date, dateTimeInfo);
-                //minLocal = epoch.AddYears(-Years).ToLocalTime();
-                //maxLocal = epoch.AddYears(Years).ToLocalTime();
                 minLocal = DateTimeFactory.CreateMutable(DateTimeConstants.MinUtcDateTime, dateTimeInfo).ToLocalTime();
                 maxLocal = DateTimeFactory.CreateMutable(DateTimeConstants.MaxUtcDateTime, dateTimeInfo).ToLocalTime();
 
@@ -47,7 +38,7 @@ namespace DST.Models.Validation
                 }
 
                 string message = base.ErrorMessage ??
-                        $"The start date must be between {minLocal.ToShortDateString()} and {maxLocal.ToShortDateString()} for the current time zone.";
+                        $"The start date must be between {minLocal.ToString(CultureInfo.CurrentCulture)} and {maxLocal.ToString(CultureInfo.CurrentCulture)} for the current time zone.";
 
                 result = new ValidationResult(message);
             }
