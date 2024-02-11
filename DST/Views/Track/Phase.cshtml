@@ -85,7 +85,7 @@
                                 {
                                     <tr>
                                         <th scope="row">@resultNumber</th>
-                                        <td>@result.DateTime.ToString()</td>
+                                        <td>@result.DateTime.ToLocalTime().ToString()</td>
                                         <td>@result.Coordinate.Format(DST.Core.Coordinate.FormatType.Component)</td>
                                     </tr>
                                 }
