@@ -18,6 +18,7 @@ using DST.Models.DataLayer;
 using DST.Core.Trajectory;
 using DST.Core.TimeKeeper;
 using DST.Core.Vector;
+using System.Linq;
 
 namespace DST.Controllers
 {
@@ -300,6 +301,7 @@ namespace DST.Controllers
                 if (results is not null)
                 {
                     /* Format data for the viewmodel */
+                    results = results.Where(i => i is ILocalVector).ToArray();
                 }
 
                 // Force the client to resubmit the form
