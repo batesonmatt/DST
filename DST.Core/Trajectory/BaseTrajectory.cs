@@ -44,8 +44,11 @@ namespace DST.Core.Trajectory
             // Track the observer at the calculated date/time.
             ICoordinate position = _tracker.Track(finalDateTime);
 
+            // Get the datetime as an IMutableDateTime object.
+            IMutableDateTime mutableDateTime = DateTimeFactory.ConvertToMutable(finalDateTime);
+
             // The IVector, containing the date/time and position values.
-            return VectorFactory.Create(finalDateTime, position);
+            return VectorFactory.Create(mutableDateTime, position);
         }
 
         // Builds an array of date/time values in the underlying timescale, starting from the specified date/time value,
@@ -54,8 +57,18 @@ namespace DST.Core.Trajectory
         {
             _ = start ?? throw new ArgumentNullException(nameof(start));
 
+            IMutableDateTime mutableStart = DateTimeFactory.ConvertToMutable(start);
+
+            // Return an empty array if all possible datetimes in this period are out of range.
+            if ((mutableStart.IsMinValue() && cycles <= 0) || (mutableStart.IsMaxValue() && cycles >= 0))
+            {
+                return Array.Empty<IAstronomicalDateTime>();
+            }
+
+            // The number of cycles must be non-zero.
             if (cycles == 0)
             {
+                // There are no cycles to evaluate from the given starting date.
                 return new IAstronomicalDateTime[] { DateTimeFactory.ConvertToAstronomical(start) };
             }
 
