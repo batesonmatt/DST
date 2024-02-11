@@ -19,10 +19,19 @@ namespace DST.Core.DateTimesBuilder
 
             IMutableDateTime mutableStart = DateTimeFactory.ConvertToMutable(start);
 
-            List<IMutableDateTime> dateTimes = new()
+            // Return an empty array if all possible datetimes in this period are out of range.
+            if ((mutableStart.IsMinValue() && period <= 0) || (mutableStart.IsMaxValue() && period >= 0))
             {
-                mutableStart
-            };
+                return Array.Empty<IBaseDateTime>();
+            }
+
+            List<IMutableDateTime> dateTimes = new();
+
+            // Only add the starting datetime if it is in range.
+            if (!mutableStart.IsMinOrMaxValue())
+            {
+                dateTimes.Add(mutableStart);
+            }
 
             // The period length must be non-zero
             // The interval length must be positive and non-zero.
@@ -40,10 +49,26 @@ namespace DST.Core.DateTimesBuilder
             // The amount of time elapsed since the starting date/time value.
             int elapsed = signedInterval;
 
-            while (IsReady(dateTimes[dateTimes.Count - 1], elapsed, period))
+            // The datetime at the previous interval.
+            IMutableDateTime previous = mutableStart;
+
+            // The datetime at the next interval.
+            IMutableDateTime next;
+
+            // Attempt to calculate all datetimes in the period, at each interval.
+            while (IsReady(previous, elapsed, period))
             {
+                // Get the previous datetime.
+                previous = dateTimes.Count > 1 ? dateTimes[dateTimes.Count - 1] : mutableStart;
+
                 // Calculate the next datetime from the starting datetime using the total elapsed time.
-                dateTimes.Add(_dateTimeAdder.Add(mutableStart, elapsed));
+                next = _dateTimeAdder.Add(mutableStart, elapsed);
+
+                // Only add valid datetimes to the list.
+                if (!next.IsMinOrMaxValue())
+                {
+                    dateTimes.Add(next);
+                }
 
                 // Advance the elapsed time by the interval length.
                 elapsed += signedInterval;
