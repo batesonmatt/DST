@@ -59,10 +59,19 @@ namespace DST.Core.LocalHourAngleDateTime
 
             // The total hours offset starts from midnight (00:00:00) on the specified date.
             // Use DateTime.Date to truncate the time component.
-            // Convert the hours back to mean solar time before adding to the date.
-            IMutableDateTime result = localObserver.DateTimeInfo
-                .ConvertTimeFromStandard(standardDateTime.Date)
-                .AddHours(totalHours * Constants.StellarToSolarRatio);
+            IMutableDateTime result = localObserver.DateTimeInfo.ConvertTimeFromStandard(standardDateTime.Date);
+
+#if DEBUG
+#warning Possible false positive may occur when the result of DateTime.Date exactly equals MinUtcDateTime or MaxUtcDateTime.
+#endif
+
+            // Calling DateTime.Date in the previous step could cause the value to fall out of range.
+            // Do not attempt to modify the min/max datetime value because it could lead to unexpected results.
+            if (!result.IsMinOrMaxValue())
+            {
+                // Convert the hours back to mean solar time before adding to the date.
+                result = result.AddHours(totalHours * Constants.StellarToSolarRatio);
+            }
 
             return DateTimeFactory.ConvertToAstronomical(result);
         }
