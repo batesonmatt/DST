@@ -62,7 +62,7 @@
 
             return Math.Sign(baseOffsetHours) switch
             {
-                >= 0 => DateTimeConstants.MinUtcDateTime,
+                >= 0 => DateTime.SpecifyKind(DateTimeConstants.MinUtcDateTime, DateTimeConstants.StandardKind),
                 _ => DateTime.SpecifyKind(DateTimeConstants.MinUtcDateTime.AddHours(baseOffsetHours), DateTimeConstants.StandardKind)
             };
         }
@@ -74,7 +74,7 @@
 
             return Math.Sign(baseOffsetHours) switch
             {
-                <= 0 => DateTimeConstants.MaxUtcDateTime,
+                <= 0 => DateTime.SpecifyKind(DateTimeConstants.MaxUtcDateTime, DateTimeConstants.StandardKind),
                 _ => DateTime.SpecifyKind(DateTimeConstants.MaxUtcDateTime.AddHours(baseOffsetHours), DateTimeConstants.StandardKind)
             };
         }
