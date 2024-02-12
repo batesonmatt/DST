@@ -57,6 +57,9 @@ namespace DST.Core.Tests
 
             // Assert
             Console.WriteLine("Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));");
+            Console.WriteLine("Assert.IsInstanceOfType(rise, typeof(LocalVector));");
+            Console.WriteLine("Assert.IsInstanceOfType(apex, typeof(LocalVector));");
+            Console.WriteLine("Assert.IsInstanceOfType(set, typeof(LocalVector));");
             Console.WriteLine("Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));");
             Console.WriteLine("Assert.IsFalse(riseSet.IsRising(dateTime));");
             Console.WriteLine("Assert.IsFalse(riseSet.IsSetting(dateTime));");
@@ -66,12 +69,93 @@ namespace DST.Core.Tests
             Console.WriteLine($"Assert.AreEqual({apexCoordinate.Components.Rotation.TotalDegrees}, apexCoordinate.Components.Rotation);");
             Console.WriteLine($"Assert.AreEqual({setCoordinate.Components.Inclination.TotalDegrees}, setCoordinate.Components.Inclination);");
             Console.WriteLine($"Assert.AreEqual({setCoordinate.Components.Rotation.TotalDegrees}, setCoordinate.Components.Rotation);");
-            Console.WriteLine($"Assert.AreEqual({rise.DateTime.Ticks}, riseDateTime.Ticks);");
-            Console.WriteLine($"Assert.AreEqual({apex.DateTime.Ticks}, apexDateTime.Ticks);");
-            Console.WriteLine($"Assert.AreEqual({set.DateTime.Ticks}, setDateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({rise.DateTime.Ticks}, rise.DateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({apex.DateTime.Ticks}, apex.DateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({set.DateTime.Ticks}, set.DateTime.Ticks);");
             Console.WriteLine($"Assert.AreEqual({localRiseDateTime.Ticks}, localRiseDateTime.Ticks);");
             Console.WriteLine($"Assert.AreEqual({localApexDateTime.Ticks}, localApexDateTime.Ticks);");
             Console.WriteLine($"Assert.AreEqual({localSetDateTime.Ticks}, localSetDateTime.Ticks);");
+        }
+
+        private static void UnitTest_TrackerDateRange_Harness()
+        {
+            // Arrange
+
+            // LAT: 40.783333°, LON: -73.966667° (Manhattan, New York)
+            IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
+                longitude: new Angle(-73.966667), latitude: new Angle(40.783333));
+
+            // RA: 5.5881389hr, DEC: -5.3911111° (M42 - Orion Nebula)
+            IEquatorialCoordinate m42 = CoordinateFactory.CreateEquatorial(
+                rightAscension: new Angle(TimeSpan.FromHours(5.5881389)), declination: new Angle(-5.3911111));
+
+            // Eastern Time - US & Canada (IANA: Eastern Standard Time)
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Eastern Standard Time");
+
+            // Greenwich Mean Sidereal Time (GMST)
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
+            IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m42, timeKeeper);
+
+            // January 2, 0001, 12:00 AM (UTC) - January 1, 0001, 7:00 PM (Local)
+            IAstronomicalDateTime minDateTime = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.MinAstronomicalDateTime);
+
+            // December 30, 9999, 11:59:59 PM (UTC) - December 30, 9999, 6:59:59 PM (Local)
+            IAstronomicalDateTime maxDateTime = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.MaxAstronomicalDateTime);
+
+            bool t1 = maxDateTime.Value.Ticks == dateTimeInfo.MaxAstronomicalDateTime.Ticks;
+            bool t2 = maxDateTime.Value.Ticks == DateTimeConstants.MaxUtcDateTime.Ticks;
+            bool t3 = DateTimeConstants.MaxUtcDateTime.Ticks == dateTimeInfo.MaxAstronomicalDateTime.Ticks;
+
+            ITracker tracker = TrackerFactory.Create(observer);
+
+            // Act
+            ITrajectory trajectory = TrajectoryCalculator.Calculate(observer);
+            IRiseSetTrajectory riseSet = (IRiseSetTrajectory)trajectory;
+            ICoordinate minPosition = tracker.Track(minDateTime);
+            ICoordinate maxPosition = tracker.Track(minDateTime);
+            IVector minApex = riseSet.GetApex(minDateTime);
+            IVector maxApex = riseSet.GetApex(maxDateTime);
+            IVector[] minApexFuture = riseSet.GetApex(minDateTime, 1);
+            IVector[] maxApexPast = riseSet.GetApex(maxDateTime, -1);
+            
+            // Assert
+            Console.WriteLine("Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));");
+
+            Console.WriteLine("Assert.IsInstanceOfType(minPosition, typeof(NonTrackableCoordinate));");
+            Console.WriteLine("Assert.IsInstanceOfType(maxPosition, typeof(NonTrackableCoordinate));");
+
+            Console.WriteLine("Assert.AreEqual(0.0, minPosition.Components.Rotation);");
+            Console.WriteLine("Assert.AreEqual(0.0, minPosition.Components.Inclination);");
+            Console.WriteLine("Assert.AreEqual(0.0, maxPosition.Components.Rotation);");
+            Console.WriteLine("Assert.AreEqual(0.0, maxPosition.Components.Inclination);");
+
+            Console.WriteLine("Assert.IsInstanceOfType(minApex, typeof(NonTrackableVector));");
+            Console.WriteLine("Assert.IsInstanceOfType(maxApex, typeof(NonTrackableVector));");
+
+            Console.WriteLine("Assert.AreEqual(DateTimeConstants.MinUtcDateTime.Ticks, minApex.DateTime.Ticks);");
+            Console.WriteLine("Assert.AreEqual(DateTimeConstants.MaxUtcDateTime.Ticks, maxApex.DateTime.Ticks);");
+
+            Console.WriteLine("Assert.AreEqual(0.0, minApex.Coordinate.Components.Rotation);");
+            Console.WriteLine("Assert.AreEqual(0.0, minApex.Coordinate.Components.Inclination);");
+            Console.WriteLine("Assert.AreEqual(0.0, maxApex.Coordinate.Components.Rotation);");
+            Console.WriteLine("Assert.AreEqual(0.0, maxApex.Coordinate.Components.Inclination);");
+
+            Console.WriteLine("Assert.IsTrue(minApexFuture.Length == 1);");
+            Console.WriteLine("Assert.IsTrue(maxApexPast.Length == 1);");
+
+            Console.WriteLine("Assert.IsInstanceOfType(minApexFuture[0], typeof(LocalVector));");
+            Console.WriteLine("Assert.IsInstanceOfType(maxApexPast[0], typeof(LocalVector));");
+
+            Console.WriteLine("Assert.IsInstanceOfType(minApexFuture[0].Coordinate, typeof(HorizontalCoordinate));");
+            Console.WriteLine("Assert.IsInstanceOfType(maxApexPast[0].Coordinate, typeof(HorizontalCoordinate));");
+
+            Console.WriteLine($"Assert.AreEqual({minApexFuture[0].DateTime.Ticks}, minApexFuture[0].DateTime.Ticks);");
+            Console.WriteLine($"Assert.AreEqual({maxApexPast[0].DateTime.Ticks}, maxApexPast[0].DateTime.Ticks);");
+
+            Console.WriteLine($"Assert.AreEqual({minApexFuture[0].Coordinate.Components.Rotation.TotalDegrees}, minApexFuture[0].Coordinate.Components.Rotation);");
+            Console.WriteLine($"Assert.AreEqual({minApexFuture[0].Coordinate.Components.Inclination.TotalDegrees}, minApexFuture[0].Coordinate.Components.Inclination);");
+            Console.WriteLine($"Assert.AreEqual({maxApexPast[0].Coordinate.Components.Rotation.TotalDegrees}, maxApexPast[0].Coordinate.Components.Rotation);");
+            Console.WriteLine($"Assert.AreEqual({maxApexPast[0].Coordinate.Components.Inclination.TotalDegrees}, maxApexPast[0].Coordinate.Components.Inclination);");
         }
 
         private static void TestTrack()
@@ -406,6 +490,8 @@ namespace DST.Core.Tests
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
             //UnitTest_TrackVector_Harness();
+
+            UnitTest_TrackerDateRange_Harness();
 
             Console.ReadLine();
         }
