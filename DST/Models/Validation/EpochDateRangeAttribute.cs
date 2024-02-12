@@ -26,8 +26,8 @@ namespace DST.Models.Validation
 
                 dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(geoBuilder.CurrentGeolocation.TimeZoneId);
 
-                minLocal = DateTimeFactory.CreateMutable(DateTimeConstants.MinUtcDateTime, dateTimeInfo).ToLocalTime();
-                maxLocal = DateTimeFactory.CreateMutable(DateTimeConstants.MaxUtcDateTime, dateTimeInfo).ToLocalTime();
+                minLocal = dateTimeInfo.MinAstronomicalDateTime.ToLocalTime();
+                maxLocal = dateTimeInfo.MaxAstronomicalDateTime.ToLocalTime();
 
                 if (value is DateTime dateTime)
                 {
