@@ -117,7 +117,7 @@ namespace DST.Core.DateAndTime
                 }
             }
 
-            // The final UTC date and time value on the correct calendar.
+            // The final UTC date and time value, to the nearest millisecond, on the correct calendar.
             DateTime result = new(
                 year,
                 month,
@@ -128,6 +128,15 @@ namespace DST.Core.DateAndTime
                 time.Milliseconds,
                 DateTimeConstants.Calendar,
                 DateTimeKind.Utc);
+
+            // Add the remaining fractional seconds from the adjusted time of day, if any.
+            if (time > result.TimeOfDay)
+            {
+                if (time <= max.TimeOfDay)
+                {
+                    result = result.AddTicks(time.Ticks - result.TimeOfDay.Ticks);
+                }
+            }
 
             return result;
         }
