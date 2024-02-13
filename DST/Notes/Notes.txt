@@ -44,7 +44,7 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 
 *******************************************************************************************************
 
-Consider a new Unit Test that tests a INonTrackableCoordinate/INonTrackableVector
+Consider using Remote validation attributes instead.
 
 Consider class-level validation (IValidatableObject) for TrackPhaseModel and TrackPeriodModel.
 - Need to validate Cycles does not go beyond the min/max (Or just display the number results that were tracked before running out of bounds)
