@@ -32,7 +32,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 18, 2023, 6:00 PM
-            DateTime localDateTime = new(2023, 8, 18, 18, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 18, 18, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -91,7 +91,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 AM
-            DateTime localDateTime = new(2023, 8, 19, 1, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 1, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -150,7 +150,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 6:00 AM
-            DateTime localDateTime = new(2023, 8, 19, 6, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 6, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -209,7 +209,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 PM
-            DateTime localDateTime = new(2023, 8, 19, 13, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 13, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -268,7 +268,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 18, 2023, 6:00 PM
-            DateTime localDateTime = new(2023, 8, 18, 18, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 18, 18, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -327,7 +327,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 AM
-            DateTime localDateTime = new(2023, 8, 19, 1, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 1, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -386,7 +386,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 6:00 AM
-            DateTime localDateTime = new(2023, 8, 19, 6, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 6, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -445,7 +445,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 PM
-            DateTime localDateTime = new(2023, 8, 19, 13, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 13, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -504,7 +504,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 18, 2023, 6:00 PM
-            DateTime localDateTime = new(2023, 8, 18, 18, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 18, 18, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -563,7 +563,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 AM
-            DateTime localDateTime = new(2023, 8, 19, 1, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 1, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -622,7 +622,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 6:00 AM
-            DateTime localDateTime = new(2023, 8, 19, 6, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 6, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -681,7 +681,7 @@ namespace DST.Core.UnitTests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 PM
-            DateTime localDateTime = new(2023, 8, 19, 13, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 13, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act

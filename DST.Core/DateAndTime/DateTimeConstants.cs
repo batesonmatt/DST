@@ -31,7 +31,7 @@ namespace DST.Core.DateAndTime
         // This value is positive.
         public static long MaxEpochTickSpan => MaxUtcDateTime.Ticks - Epoch.Ticks;
 
-        // Gets the DateTimeKind value intended for use with standardized local DateTime values.
+        // Gets the DateTimeKind value intended for use with the client's local and standardized local DateTime values.
         public static DateTimeKind StandardKind => DateTimeKind.Unspecified;
     }
 }

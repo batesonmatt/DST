@@ -62,7 +62,7 @@ namespace DST.Core.Tests
 
                 // March 12, 2:00 am
                 // November 5, 2:00 am
-                local = new(2023, 3, 12, 0, 30, 0, DateTimeKind.Unspecified);
+                local = new(2023, 3, 12, 0, 30, 0, DateTimeConstants.StandardKind);
                 mutable = DateTimeFactory.CreateMutable(local, info);
                 for (int i = 0; i < 4; i++)
                 {

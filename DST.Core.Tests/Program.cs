@@ -34,7 +34,7 @@ namespace DST.Core.Tests
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 PM
-            DateTime localDateTime = new(2023, 8, 19, 13, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 13, 0, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             // Act
@@ -221,7 +221,7 @@ namespace DST.Core.Tests
             //IAstronomicalDateTime start = DateTimeFactory.ConvertToAstronomical(dateTimeInfo.Now);
 
             // August 19, 2023, 1:00 AM
-            DateTime localDateTime = new(2023, 8, 19, 1, 0, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(2023, 8, 19, 1, 0, 0, DateTimeConstants.StandardKind);
 
             //AstronomicalDateTime start = new(new DateTime(2023, 10, 1, 22, 0, 0), dateTimeInfo);
             IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);

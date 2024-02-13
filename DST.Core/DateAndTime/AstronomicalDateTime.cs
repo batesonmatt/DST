@@ -278,7 +278,7 @@ namespace DST.Core.DateAndTime
 
             // The DateTimeKind needs to be explicitly set to Unspecified.
             // No need to check bounds here, since Info.Min- and MaxStandardDateTime are built on the BaseUtcOffset values.
-            DateTime standard = DateTime.SpecifyKind(Value.AddHours(Info.BaseUtcOffset.TotalHours), DateTimeKind.Unspecified);
+            DateTime standard = DateTime.SpecifyKind(Value.AddHours(Info.BaseUtcOffset.TotalHours), DateTimeConstants.StandardKind);
 
             return standard;
         }

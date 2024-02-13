@@ -29,7 +29,7 @@ namespace DST.Core.UnitTests
             ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m13, timeKeeper);
 
-            DateTime localDateTime = new(1998, 8, 10, 18, 10, 0, DateTimeKind.Unspecified);
+            DateTime localDateTime = new(1998, 8, 10, 18, 10, 0, DateTimeConstants.StandardKind);
             IAstronomicalDateTime dateTime = DateTimeFactory.CreateAstronomical(localDateTime, dateTimeInfo);
 
             IMutableDateTime mutable = DateTimeFactory.ConvertToMutable(dateTime);
