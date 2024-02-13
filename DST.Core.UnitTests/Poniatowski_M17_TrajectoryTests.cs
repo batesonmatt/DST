@@ -56,18 +56,18 @@ namespace DST.Core.UnitTests
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsTrue(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-1.3534889831134933E-06, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20361429890583, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.823333299999966, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(179.9999973001307, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(1.818674639018307E-06, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.79638224975324, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279915944970000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280090994350000, apex.DateTime.Ticks);
-            Assert.AreEqual(638280266043730000, set.DateTime.Ticks);
-            Assert.AreEqual(638279735944970000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638279910994350000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280086043730000, localSetDateTime.Ticks);
+            Assert.AreEqual(-1.4927081792848185E-10, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.2036157713509, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.823333300000005, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(180.0, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(1.9282907895042935E-10, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.7963842282769, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638279915944974984, rise.DateTime.Ticks);
+            Assert.AreEqual(638280090994355841, apex.DateTime.Ticks);
+            Assert.AreEqual(638280266043736697, set.DateTime.Ticks);
+            Assert.AreEqual(638279735944974984, localRiseDateTime.Ticks);
+            Assert.AreEqual(638279910994355841, localApexDateTime.Ticks);
+            Assert.AreEqual(638280086043736697, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -115,18 +115,18 @@ namespace DST.Core.UnitTests
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsTrue(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-1.3534889831134933E-06, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20361429890583, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.823333299999966, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(179.9999973001307, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(1.818674639018307E-06, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.79638224975324, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279915944970000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280090994350000, apex.DateTime.Ticks);
-            Assert.AreEqual(638280266043730000, set.DateTime.Ticks);
-            Assert.AreEqual(638279735944970000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638279910994350000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280086043730000, localSetDateTime.Ticks);
+            Assert.AreEqual(1.2263741768521101E-10, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20361577164672, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.823333300000005, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(180.0, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(1.9282907895042935E-10, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.7963842282769, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638279915944974985, rise.DateTime.Ticks);
+            Assert.AreEqual(638280090994355841, apex.DateTime.Ticks);
+            Assert.AreEqual(638280266043736697, set.DateTime.Ticks);
+            Assert.AreEqual(638279735944974985, localRiseDateTime.Ticks);
+            Assert.AreEqual(638279910994355841, localApexDateTime.Ticks);
+            Assert.AreEqual(638280086043736697, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -174,18 +174,18 @@ namespace DST.Core.UnitTests
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-7.952661462695687E-08, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20361568498768, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(-2.3794655135134235E-10, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20361577125443, riseCoordinate.Components.Rotation);
             Assert.AreEqual(28.823333300000005, apexCoordinate.Components.Inclination);
             Assert.AreEqual(180.0, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(5.447134944178376E-07, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.79638363583382, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280777585880000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280952635260000, apex.DateTime.Ticks);
-            Assert.AreEqual(638281127684640000, set.DateTime.Ticks);
-            Assert.AreEqual(638280597585880000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638280772635260000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280947684640000, localSetDateTime.Ticks);
+            Assert.AreEqual(9.594143196634698E-12, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.79638422847626, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638280777585880292, rise.DateTime.Ticks);
+            Assert.AreEqual(638280952635261149, apex.DateTime.Ticks);
+            Assert.AreEqual(638281127684642006, set.DateTime.Ticks);
+            Assert.AreEqual(638280597585880292, localRiseDateTime.Ticks);
+            Assert.AreEqual(638280772635261149, localApexDateTime.Ticks);
+            Assert.AreEqual(638280947684642006, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -233,18 +233,18 @@ namespace DST.Core.UnitTests
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-7.952661462695687E-08, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20361568498768, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(-2.3794655135134235E-10, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20361577125443, riseCoordinate.Components.Rotation);
             Assert.AreEqual(28.823333300000005, apexCoordinate.Components.Inclination);
             Assert.AreEqual(180.0, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(5.447134944178376E-07, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.79638363583382, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280777585880000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280952635260000, apex.DateTime.Ticks);
-            Assert.AreEqual(638281127684640000, set.DateTime.Ticks);
-            Assert.AreEqual(638280597585880000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638280772635260000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280947684640000, localSetDateTime.Ticks);
+            Assert.AreEqual(9.594143196634698E-12, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.79638422847626, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638280777585880292, rise.DateTime.Ticks);
+            Assert.AreEqual(638280952635261149, apex.DateTime.Ticks);
+            Assert.AreEqual(638281127684642006, set.DateTime.Ticks);
+            Assert.AreEqual(638280597585880292, localRiseDateTime.Ticks);
+            Assert.AreEqual(638280772635261149, localApexDateTime.Ticks);
+            Assert.AreEqual(638280947684642006, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -292,18 +292,18 @@ namespace DST.Core.UnitTests
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsTrue(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-0.001760929803936051, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20523179008657, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.820941558589183, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(179.9999920365296, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(-0.001753770217874262, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.79475580753342, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279918144670000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280093194050000, apex.DateTime.Ticks);
-            Assert.AreEqual(638280268243430000, set.DateTime.Ticks);
-            Assert.AreEqual(638279738144670000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638279913194050000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280088243430000, localSetDateTime.Ticks);
+            Assert.AreEqual(-0.0017588493141715844, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20523405367713, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.820941558589325, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(179.9999946681853, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(-0.0017554662183556502, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.79475765279642, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638279918144677662, rise.DateTime.Ticks);
+            Assert.AreEqual(638280093194055389, apex.DateTime.Ticks);
+            Assert.AreEqual(638280268243436246, set.DateTime.Ticks);
+            Assert.AreEqual(638279738144677662, localRiseDateTime.Ticks);
+            Assert.AreEqual(638279913194055389, localApexDateTime.Ticks);
+            Assert.AreEqual(638280088243436246, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -351,18 +351,18 @@ namespace DST.Core.UnitTests
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsTrue(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-0.0017554991322867863, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.2052376987038, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.820941558589183, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(179.9999920365296, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(-0.001753770217874262, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.79475580753342, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279918144690000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280093194050000, apex.DateTime.Ticks);
-            Assert.AreEqual(638280268243430000, set.DateTime.Ticks);
-            Assert.AreEqual(638279738144690000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638279913194050000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280088243430000, localSetDateTime.Ticks);
+            Assert.AreEqual(-0.0017541455360969849, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20523917142812, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.820941558589325, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(179.9999946681853, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(-0.0017554662183556502, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.79475765279642, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638279918144694985, rise.DateTime.Ticks);
+            Assert.AreEqual(638280093194055389, apex.DateTime.Ticks);
+            Assert.AreEqual(638280268243436246, set.DateTime.Ticks);
+            Assert.AreEqual(638279738144694985, localRiseDateTime.Ticks);
+            Assert.AreEqual(638279913194055389, localApexDateTime.Ticks);
+            Assert.AreEqual(638280088243436246, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -410,18 +410,18 @@ namespace DST.Core.UnitTests
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-0.0017718321193456177, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20522870107384, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.820936809731055, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(179.9999904164146, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(-0.0017584803977683805, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.7947556539748, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280779785610000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280954835010000, apex.DateTime.Ticks);
-            Assert.AreEqual(638281129884400000, set.DateTime.Ticks);
-            Assert.AreEqual(638280599785610000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638280774835010000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280949884400000, localSetDateTime.Ticks);
+            Assert.AreEqual(-0.0017711046808699393, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20522949253298, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.82093680973136, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(179.99999502168694, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(-0.0017585618582529605, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.7947557426045, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638280779785612679, rise.DateTime.Ticks);
+            Assert.AreEqual(638280954835019443, apex.DateTime.Ticks);
+            Assert.AreEqual(638281129884400300, set.DateTime.Ticks);
+            Assert.AreEqual(638280599785612679, localRiseDateTime.Ticks);
+            Assert.AreEqual(638280774835019443, localApexDateTime.Ticks);
+            Assert.AreEqual(638280949884400300, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -469,18 +469,18 @@ namespace DST.Core.UnitTests
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-0.0017691167839757327, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20523165538161, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.820936809731055, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(179.9999904164146, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(-0.0017584803977683805, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.7947556539748, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280779785620000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280954835010000, apex.DateTime.Ticks);
-            Assert.AreEqual(638281129884400000, set.DateTime.Ticks);
-            Assert.AreEqual(638280599785620000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638280774835010000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280949884400000, localSetDateTime.Ticks);
+            Assert.AreEqual(-0.0017664527663896479, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20523455385516, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.82093680973136, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(179.99999502168694, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(-0.0017585618582529605, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.7947557426045, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638280779785629811, rise.DateTime.Ticks);
+            Assert.AreEqual(638280954835019443, apex.DateTime.Ticks);
+            Assert.AreEqual(638281129884400300, set.DateTime.Ticks);
+            Assert.AreEqual(638280599785629811, localRiseDateTime.Ticks);
+            Assert.AreEqual(638280774835019443, localApexDateTime.Ticks);
+            Assert.AreEqual(638280949884400300, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -528,18 +528,18 @@ namespace DST.Core.UnitTests
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsTrue(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-1.10436832301275E-06, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20361456995118, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.823333299999998, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(180.0, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(8.364977097077653E-07, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.7963833183701, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279915949040000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280090998440000, apex.DateTime.Ticks);
-            Assert.AreEqual(638280266047830000, set.DateTime.Ticks);
-            Assert.AreEqual(638279735949040000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638279910998440000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280086047830000, localSetDateTime.Ticks);
+            Assert.AreEqual(-2.5853182705759536E-07, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20361549022847, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.823333299999994, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(180.00000147877932, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(-1.824563582886185E-06, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.79638621362733, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638279915949043115, rise.DateTime.Ticks);
+            Assert.AreEqual(638280090998441933, apex.DateTime.Ticks);
+            Assert.AreEqual(638280266047839800, set.DateTime.Ticks);
+            Assert.AreEqual(638279735949043115, localRiseDateTime.Ticks);
+            Assert.AreEqual(638279910998441933, localApexDateTime.Ticks);
+            Assert.AreEqual(638280086047839800, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -587,18 +587,18 @@ namespace DST.Core.UnitTests
             Assert.IsTrue(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsTrue(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-3.8197376852622256E-06, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20361161560636, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.823333299999998, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(180.0, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(8.364977097077653E-07, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.7963833183701, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638279915949030000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280090998440000, apex.DateTime.Ticks);
-            Assert.AreEqual(638280266047830000, set.DateTime.Ticks);
-            Assert.AreEqual(638279735949030000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638279910998440000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280086047830000, localSetDateTime.Ticks);
+            Assert.AreEqual(-1.5681544596191088E-06, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20361406534792, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.823333299999994, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(180.00000147877932, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(-1.824563582886185E-06, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.79638621362733, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638279915949038292, rise.DateTime.Ticks);
+            Assert.AreEqual(638280090998441933, apex.DateTime.Ticks);
+            Assert.AreEqual(638280266047839800, set.DateTime.Ticks);
+            Assert.AreEqual(638279735949038292, localRiseDateTime.Ticks);
+            Assert.AreEqual(638279910998441933, localApexDateTime.Ticks);
+            Assert.AreEqual(638280086047839800, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -646,18 +646,18 @@ namespace DST.Core.UnitTests
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(1.0357751708513037E-06, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20361689844549, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.823333300000005, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(180.0, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(-1.7875167941383552E-06, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.79638617332012, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280777590020000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280952639410000, apex.DateTime.Ticks);
-            Assert.AreEqual(638281127688810000, set.DateTime.Ticks);
-            Assert.AreEqual(638280597590020000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638280772639410000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280947688810000, localSetDateTime.Ticks);
+            Assert.AreEqual(2.0999280186745806E-06, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20361805625284, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.823333299999987, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(180.00000190909591, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(-2.3083229621079226E-06, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.7963867399616, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638280777590023919, rise.DateTime.Ticks);
+            Assert.AreEqual(638280952639414052, apex.DateTime.Ticks);
+            Assert.AreEqual(638281127688811918, set.DateTime.Ticks);
+            Assert.AreEqual(638280597590023919, localRiseDateTime.Ticks);
+            Assert.AreEqual(638280772639414052, localApexDateTime.Ticks);
+            Assert.AreEqual(638280947688811918, localSetDateTime.Ticks);
         }
 
         [TestMethod]
@@ -705,18 +705,18 @@ namespace DST.Core.UnitTests
             Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));
             Assert.IsFalse(riseSet.IsRising(dateTime));
             Assert.IsFalse(riseSet.IsSetting(dateTime));
-            Assert.AreEqual(-1.6795930264379422E-06, riseCoordinate.Components.Inclination);
-            Assert.AreEqual(113.20361394410183, riseCoordinate.Components.Rotation);
-            Assert.AreEqual(28.823333300000005, apexCoordinate.Components.Inclination);
-            Assert.AreEqual(180.0, apexCoordinate.Components.Rotation);
-            Assert.AreEqual(-1.7875167941383552E-06, setCoordinate.Components.Inclination);
-            Assert.AreEqual(246.79638617332012, setCoordinate.Components.Rotation);
-            Assert.AreEqual(638280777590010000, rise.DateTime.Ticks);
-            Assert.AreEqual(638280952639410000, apex.DateTime.Ticks);
-            Assert.AreEqual(638281127688810000, set.DateTime.Ticks);
-            Assert.AreEqual(638280597590010000, localRiseDateTime.Ticks);
-            Assert.AreEqual(638280772639410000, localApexDateTime.Ticks);
-            Assert.AreEqual(638280947688810000, localSetDateTime.Ticks);
+            Assert.AreEqual(7.474029655681191E-07, riseCoordinate.Components.Inclination);
+            Assert.AreEqual(113.20361658469407, riseCoordinate.Components.Rotation);
+            Assert.AreEqual(28.823333299999987, apexCoordinate.Components.Inclination);
+            Assert.AreEqual(180.00000190909591, apexCoordinate.Components.Rotation);
+            Assert.AreEqual(-2.3083229621079226E-06, setCoordinate.Components.Inclination);
+            Assert.AreEqual(246.7963867399616, setCoordinate.Components.Rotation);
+            Assert.AreEqual(638280777590018938, rise.DateTime.Ticks);
+            Assert.AreEqual(638280952639414052, apex.DateTime.Ticks);
+            Assert.AreEqual(638281127688811918, set.DateTime.Ticks);
+            Assert.AreEqual(638280597590018938, localRiseDateTime.Ticks);
+            Assert.AreEqual(638280772639414052, localApexDateTime.Ticks);
+            Assert.AreEqual(638280947688811918, localSetDateTime.Ticks);
         }
     }
 }

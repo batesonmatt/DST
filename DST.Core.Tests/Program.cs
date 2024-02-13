@@ -18,19 +18,19 @@ namespace DST.Core.Tests
         {
             // Arrange
 
-            // LAT: -30.0, LON: -60.0 (San Javier, Santa Fe, Argentina)
+            // LAT: 45.0, LON: 90.0 (Xinjiang, China)
             IGeographicCoordinate location = CoordinateFactory.CreateGeographic(
-                longitude: new Angle(-60.0), latitude: new Angle(-30.0));
+                longitude: new Angle(90.0), latitude: new Angle(45.0));
 
             // RA: 18.3405556hr, DEC: -16.1766667° (M17)
             IEquatorialCoordinate m17 = CoordinateFactory.CreateEquatorial(
                 rightAscension: new Angle(TimeSpan.FromHours(18.3405556)), declination: new Angle(-16.1766667));
 
-            // Argentina Standard Time (IANA: America/Buenos_Aires)
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Buenos_Aires");
+            // China Standard Time (IANA: Asia/Shanghai)
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("Asia/Shanghai");
 
-            // Greenwich Mean Sidereal Time (GMST)
-            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.GMST);
+            // Earth Rotation Angle (ERA)
+            ITimeKeeper timeKeeper = TimeKeeperFactory.Create(Algorithm.ERA);
             IObserver observer = ObserverFactory.Create(dateTimeInfo, location, m17, timeKeeper);
 
             // August 19, 2023, 1:00 PM
@@ -50,19 +50,19 @@ namespace DST.Core.Tests
             DateTime localApexDateTime = apex.DateTime.ToLocalTime();
             DateTime localSetDateTime = set.DateTime.ToLocalTime();
 
-            bool isRiseSet = trajectory is IRiseSetTrajectory;
-            bool isNotAboveHorizon = !riseSet.IsAboveHorizon(dateTime);
-            bool isNotRising = !riseSet.IsRising(dateTime);
-            bool isNotSetting = !riseSet.IsSetting(dateTime);
+            //bool isRiseSet = trajectory is IRiseSetTrajectory;
+            //bool isNotAboveHorizon = !riseSet.IsAboveHorizon(dateTime);
+            //bool isNotRising = !riseSet.IsRising(dateTime);
+            //bool isNotSetting = !riseSet.IsSetting(dateTime);
 
             // Assert
-            Console.WriteLine("Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));");
-            Console.WriteLine("Assert.IsInstanceOfType(rise, typeof(LocalVector));");
-            Console.WriteLine("Assert.IsInstanceOfType(apex, typeof(LocalVector));");
-            Console.WriteLine("Assert.IsInstanceOfType(set, typeof(LocalVector));");
-            Console.WriteLine("Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));");
-            Console.WriteLine("Assert.IsFalse(riseSet.IsRising(dateTime));");
-            Console.WriteLine("Assert.IsFalse(riseSet.IsSetting(dateTime));");
+            //Console.WriteLine("Assert.IsInstanceOfType(trajectory, typeof(RiseSetTrajectory));");
+            //Console.WriteLine("Assert.IsInstanceOfType(rise, typeof(LocalVector));");
+            //Console.WriteLine("Assert.IsInstanceOfType(apex, typeof(LocalVector));");
+            //Console.WriteLine("Assert.IsInstanceOfType(set, typeof(LocalVector));");
+            //Console.WriteLine("Assert.IsFalse(riseSet.IsAboveHorizon(dateTime));");
+            //Console.WriteLine("Assert.IsFalse(riseSet.IsRising(dateTime));");
+            //Console.WriteLine("Assert.IsFalse(riseSet.IsSetting(dateTime));");
             Console.WriteLine($"Assert.AreEqual({riseCoordinate.Components.Inclination.TotalDegrees}, riseCoordinate.Components.Inclination);");
             Console.WriteLine($"Assert.AreEqual({riseCoordinate.Components.Rotation.TotalDegrees}, riseCoordinate.Components.Rotation);");
             Console.WriteLine($"Assert.AreEqual({apexCoordinate.Components.Inclination.TotalDegrees}, apexCoordinate.Components.Inclination);");
@@ -489,9 +489,8 @@ namespace DST.Core.Tests
             //TestTrackVectors();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
-            //UnitTest_TrackVector_Harness();
-
-            UnitTest_TrackerDateRange_Harness();
+            UnitTest_TrackVector_Harness();
+            //UnitTest_TrackerDateRange_Harness();
 
             Console.ReadLine();
         }

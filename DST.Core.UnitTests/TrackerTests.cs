@@ -105,9 +105,9 @@ namespace DST.Core.UnitTests
             Assert.IsTrue(minApexFuture.Length == 1);
             Assert.IsInstanceOfType(minApexFuture[0], typeof(LocalVector));
             Assert.IsInstanceOfType(minApexFuture[0].Coordinate, typeof(HorizontalCoordinate));
-            Assert.AreEqual(1861360670000, minApexFuture[0].DateTime.Ticks);
-            Assert.AreEqual(179.9999950954438, minApexFuture[0].Coordinate.Components.Rotation);
-            Assert.AreEqual(43.8255558999999, minApexFuture[0].Coordinate.Components.Inclination);
+            Assert.AreEqual(1861360678428, minApexFuture[0].DateTime.Ticks);
+            Assert.AreEqual(179.99999879258172, minApexFuture[0].Coordinate.Components.Rotation);
+            Assert.AreEqual(43.82555590000001, minApexFuture[0].Coordinate.Components.Inclination);
         }
 
         [TestMethod]
@@ -148,17 +148,15 @@ namespace DST.Core.UnitTests
             Assert.AreEqual(0.0, maxPosition.Components.Rotation);
             Assert.AreEqual(0.0, maxPosition.Components.Inclination);
             Assert.IsInstanceOfType(maxApex, typeof(NonTrackableVector));
-
             Assert.AreEqual(DateTimeConstants.MaxUtcDateTime.Ticks, maxApex.DateTime.Ticks);
-
             Assert.AreEqual(0.0, maxApex.Coordinate.Components.Rotation);
             Assert.AreEqual(0.0, maxApex.Coordinate.Components.Inclination);
             Assert.IsTrue(maxApexPast.Length == 1);
             Assert.IsInstanceOfType(maxApexPast[0], typeof(LocalVector));
             Assert.IsInstanceOfType(maxApexPast[0].Coordinate, typeof(HorizontalCoordinate));
-            Assert.AreEqual(3155377385208660000, maxApexPast[0].DateTime.Ticks);
-            Assert.AreEqual(179.99999692167535, maxApexPast[0].Coordinate.Components.Rotation);
-            Assert.AreEqual(43.82555589999997, maxApexPast[0].Coordinate.Components.Inclination);
+            Assert.AreEqual(3155377385208665045, maxApexPast[0].DateTime.Ticks);
+            Assert.AreEqual(179.99999879258172, maxApexPast[0].Coordinate.Components.Rotation);
+            Assert.AreEqual(43.82555590000001, maxApexPast[0].Coordinate.Components.Inclination);
         }
     }
 }
