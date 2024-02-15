@@ -45,6 +45,22 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 *******************************************************************************************************
 
 Consider using Remote validation attributes instead.
+- Use ValidationController for remote validation.
+- Call a static method in Utilities for both server-side and client-side validation.
+
+Need a new Phase form control (checkbox/radio) for allowing the user to select only a single phase result vs. a number of cycles.
+- If single tracking is enabled, default Cycles to 0 and disable the Cycles input control.
+- Otherwise, enable the Cycles input control.
+
+Need to disable certain Phase type options in the form depending on the object's trajectory.
+- This may be done server-side in the Phase GET action.
+- If the object is Never Rise, disable the form (or just don't generate it) 
+  and display a message stating, "This object has no trackable rise, set, nor apex positions because it is never visible from your location."
+- If the object is Circumpolar (Is ICircumpolarTrajectory and is not IVariableTrajectory - i.e., not CircumpolarOffset)
+  Display, "This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no change in altitude."
+- If the object is CircumpolarOffset (Is ICircumpolar and IVariableTrajectory; is not IRiseSetTrajectory)
+  Disable Rise and Set phase options, and only allow Apex. (Default to Apex, or only populate the Apex option)
+  Display, "This object has no trackable rise nor set positions because it is circumpolar from your location with variation in altitude."
 
 Consider class-level validation (IValidatableObject) for TrackPhaseModel and TrackPeriodModel.
 - Need to validate Cycles does not go beyond the min/max (Or just display the number results that were tracked before running out of bounds)
@@ -109,7 +125,6 @@ Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteB
 
 Validation
 - The Start segment will be treated in the client's local time
-- The Start segment must be validated within +-1000 years of the J2000 Epoch
 - The initial validation in the route classes (TrackPhaseRoute.Validate() and TrackPeriodRoute.Validate())
   will only perform basic validation, but are not responsible for determining timezone checks for local/UTC conversions.
   See SearchController.List() for an example of how the SearchRoute values are initially validated, modified,
@@ -135,6 +150,7 @@ Consider a Bootstrap OffCanvas for the Geolocation and Details partial views.
 Revise the JS files (wwwroot\js\...)
 - Consider separate files
 - Move the <script> declarations to _Layout?
+- Consider moving some of the scripts from _Layout into the views that need them. (See pg. 439 and 441)
 
 Consider removing TrackPhaseRoute routes = current.Clone(); from the Phase and Period views if not used.
 
