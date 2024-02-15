@@ -1,5 +1,6 @@
 ﻿using DST.Models.DataLayer.Query;
 using DST.Models.Validation;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -14,6 +15,7 @@ namespace DST.Models.DomainModels
         public string Phase { get; set; } = PhaseName.Default;
 
         [Required(ErrorMessage = "Please enter the start date.")]
+        [Remote("ValidateStartDate", "Track")]
         [EpochDateRange]
         public DateTime Start { get; set; }
 
