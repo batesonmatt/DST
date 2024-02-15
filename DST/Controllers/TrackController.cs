@@ -114,6 +114,21 @@ namespace DST.Controllers
             return RedirectToAction("Summary", values.ToDictionary());
         }
 
+        /* Do not use HttpPostAttribute. Move this to ValidationController. Use a static method in Utilities class. */
+        public JsonResult ValidateStartDate(DateTime start)
+        {
+            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(_geoBuilder.CurrentGeolocation.TimeZoneId);
+            DateTime minLocal = dateTimeInfo.MinAstronomicalDateTime.ToLocalTime();
+            DateTime maxLocal = dateTimeInfo.MaxAstronomicalDateTime.ToLocalTime();
+
+            if (start >= minLocal && start <= maxLocal)
+            {
+                return Json(true);
+            }
+
+            return Json($"The start date must be between {minLocal.ToString(CultureInfo.CurrentCulture)} and {maxLocal.ToString(CultureInfo.CurrentCulture)} for the current time zone.");
+        }
+
         [HttpGet]
         public ViewResult Summary(TrackSummaryRoute values)
         {
