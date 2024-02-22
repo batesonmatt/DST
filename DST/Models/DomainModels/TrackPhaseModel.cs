@@ -15,7 +15,7 @@ namespace DST.Models.DomainModels
         public string Phase { get; set; } = PhaseName.Default;
 
         [Required(ErrorMessage = "Please enter the start date.")]
-        [Remote("ValidateStartDate", "Track")]
+        [Remote("ValidateStartDate", "Validation")]
         [EpochDateRange]
         public DateTime Start { get; set; }
 
