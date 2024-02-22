@@ -47,6 +47,7 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 Consider using Remote validation attributes instead.
 - Use ValidationController for remote validation.
 - Call a static method in Utilities for both server-side and client-side validation.
+- Do this for all necessary track forms.
 
 Need a new Phase form control (checkbox/radio) for allowing the user to select only a single phase result vs. a number of cycles.
 - If single tracking is enabled, default Cycles to 0 and disable the Cycles input control.
