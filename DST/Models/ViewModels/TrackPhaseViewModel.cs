@@ -14,7 +14,7 @@ namespace DST.Models.ViewModels
         public TrackPhaseRoute CurrentRoute { get; set; }
         public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
         public IEnumerable<TrackPhaseItem> Phases { get; set; }
-        public TrackPhaseModel PhaseModel { get; set; }
+        public TrackPhaseModel TrackForm { get; set; }
         public IEnumerable<IVector> Results { get; set; }
 
         #endregion
