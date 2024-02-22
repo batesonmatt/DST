@@ -772,6 +772,33 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The start date must be a valid date and time value..
+        /// </summary>
+        public static string StartDateValidation {
+            get {
+                return ResourceManager.GetString("StartDateValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The start date must be between {0} and {1} for the current time zone..
+        /// </summary>
+        public static string StartDateValidationRange {
+            get {
+                return ResourceManager.GetString("StartDateValidationRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The start date is not valid for the current time zone..
+        /// </summary>
+        public static string StartDateValidationTimeZone {
+            get {
+                return ResourceManager.GetString("StartDateValidationTimeZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Altitude.
         /// </summary>
         public static string TargetAltitudeLong {

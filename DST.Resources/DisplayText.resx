@@ -433,6 +433,18 @@
     <value>Type</value>
     <comment>The display text for sorting by type.</comment>
   </data>
+  <data name="StartDateValidation" xml:space="preserve">
+    <value>The start date must be a valid date and time value.</value>
+    <comment>The generic display text for an invalid starting date.</comment>
+  </data>
+  <data name="StartDateValidationRange" xml:space="preserve">
+    <value>The start date must be between {0} and {1} for the current time zone.</value>
+    <comment>The formatted display text for a valid starting date range.</comment>
+  </data>
+  <data name="StartDateValidationTimeZone" xml:space="preserve">
+    <value>The start date is not valid for the current time zone.</value>
+    <comment>The display text for an invalid starting date for the client's time zone.</comment>
+  </data>
   <data name="TargetAltitudeLong" xml:space="preserve">
     <value>Altitude</value>
     <comment>The display text for a deep-sky object's altitude.</comment>
