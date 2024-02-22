@@ -10,11 +10,44 @@ using DST.Models.DataLayer.Query;
 using DST.Models.Extensions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 
 namespace DST.Models.BusinessLogic
 {
     public class Utilities
     {
+        // Returns a message indicating whether the specified DateTime value is valid for the client's time zone.
+        // Argument 'dateTime' is assumed to be represented in the client's local time.
+        // If 'dateTime' is valid, this returns an empty string.
+        public static string ValidateClientDateTime(DateTime dateTime, GeolocationModel geolocation)
+        {
+            string message = string.Empty;
+            IDateTimeInfo dateTimeInfo;
+            DateTime minLocal;
+            DateTime maxLocal;
+
+            try
+            {
+                dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(geolocation.TimeZoneId);
+                minLocal = dateTimeInfo.MinAstronomicalDateTime.ToLocalTime();
+                maxLocal = dateTimeInfo.MaxAstronomicalDateTime.ToLocalTime();
+
+                if (dateTime < minLocal || dateTime > maxLocal)
+                {
+                    message = string.Format(
+                        Resources.DisplayText.StartDateValidationRange, 
+                        minLocal.ToString(CultureInfo.CurrentCulture), 
+                        maxLocal.ToString(CultureInfo.CurrentCulture));
+                }
+            }
+            catch
+            {
+                message = Resources.DisplayText.StartDateValidationTimeZone;
+            }
+
+            return message;
+        }
+
         // Returns the current local DateTime in the client's timezone.
         public static DateTime GetClientDateTime(GeolocationModel geolocation)
         {
