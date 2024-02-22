@@ -41,22 +41,22 @@
 
     <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post">
         <div class="mb-3">
-            <label class="form-label" asp-for="PhaseModel.Algorithm">Timekeeping Algorithm</label>
-            <select id="select-phase-algorithm" class="form-control" asp-for="PhaseModel.Algorithm" asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", Model.PhaseModel.Algorithm))"></select>
+            <label class="form-label" asp-for="TrackForm.Algorithm">Timekeeping Algorithm</label>
+            <select id="select-phase-algorithm" class="form-control" asp-for="TrackForm.Algorithm" asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", Model.TrackForm.Algorithm))"></select>
         </div>
         <div class="mb-3">
-            <label class="form-label" asp-for="PhaseModel.Phase">Phase</label>
-            <select id="select-phase" class="form-control" asp-for="PhaseModel.Phase" asp-items="@(new SelectList(Model.Phases, "Id", "Text", Model.PhaseModel.Phase))"></select>
+            <label class="form-label" asp-for="TrackForm.Phase">Phase</label>
+            <select id="select-phase" class="form-control" asp-for="TrackForm.Phase" asp-items="@(new SelectList(Model.Phases, "Id", "Text", Model.TrackForm.Phase))"></select>
         </div>
         <div class="mb-3">
-            <label class="form-label" asp-for="PhaseModel.Start">Start</label>
-            <input id="input-phase-start" class="form-control" asp-for="PhaseModel.Start" type="datetime-local" value="@Model.PhaseModel.GetFormattedStart()" />
-            <span asp-validation-for="PhaseModel.Start" class="text-danger"></span>
+            <label class="form-label" asp-for="TrackForm.Start">Start</label>
+            <input id="input-phase-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
+            <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
         </div>
         <div class="mb-3">
-            <label class="form-label" asp-for="PhaseModel.Cycles">Cycles</label>
-            <input id="input-phase-cycles" class="form-control" asp-for="PhaseModel.Cycles" type="number" value="@Model.PhaseModel.Cycles" />
-            <span asp-validation-for="PhaseModel.Cycles" class="text-danger"></span>
+            <label class="form-label" asp-for="TrackForm.Cycles">Cycles</label>
+            <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles" />
+            <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
