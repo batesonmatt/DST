@@ -114,21 +114,6 @@ namespace DST.Controllers
             return RedirectToAction("Summary", values.ToDictionary());
         }
 
-        /* Do not use HttpPostAttribute. Move this to ValidationController. Use a static method in Utilities class. */
-        public JsonResult ValidateStartDate(DateTime start)
-        {
-            IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId(_geoBuilder.CurrentGeolocation.TimeZoneId);
-            DateTime minLocal = dateTimeInfo.MinAstronomicalDateTime.ToLocalTime();
-            DateTime maxLocal = dateTimeInfo.MaxAstronomicalDateTime.ToLocalTime();
-
-            if (start >= minLocal && start <= maxLocal)
-            {
-                return Json(true);
-            }
-
-            return Json($"The start date must be between {minLocal.ToString(CultureInfo.CurrentCulture)} and {maxLocal.ToString(CultureInfo.CurrentCulture)} for the current time zone.");
-        }
-
         [HttpGet]
         public ViewResult Summary(TrackSummaryRoute values)
         {
@@ -216,11 +201,11 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitPhase(TrackPhaseModel phaseModel, TrackPhaseRoute values)
+        public IActionResult SubmitPhase(TrackPhaseModel trackForm, TrackPhaseRoute values)
         {
             if (!ModelState.IsValid)
             {
-                //ModelState.AddModelError(nameof(phaseModel.Start), "bad");
+                //ModelState.AddModelError(nameof(trackForm.Start), "bad");
 
                 DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
 
@@ -231,7 +216,7 @@ namespace DST.Controllers
                     Algorithms = Utilities.GetAlgorithmItems(),
                     Phases = Utilities.GetPhaseItems(),
 
-                    PhaseModel = new TrackPhaseModel()
+                    TrackForm = new TrackPhaseModel()
                     {
                         Algorithm = values.Algorithm,
                         Phase = values.Phase,
@@ -248,16 +233,16 @@ namespace DST.Controllers
 
             /* perform validation */
 
-            values.SetAlgorithm(phaseModel.Algorithm);
-            values.SetPhase(phaseModel.Phase);
-            values.SetStart(phaseModel.GetTicks());
-            values.SetCycles(phaseModel.Cycles);
+            values.SetAlgorithm(trackForm.Algorithm);
+            values.SetPhase(trackForm.Phase);
+            values.SetStart(trackForm.GetTicks());
+            values.SetCycles(trackForm.Cycles);
 
             // Mark the entry as ready so we can calculate the results.
-            phaseModel.IsReady = true;
+            trackForm.IsReady = true;
 
             // Set the current phase entry.
-            _phaseBuilder.Current = phaseModel;
+            _phaseBuilder.Current = trackForm;
 
             // Save the phase entry to session state.
             _phaseBuilder.Save();
@@ -331,7 +316,7 @@ namespace DST.Controllers
                 Algorithms = Utilities.GetAlgorithmItems(),
                 Phases = Utilities.GetPhaseItems(),
 
-                PhaseModel = new TrackPhaseModel()
+                TrackForm = new TrackPhaseModel()
                 {
                     Algorithm = values.Algorithm,
                     Phase = values.Phase,
