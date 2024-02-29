@@ -46,7 +46,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label" asp-for="TrackForm.Phase">Phase</label>
-            <select id="select-phase" class="form-control" asp-for="TrackForm.Phase" asp-items="@(new SelectList(Model.Phases, "Id", "Text", Model.TrackForm.Phase))"></select>
+            <select id="select-phase" class="form-control" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
         </div>
         <div class="mb-3">
             <label class="form-label" asp-for="TrackForm.Start">Start</label>
