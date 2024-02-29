@@ -19,6 +19,8 @@ using DST.Core.Trajectory;
 using DST.Core.TimeKeeper;
 using DST.Core.Vector;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DST.Controllers
 {
@@ -208,13 +210,49 @@ namespace DST.Controllers
                 //ModelState.AddModelError(nameof(trackForm.Start), "bad");
 
                 DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
+                Algorithm algorithm = values.GetAlgorithm();
+                ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
+                ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
+
+                /* Build the Phases collection (IEnumerable<SelectListItem>) with disabled and selected items, if any. */
+
+                List<SelectListItem> phases = new();
+
+                if (trajectory is IRiseSetTrajectory)
+                {
+                    /* Include all phases. */
+                    /* Set Selected = true for values.Phase */
+                    phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == values.Phase));
+                    phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), PhaseName.Apex.ToKebabCase() == values.Phase));
+                    phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), PhaseName.Set.ToKebabCase() == values.Phase));
+                }
+                else if (trajectory is ICircumpolarTrajectory and not IVariableTrajectory)
+                {
+                    /* "This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no change in altitude." */
+                    /* Set Disabled = true for each Rise, Apex, and Set */
+                    /* Set Selected = true for values.Phase */
+                }
+                else if (trajectory is ICircumpolarTrajectory and IVariableTrajectory)
+                {
+                    /* "This object has no trackable rise nor set positions because it is circumpolar from your location with variation in altitude." */
+                    /* Set Disabled = true for Rise and Set
+                     * Set Selected = true for Apex */
+                    phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), selected: false, disabled: true));
+                    phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), selected: true));
+                    phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), selected: false, disabled: true));
+                }
+                else
+                {
+                    /* "This object has no trackable rise, set, nor apex positions because it is never visible from your location." */
+                    /* Do not include any phases. */
+                }
 
                 TrackPhaseViewModel viewModel = new()
                 {
                     Dso = dso,
                     CurrentRoute = values,
                     Algorithms = Utilities.GetAlgorithmItems(),
-                    Phases = Utilities.GetPhaseItems(),
+                    Phases = phases,
 
                     TrackForm = new TrackPhaseModel()
                     {
@@ -257,14 +295,9 @@ namespace DST.Controllers
             values.Validate();
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
-
-            /* Consider allowing Cycles = 0 for getting the next single phase. 
-             * Or, consider allowing an option for the user to choose to track successive Cycles.
-             */
-
-            /* Consider allowing client to choose "Now" or "Current Time" instead of entering a datetime.
-             * Or consider defaulting to the current client datetime.
-             */
+            Algorithm algorithm = values.GetAlgorithm();
+            ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
+            ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
             // Load the previous phase entry, if any.
             _phaseBuilder.Load();
@@ -274,10 +307,7 @@ namespace DST.Controllers
             // Calculate the phase tracking results if an entry was submitted.
             if (_phaseBuilder.Current.IsReady)
             {
-                Algorithm algorithm = values.GetAlgorithm();
-                ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
-                ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
-                IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical((DateTime)_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
+                IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
 
                 if (trajectory is IVariableTrajectory variableTrajectory)
                 {
@@ -308,13 +338,44 @@ namespace DST.Controllers
                 _phaseBuilder.Current.IsReady = false;
                 _phaseBuilder.Save();
             }
+            
+            /* Build the Phases collection (IEnumerable<SelectListItem>) with disabled and selected items, if any. */
+
+            List<SelectListItem> phases = new();
+
+            if (trajectory is IRiseSetTrajectory)
+            {
+                /* Include all phases. */
+                /* Set Selected = true for values.Phase */
+                phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == values.Phase));
+                phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), PhaseName.Apex.ToKebabCase() == values.Phase));
+                phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), PhaseName.Set.ToKebabCase() == values.Phase));
+            }
+            else if (trajectory is ICircumpolarTrajectory and not IVariableTrajectory)
+            {
+                /* "This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no change in altitude." */
+            }
+            else if (trajectory is ICircumpolarTrajectory and IVariableTrajectory)
+            {
+                /* "This object has no trackable rise nor set positions because it is circumpolar from your location with variation in altitude." */
+                /* Set Disabled = true for Rise and Set
+                 * Set Selected = true for Apex */
+                phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), selected: false, disabled: true));
+                phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), selected: true));
+                phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), selected: false, disabled: true));
+            }
+            else
+            {
+                /* "This object has no trackable rise, set, nor apex positions because it is never visible from your location." */
+                /* Do not include any phases. */
+            }
 
             TrackPhaseViewModel viewModel = new()
             {
                 Dso = dso,
                 CurrentRoute = values,
                 Algorithms = Utilities.GetAlgorithmItems(),
-                Phases = Utilities.GetPhaseItems(),
+                Phases = phases,
 
                 TrackForm = new TrackPhaseModel()
                 {
