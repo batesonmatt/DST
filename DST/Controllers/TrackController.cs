@@ -217,14 +217,18 @@ namespace DST.Controllers
                 /* Build the Phases collection (IEnumerable<SelectListItem>) with disabled and selected items, if any. */
 
                 List<SelectListItem> phases = new();
+                string selectedPhase = string.Empty;
 
                 if (trajectory is IRiseSetTrajectory)
                 {
                     /* Include all phases. */
                     /* Set Selected = true for values.Phase */
-                    phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == values.Phase));
-                    phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), PhaseName.Apex.ToKebabCase() == values.Phase));
-                    phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), PhaseName.Set.ToKebabCase() == values.Phase));
+
+                    selectedPhase = values.Phase;
+
+                    phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == selectedPhase));
+                    phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), PhaseName.Apex.ToKebabCase() == selectedPhase));
+                    phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), PhaseName.Set.ToKebabCase() == selectedPhase));
                 }
                 else if (trajectory is ICircumpolarTrajectory and not IVariableTrajectory)
                 {
@@ -237,6 +241,9 @@ namespace DST.Controllers
                     /* "This object has no trackable rise nor set positions because it is circumpolar from your location with variation in altitude." */
                     /* Set Disabled = true for Rise and Set
                      * Set Selected = true for Apex */
+
+                    selectedPhase = PhaseName.Apex.ToKebabCase();
+
                     phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), selected: false, disabled: true));
                     phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), selected: true));
                     phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), selected: false, disabled: true));
@@ -257,7 +264,7 @@ namespace DST.Controllers
                     TrackForm = new TrackPhaseModel()
                     {
                         Algorithm = values.Algorithm,
-                        Phase = values.Phase,
+                        Phase = selectedPhase,
                         Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
                         Cycles = values.Cycles
                     },
@@ -342,14 +349,18 @@ namespace DST.Controllers
             /* Build the Phases collection (IEnumerable<SelectListItem>) with disabled and selected items, if any. */
 
             List<SelectListItem> phases = new();
+            string selectedPhase = string.Empty;
 
             if (trajectory is IRiseSetTrajectory)
             {
                 /* Include all phases. */
                 /* Set Selected = true for values.Phase */
-                phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == values.Phase));
-                phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), PhaseName.Apex.ToKebabCase() == values.Phase));
-                phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), PhaseName.Set.ToKebabCase() == values.Phase));
+
+                selectedPhase = values.Phase;
+
+                phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == selectedPhase));
+                phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), PhaseName.Apex.ToKebabCase() == selectedPhase));
+                phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), PhaseName.Set.ToKebabCase() == selectedPhase));
             }
             else if (trajectory is ICircumpolarTrajectory and not IVariableTrajectory)
             {
@@ -360,6 +371,9 @@ namespace DST.Controllers
                 /* "This object has no trackable rise nor set positions because it is circumpolar from your location with variation in altitude." */
                 /* Set Disabled = true for Rise and Set
                  * Set Selected = true for Apex */
+
+                selectedPhase = PhaseName.Apex.ToKebabCase();
+
                 phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), selected: false, disabled: true));
                 phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), selected: true));
                 phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), selected: false, disabled: true));
@@ -380,7 +394,7 @@ namespace DST.Controllers
                 TrackForm = new TrackPhaseModel()
                 {
                     Algorithm = values.Algorithm,
-                    Phase = values.Phase,
+                    Phase = selectedPhase,
                     Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
                     Cycles = values.Cycles
                 },
