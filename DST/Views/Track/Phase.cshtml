@@ -39,33 +39,45 @@
         @* <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a> *@
     </nav>
 
-    <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post">
+    @if (Model.HasWarning())
+    {
         <div class="mb-3">
-            <label class="form-label" asp-for="TrackForm.Algorithm">Timekeeping Algorithm</label>
-            <select id="select-phase-algorithm" class="form-control" asp-for="TrackForm.Algorithm" asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", Model.TrackForm.Algorithm))"></select>
+            <label class="form-label text-warning">@Model.WarningMessage</label>
         </div>
-        <div class="mb-3">
-            <label class="form-label" asp-for="TrackForm.Phase">Phase</label>
-            <select id="select-phase" class="form-control" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" asp-for="TrackForm.Start">Start</label>
-            <input id="input-phase-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
-            <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" asp-for="TrackForm.Cycles">Cycles</label>
-            <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles" />
-            <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
-        </div>
-    </form>
+    }
 
-    <div class="mb-3">
-        @if (Model.Results is not null && Model.Results.Any())
-        {
+    @if (Model.IsTrackingSupported())
+    {
+        <div class="mb-3">
+            <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="mb-3">
+                    <label class="form-label" asp-for="TrackForm.Algorithm">Timekeeping Algorithm</label>
+                    <select id="select-phase-algorithm" class="form-control" asp-for="TrackForm.Algorithm" asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", Model.TrackForm.Algorithm))"></select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="TrackForm.Phase">Phase</label>
+                    <select id="select-phase" class="form-control" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="TrackForm.Start">Start</label>
+                    <input id="input-phase-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
+                    <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="TrackForm.Cycles">Cycles</label>
+                    <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles" />
+                    <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
+                </div>
+            </form>
+        </div>
+    }
+
+    @if (Model.HasResults())
+    {
+        <div class="mb-3">
             <div class="table-responsive">
                 <table class="table table-striped caption-top align-middle">
                     <caption>Track results</caption>
@@ -95,6 +107,6 @@
                     </tbody>
                 </table>
             </div>
-        }
-    </div>
+        </div>
+    }
 </div>
