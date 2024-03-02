@@ -207,23 +207,17 @@ namespace DST.Controllers
         {
             if (!ModelState.IsValid)
             {
-                //ModelState.AddModelError(nameof(trackForm.Start), "bad");
-
                 DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
                 Algorithm algorithm = values.GetAlgorithm();
                 ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
                 ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-                /* Build the Phases collection (IEnumerable<SelectListItem>) with disabled and selected items, if any. */
-
                 List<SelectListItem> phases = new();
                 string selectedPhase = string.Empty;
+                string message = string.Empty;
 
                 if (trajectory is IRiseSetTrajectory)
                 {
-                    /* Include all phases. */
-                    /* Set Selected = true for values.Phase */
-
                     selectedPhase = values.Phase;
 
                     phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == selectedPhase));
@@ -232,15 +226,11 @@ namespace DST.Controllers
                 }
                 else if (trajectory is ICircumpolarTrajectory and not IVariableTrajectory)
                 {
-                    /* "This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no change in altitude." */
-                    /* Set Disabled = true for each Rise, Apex, and Set */
-                    /* Set Selected = true for values.Phase */
+                    message = Resources.DisplayText.TrackPhaseWarningCircumpolar;
                 }
                 else if (trajectory is ICircumpolarTrajectory and IVariableTrajectory)
                 {
-                    /* "This object has no trackable rise nor set positions because it is circumpolar from your location with variation in altitude." */
-                    /* Set Disabled = true for Rise and Set
-                     * Set Selected = true for Apex */
+                    message = Resources.DisplayText.TrackPhaseWarningCircumpolarOffset;
 
                     selectedPhase = PhaseName.Apex.ToKebabCase();
 
@@ -250,8 +240,7 @@ namespace DST.Controllers
                 }
                 else
                 {
-                    /* "This object has no trackable rise, set, nor apex positions because it is never visible from your location." */
-                    /* Do not include any phases. */
+                    message = Resources.DisplayText.TrackPhaseWarningNeverRise;
                 }
 
                 TrackPhaseViewModel viewModel = new()
@@ -269,7 +258,8 @@ namespace DST.Controllers
                         Cycles = values.Cycles
                     },
 
-                    Results = Array.Empty<IVector>()
+                    Results = Array.Empty<IVector>(),
+                    WarningMessage = message
                 };
 
                 // Re-render the view so that the validation error messages get displayed.
@@ -345,17 +335,13 @@ namespace DST.Controllers
                 _phaseBuilder.Current.IsReady = false;
                 _phaseBuilder.Save();
             }
-            
-            /* Build the Phases collection (IEnumerable<SelectListItem>) with disabled and selected items, if any. */
 
             List<SelectListItem> phases = new();
             string selectedPhase = string.Empty;
+            string message = string.Empty;
 
             if (trajectory is IRiseSetTrajectory)
             {
-                /* Include all phases. */
-                /* Set Selected = true for values.Phase */
-
                 selectedPhase = values.Phase;
 
                 phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == selectedPhase));
@@ -364,13 +350,11 @@ namespace DST.Controllers
             }
             else if (trajectory is ICircumpolarTrajectory and not IVariableTrajectory)
             {
-                /* "This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no change in altitude." */
+                message = Resources.DisplayText.TrackPhaseWarningCircumpolar;
             }
             else if (trajectory is ICircumpolarTrajectory and IVariableTrajectory)
             {
-                /* "This object has no trackable rise nor set positions because it is circumpolar from your location with variation in altitude." */
-                /* Set Disabled = true for Rise and Set
-                 * Set Selected = true for Apex */
+                message = Resources.DisplayText.TrackPhaseWarningCircumpolarOffset;
 
                 selectedPhase = PhaseName.Apex.ToKebabCase();
 
@@ -380,8 +364,7 @@ namespace DST.Controllers
             }
             else
             {
-                /* "This object has no trackable rise, set, nor apex positions because it is never visible from your location." */
-                /* Do not include any phases. */
+                message = Resources.DisplayText.TrackPhaseWarningNeverRise;
             }
 
             TrackPhaseViewModel viewModel = new()
@@ -399,7 +382,8 @@ namespace DST.Controllers
                     Cycles = values.Cycles
                 },
 
-                Results = results
+                Results = results,
+                WarningMessage = message
             };
 
             return View(viewModel);
