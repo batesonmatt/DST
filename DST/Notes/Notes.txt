@@ -45,7 +45,6 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 *******************************************************************************************************
 
 Phase
-- If there are no available phase options in the select list, display the message and do not generate the form.
 - Clean up code.
 
 Use ValidationController for remote validation.
