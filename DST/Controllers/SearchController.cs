@@ -70,6 +70,7 @@ namespace DST.Controllers
             // Check model state.
             if (!ModelState.IsValid)
             {
+                // The view is not being re-rendered here, so any server-side validation messages will not be shown.
                 return RedirectToAction("List", values.ToDictionary());
             }
 
@@ -133,6 +134,7 @@ namespace DST.Controllers
             // Check model state.
             if (!ModelState.IsValid)
             {
+                // The view is not being re-rendered here, so any server-side validation messages will not be shown.
                 return RedirectToAction("List", values.ToDictionary());
             }
 
