@@ -62,6 +62,7 @@ namespace DST.Controllers
             // Check model state.
             if (!ModelState.IsValid)
             {
+                // The view is not being re-rendered here, so any server-side validation messages will not be shown.
                 return RedirectToAction("Summary", values.ToDictionary());
             }
 
@@ -88,6 +89,7 @@ namespace DST.Controllers
             // Check model state.
             if (!ModelState.IsValid)
             {
+                // The view is not being re-rendered here, so any server-side validation messages will not be shown.
                 return RedirectToAction("Phase", values.ToDictionary());
             }
 
@@ -202,91 +204,7 @@ namespace DST.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
-        public IActionResult SubmitPhase(TrackPhaseModel trackForm, TrackPhaseRoute values)
-        {
-            if (!ModelState.IsValid)
-            {
-                DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
-                Algorithm algorithm = values.GetAlgorithm();
-                ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
-                ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
-
-                List<SelectListItem> phases = new();
-                string selectedPhase = string.Empty;
-                string message = string.Empty;
-
-                if (trajectory is IRiseSetTrajectory)
-                {
-                    selectedPhase = values.Phase;
-
-                    phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == selectedPhase));
-                    phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), PhaseName.Apex.ToKebabCase() == selectedPhase));
-                    phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), PhaseName.Set.ToKebabCase() == selectedPhase));
-                }
-                else if (trajectory is ICircumpolarTrajectory and not IVariableTrajectory)
-                {
-                    message = Resources.DisplayText.TrackPhaseWarningCircumpolar;
-                }
-                else if (trajectory is ICircumpolarTrajectory and IVariableTrajectory)
-                {
-                    message = Resources.DisplayText.TrackPhaseWarningCircumpolarOffset;
-
-                    selectedPhase = PhaseName.Apex.ToKebabCase();
-
-                    phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), selected: false, disabled: true));
-                    phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), selected: true));
-                    phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), selected: false, disabled: true));
-                }
-                else
-                {
-                    message = Resources.DisplayText.TrackPhaseWarningNeverRise;
-                }
-
-                TrackPhaseViewModel viewModel = new()
-                {
-                    Dso = dso,
-                    CurrentRoute = values,
-                    Algorithms = Utilities.GetAlgorithmItems(),
-                    Phases = phases,
-
-                    TrackForm = new TrackPhaseModel()
-                    {
-                        Algorithm = values.Algorithm,
-                        Phase = selectedPhase,
-                        Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
-                        Cycles = values.Cycles
-                    },
-
-                    Results = Array.Empty<IVector>(),
-                    WarningMessage = message
-                };
-
-                // Re-render the view so that the validation error messages get displayed.
-                return View("Phase", viewModel);
-            }
-
-            /* perform validation */
-
-            values.SetAlgorithm(trackForm.Algorithm);
-            values.SetPhase(trackForm.Phase);
-            values.SetStart(trackForm.GetTicks());
-            values.SetCycles(trackForm.Cycles);
-
-            // Mark the entry as ready so we can calculate the results.
-            trackForm.IsReady = true;
-
-            // Set the current phase entry.
-            _phaseBuilder.Current = trackForm;
-
-            // Save the phase entry to session state.
-            _phaseBuilder.Save();
-
-            return RedirectToAction("Phase", values.ToDictionary());
-        }
-
-        [HttpGet]
-        public ViewResult Phase(TrackPhaseRoute values)
+        private TrackPhaseViewModel GetPhaseViewModel(TrackPhaseRoute values, bool buildResults)
         {
             // Validate route values.
             values.Validate();
@@ -296,49 +214,51 @@ namespace DST.Controllers
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-            // Load the previous phase entry, if any.
-            _phaseBuilder.Load();
-
             IVector[] results = Array.Empty<IVector>();
-
-            // Calculate the phase tracking results if an entry was submitted.
-            if (_phaseBuilder.Current.IsReady)
-            {
-                IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
-
-                if (trajectory is IVariableTrajectory variableTrajectory)
-                {
-                    if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Apex))
-                    {
-                        results = variableTrajectory.GetApex(start, _phaseBuilder.Current.Cycles);
-                    }
-                    else if (trajectory is IRiseSetTrajectory riseSetTrajectory)
-                    {
-                        if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Rise))
-                        {
-                            results = riseSetTrajectory.GetRise(start, _phaseBuilder.Current.Cycles);
-                        }
-                        else if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Set))
-                        {
-                            results = riseSetTrajectory.GetSet(start, _phaseBuilder.Current.Cycles);
-                        }
-                    }
-                }
-
-                if (results is not null)
-                {
-                    /* Format data for the viewmodel */
-                    results = results.Where(i => i is ILocalVector).ToArray();
-                }
-
-                // Force the client to resubmit the form
-                _phaseBuilder.Current.IsReady = false;
-                _phaseBuilder.Save();
-            }
-
             List<SelectListItem> phases = new();
             string selectedPhase = string.Empty;
             string message = string.Empty;
+
+            if (buildResults)
+            {
+                // Load the previous phase entry, if any.
+                _phaseBuilder.Load();
+
+                // Calculate the phase tracking results if an entry was submitted.
+                if (_phaseBuilder.Current.IsReady)
+                {
+                    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
+
+                    if (trajectory is IVariableTrajectory variableTrajectory)
+                    {
+                        if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Apex))
+                        {
+                            results = variableTrajectory.GetApex(start, _phaseBuilder.Current.Cycles);
+                        }
+                        else if (trajectory is IRiseSetTrajectory riseSetTrajectory)
+                        {
+                            if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Rise))
+                            {
+                                results = riseSetTrajectory.GetRise(start, _phaseBuilder.Current.Cycles);
+                            }
+                            else if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Set))
+                            {
+                                results = riseSetTrajectory.GetSet(start, _phaseBuilder.Current.Cycles);
+                            }
+                        }
+                    }
+
+                    if (results is not null)
+                    {
+                        /* Format data for the viewmodel */
+                        results = results.Where(i => i is ILocalVector).ToArray();
+                    }
+
+                    // Force the client to resubmit the form
+                    _phaseBuilder.Current.IsReady = false;
+                    _phaseBuilder.Save();
+                }
+            }
 
             if (trajectory is IRiseSetTrajectory)
             {
@@ -386,7 +306,41 @@ namespace DST.Controllers
                 WarningMessage = message
             };
 
-            return View(viewModel);
+            return viewModel;
+        }
+
+        [HttpPost]
+        public IActionResult SubmitPhase(TrackPhaseModel trackForm, TrackPhaseRoute values)
+        {
+            // Check server-side validation state.
+            if (!ModelState.IsValid)
+            {
+                // Re-render the view so that server-side validation messages are displayed.
+                return View("Phase", GetPhaseViewModel(values, buildResults: false));
+            }
+
+            values.SetAlgorithm(trackForm.Algorithm);
+            values.SetPhase(trackForm.Phase);
+            values.SetStart(trackForm.GetTicks());
+            values.SetCycles(trackForm.Cycles);
+
+            // Mark the entry as ready so we can calculate the results.
+            trackForm.IsReady = true;
+
+            // Set the current phase entry.
+            _phaseBuilder.Current = trackForm;
+
+            // Save the phase entry to session state.
+            _phaseBuilder.Save();
+
+            // Redirect the action to calculate the results.
+            return RedirectToAction("Phase", values.ToDictionary());
+        }
+
+        [HttpGet]
+        public ViewResult Phase(TrackPhaseRoute values)
+        {
+            return View(GetPhaseViewModel(values, buildResults: true));
         }
 
         /* Takes TrackPeriodRoute */
