@@ -44,8 +44,19 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 
 *******************************************************************************************************
 
-Phase
-- Clean up code.
+Phase results
+- Consider a new custom type for the Results collection.
+  Needs property/field for the IVector or ILocalVector object
+  Needs string properties/methods for retrieving the local client DateTime, utc datetime,
+  and the altitude and azimuth in various FormatTypes (decimal, component, compact)
+- Include buttons for showing the data in various formats (Local or UTC datetimes and position formats)
+- Use ajax or jquery script to show/hide the extra info/formats
+- For smaller screen widths, consider a single column list of formatted results.
+
+Summary view
+- Need alternating colors for the rows
+- Consider spacing the rows better (see smaller screen widths)
+- Center the info
 
 Use ValidationController for remote validation.
 - Call a static method in Utilities for both server-side and client-side validation.
