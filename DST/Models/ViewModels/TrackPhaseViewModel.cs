@@ -15,7 +15,7 @@ namespace DST.Models.ViewModels
         public DsoModel Dso { get; set; }
         public TrackPhaseRoute CurrentRoute { get; set; }
         public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
-        public List<SelectListItem> Phases { get; set; }
+        public IEnumerable<SelectListItem> Phases { get; set; }
         public TrackPhaseModel TrackForm { get; set; }
         public IEnumerable<IVector> Results { get; set; }
         public string WarningMessage { get; set; }
