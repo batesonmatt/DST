@@ -11,6 +11,7 @@ using DST.Models.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
+using DST.Core.Vector;
 
 namespace DST.Models.BusinessLogic
 {
@@ -299,15 +300,38 @@ namespace DST.Models.BusinessLogic
             };
         }
 
-        // Returns all the displayable tracking phase names.
-        public static IEnumerable<TrackPhaseItem> GetPhaseItems()
+        // Returns a trajectory tracking at a given phase, beginning from the specified start date for the specified number of cycles.
+        public static IEnumerable<TrackPhaseResult> GetPhaseResults(ITrajectory trajectory, Phase phase, IAstronomicalDateTime start, int cycles)
         {
-            return new TrackPhaseItem[]
+            IVector[] results = Array.Empty<IVector>();
+
+            try
             {
-                new TrackPhaseItem(PhaseName.Rise.ToKebabCase(), PhaseName.Rise),
-                new TrackPhaseItem(PhaseName.Apex.ToKebabCase(), PhaseName.Apex),
-                new TrackPhaseItem(PhaseName.Set.ToKebabCase(), PhaseName.Set)
-            };
+                if (trajectory is not null and IVariableTrajectory variableTrajectory)
+                {
+                    if (phase == Phase.Apex)
+                    {
+                        results = variableTrajectory.GetApex(start, cycles);
+                    }
+                    else if (trajectory is IRiseSetTrajectory riseSetTrajectory)
+                    {
+                        if (phase == Phase.Rise)
+                        {
+                            results = riseSetTrajectory.GetRise(start, cycles);
+                        }
+                        else if (phase == Phase.Set)
+                        {
+                            results = riseSetTrajectory.GetSet(start, cycles);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                results = Array.Empty<IVector>();
+            }
+
+            return results.OfType<ILocalVector>().Select(result => new TrackPhaseResult(result));
         }
 
         // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation during the current season.
