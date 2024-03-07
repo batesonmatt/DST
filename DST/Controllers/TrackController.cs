@@ -211,10 +211,11 @@ namespace DST.Controllers
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
             Algorithm algorithm = values.GetAlgorithm();
+            Phase phase = values.GetPhase();
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-            IVector[] results = Array.Empty<IVector>();
+            IEnumerable<TrackPhaseResult> results = Enumerable.Empty<TrackPhaseResult>();
             List<SelectListItem> phases = new();
             string selectedPhase = string.Empty;
             string message = string.Empty;
@@ -229,30 +230,7 @@ namespace DST.Controllers
                 {
                     IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
 
-                    if (trajectory is IVariableTrajectory variableTrajectory)
-                    {
-                        if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Apex))
-                        {
-                            results = variableTrajectory.GetApex(start, _phaseBuilder.Current.Cycles);
-                        }
-                        else if (trajectory is IRiseSetTrajectory riseSetTrajectory)
-                        {
-                            if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Rise))
-                            {
-                                results = riseSetTrajectory.GetRise(start, _phaseBuilder.Current.Cycles);
-                            }
-                            else if (_phaseBuilder.Current.Phase.EqualsSeo(PhaseName.Set))
-                            {
-                                results = riseSetTrajectory.GetSet(start, _phaseBuilder.Current.Cycles);
-                            }
-                        }
-                    }
-
-                    if (results is not null)
-                    {
-                        /* Format data for the viewmodel */
-                        results = results.Where(i => i is ILocalVector).ToArray();
-                    }
+                    results = Utilities.GetPhaseResults(trajectory, phase, start, _phaseBuilder.Current.Cycles);
 
                     // Force the client to resubmit the form
                     _phaseBuilder.Current.IsReady = false;
