@@ -45,13 +45,8 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 *******************************************************************************************************
 
 Phase results
-- Consider a new custom type for the Results collection.
-  Needs property/field for the IVector or ILocalVector object
-  Needs string properties/methods for retrieving the local client DateTime, utc datetime,
-  and the altitude and azimuth in various FormatTypes (decimal, component, compact)
-- Include buttons for showing the data in various formats (Local or UTC datetimes and position formats)
-- Use ajax or jquery script to show/hide the extra info/formats
 - For smaller screen widths, consider a single column list of formatted results.
+  Or a double-column table: DateTime and Position.
 
 Summary view
 - Need alternating colors for the rows
@@ -180,6 +175,14 @@ Consider revising Utilities.GetSortTag and its helper methods.
 - Consider moving methods to DsoSortTagViewComponent.
 
 For the IVector list sections in Phase and Period views, consider limiting results to ~50 by default, with a Show More button at the bottom.
+
+---------------------------------------------------------------------------
+
+Query update
+- Consider a new SQL Server Database Project to keep track of changes to the database and to store scripts
+- DST.Database
+- https://stackoverflow.com/questions/194652/sql-server-regular-expressions-in-t-sql
+- https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping
 
 ---------------------------------------------------------------------------
 
