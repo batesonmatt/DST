@@ -44,9 +44,6 @@ Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time
 
 *******************************************************************************************************
 
-List view - Page nav buttons
-- For small screens, just use < and > or Previous and Next
-
 Summary view
 - Need alternating colors for the rows
 - Consider spacing the rows better (see smaller screen widths)
