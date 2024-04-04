@@ -57,25 +57,18 @@ Use bootstrap switches (checkbox) where necessary. See the toggle filters for th
 - Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, based on whether the given string is "on" or "off".
   Similar to SeoExtensions.Active
 
-Need to disable certain Phase type options in the form depending on the object's trajectory.
-- This may be done server-side in the Phase GET action.
-- Use IEnumerable<SelectListItem> Phases, and specify the Disabled arg for each SelectListItem to disable.
-- If the object is Never Rise, disable the form (or just don't generate it) 
-  and display a message stating, "This object has no trackable rise, set, nor apex positions because it is never visible from your location."
-- If the object is Circumpolar (Is ICircumpolarTrajectory and is not IVariableTrajectory - i.e., not CircumpolarOffset)
-  Display, "This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no change in altitude."
-- If the object is CircumpolarOffset (Is ICircumpolar and IVariableTrajectory; is not IRiseSetTrajectory)
-  Disable Rise and Set phase options, and only allow Apex. (Default to Apex, or only populate the Apex option)
-  Display, "This object has no trackable rise nor set positions because it is circumpolar from your location with variation in altitude."
-
 Period route/validation:
-- {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}
+- {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}       ...DONE
     Where Fixed = "On"/"Off"
-    If TimeUnit = Seconds, Minutes, or Hours, disable the Fixed option (Set to "Off")
+    If TimeUnit = Seconds, Minutes, or Hours, disable the Fixed option (And set property to "Off")
     If Algorithm = GMST or GAST, and Fixed = On, use TimeScale.SiderealTime
     If Algorithm = ERA, and Fixed = On, use TimeScale.StellarTime
     Otherwise, use TimeScale.MeanSolarTime
-    Display the time scaled used after posting, along with the results. (Consider doing this for the Phase results, too.)
+
+Tracking results
+- Display the time scale used after posting, along with the results (Important for Period tracking, which supports fixed tracking).
+- For Phase and Period tracking.
+- Position tracking will most likely perform calulations with each time scale type, etc.
 
 Consider tracking the object's position at a single point in time.
 - TrackPositionRoute : TrackSummaryRoute, TrackPositionModel, TrackPositionViewModel, Position view
