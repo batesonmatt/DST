@@ -17,7 +17,6 @@ using DST.Core.Tracker;
 using DST.Models.DataLayer;
 using DST.Core.Trajectory;
 using DST.Core.TimeKeeper;
-using DST.Core.Vector;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
