@@ -58,12 +58,9 @@ Use bootstrap switches (checkbox) where necessary. See the toggle filters for th
   Similar to SeoExtensions.Active
 
 Period route/validation:
-- {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}       ...DONE
-    Where Fixed = "On"/"Off"
-    If TimeUnit = Seconds, Minutes, or Hours, disable the Fixed option (And set property to "Off")
-    If Algorithm = GMST or GAST, and Fixed = On, use TimeScale.SiderealTime
-    If Algorithm = ERA, and Fixed = On, use TimeScale.StellarTime
-    Otherwise, use TimeScale.MeanSolarTime
+- {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}
+- Add Period view and view model
+- Need client-side validation for fixed tracking support (see PeriodTrackRoute.SupportsFixedTracking())
 
 Tracking results
 - Display the time scale used after posting, along with the results (Important for Period tracking, which supports fixed tracking).
