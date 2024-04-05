@@ -1,4 +1,5 @@
 ﻿using DST.Core.DateTimeAdder;
+using DST.Core.TimeScalable;
 using DST.Models.DataLayer.Query;
 using DST.Models.Extensions;
 using System.Collections.Generic;
@@ -122,22 +123,54 @@ namespace DST.Models.Routes
             return timeUnit;
         }
 
+        public bool SupportsFixedTracking()
+        {
+            // Fixed tracking is not supported for time units less than days.
+            return GetTimeUnit() switch
+            {
+                Core.DateTimeAdder.TimeUnit.Seconds
+                or Core.DateTimeAdder.TimeUnit.Minutes
+                or Core.DateTimeAdder.TimeUnit.Hours => false,
+
+                _ => true
+            };
+        }
+
+        public TimeScale GetTimeScale()
+        {
+            Core.TimeKeeper.Algorithm algorithm = GetAlgorithm();
+
+            if (IsFixed && (algorithm == Core.TimeKeeper.Algorithm.GMST || algorithm == Core.TimeKeeper.Algorithm.GAST))
+            {
+                return TimeScale.SiderealTime;
+            }
+            
+            if (IsFixed && algorithm == Core.TimeKeeper.Algorithm.ERA)
+            {
+                return TimeScale.StellarTime;
+            }
+
+            return TimeScale.MeanSolarTime;
+        }
+
+        public IDateTimeAdder GetDateTimeAdder()
+        {
+            ITimeScalable timeScale = TimeScalableFactory.Create(GetTimeScale());
+            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScale, GetTimeUnit());
+
+            return dateTimeAdder;
+        }
+
         public void SetPeriod(int period)
         {
-            /* IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create() */
-
-            /* 
-             * If Algorithm = GMST or GAST, and Fixed = On, use TimeScale.SiderealTime
-             * If Algorithm = ERA, and Fixed = On, use TimeScale.StellarTime
-             * Otherwise, use TimeScale.MeanSolarTime
-             */
-
-            /* Default => 0, Validate based on IDateTimeAdder.Min and .Max values */
+            IDateTimeAdder dateTimeAdder = GetDateTimeAdder();
+            Period = int.Clamp(period, dateTimeAdder.Min, dateTimeAdder.Max);
         }
 
         public void SetInterval(int interval)
         {
-            /* Default => 0, Validate for >= 0 and <= validated period */
+            // Period should already be validated here.
+            Interval = interval >= 0 && interval <= Period ? interval : 0;
         }
 
         public new TrackPeriodRoute Clone()
@@ -170,7 +203,12 @@ namespace DST.Models.Routes
             SetStart(Start);
             SetTimeUnit(TimeUnit);
 
-            /* If TimeUnit = Seconds, Minutes, or Hours, disable the Fixed option (And set property to "Off") */
+            // Fixed tracking is not supported for time units less than days.
+            if (!SupportsFixedTracking())
+            {
+                Fixed = Filter.Off;
+            }
+
             if (!(Fixed.IsFilterOn() || Fixed.IsFilterOff()))
             {
                 Fixed = Filter.Off;
