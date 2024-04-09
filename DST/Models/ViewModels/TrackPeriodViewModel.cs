@@ -14,8 +14,8 @@ namespace DST.Models.ViewModels
         public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
 
         /*
-         * public TrackPhaseModel TrackForm { get; set; }
-         * public IEnumerable<TrackPhaseResult> Results { get; set; }
+         * public TrackPeriodModel TrackForm { get; set; }
+         * public IEnumerable<TrackPeriodResult> Results { get; set; }
          */
 
         public string WarningMessage { get; set; }

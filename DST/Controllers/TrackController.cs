@@ -357,7 +357,7 @@ namespace DST.Controllers
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-            //IEnumerable<TrackPhaseResult> results = Enumerable.Empty<TrackPhaseResult>();
+            //IEnumerable<TrackPeriodResult> results = Enumerable.Empty<TrackPeriodResult>();
             string message = string.Empty;
 
             if (buildResults)
