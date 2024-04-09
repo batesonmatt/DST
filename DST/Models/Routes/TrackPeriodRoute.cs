@@ -19,7 +19,7 @@ namespace DST.Models.Routes
         public int Interval { get; set; }
 
         [JsonIgnore]
-        public bool IsFixed => !string.IsNullOrWhiteSpace(Fixed);
+        public bool IsFixed => Fixed.IsFilterOn();
 
         #endregion
 
