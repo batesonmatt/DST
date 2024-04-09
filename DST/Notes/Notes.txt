@@ -48,31 +48,45 @@ Summary view
 - Need alternating colors for the rows
 - Consider spacing the rows better (see smaller screen widths)
 - Center the info
+- Display more info for the Position (EE, Obliquity, etc... everything)
 
 Use ValidationController for remote validation.
 - Call a static method in Utilities for both server-side and client-side validation.
 - Do this for all necessary track forms.
 
-Use bootstrap switches (checkbox) where necessary. See the toggle filters for the List view.
+Use bootstrap switches (checkbox) where necessary. See the toggle filters for the List view, etc.
 - Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, based on whether the given string is "on" or "off".
   Similar to SeoExtensions.Active
 
 Period route/validation:
-- {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}
-- Add Period view and view model
+- {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}       ...DONE
+- Add Period view and view model                                                                                                ...DONE
+- Add TrackPeriodModel
+- Add ITrackPhaseBuilder and concrete type. Implement DI.
+- Add TrackPeriodResult
+- Add Utilities.GetPeriodResults(...)
 - Need client-side validation for fixed tracking support (see PeriodTrackRoute.SupportsFixedTracking())
+
+Period
+- Colorize each result where the object is above the horizon.
+  Also display some icon in a new column at the end.
+  For small screens, just align this icon to the upper right.
 
 Tracking results
 - Display the time scale used after posting, along with the results (Important for Period tracking, which supports fixed tracking).
 - For Phase and Period tracking.
 - Position tracking will most likely perform calulations with each time scale type, etc.
 
-Consider tracking the object's position at a single point in time.
-- TrackPositionRoute : TrackSummaryRoute, TrackPositionModel, TrackPositionViewModel, Position view
-- {controller}/{action}/{catalog}/{id}/{algorithm}/{start}
+Feature (Phase and period)
+- Reconsider the Position view (See points below).
+  OR, consider the Position be a partial view, and display it via a Bootstrap OffCanvas.
+- For each result, provide an option to take the user to the Position page to view more info on that particular track record.
+- Reconsider the table-hover for this
+- Consider right click, or click to expand, or a button on the result row somewhere.
 
 Use floating labels for the form controls.
 
+...DONE
 The Algorithm select control should be available in the Phase/Period forms.
 - The builders/routes will use this value that gets posted from the form, instead of the one already selected in the current route.
 - The current selection in the select list will be initially set to the Algorithm value in the current route.
@@ -82,23 +96,21 @@ The Algorithm select control should be available in the Phase/Period forms.
   There will also be server-side validation to ensure bad data doesn't get sent in.
 - The Summary view may still have an Algorithm select control.
 
+...SCRAP
 Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Takes DsoModel, GeolocationModel, and Algorithm
 - Inject into TrackController.
 - Save to session state
 - Provide methods to set the Target (takes DsoModel), the Location (takes GeolocationModel), and the TimeKeeper (takes Algorithm)
 - Provide methods/properties for dealing with the Season, Trajectory, etc.
-
 OR, Consider a builder for storing at least the client date time.
 
+...SCRAP
 Consider a TrackPhaseModel and TrackPeriodModel with custom server-side validation attributes for the properties.
 - See pg. 418
 - To use DI in validation attribute classes: 
-
     IPhaseBuilder b = (IPhaseBuilder)validationContext.GetService(typeof(IPhaseBuilder));
-  
     OR:
-
     using Microsoft.Extensions.DependencyInjection;
     ...
     IPhaseBuilder b = validationContext.GetService<IPhaseBuilder>()
@@ -113,6 +125,7 @@ Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteB
   The routes will be saved to session in the regular actions methods that build the viewmodels and return the views.
 - We don't need a route builder for the summary view.
 
+...DONE
 Validation
 - The Start segment will be treated in the client's local time
 - The initial validation in the route classes (TrackPhaseRoute.Validate() and TrackPeriodRoute.Validate())
@@ -120,11 +133,12 @@ Validation
   See SearchController.List() for an example of how the SearchRoute values are initially validated, modified,
   then saved back into session state in the SearchRouteBuilder object.
 
+...DONE
 When visiting the Phase and Period views for the first time (i.e., from the Summary view), use the tracksummary route values.
-Then when posting from those views, use their respective route values (TrackPhaseRoute and TrackPeriodRoute).
+- Then when posting from those views, use their respective route values (TrackPhaseRoute and TrackPeriodRoute).
+- When navigating back to the Summary view from the Phase and Period views, use the TrackSummaryRoute values.
 
-When navigating back to the Summary view from the Phase and Period views, use the TrackSummaryRoute values.
-
+...DONE
 Might need separate view models for the track views
 - Consider TrackPhaseViewModel : TrackSummaryViewModel that has a collection of IVector objects
 
@@ -151,16 +165,26 @@ PageSizeItem, TimeZoneItem, TrackPhaseItem, TrackAlgorithmItem, etc.
 - OR, Consider using a single class, SelectItem.
   => string Id, string Text, int Value
 
-Consider moving AlgorithmName and PhaseName out of the Query namespace, and into BusinessLogic?
-
-Consider renaming Utilities.GetSearchListPageSizeItems() to .GetPageSizeItems()
+AlgorithmName, Filter, PhaseName, TimeUnitName
+- Consider moving out of the Query namespace, and into BusinessLogic
 
 Consider using DI in certain action methods, instead of through the controller constructor. See pg. 568.
+- Important for the Track controller, where certain dependencies are unused.
 
 Consider revising Utilities.GetSortTag and its helper methods.
 - Consider moving methods to DsoSortTagViewComponent.
 
-For the IVector list sections in Phase and Period views, consider limiting results to ~50 by default, with a Show More button at the bottom.
+For the tracking result in Phase and Period views, consider limiting results to ~50 by default, with a Show More button at the bottom.
+
+Consider using DI for ISearchUnitOfWork and ITrackUnitOfWork, or IUnitOfWork, in SearchController and TrackController, instead of MainDbContext.
+
+Consider removing the paging endpoint, since it is never used.
+
+"Continuous" Tracking
+- After tracking over time, allow the user to click a button to continue tracking for the same period/interval, 
+  but starting at the last DateTime value.
+- This could cause a bug where the datetime would eventually run to min/max value, or to a point where
+  the results are not trustworthy.
 
 ---------------------------------------------------------------------------
 
@@ -305,25 +329,9 @@ Track selector (Rise, Set, Apex, Period):
   For each list item, display: Local DateTime, position, is visible (Above horizon), is rising/setting
 - Need to disable/hide certain controls and information if the trajectory is never rise or circumpolar.
 
-....................................................................
-
-"Continuous" Tracking
-- After tracking over time, allow the user to click a button to continue tracking for the same period/interval, 
-  but starting at the last DateTime value.
-- This could cause a bug where the datetime would eventually run to min/max value, or to a point where
-  the results are not trustworthy.
-
 ----------------------------------------------------------------------------
 
 https://icons.getbootstrap.com/
-
-----------------------------------------------------------------------------
-
-Consider DI ISearchUnitOfWork or IUnitOfWork in SearchController, instead of DI MainDbContext.
-
-----------------------------------------------------------------------------
-
-Consider removing the paging endpoint, since it is never used.
 
 ----------------------------------------------------------------------------
 
