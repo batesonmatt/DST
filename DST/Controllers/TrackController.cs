@@ -110,6 +110,33 @@ namespace DST.Controllers
         }
 
         [HttpPost]
+        public IActionResult SubmitPeriodGeolocation(GeolocationModel geolocation, TrackPeriodRoute values, bool reset = false)
+        {
+            // Check model state.
+            if (!ModelState.IsValid)
+            {
+                // The view is not being re-rendered here, so any server-side validation messages will not be shown.
+                return RedirectToAction("Period", values.ToDictionary());
+            }
+
+            if (reset)
+            {
+                // Reset geolocation and timezone to defaults.
+                _geoBuilder.CurrentGeolocation.Reset();
+            }
+            else
+            {
+                // Update geolocation and timezone.
+                _geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
+            }
+
+            // Save the geolocation in session and create a persistent cookie.
+            _geoBuilder.Save();
+
+            return RedirectToAction("Period", values.ToDictionary());
+        }
+
+        [HttpPost]
         public IActionResult SetAlgorithm(TrackSummaryRoute values, string algorithm)
         {
             values.SetAlgorithm(algorithm);
@@ -231,7 +258,7 @@ namespace DST.Controllers
 
                     results = Utilities.GetPhaseResults(trajectory, phase, start, _phaseBuilder.Current.Cycles);
 
-                    // Force the client to resubmit the form
+                    // Force the client to resubmit the form.
                     _phaseBuilder.Current.IsReady = false;
                     _phaseBuilder.Save();
                 }
@@ -320,11 +347,67 @@ namespace DST.Controllers
             return View(GetPhaseViewModel(values, buildResults: true));
         }
 
-        /* Takes TrackPeriodRoute */
-        public ViewResult Period()
+        private TrackPeriodViewModel GetPeriodViewModel(TrackPeriodRoute values, bool buildResults)
         {
-            /* Create TrackPeriodViewModel and pass into View(viewModel) */
-            return View();
+            // Validate route values.
+            values.Validate();
+
+            DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
+            Algorithm algorithm = values.GetAlgorithm();
+            ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
+            ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
+
+            //IEnumerable<TrackPhaseResult> results = Enumerable.Empty<TrackPhaseResult>();
+            string message = string.Empty;
+
+            if (buildResults)
+            {
+                //// Load the previous period entry, if any.
+                ////_periodBuilder.Load();
+
+                //// Calculate the period tracking results if an entry was submitted.
+                //if (_periodBuilder.Current.IsReady)
+                //{
+                //    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_periodBuilder.Current.Start, localObserver.DateTimeInfo);
+
+                //    results = Utilities.GetPeriodResults(
+                //        trajectory, start,
+                //        _periodBuilder.Current.TimeUnit,
+                //        _periodBuilder.Current.Period,
+                //        _periodBuilder.Current.Interval,
+                //        _periodBuilder.Current.IsFixed);
+
+                //    // Force the client to resubmit the form.
+                //    _periodBuilder.Current.IsReady = false;
+                //    _periodBuilder.Save();
+                //}
+            }
+
+            TrackPeriodViewModel viewModel = new()
+            {
+                Dso = dso,
+                CurrentRoute = values,
+                Algorithms = Utilities.GetAlgorithmItems(),
+
+                //TrackForm = new TrackPeriodModel()
+                //{
+                //},
+
+                //Results = results,
+                WarningMessage = message /* Might not be necessary */
+            };
+
+            return viewModel;
+        }
+
+        /*
+         * [HttpPost]
+         * public IActionResult SubmitPeriod(TrackPeriodModel trackForm, TrackPeriodRoute values) {}
+         */
+
+        public ViewResult Period(TrackPeriodRoute values)
+        {
+            return View(GetPeriodViewModel(values, buildResults: true));
         }
 
         #endregion
