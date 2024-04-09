@@ -36,7 +36,7 @@
     <nav class="nav nav-tabs mb-5">
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Summary" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">Summary</a>
         <a class="nav-item nav-link active">Phase</a>
-        @* <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a> *@
+        <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">Period</a>
     </nav>
 
     @if (Model.HasWarning())
