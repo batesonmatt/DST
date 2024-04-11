@@ -12,11 +12,211 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using DST.Core.Vector;
+using DST.Core.DateTimeAdder;
+using DST.Core.TimeScalable;
 
 namespace DST.Models.BusinessLogic
 {
     public class Utilities
     {
+        public static Algorithm GetAlgorithm(string name)
+        {
+            Algorithm algorithm;
+
+            if (name.EqualsSeo(AlgorithmName.GMST))
+            {
+                algorithm = Algorithm.GMST;
+            }
+            else if (name.EqualsSeo(AlgorithmName.GAST))
+            {
+                algorithm = Algorithm.GAST;
+            }
+            else if (name.EqualsSeo(AlgorithmName.ERA))
+            {
+                algorithm = Algorithm.ERA;
+            }
+            else
+            {
+                algorithm = Algorithm.Default;
+            }
+
+            return algorithm;
+        }
+
+        public static Phase GetPhase(string name)
+        {
+            Phase phase;
+
+            if (name.EqualsSeo(PhaseName.Rise))
+            {
+                phase = Phase.Rise;
+            }
+            else if (name.EqualsSeo(PhaseName.Apex))
+            {
+                phase = Phase.Apex;
+            }
+            else if (name.EqualsSeo(PhaseName.Set))
+            {
+                phase = Phase.Set;
+            }
+            else
+            {
+                phase = Phase.Default;
+            }
+
+            return phase;
+        }
+
+        public static TimeUnit GetTimeUnit(string name)
+        {
+            TimeUnit timeUnit;
+
+            if (name.EqualsSeo(TimeUnitName.Seconds))
+            {
+                timeUnit = TimeUnit.Seconds;
+            }
+            else if (name.EqualsSeo(TimeUnitName.Minutes))
+            {
+                timeUnit = TimeUnit.Minutes;
+            }
+            else if (name.EqualsSeo(TimeUnitName.Hours))
+            {
+                timeUnit = TimeUnit.Hours;
+            }
+            else if (name.EqualsSeo(TimeUnitName.Days))
+            {
+                timeUnit = TimeUnit.Days;
+            }
+            else if (name.EqualsSeo(TimeUnitName.Weeks))
+            {
+                timeUnit = TimeUnit.Weeks;
+            }
+            else if (name.EqualsSeo(TimeUnitName.Months))
+            {
+                timeUnit = TimeUnit.Months;
+            }
+            else if (name.EqualsSeo(TimeUnitName.Years))
+            {
+                timeUnit = TimeUnit.Years;
+            }
+            else
+            {
+                timeUnit = TimeUnit.Default;
+            }
+
+            return timeUnit;
+        }
+
+        public static bool SupportsFixedTracking(TimeUnit timeUnit)
+        {
+            // Fixed tracking is not supported for time units less than days.
+            return timeUnit switch
+            {
+                TimeUnit.Days or TimeUnit.Weeks or TimeUnit.Months or TimeUnit.Years => true,
+                _ => false
+            };
+        }
+
+        public static TimeScale GetTimeScale(Algorithm algorithm, bool isFixed)
+        {
+            if (isFixed && (algorithm == Algorithm.GMST || algorithm == Algorithm.GAST))
+            {
+                return TimeScale.SiderealTime;
+            }
+
+            if (isFixed && algorithm == Algorithm.ERA)
+            {
+                return TimeScale.StellarTime;
+            }
+
+            return TimeScale.MeanSolarTime;
+        }
+
+        public static IDateTimeAdder GetDateTimeAdder(TimeScale timeScale, TimeUnit timeUnit)
+        {
+            ITimeScalable scale = TimeScalableFactory.Create(timeScale);
+            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(scale, timeUnit);
+
+            return dateTimeAdder;
+        }
+
+        public static int GetClientPeriod(int period, string algorithmName, string timeUnitName, bool isFixed)
+        {
+            int result;
+            Algorithm algorithm;
+            TimeUnit timeUnit;
+            TimeScale timeScale;
+            IDateTimeAdder dateTimeAdder;
+
+            try
+            {
+                algorithm = GetAlgorithm(algorithmName);
+                timeUnit = GetTimeUnit(timeUnitName);
+
+                if (isFixed && !SupportsFixedTracking(timeUnit))
+                {
+                    isFixed = false;
+                }
+
+                timeScale = GetTimeScale(algorithm, isFixed);
+                dateTimeAdder = GetDateTimeAdder(timeScale, timeUnit);
+                result = int.Clamp(period, dateTimeAdder.Min, dateTimeAdder.Max);
+            }
+            catch
+            {
+                result = 0;
+            }
+
+            return result;
+        }
+
+        public static string ValidateClientPeriod(int period, string algorithmName, string timeUnitName, bool isFixed)
+        {
+            string message = string.Empty;
+            Algorithm algorithm;
+            TimeUnit timeUnit;
+            TimeScale timeScale;
+            IDateTimeAdder dateTimeAdder;
+
+            try
+            {
+                algorithm = GetAlgorithm(algorithmName);
+                timeUnit = GetTimeUnit(timeUnitName);
+
+                if (isFixed && !SupportsFixedTracking(timeUnit))
+                {
+                    isFixed = false;
+                }
+
+                timeScale = GetTimeScale(algorithm, isFixed);
+                dateTimeAdder = GetDateTimeAdder(timeScale, timeUnit);
+
+                if (period < dateTimeAdder.Min || period > dateTimeAdder.Max)
+                {
+                    message = string.Format(
+                        "The period length must be between {0} and {1}.",
+                        dateTimeAdder.Min, dateTimeAdder.Max);
+                }
+            }
+            catch
+            {
+                message = "The period length is not valid.";
+            }
+
+            return message;
+        }
+
+        public static string ValidateClientInterval(int interval, int period)
+        {
+            // Assumes the period length has already been validated.
+            if (interval < 0 || interval > period)
+            {
+                return string.Format("The number of intervals must be between {0} and the period length ({1}).", 0, period);
+            }
+
+            return string.Empty;
+        }
+
         // Returns a message indicating whether the specified DateTime value is valid for the client's time zone.
         // Argument 'dateTime' is assumed to be represented in the client's local time.
         // If 'dateTime' is valid, this returns an empty string.
@@ -297,6 +497,21 @@ namespace DST.Models.BusinessLogic
                 new TrackAlgorithmItem(AlgorithmName.GMST.ToKebabCase(), Resources.DisplayText.AlgorithmGMSTLong),
                 new TrackAlgorithmItem(AlgorithmName.GAST.ToKebabCase(), Resources.DisplayText.AlgorithmGASTLong),
                 new TrackAlgorithmItem(AlgorithmName.ERA.ToKebabCase(), Resources.DisplayText.AlgorithmERALong)
+            };
+        }
+
+        // Returns all the displayable time unit names.
+        public static IEnumerable<TimeUnitItem> GetTimeUnitItems()
+        {
+            return new TimeUnitItem[]
+            {
+                new TimeUnitItem(TimeUnitName.Seconds.ToKebabCase(), Resources.DisplayText.TimeUnitSeconds),
+                new TimeUnitItem(TimeUnitName.Minutes.ToKebabCase(), Resources.DisplayText.TimeUnitMinutes),
+                new TimeUnitItem(TimeUnitName.Hours.ToKebabCase(), Resources.DisplayText.TimeUnitHours),
+                new TimeUnitItem(TimeUnitName.Days.ToKebabCase(), Resources.DisplayText.TimeUnitDays),
+                new TimeUnitItem(TimeUnitName.Weeks.ToKebabCase(), Resources.DisplayText.TimeUnitWeeks),
+                new TimeUnitItem(TimeUnitName.Months.ToKebabCase(), Resources.DisplayText.TimeUnitMonths),
+                new TimeUnitItem(TimeUnitName.Years.ToKebabCase(), Resources.DisplayText.TimeUnitYears)
             };
         }
 
