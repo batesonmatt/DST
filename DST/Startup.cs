@@ -51,6 +51,7 @@ namespace DST
             services.AddTransient<IGeolocationBuilder, GeolocationBuilder>();
             services.AddTransient<ISearchBuilder, SearchBuilder>();
             services.AddTransient<ITrackPhaseBuilder, TrackPhaseBuilder>();
+            services.AddTransient<ITrackPeriodBuilder, TrackPeriodBuilder>();
 
             // Make URLs lowercase and end with a trailing slash.
             services.AddRouting(options =>
