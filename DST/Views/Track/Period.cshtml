@@ -8,6 +8,12 @@
     TrackPeriodRoute routes = current.Clone();
 }
 
+<style>
+    input[type=checkbox][disabled] + label {
+        color: #ccc;
+    }
+</style>
+
 <div class="container pt-3">
 
     <div class="mb-3">
@@ -59,7 +65,9 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" asp-for="TrackForm.TimeUnit">Time Unit</label>
-                <select id="select-period-timeunit" class="form-control" asp-for="TrackForm.TimeUnit" asp-items="@(new SelectList(Model.TimeUnits, "Id", "Text", Model.TrackForm.TimeUnit))"></select>
+                <select id="select-period-timeunit" class="form-control" asp-for="TrackForm.TimeUnit" 
+                    asp-items="@(new SelectList(Model.TimeUnits, "Id", "Text", Model.TrackForm.TimeUnit))"
+                        onchange="updateFixedTrackingToggle('select-period-timeunit', 'input-period-fixed')"></select>
             </div>
             <div class="mb-3">
                 <label class="form-label" asp-for="TrackForm.Period">Period</label>
