@@ -12,9 +12,10 @@ namespace DST.Models.ViewModels
         public DsoModel Dso { get; set; }
         public TrackPeriodRoute CurrentRoute { get; set; }
         public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
-
+        public IEnumerable<TimeUnitItem> TimeUnits { get; set; }
+        public TrackPeriodModel TrackForm { get; set; }
+        
         /*
-         * public TrackPeriodModel TrackForm { get; set; }
          * public IEnumerable<TrackPeriodResult> Results { get; set; }
          */
 
