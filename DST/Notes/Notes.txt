@@ -58,14 +58,36 @@ Use bootstrap switches (checkbox) where necessary. See the toggle filters for th
 - Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, based on whether the given string is "on" or "off".
   Similar to SeoExtensions.Active
 
+Create resource strings for the validation attribute messages.
+- See DomainModels
+
+Create resource strings for Utilities.ValidateClientPeriod and .ValidateClientInterval
+
 Period route/validation:
 - {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}       ...DONE
 - Add Period view and view model                                                                                                ...DONE
-- Add TrackPeriodModel
-- Add ITrackPhaseBuilder and concrete type. Implement DI.
+- Add TrackPeriodModel                                                                                                          ...DONE
+- Consider moving to Utilities:                                                                                                 ...DONE
+  TrackSummaryRoute.GetAlgorithm                                                                                                ...DONE
+  TrackPhaseRoute.GetPhase                                                                                                      ...DONE
+  TrackPeriodRoute.SupportsFixedTracking                                                                                        ...DONE
+  TrackPeriodRoute.GetTimeUnit                                                                                                  ...DONE
+  TrackPeriodRoute.GetTimeScale                                                                                                 ...DONE
+  TrackPeriodRoute.GetDateTimeAdder                                                                                             ...DONE
+- Use Remote validation attributes for TrackPhaseModel.Period and TrackPhaseModel.Interval (Use AdditionalFields, pg. 428)      ...DONE
+  Use simple validation bounds checking for period/interval in TrackPeriodRoute (See TrackPhaseRoute.Cycles).                   ...DONE
+  Add ValidationController.ValidatePeriod and ValidationController.ValidateInterval.                                            ...DONE
+- Consider TrackModel base class for TrackPhaseModel and TrackPeriodModel.                                                      ...DONE
+- Add ITrackPhaseBuilder and concrete type. Implement DI.                                                                       ...DONE
+- Finish Period view
+- Finish PeriodViewModel (Results)
+- Add post action method, SubmitPeriod                                                                                          ...DONE
 - Add TrackPeriodResult
 - Add Utilities.GetPeriodResults(...)
-- Need client-side validation for fixed tracking support (see PeriodTrackRoute.SupportsFixedTracking())
+- Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.
+- Need client-side validation for fixed tracking support (see TrackPeriodRoute.SupportsFixedTracking())
+  Also, disable the form switch if fixed tracking is not supported
+- Implement remote validation for both TrackPeriodModel.IsFixed and TrackPeriodModel.TimeUnit properties
 
 Period
 - Colorize each result where the object is above the horizon.
@@ -170,6 +192,7 @@ AlgorithmName, Filter, PhaseName, TimeUnitName
 
 Consider using DI in certain action methods, instead of through the controller constructor. See pg. 568.
 - Important for the Track controller, where certain dependencies are unused.
+- Also see ValidationController methods.
 
 Consider revising Utilities.GetSortTag and its helper methods.
 - Consider moving methods to DsoSortTagViewComponent.
