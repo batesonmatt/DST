@@ -46,4 +46,39 @@
         </div>
     }
 
+    <div class="mb-3">
+        <form id="form-period" class="mb-5" asp-action="SubmitPeriod" asp-all-route-data="@routes.ToDictionary()" method="post">
+            <div class="mb-3">
+                <label class="form-label" asp-for="TrackForm.Algorithm">Timekeeping Algorithm</label>
+                <select id="select-period-algorithm" class="form-control" asp-for="TrackForm.Algorithm" asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", Model.TrackForm.Algorithm))"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="TrackForm.Start">Start</label>
+                <input id="input-period-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
+                <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="TrackForm.TimeUnit">Time Unit</label>
+                <select id="select-period-timeunit" class="form-control" asp-for="TrackForm.TimeUnit" asp-items="@(new SelectList(Model.TimeUnits, "Id", "Text", Model.TrackForm.TimeUnit))"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="TrackForm.Period">Period</label>
+                <input id="input-period" class="form-control" asp-for="TrackForm.Period" type="number" value="@Model.TrackForm.Period" />
+                <span asp-validation-for="TrackForm.Period" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="TrackForm.Interval">Intervals</label>
+                <input id="input-interval" class="form-control" asp-for="TrackForm.Interval" type="number" value="@Model.TrackForm.Interval" />
+                <span asp-validation-for="TrackForm.Interval" class="text-danger"></span>
+            </div>
+            <div class="form-check form-switch mb-3">
+                <input id="input-period-fixed" class="form-check-input" asp-for="TrackForm.IsFixed" type="checkbox" value="@Model.TrackForm.IsFixed" />
+                <label class="form-label" asp-for="TrackForm.IsFixed">Fixed Tracking</label>
+            </div>
+            <div class="mb-3">
+                <button id="form-period-submit" class="btn btn-primary" type="submit">Track</button>
+            </div>
+        </form>
+    </div>
+
 </div>
