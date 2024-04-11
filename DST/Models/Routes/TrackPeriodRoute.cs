@@ -1,5 +1,4 @@
-﻿using DST.Core.DateTimeAdder;
-using DST.Core.TimeScalable;
+﻿using DST.Models.BusinessLogic;
 using DST.Models.DataLayer.Query;
 using DST.Models.Extensions;
 using System.Collections.Generic;
@@ -47,6 +46,11 @@ namespace DST.Models.Routes
             Start = start is >= 0 and < long.MaxValue ? start : 0;
         }
 
+        public void SetFixed(bool isFixed)
+        {
+            Fixed = isFixed && Utilities.SupportsFixedTracking(Utilities.GetTimeUnit(TimeUnit)) ? Filter.On : Filter.Off;
+        }
+
         public void SetTimeUnit(string timeUnit)
         {
             if (timeUnit.EqualsSeo(TimeUnitName.Seconds))
@@ -83,88 +87,10 @@ namespace DST.Models.Routes
             }
         }
 
-        public Core.DateTimeAdder.TimeUnit GetTimeUnit()
-        {
-            Core.DateTimeAdder.TimeUnit timeUnit;
-
-            if (TimeUnit.EqualsSeo(TimeUnitName.Seconds))
-            {
-                timeUnit = Core.DateTimeAdder.TimeUnit.Seconds;
-            }
-            else if (TimeUnit.EqualsSeo(TimeUnitName.Minutes))
-            {
-                timeUnit = Core.DateTimeAdder.TimeUnit.Minutes;
-            }
-            else if (TimeUnit.EqualsSeo(TimeUnitName.Hours))
-            {
-                timeUnit = Core.DateTimeAdder.TimeUnit.Hours;
-            }
-            else if (TimeUnit.EqualsSeo(TimeUnitName.Days))
-            {
-                timeUnit = Core.DateTimeAdder.TimeUnit.Days;
-            }
-            else if (TimeUnit.EqualsSeo(TimeUnitName.Weeks))
-            {
-                timeUnit = Core.DateTimeAdder.TimeUnit.Weeks;
-            }
-            else if (TimeUnit.EqualsSeo(TimeUnitName.Months))
-            {
-                timeUnit = Core.DateTimeAdder.TimeUnit.Months;
-            }
-            else if (TimeUnit.EqualsSeo(TimeUnitName.Years))
-            {
-                timeUnit = Core.DateTimeAdder.TimeUnit.Years;
-            }
-            else
-            {
-                timeUnit = Core.DateTimeAdder.TimeUnit.Default;
-            }
-
-            return timeUnit;
-        }
-
-        public bool SupportsFixedTracking()
-        {
-            // Fixed tracking is not supported for time units less than days.
-            return GetTimeUnit() switch
-            {
-                Core.DateTimeAdder.TimeUnit.Seconds
-                or Core.DateTimeAdder.TimeUnit.Minutes
-                or Core.DateTimeAdder.TimeUnit.Hours => false,
-
-                _ => true
-            };
-        }
-
-        public TimeScale GetTimeScale()
-        {
-            Core.TimeKeeper.Algorithm algorithm = GetAlgorithm();
-
-            if (IsFixed && (algorithm == Core.TimeKeeper.Algorithm.GMST || algorithm == Core.TimeKeeper.Algorithm.GAST))
-            {
-                return TimeScale.SiderealTime;
-            }
-            
-            if (IsFixed && algorithm == Core.TimeKeeper.Algorithm.ERA)
-            {
-                return TimeScale.StellarTime;
-            }
-
-            return TimeScale.MeanSolarTime;
-        }
-
-        public IDateTimeAdder GetDateTimeAdder()
-        {
-            ITimeScalable timeScale = TimeScalableFactory.Create(GetTimeScale());
-            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScale, GetTimeUnit());
-
-            return dateTimeAdder;
-        }
-
         public void SetPeriod(int period)
         {
-            IDateTimeAdder dateTimeAdder = GetDateTimeAdder();
-            Period = int.Clamp(period, dateTimeAdder.Min, dateTimeAdder.Max);
+            // Fixed should already be validated here.
+            Period = Utilities.GetClientPeriod(period, Algorithm, TimeUnit, IsFixed);
         }
 
         public void SetInterval(int interval)
@@ -202,18 +128,7 @@ namespace DST.Models.Routes
 
             SetStart(Start);
             SetTimeUnit(TimeUnit);
-
-            // Fixed tracking is not supported for time units less than days.
-            if (!SupportsFixedTracking())
-            {
-                Fixed = Filter.Off;
-            }
-
-            if (!(Fixed.IsFilterOn() || Fixed.IsFilterOff()))
-            {
-                Fixed = Filter.Off;
-            }
-
+            SetFixed(Fixed.IsFilterOn());
             SetPeriod(Period);
             SetInterval(Interval);
         }
