@@ -57,11 +57,21 @@ Use ValidationController for remote validation.
 Use bootstrap switches (checkbox) where necessary. See the toggle filters for the List view, etc.
 - Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, based on whether the given string is "on" or "off".
   Similar to SeoExtensions.Active
+- Need to use CSS to style the label as disabled (see Period view)
 
 Create resource strings for the validation attribute messages.
 - See DomainModels
 
 Create resource strings for Utilities.ValidateClientPeriod and .ValidateClientInterval
+
+Revise updateFixedTrackingToggle JS function
+- Don't want to use hardcoded strings for the timeunit names.
+- Use hidden elements in the Period view for the time units that support fixed tracking
+- for the JS script, iterate the valid time units by value/id
+- Consider a new hidden selectlist of TimeUnitItem, and iterate the ID properties.
+    var x = document.getElementById("supported-timeunits");
+    for (i = 0; i < x.options.length; i++) { }
+- Consider putting the script in the period view to utilize razor functionality.
 
 Period route/validation:
 - {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}       ...DONE
@@ -79,14 +89,14 @@ Period route/validation:
   Add ValidationController.ValidatePeriod and ValidationController.ValidateInterval.                                            ...DONE
 - Consider TrackModel base class for TrackPhaseModel and TrackPeriodModel.                                                      ...DONE
 - Add ITrackPhaseBuilder and concrete type. Implement DI.                                                                       ...DONE
-- Finish Period view
-- Finish PeriodViewModel (Results)
 - Add post action method, SubmitPeriod                                                                                          ...DONE
+- Finish PeriodViewModel (Results)
 - Add TrackPeriodResult
 - Add Utilities.GetPeriodResults(...)
 - Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.
 - Need client-side validation for fixed tracking support (see TrackPeriodRoute.SupportsFixedTracking())
-  Also, disable the form switch if fixed tracking is not supported
+- Disable the form switch if fixed tracking is not supported                                                                    ...DONE
+- If Fixed is disabled, Display a message stating "Fixed tracking is not supported for time units less than days."
 - Implement remote validation for both TrackPeriodModel.IsFixed and TrackPeriodModel.TimeUnit properties
 
 Period
