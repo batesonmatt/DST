@@ -30,16 +30,18 @@ namespace DST.Controllers
         private readonly TrackUnitOfWork _data;
         private readonly IGeolocationBuilder _geoBuilder;
         private readonly ITrackPhaseBuilder _phaseBuilder;
+        private readonly ITrackPeriodBuilder _periodBuilder;
 
         #endregion
 
         #region Constructors
 
-        public TrackController(MainDbContext context, IGeolocationBuilder geoBuilder, ITrackPhaseBuilder phaseBuilder)
+        public TrackController(MainDbContext context, IGeolocationBuilder geoBuilder, ITrackPhaseBuilder phaseBuilder, ITrackPeriodBuilder periodBuilder)
         {
             _data = new TrackUnitOfWork(context);
             _geoBuilder = geoBuilder;
             _phaseBuilder = phaseBuilder;
+            _periodBuilder = periodBuilder;
 
             // Load the client geolocation, if any.
             _geoBuilder.Load();
@@ -151,7 +153,7 @@ namespace DST.Controllers
             values.Validate();
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
-            Algorithm algorithm = values.GetAlgorithm();
+            Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             SeasonModel season = _data.GetSeason(dso);
             ConstellationModel constellation = _data.GetConstellation(dso);
@@ -236,8 +238,8 @@ namespace DST.Controllers
             values.Validate();
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
-            Algorithm algorithm = values.GetAlgorithm();
-            Phase phase = values.GetPhase();
+            Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
+            Phase phase = Utilities.GetPhase(values.Phase);
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
@@ -353,7 +355,7 @@ namespace DST.Controllers
             values.Validate();
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
-            Algorithm algorithm = values.GetAlgorithm();
+            Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
@@ -388,22 +390,56 @@ namespace DST.Controllers
                 Dso = dso,
                 CurrentRoute = values,
                 Algorithms = Utilities.GetAlgorithmItems(),
+                TimeUnits = Utilities.GetTimeUnitItems(),
 
-                //TrackForm = new TrackPeriodModel()
-                //{
-                //},
+                TrackForm = new TrackPeriodModel()
+                {
+                    Algorithm = values.Algorithm,
+                    Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
+                    IsFixed = values.IsFixed,
+                    TimeUnit = values.TimeUnit,
+                    Period = values.Period,
+                    Interval = values.Interval
+                },
 
                 //Results = results,
-                WarningMessage = message /* Might not be necessary */
+                WarningMessage = message
             };
 
             return viewModel;
         }
 
-        /*
-         * [HttpPost]
-         * public IActionResult SubmitPeriod(TrackPeriodModel trackForm, TrackPeriodRoute values) {}
-         */
+
+        [HttpPost]
+        public IActionResult SubmitPeriod(TrackPeriodModel trackForm, TrackPeriodRoute values)
+        {
+            // Check server-side validation state.
+            if (!ModelState.IsValid)
+            {
+                // Re-render the view so that server-side validation messages are displayed.
+                return View("Period", GetPeriodViewModel(values, buildResults: false));
+            }
+
+            values.SetAlgorithm(trackForm.Algorithm);
+            values.SetStart(trackForm.GetTicks());
+            values.SetFixed(trackForm.IsFixed);
+            values.SetTimeUnit(trackForm.TimeUnit);
+            values.SetPeriod(trackForm.Period);
+            values.SetInterval(values.Interval);
+
+            // Mark the entry as ready so we can calculate the results.
+            trackForm.IsReady = true;
+
+            // Set the current period entry.
+            _periodBuilder.Current = trackForm;
+
+            // Save the period entry to session state.
+            _periodBuilder.Save();
+
+            // Redirect the action to calculate the results.
+            return RedirectToAction("Period", values.ToDictionary());
+        }
+
 
         public ViewResult Period(TrackPeriodRoute values)
         {
