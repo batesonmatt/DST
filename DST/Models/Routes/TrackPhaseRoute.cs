@@ -52,30 +52,6 @@ namespace DST.Models.Routes
             }
         }
 
-        public Core.Trajectory.Phase GetPhase()
-        {
-            Core.Trajectory.Phase phase;
-
-            if (Phase.EqualsSeo(PhaseName.Rise))
-            {
-                phase = Core.Trajectory.Phase.Rise;
-            }
-            else if (Phase.EqualsSeo(PhaseName.Apex))
-            {
-                phase = Core.Trajectory.Phase.Apex;
-            }
-            else if (Phase.EqualsSeo(PhaseName.Set))
-            {
-                phase = Core.Trajectory.Phase.Set;
-            }
-            else
-            {
-                phase = Core.Trajectory.Phase.Default;
-            }
-
-            return phase;
-        }
-
         public void SetStart(long start)
         {
             Start = start is >= 0 and < long.MaxValue ? start : 0;
@@ -83,7 +59,7 @@ namespace DST.Models.Routes
 
         public void SetCycles(int cycles)
         {
-            Cycles = cycles is > int.MinValue and < int.MaxValue ? cycles : 0;
+            Cycles = cycles is > -100 and < 100 ? cycles : 0;
         }
 
         public new TrackPhaseRoute Clone()
