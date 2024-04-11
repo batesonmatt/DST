@@ -63,3 +63,29 @@ function enableElement(elementId)
         e.removeAttribute("disabled");
     }
 }
+
+function disableToggleElement(elementId)
+{
+    let e = document.getElementById(toggleId);
+
+    e.checked = false;
+    e.setAttribute("disabled", "disabled");
+}
+
+function updateFixedTrackingToggle(selectId, toggleId)
+{
+    let s = document.getElementById(selectId);
+    
+    switch (s.value)
+    {
+        case "days":
+        case "weeks":
+        case "months":
+        case "years":
+            enableElement(toggleId);
+            break;
+        default:
+            disableToggleElement(toggleId);
+            break;
+    }
+}
