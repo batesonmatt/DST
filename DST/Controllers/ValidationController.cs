@@ -30,7 +30,24 @@ namespace DST.Controllers
         public JsonResult ValidateStartDate([Bind(Prefix = "TrackForm.Start")] DateTime start)
         {
             string message = Utilities.ValidateClientDateTime(start, _geoBuilder.CurrentGeolocation);
+            return string.IsNullOrWhiteSpace(message) ? Json(true) : Json(message);
+        }
 
+        public JsonResult ValidatePeriod(
+            [Bind(Prefix = "TrackForm.Period")] int period,
+            [Bind(Prefix = "TrackForm.Algorithm")] string algorithm,
+            [Bind(Prefix = "TrackForm.TimeUnit")] string timeUnit,
+            [Bind(Prefix = "TrackForm.IsFixed")] bool isFixed)
+        {
+            string message = Utilities.ValidateClientPeriod(period, algorithm, timeUnit, isFixed);
+            return string.IsNullOrWhiteSpace(message) ? Json(true) : Json(message);
+        }
+
+        public JsonResult ValidateInterval(
+            [Bind(Prefix = "TrackForm.Interval")] int interval,
+            [Bind(Prefix = "TrackForm.Period")] int period)
+        {
+            string message = Utilities.ValidateClientInterval(interval, period);
             return string.IsNullOrWhiteSpace(message) ? Json(true) : Json(message);
         }
 
