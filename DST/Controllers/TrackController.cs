@@ -364,25 +364,25 @@ namespace DST.Controllers
 
             if (buildResults)
             {
-                //// Load the previous period entry, if any.
-                ////_periodBuilder.Load();
+                // Load the previous period entry, if any.
+                _periodBuilder.Load();
 
-                //// Calculate the period tracking results if an entry was submitted.
-                //if (_periodBuilder.Current.IsReady)
-                //{
-                //    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_periodBuilder.Current.Start, localObserver.DateTimeInfo);
+                // Calculate the period tracking results if an entry was submitted.
+                if (_periodBuilder.Current.IsReady)
+                {
+                    //IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_periodBuilder.Current.Start, localObserver.DateTimeInfo);
 
-                //    results = Utilities.GetPeriodResults(
-                //        trajectory, start,
-                //        _periodBuilder.Current.TimeUnit,
-                //        _periodBuilder.Current.Period,
-                //        _periodBuilder.Current.Interval,
-                //        _periodBuilder.Current.IsFixed);
+                    //results = Utilities.GetPeriodResults(
+                    //    trajectory, start,
+                    //    _periodBuilder.Current.TimeUnit,
+                    //    _periodBuilder.Current.Period,
+                    //    _periodBuilder.Current.Interval,
+                    //    _periodBuilder.Current.IsFixed);
 
-                //    // Force the client to resubmit the form.
-                //    _periodBuilder.Current.IsReady = false;
-                //    _periodBuilder.Save();
-                //}
+                    // Force the client to resubmit the form.
+                    _periodBuilder.Current.IsReady = false;
+                    _periodBuilder.Save();
+                }
             }
 
             TrackPeriodViewModel viewModel = new()
@@ -425,7 +425,7 @@ namespace DST.Controllers
             values.SetFixed(trackForm.IsFixed);
             values.SetTimeUnit(trackForm.TimeUnit);
             values.SetPeriod(trackForm.Period);
-            values.SetInterval(values.Interval);
+            values.SetInterval(trackForm.Interval);
 
             // Mark the entry as ready so we can calculate the results.
             trackForm.IsReady = true;
