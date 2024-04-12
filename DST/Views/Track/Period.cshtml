@@ -6,6 +6,8 @@
 
     TrackPeriodRoute current = Model.CurrentRoute;
     TrackPeriodRoute routes = current.Clone();
+
+    string hidden;
 }
 
 <style>
@@ -67,7 +69,7 @@
                 <label class="form-label" asp-for="TrackForm.TimeUnit">Time Unit</label>
                 <select id="select-period-timeunit" class="form-control" asp-for="TrackForm.TimeUnit" 
                     asp-items="@(new SelectList(Model.TimeUnits, "Id", "Text", Model.TrackForm.TimeUnit))"
-                        onchange="updateFixedTrackingToggle('select-period-timeunit', 'input-period-fixed')"></select>
+                        onchange="updateFixedTrackingToggle()"></select>
             </div>
             <div class="mb-3">
                 <label class="form-label" asp-for="TrackForm.Period">Period</label>
@@ -75,13 +77,16 @@
                 <span asp-validation-for="TrackForm.Period" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label" asp-for="TrackForm.Interval">Intervals</label>
+                <label class="form-label" asp-for="TrackForm.Interval">Interval</label>
                 <input id="input-interval" class="form-control" asp-for="TrackForm.Interval" type="number" value="@Model.TrackForm.Interval" />
                 <span asp-validation-for="TrackForm.Interval" class="text-danger"></span>
             </div>
             <div class="form-check form-switch mb-3">
                 <input id="input-period-fixed" class="form-check-input" asp-for="TrackForm.IsFixed" type="checkbox" value="@Model.TrackForm.IsFixed" />
                 <label class="form-label" asp-for="TrackForm.IsFixed">Fixed Tracking</label>
+
+                @{ hidden = current.TimeUnit.Hidden(); }
+                <div id="form-fixed-notsupported" class="form-text" @hidden>Fixed tracking is not supported for the selected time unit.</div>
             </div>
             <div class="mb-3">
                 <button id="form-period-submit" class="btn btn-primary" type="submit">Track</button>
