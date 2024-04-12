@@ -96,7 +96,7 @@ namespace DST.Models.Routes
         public void SetInterval(int interval)
         {
             // Period should already be validated here.
-            Interval = interval >= 0 && interval <= Period ? interval : 0;
+            Interval = int.Clamp(interval, 0, Period);
         }
 
         public new TrackPeriodRoute Clone()
