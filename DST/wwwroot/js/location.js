@@ -64,28 +64,25 @@ function enableElement(elementId)
     }
 }
 
-function disableToggleElement(elementId)
+function updateFixedTrackingToggle()
 {
-    let e = document.getElementById(toggleId);
+    let s = document.getElementById("select-period-timeunit");
+    let e = document.getElementById("input-period-fixed");
 
-    e.checked = false;
-    e.setAttribute("disabled", "disabled");
-}
-
-function updateFixedTrackingToggle(selectId, toggleId)
-{
-    let s = document.getElementById(selectId);
-    
     switch (s.value)
     {
         case "days":
         case "weeks":
         case "months":
         case "years":
-            enableElement(toggleId);
+            if (e.hasAttribute("disabled"))
+            {
+                e.removeAttribute("disabled");
+            }
             break;
         default:
-            disableToggleElement(toggleId);
+            e.checked = false;
+            e.setAttribute("disabled", "disabled");
             break;
     }
 }
