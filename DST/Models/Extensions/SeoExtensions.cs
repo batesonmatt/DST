@@ -1,4 +1,6 @@
-﻿using DST.Models.DataLayer.Query;
+﻿using DST.Core.DateTimeAdder;
+using DST.Models.BusinessLogic;
+using DST.Models.DataLayer.Query;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -82,6 +84,20 @@ namespace DST.Models.Extensions
             if (a == b)
             {
                 return "active";
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public static string Hidden(this string timeUnitName)
+        {
+            TimeUnit timeUnit = Utilities.GetTimeUnit(timeUnitName);
+
+            if (Utilities.SupportsFixedTracking(timeUnit))
+            {
+                return "hidden";
             }
             else
             {
