@@ -73,6 +73,10 @@ Revise updateFixedTrackingToggle JS function
     for (i = 0; i < x.options.length; i++) { }
 - Consider putting the script in the period view to utilize razor functionality.
 
+Consider a toggle option in the Period view to allow the user to track just once
+- If checked, set Period and Interval both to 0, then disable the inputs for both. (Don't need to disable the labels)
+- Consider the same option for Phase tracking (No Cycles, just single result)
+
 Period route/validation:
 - {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}       ...DONE
 - Add Period view and view model                                                                                                ...DONE
@@ -90,18 +94,18 @@ Period route/validation:
 - Consider TrackModel base class for TrackPhaseModel and TrackPeriodModel.                                                      ...DONE
 - Add ITrackPhaseBuilder and concrete type. Implement DI.                                                                       ...DONE
 - Add post action method, SubmitPeriod                                                                                          ...DONE
+- Disable the form switch if fixed tracking is not supported                                                                    ...DONE
+- If Fixed is disabled, Display a message stating "Fixed tracking is not supported for the selected time unit."
+  Need to check current.TimeUnit on load, then call JS function on time unit selection change.
+- BUG: The Fixed toggle switch/label becomes enabled after postback. Need to check current route values on load.
+- Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.
 - Finish PeriodViewModel (Results)
 - Add TrackPeriodResult
 - Add Utilities.GetPeriodResults(...)
-- Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.
-- Need client-side validation for fixed tracking support (see TrackPeriodRoute.SupportsFixedTracking())
-- Disable the form switch if fixed tracking is not supported                                                                    ...DONE
-- If Fixed is disabled, Display a message stating "Fixed tracking is not supported for time units less than days."
-- Implement remote validation for both TrackPeriodModel.IsFixed and TrackPeriodModel.TimeUnit properties
 
 Period
 - Colorize each result where the object is above the horizon.
-  Also display some icon in a new column at the end.
+  Also display some icon in a new column at the end (Open/closed eye?).
   For small screens, just align this icon to the upper right.
 
 Tracking results
