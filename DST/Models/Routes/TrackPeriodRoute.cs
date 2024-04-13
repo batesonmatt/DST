@@ -41,6 +41,11 @@ namespace DST.Models.Routes
 
         #region Methods
 
+        public bool SupportsFixedTracking()
+        {
+            return Utilities.SupportsFixedTracking(Utilities.GetTimeUnit(TimeUnit));
+        }
+
         public void SetStart(long start)
         {
             Start = start is >= 0 and < long.MaxValue ? start : 0;
@@ -48,7 +53,7 @@ namespace DST.Models.Routes
 
         public void SetFixed(bool isFixed)
         {
-            Fixed = isFixed && Utilities.SupportsFixedTracking(Utilities.GetTimeUnit(TimeUnit)) ? Filter.On : Filter.Off;
+            Fixed = isFixed && SupportsFixedTracking() ? Filter.On : Filter.Off;
         }
 
         public void SetTimeUnit(string timeUnit)
