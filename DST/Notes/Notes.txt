@@ -77,6 +77,10 @@ Consider a toggle option in the Period view to allow the user to track just once
 - If checked, set Period and Interval both to 0, then disable the inputs for both. (Don't need to disable the labels)
 - Consider the same option for Phase tracking (No Cycles, just single result)
 
+Fixed runtime markup issues
+- Remove asp-for attribute on label elements, and replace with the correct element id.
+- research this.
+
 Period route/validation:
 - {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}       ...DONE
 - Add Period view and view model                                                                                                ...DONE
@@ -95,9 +99,9 @@ Period route/validation:
 - Add ITrackPhaseBuilder and concrete type. Implement DI.                                                                       ...DONE
 - Add post action method, SubmitPeriod                                                                                          ...DONE
 - Disable the form switch if fixed tracking is not supported                                                                    ...DONE
-- If Fixed is disabled, Display a message stating "Fixed tracking is not supported for the selected time unit."
-  Need to check current.TimeUnit on load, then call JS function on time unit selection change.
-- BUG: The Fixed toggle switch/label becomes enabled after postback. Need to check current route values on load.
+- If Fixed is disabled, Display a message stating "Fixed tracking is not supported for the selected time unit."                 ...DONE
+  Need to check current.TimeUnit on load, then call JS function on time unit selection change.                                  ...DONE
+- BUG: The Fixed toggle switch/label becomes enabled after postback. Need to check current route values on load.                ...DONE
 - Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.
 - Finish PeriodViewModel (Results)
 - Add TrackPeriodResult
