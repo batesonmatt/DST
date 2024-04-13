@@ -68,6 +68,7 @@ function updateFixedTrackingToggle()
 {
     let s = document.getElementById("select-period-timeunit");
     let e = document.getElementById("input-period-fixed");
+    let w = document.getElementById("input-fixed-warning");
 
     switch (s.value)
     {
@@ -79,10 +80,12 @@ function updateFixedTrackingToggle()
             {
                 e.removeAttribute("disabled");
             }
+            w.hidden = true;
             break;
         default:
             e.checked = false;
             e.setAttribute("disabled", "disabled");
+            w.hidden = false;
             break;
     }
 }
