@@ -6,8 +6,6 @@
 
     TrackPeriodRoute current = Model.CurrentRoute;
     TrackPeriodRoute routes = current.Clone();
-
-    string hidden;
 }
 
 <style>
@@ -81,12 +79,14 @@
                 <input id="input-interval" class="form-control" asp-for="TrackForm.Interval" type="number" value="@Model.TrackForm.Interval" />
                 <span asp-validation-for="TrackForm.Interval" class="text-danger"></span>
             </div>
-            <div class="form-check form-switch mb-3">
-                <input id="input-period-fixed" class="form-check-input" asp-for="TrackForm.IsFixed" type="checkbox" value="@Model.TrackForm.IsFixed" />
-                <label class="form-label" asp-for="TrackForm.IsFixed">Fixed Tracking</label>
-
-                @{ hidden = current.TimeUnit.Hidden(); }
-                <div id="form-fixed-notsupported" class="form-text" @hidden>Fixed tracking is not supported for the selected time unit.</div>
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input id="input-period-fixed" class="form-check-input" asp-for="TrackForm.IsFixed" type="checkbox" checked="@Model.TrackForm.IsFixed"
+                        disabled="@(current?.SupportsFixedTracking() == false)"/>
+                    <label class="form-label" asp-for="TrackForm.IsFixed">Fixed Tracking</label>
+                </div>
+                <div id="input-fixed-warning" class="form-text" 
+                    hidden="@(current?.SupportsFixedTracking())">Fixed tracking is not supported for the selected time unit.</div>
             </div>
             <div class="mb-3">
                 <button id="form-period-submit" class="btn btn-primary" type="submit">Track</button>
