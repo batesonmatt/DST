@@ -420,10 +420,11 @@ namespace DST.Controllers
                 return View("Period", GetPeriodViewModel(values, buildResults: false));
             }
 
+            // The ordering is important here.
             values.SetAlgorithm(trackForm.Algorithm);
             values.SetStart(trackForm.GetTicks());
-            values.SetFixed(trackForm.IsFixed);
             values.SetTimeUnit(trackForm.TimeUnit);
+            values.SetFixed(trackForm.IsFixed);
             values.SetPeriod(trackForm.Period);
             values.SetInterval(trackForm.Interval);
 
