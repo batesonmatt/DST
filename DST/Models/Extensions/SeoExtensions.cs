@@ -91,20 +91,6 @@ namespace DST.Models.Extensions
             }
         }
 
-        public static string Hidden(this string timeUnitName)
-        {
-            TimeUnit timeUnit = Utilities.GetTimeUnit(timeUnitName);
-
-            if (Utilities.SupportsFixedTracking(timeUnit))
-            {
-                return "hidden";
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
-
         public static bool IsFilterAll(this string value)
         {
             return value.EqualsSeo(Filter.All);
