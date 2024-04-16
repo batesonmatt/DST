@@ -577,6 +577,14 @@
     <value>Years</value>
     <comment>A unit of time</comment>
   </data>
+  <data name="TrackPeriodWarningCircumpolar" xml:space="preserve">
+    <value>This object is always above the horizon from your location, and thus the altitude will always be positive.</value>
+    <comment>The display text warning that a particular object will always have a positive observable altitude due to its trajectory being circumpolar to the observer.</comment>
+  </data>
+  <data name="TrackPeriodWarningNeverRise" xml:space="preserve">
+    <value>This object never rises above the horizon from your location, and thus the altitude will always be negative.</value>
+    <comment>The display text warning that a particular object will always have a negative observable altitude due to its trajectory being never visible to the observer.</comment>
+  </data>
   <data name="TrackPhaseWarningCircumpolar" xml:space="preserve">
     <value>This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no variation in altitude.</value>
     <comment>The display text warning that a particular object does not support any phase tracking due to its trajectory being circumpolar to the observer.</comment>

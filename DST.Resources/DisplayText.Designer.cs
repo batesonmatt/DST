@@ -1096,6 +1096,24 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This object is always above the horizon from your location, and thus the altitude will always be positive..
+        /// </summary>
+        public static string TrackPeriodWarningCircumpolar {
+            get {
+                return ResourceManager.GetString("TrackPeriodWarningCircumpolar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This object never rises above the horizon from your location, and thus the altitude will always be negative..
+        /// </summary>
+        public static string TrackPeriodWarningNeverRise {
+            get {
+                return ResourceManager.GetString("TrackPeriodWarningNeverRise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no variation in altitude..
         /// </summary>
         public static string TrackPhaseWarningCircumpolar {
