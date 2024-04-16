@@ -362,6 +362,15 @@ namespace DST.Controllers
             //IEnumerable<TrackPeriodResult> results = Enumerable.Empty<TrackPeriodResult>();
             string message = string.Empty;
 
+            if (trajectory is NeverRiseTrajectory)
+            {
+                message = Resources.DisplayText.TrackPeriodWarningNeverRise;
+            }
+            else if (trajectory is ICircumpolarTrajectory)
+            {
+                message = Resources.DisplayText.TrackPeriodWarningCircumpolar;
+            }
+
             if (buildResults)
             {
                 // Load the previous period entry, if any.
