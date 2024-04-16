@@ -59,10 +59,8 @@ Use bootstrap switches (checkbox) where necessary. See the toggle filters for th
   Similar to SeoExtensions.Active
 - Need to use CSS to style the label as disabled (see Period view)
 
-Create resource strings for the validation attribute messages.
-- See DomainModels
-
-Create resource strings for Utilities.ValidateClientPeriod and .ValidateClientInterval
+Create resource strings for the validation attribute messages.                                                                  ...DONE
+Create resource strings for Utilities.ValidateClientPeriod and .ValidateClientInterval                                          ...DONE
 
 Revise updateFixedTrackingToggle JS function
 - Don't want to use hardcoded strings for the timeunit names.
