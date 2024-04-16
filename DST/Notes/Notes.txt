@@ -62,6 +62,12 @@ Use bootstrap switches (checkbox) where necessary. See the toggle filters for th
 Create resource strings for the validation attribute messages.                                                                  ...DONE
 Create resource strings for Utilities.ValidateClientPeriod and .ValidateClientInterval                                          ...DONE
 
+Consider Bootstrap input groups for tracking forms:
+- https://getbootstrap.com/docs/5.0/forms/input-group/
+  | #    | Days     |  for every  | #    | Days
+- OR, build a string while the user fills out the form.
+  Every # day(s) for # total day(s).
+
 Revise updateFixedTrackingToggle JS function
 - Don't want to use hardcoded strings for the timeunit names.
 - Use hidden elements in the Period view for the time units that support fixed tracking
@@ -100,7 +106,7 @@ Period route/validation:
 - If Fixed is disabled, Display a message stating "Fixed tracking is not supported for the selected time unit."                 ...DONE
   Need to check current.TimeUnit on load, then call JS function on time unit selection change.                                  ...DONE
 - BUG: The Fixed toggle switch/label becomes enabled after postback. Need to check current route values on load.                ...DONE
-- Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.
+- Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.           ...DONE
 - Finish PeriodViewModel (Results)
 - Add TrackPeriodResult
 - Add Utilities.GetPeriodResults(...)
