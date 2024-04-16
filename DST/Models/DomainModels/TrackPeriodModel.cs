@@ -12,11 +12,11 @@ namespace DST.Models.DomainModels
 
         public string TimeUnit { get; set; } = TimeUnitName.Default;
 
-        [Required(ErrorMessage = "Please enter the period length.")]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resources.DisplayText), ErrorMessageResourceName = "TrackValidationPeriod")]
         [Remote("ValidatePeriod", "Validation", AdditionalFields = "Algorithm, TimeUnit, IsFixed")]
         public int Period { get; set; }
 
-        [Required(ErrorMessage = "Please enter the number of intervals.")]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resources.DisplayText), ErrorMessageResourceName = "TrackValidationInterval")]
         [Remote("ValidateInterval", "Validation", AdditionalFields = "Period")]
         public int Interval { get; set; }
 

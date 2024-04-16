@@ -10,8 +10,8 @@ namespace DST.Models.DomainModels
 
         public string Phase { get; set; } = PhaseName.Default;
 
-        [Required(ErrorMessage = "Please enter the number of cycles.")]
-        [Range(-100, 100, ErrorMessage = "The number of cycles must be between -100 and 100.")]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resources.DisplayText), ErrorMessageResourceName = "TrackValidationCycles")]
+        [Range(-100, 100, ErrorMessageResourceType = typeof(Resources.DisplayText), ErrorMessageResourceName = "TrackValidationCyclesRange")]
         public int Cycles { get; set; } = 0;
 
         #endregion

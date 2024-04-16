@@ -12,7 +12,7 @@ namespace DST.Models.DomainModels
 
         public string Algorithm { get; set; } = AlgorithmName.Default;
 
-        [Required(ErrorMessage = "Please enter the start date.")]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resources.DisplayText), ErrorMessageResourceName = "TrackValidationStartDate")]
         [Remote("ValidateStartDate", "Validation")]
         [EpochDateRange]
         public DateTime Start { get; set; }

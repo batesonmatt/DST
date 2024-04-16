@@ -194,13 +194,13 @@ namespace DST.Models.BusinessLogic
                 if (period < dateTimeAdder.Min || period > dateTimeAdder.Max)
                 {
                     message = string.Format(
-                        "The period length must be between {0} and {1}.",
+                        Resources.DisplayText.TrackValidationPeriodRange,
                         dateTimeAdder.Min, dateTimeAdder.Max);
                 }
             }
             catch
             {
-                message = "The period length is not valid.";
+                message = Resources.DisplayText.TrackValidationPeriodUnknown;
             }
 
             return message;
@@ -211,7 +211,7 @@ namespace DST.Models.BusinessLogic
             // Assumes the period length has already been validated.
             if (interval < 0 || interval > period)
             {
-                return string.Format("The interval length must be between {0} and the period length ({1}).", 0, period);
+                return string.Format(Resources.DisplayText.TrackValidationIntervalRange, 0, period);
             }
 
             return string.Empty;
