@@ -589,6 +589,38 @@
     <value>This object has no trackable rise, set, nor apex positions because it is never visible from your location.</value>
     <comment>The display text warning that a particular object does not support any phase tracking due to its trajectory being never visible to the observer.</comment>
   </data>
+  <data name="TrackValidationCycles" xml:space="preserve">
+    <value>Please enter the number of cycles.</value>
+    <comment>The validation message for a required number of tracking cycles in a form.</comment>
+  </data>
+  <data name="TrackValidationCyclesRange" xml:space="preserve">
+    <value>The number of cycles must be between -100 and 100.</value>
+    <comment>The validation message for the tracking cycle range in a form.</comment>
+  </data>
+  <data name="TrackValidationInterval" xml:space="preserve">
+    <value>Please enter the interval length.</value>
+    <comment>The validation message for a required tracking interval length in a form.</comment>
+  </data>
+  <data name="TrackValidationIntervalRange" xml:space="preserve">
+    <value>The interval length must be between {0} and the specified period length ({1}).</value>
+    <comment>The formattable validation message for the tracking interval range in a form.</comment>
+  </data>
+  <data name="TrackValidationPeriod" xml:space="preserve">
+    <value>Please enter the period length.</value>
+    <comment>The validation message for a required tracking period length in a form.</comment>
+  </data>
+  <data name="TrackValidationPeriodRange" xml:space="preserve">
+    <value>The period length must be between {0} and {1}.</value>
+    <comment>The formattable validation message for the tracking period range in a form.</comment>
+  </data>
+  <data name="TrackValidationPeriodUnknown" xml:space="preserve">
+    <value>The period length is not valid.</value>
+    <comment>The validation message for an unknown tracking period length in a form.</comment>
+  </data>
+  <data name="TrackValidationStartDate" xml:space="preserve">
+    <value>Please enter the start date.</value>
+    <comment>The validation message for a required starting date and time value in a form.</comment>
+  </data>
   <data name="TrajectoryCircumpolar" xml:space="preserve">
     <value>Circumpolar</value>
     <comment>A type of diurnal arc in which a tracked object is always above an observer's horizon.</comment>

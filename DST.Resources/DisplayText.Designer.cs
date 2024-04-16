@@ -1123,6 +1123,78 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter the number of cycles..
+        /// </summary>
+        public static string TrackValidationCycles {
+            get {
+                return ResourceManager.GetString("TrackValidationCycles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of cycles must be between -100 and 100..
+        /// </summary>
+        public static string TrackValidationCyclesRange {
+            get {
+                return ResourceManager.GetString("TrackValidationCyclesRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the interval length..
+        /// </summary>
+        public static string TrackValidationInterval {
+            get {
+                return ResourceManager.GetString("TrackValidationInterval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The interval length must be between {0} and the specified period length ({1})..
+        /// </summary>
+        public static string TrackValidationIntervalRange {
+            get {
+                return ResourceManager.GetString("TrackValidationIntervalRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the period length..
+        /// </summary>
+        public static string TrackValidationPeriod {
+            get {
+                return ResourceManager.GetString("TrackValidationPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period length must be between {0} and {1}..
+        /// </summary>
+        public static string TrackValidationPeriodRange {
+            get {
+                return ResourceManager.GetString("TrackValidationPeriodRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period length is not valid..
+        /// </summary>
+        public static string TrackValidationPeriodUnknown {
+            get {
+                return ResourceManager.GetString("TrackValidationPeriodUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the start date..
+        /// </summary>
+        public static string TrackValidationStartDate {
+            get {
+                return ResourceManager.GetString("TrackValidationStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Circumpolar.
         /// </summary>
         public static string TrajectoryCircumpolar {
