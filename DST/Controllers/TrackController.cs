@@ -20,6 +20,9 @@ using DST.Core.TimeKeeper;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using DST.Core.TimeScalable;
+using DST.Core.DateTimeAdder;
+using DST.Core.DateTimesBuilder;
 
 namespace DST.Controllers
 {
@@ -248,24 +251,6 @@ namespace DST.Controllers
             string selectedPhase = string.Empty;
             string message = string.Empty;
 
-            if (buildResults)
-            {
-                // Load the previous phase entry, if any.
-                _phaseBuilder.Load();
-
-                // Calculate the phase tracking results if an entry was submitted.
-                if (_phaseBuilder.Current.IsReady)
-                {
-                    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
-
-                    results = Utilities.GetPhaseResults(trajectory, phase, start, _phaseBuilder.Current.Cycles);
-
-                    // Force the client to resubmit the form.
-                    _phaseBuilder.Current.IsReady = false;
-                    _phaseBuilder.Save();
-                }
-            }
-
             if (trajectory is IRiseSetTrajectory)
             {
                 selectedPhase = values.Phase;
@@ -291,6 +276,24 @@ namespace DST.Controllers
             else
             {
                 message = Resources.DisplayText.TrackPhaseWarningNeverRise;
+            }
+
+            if (buildResults)
+            {
+                // Load the previous phase entry, if any.
+                _phaseBuilder.Load();
+
+                // Calculate the phase tracking results if an entry was submitted.
+                if (_phaseBuilder.Current.IsReady)
+                {
+                    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
+
+                    results = Utilities.GetPhaseResults(trajectory, phase, start, _phaseBuilder.Current.Cycles);
+
+                    // Force the client to resubmit the form.
+                    _phaseBuilder.Current.IsReady = false;
+                    _phaseBuilder.Save();
+                }
             }
 
             TrackPhaseViewModel viewModel = new()
@@ -379,7 +382,7 @@ namespace DST.Controllers
                 // Calculate the period tracking results if an entry was submitted.
                 if (_periodBuilder.Current.IsReady)
                 {
-                    //IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_periodBuilder.Current.Start, localObserver.DateTimeInfo);
+                    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_periodBuilder.Current.Start, localObserver.DateTimeInfo);
 
                     //results = Utilities.GetPeriodResults(
                     //    trajectory, start,
@@ -387,6 +390,23 @@ namespace DST.Controllers
                     //    _periodBuilder.Current.Period,
                     //    _periodBuilder.Current.Interval,
                     //    _periodBuilder.Current.IsFixed);
+
+                    // Get TimeScale
+                    TimeScale timeScale = Utilities.GetTimeScale(algorithm, values.IsFixed);
+                    // Get TimeUnit
+                    TimeUnit timeUnit = Utilities.GetTimeUnit(values.TimeUnit);
+                    // Get DateTimeAdder
+                    IDateTimeAdder dateTimeAdder = Utilities.GetDateTimeAdder(timeScale, timeUnit);
+                    // Get DateTimesBuilder
+                    /* New option - Adjust for Leap Years? (Only available for fixed tracking)
+                     * If true, then add from starting datetime
+                     * Else, add from previous interval
+                     */
+                    IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, addFromStart: true);
+                    // Build DateTimes[]
+                    // Get Tracker
+                    // Track DateTimes[] to get positions[]
+                    // Build LocalVector[] using the DateTimes and positions[]
 
                     // Force the client to resubmit the form.
                     _periodBuilder.Current.IsReady = false;
