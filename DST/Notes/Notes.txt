@@ -107,6 +107,11 @@ Period route/validation:
   Need to check current.TimeUnit on load, then call JS function on time unit selection change.                                  ...DONE
 - BUG: The Fixed toggle switch/label becomes enabled after postback. Need to check current route values on load.                ...DONE
 - Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.           ...DONE
+- Need new option - Adjust for Leap Years (route value = Leap, or Adjust, or AdjustLeap = adjust-leap-{adjustleap}, etc.)
+  (Only available for fixed tracking)
+  If true, then add from starting datetime
+  Else, add from previous interval
+  Enable this toggle switch only for TimeUnit = Years and Fixed tracking = True
 - Finish PeriodViewModel (Results)
 - Add TrackPeriodResult
 - Add Utilities.GetPeriodResults(...)
