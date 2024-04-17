@@ -13,6 +13,9 @@ namespace DST.Core.DateTimesBuilder
         // Builds a new IBaseDateTime array given the specified starting IBaseDateTime value,
         // the period length, and the interval length.
         // The date/time value at each interval will be added from the previous date/time value.
+        // This will not accomodate for leap years when adding in Sidereal and Stellar time scales,
+        // which will cause each consecutive day of year and time of day to gradually drift
+        // from the starting date/time value.
         public override IBaseDateTime[] Build(IBaseDateTime start, int period, int interval)
         {
             _ = start ?? throw new ArgumentNullException(nameof(start));
