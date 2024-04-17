@@ -20,7 +20,6 @@ namespace DST.Models.ViewModels
          */
 
         public string WarningMessage { get; set; }
-        //public string NotSupportedMessage { get; set; }
 
         #endregion
 
