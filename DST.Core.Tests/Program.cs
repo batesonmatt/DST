@@ -271,11 +271,11 @@ namespace DST.Core.Tests
 
             Console.WriteLine();
 
-            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.MeanSolarTime);
-            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Hours);
+            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.SiderealTime);
+            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Years);
             IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, true);
             IAstronomicalDateTime[] dateTimes = DateTimeFactory.ConvertToAstronomical(
-                dateTimesBuilder.Build(start, 24, 1));
+                dateTimesBuilder.Build(start, 10, 1));
 
             ITracker tracker = TrackerFactory.Create(observer);
 
@@ -376,18 +376,18 @@ namespace DST.Core.Tests
         private static void TestDateTimes()
         {
             IDateTimeInfo dateTimeInfo = DateTimeInfoFactory.CreateFromTimeZoneId("America/Chicago");
-            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.SiderealTime);
-            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Months);
-            IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, false);
+            ITimeScalable timeScalable = TimeScalableFactory.Create(TimeScale.StellarTime);
+            IDateTimeAdder dateTimeAdder = DateTimeAdderFactory.Create(timeScalable, TimeUnit.Years);
+            IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, true);
 
             IBaseDateTime start = DateTimeFactory.CreateBase(
                 new DateTime(2022, 11, 24, 12, 0, 0, DateTimeKind.Local), dateTimeInfo);
 
-            IAstronomicalDateTime[] dateTimes = DateTimeFactory.ConvertToAstronomical(dateTimesBuilder.Build(start, -10, 1));
+            IAstronomicalDateTime[] dateTimes = DateTimeFactory.ConvertToAstronomical(dateTimesBuilder.Build(start, 100, 1));
 
             foreach (IAstronomicalDateTime dateTime in dateTimes)
             {
-                Console.WriteLine($"{dateTime.Value}: \t{dateTime.GetMeanSiderealTime().TotalDegrees}°");
+                Console.WriteLine($"{dateTime.Value}: \t{dateTime.GetEarthRotationAngle().TotalDegrees}°");
             }
         }
 
@@ -487,9 +487,10 @@ namespace DST.Core.Tests
         {
             //TestTrack();
             //TestTrackVectors();
+            TestDateTimes();
             //ClientTimeZoneInfoTests.RunAmericaNewYorkTest();
             //ClientTimeZoneInfoTests.RunAustraliaSydneyTest();
-            UnitTest_TrackVector_Harness();
+            //UnitTest_TrackVector_Harness();
             //UnitTest_TrackerDateRange_Harness();
 
             Console.ReadLine();
