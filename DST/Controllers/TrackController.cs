@@ -398,7 +398,8 @@ namespace DST.Controllers
                     // Get DateTimeAdder
                     IDateTimeAdder dateTimeAdder = Utilities.GetDateTimeAdder(timeScale, timeUnit);
                     // Get DateTimesBuilder
-                    /* New option - Adjust for Leap Years? (Only available for fixed tracking)
+                    /* New option - Deep/Comprehensive vs Shallow/Narrow intervals
+                     * (Only available for fixed tracking, Months and Years)
                      * If true, then add from starting datetime
                      * Else, add from previous interval
                      */
