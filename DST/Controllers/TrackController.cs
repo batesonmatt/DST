@@ -398,7 +398,7 @@ namespace DST.Controllers
                     // Get DateTimeAdder
                     IDateTimeAdder dateTimeAdder = Utilities.GetDateTimeAdder(timeScale, timeUnit);
                     // Get DateTimesBuilder
-                    /* New option - Deep/Comprehensive vs Shallow/Narrow intervals
+                    /* New option - Aggregate/IsAggregated
                      * (Only available for fixed tracking, Months and Years)
                      * If true, then add from starting datetime
                      * Else, add from previous interval

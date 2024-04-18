@@ -12,9 +12,10 @@ namespace DST.Core.DateTimesBuilder
 
         // Builds a new IBaseDateTime array given the specified starting IBaseDateTime value,
         // the period length, and the interval length.
+        //
         // The date/time value at each interval will be added from the starting date/time value.
         //
-        // By performing a comprehensive add, this is useful when adding in Months or Years
+        // By performing an aggregated interval calculation, this is useful when adding in Months or Years
         // (where the number of days is not consistent) for time scales other than Mean Solar Time,
         // which causes each consecutive date/time to resemble its Mean Solar Time counterpart in
         // whole days of the underlying time scale.
