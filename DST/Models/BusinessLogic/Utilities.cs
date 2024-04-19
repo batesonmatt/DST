@@ -117,6 +117,17 @@ namespace DST.Models.BusinessLogic
             };
         }
 
+        public static bool SupportsAggregatedIntervals(TimeUnit timeUnit)
+        {
+            // Aggregated interval calculation is only supported for Months and Years,
+            // for which the number of days is not consistent.
+            return timeUnit switch
+            {
+                TimeUnit.Months or TimeUnit.Years => true,
+                _ => false
+            };
+        }
+
         public static TimeScale GetTimeScale(Algorithm algorithm, bool isFixed)
         {
             if (isFixed && (algorithm == Algorithm.GMST || algorithm == Algorithm.GAST))
