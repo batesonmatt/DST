@@ -67,7 +67,7 @@ function enableElement(elementId)
 function updateFixedTrackingToggle()
 {
     let s = document.getElementById("select-period-timeunit");
-    let e = document.getElementById("input-period-fixed");
+    let f = document.getElementById("input-period-fixed");
     let w = document.getElementById("input-fixed-warning");
 
     switch (s.value)
@@ -76,15 +76,43 @@ function updateFixedTrackingToggle()
         case "weeks":
         case "months":
         case "years":
-            if (e.hasAttribute("disabled"))
+            if (f.hasAttribute("disabled"))
             {
-                e.removeAttribute("disabled");
+                f.removeAttribute("disabled");
+                w.hidden = true;
             }
-            w.hidden = true;
             break;
         default:
-            e.checked = false;
-            e.setAttribute("disabled", "disabled");
+            f.checked = false;
+            f.setAttribute("disabled", "disabled");
+            w.hidden = false;
+            break;
+    }
+}
+
+function updateAggregateToggle()
+{
+    let s = document.getElementById("select-period-timeunit");
+    let f = document.getElementById("input-period-fixed");
+    let a = document.getElementById("input-period-aggregate");
+    let w = document.getElementById("input-aggregate-warning");
+
+    switch (s.value)
+    {
+        case "months":
+        case "years":
+            if (f.checked === true)
+            {
+                if (a.hasAttribute("disabled"))
+                {
+                    a.removeAttribute("disabled");
+                    w.hidden = true;
+                }
+            }
+            break;
+        default:
+            a.checked = true;
+            a.setAttribute("disabled", "disabled");
             w.hidden = false;
             break;
     }
