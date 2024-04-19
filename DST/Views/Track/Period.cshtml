@@ -67,7 +67,7 @@
                 <label class="form-label" asp-for="TrackForm.TimeUnit">Time Unit</label>
                 <select id="select-period-timeunit" class="form-control" asp-for="TrackForm.TimeUnit" 
                     asp-items="@(new SelectList(Model.TimeUnits, "Id", "Text", Model.TrackForm.TimeUnit))"
-                        onchange="updateFixedTrackingToggle()"></select>
+                        onchange="updateFixedTrackingToggle(); updateAggregateToggle()"></select>
             </div>
             <div class="mb-3">
                 <label class="form-label" asp-for="TrackForm.Period">Period</label>
@@ -82,11 +82,22 @@
             <div class="mb-3">
                 <div class="form-check form-switch">
                     <input id="input-period-fixed" class="form-check-input" asp-for="TrackForm.IsFixed" type="checkbox" checked="@Model.TrackForm.IsFixed"
-                        disabled="@(current?.SupportsFixedTracking() == false)"/>
+                           disabled="@(current?.SupportsFixedTracking() == false)" onchange="updateAggregateToggle()" />
                     <label class="form-label" asp-for="TrackForm.IsFixed">Fixed Tracking</label>
                 </div>
-                <div id="input-fixed-warning" class="form-text" 
-                    hidden="@(current?.SupportsFixedTracking())">Fixed tracking is not supported for the selected time unit.</div>
+                <div id="input-fixed-warning" class="form-text" hidden="@(current?.SupportsFixedTracking())">
+                    Fixed tracking is only supported for days, weeks, months, and years.
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input id="input-period-aggregate" class="form-check-input" asp-for="TrackForm.IsAggregated" type="checkbox" checked="@Model.TrackForm.IsAggregated"
+                           disabled="@(current?.SupportsAggregatedIntervals() == false)" />
+                    <label class="form-label" asp-for="TrackForm.IsAggregated">Aggregated Intervals</label>
+                </div>
+                <div id="input-aggregate-warning" class="form-text" hidden="@(current?.SupportsAggregatedIntervals())">
+                    Aggregation can only be disabled for fixed tracking in months and years.
+                </div>
             </div>
             <div class="mb-3">
                 <button id="form-period-submit" class="btn btn-primary" type="submit">Track</button>
