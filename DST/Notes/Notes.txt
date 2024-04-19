@@ -107,29 +107,11 @@ Period route/validation:
   Need to check current.TimeUnit on load, then call JS function on time unit selection change.                                  ...DONE
 - BUG: The Fixed toggle switch/label becomes enabled after postback. Need to check current route values on load.                ...DONE
 - Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.           ...DONE
-- Need new option - Deep/Comprehensive vs Shallow/Narrow intervals.
-  (Only available for Months/Years and fixed tracking)
-  If true, then add from starting datetime. Else, add from previous interval
-  Consider replacing the DateTimesBuilderFactory.Create => bool addFromStart parameter with an Enum value.
-  Enable this toggle switch only for TimeUnit = Years or Months, and Fixed tracking = True
-  Add new route segment, Aggregate (string => On/Off), default to On
-  Add jsonignore property, IsAggregated => bool
-  Add TrackPeriodViewModel.IsAggregated property.
-
-        Month/Year Fixed tracking Interval types (From start, from previous)
-        --
-        From start (Aggregated):
-        Each date is determined by calculating the number of days since the start date 
-        in Mean Solar Time for the selected time unit, which is then represented in 
-        whole days of the time scale for the selected timekeeping algorithm.
-        --
-        From previous (Successive/Consecutive):
-        Each date is determined by calculating the number of days since the previous date 
-        in Mean Solar time for the selected time unit, which is then represented in 
-        whole days of the time scale for the selected timekeeping algorithm.
-        This more accurately depicts the length of each interval in the underlying time scale,
-        but might be less intuitive for some people.
-
+- Need new option - Aggregated intervals                                                                                        ...DONE
+  Enable this toggle switch only for TimeUnit = Years or Months, and Fixed tracking = True                                      ...DONE
+  Add new route segment, Aggregate (string => On/Off), default to On                                                            ...DONE
+  Add jsonignore property, IsAggregated => bool                                                                                 ...DONE
+  Add TrackPeriodModel.IsAggregated property                                                                                    ...DONE
 - Finish PeriodViewModel (Results)
 - Add TrackPeriodResult
 - Add Utilities.GetPeriodResults(...)
