@@ -10,6 +10,19 @@ namespace DST.Models.DomainModels
 
         public bool IsFixed { get; set; } = false;
 
+        // If set to true, tracking will use Aggregated interval calculation.
+        // Each date is determined by calculating the number of days since the start date 
+        // in Mean Solar Time for the selected time unit, which is then represented in 
+        // whole days of the time scale for the selected timekeeping algorithm.
+        //
+        // If set to false, tracking will use Successive interval calculation.
+        // Each date is determined by calculating the number of days since the previous date 
+        // in Mean Solar time for the selected time unit, which is then represented in 
+        // whole days of the time scale for the selected timekeeping algorithm.
+        // This more accurately depicts the length of each interval in the underlying time scale,
+        // but might be less intuitive for some people.
+        public bool IsAggregated { get; set; } = true;
+
         public string TimeUnit { get; set; } = TimeUnitName.Default;
 
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resources.DisplayText), ErrorMessageResourceName = "TrackValidationPeriod")]
