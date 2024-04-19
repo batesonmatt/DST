@@ -13,12 +13,16 @@ namespace DST.Models.Routes
 
         public long Start { get; set; }
         public string Fixed { get; set; } = Filter.Off;
+        public string Aggregate { get; set; } = Filter.On;
         public string TimeUnit { get; set; } = TimeUnitName.Default;
         public int Period { get; set; }
         public int Interval { get; set; }
 
         [JsonIgnore]
         public bool IsFixed => Fixed.IsFilterOn();
+
+        [JsonIgnore]
+        public bool IsAggregated => Aggregate.IsFilterOn();
 
         #endregion
 
@@ -32,6 +36,7 @@ namespace DST.Models.Routes
         {
             Start = values.Start;
             Fixed = values.Fixed;
+            Aggregate = values.Aggregate;
             TimeUnit = values.TimeUnit;
             Period = values.Period;
             Interval = values.Interval;
@@ -46,6 +51,11 @@ namespace DST.Models.Routes
             return Utilities.SupportsFixedTracking(Utilities.GetTimeUnit(TimeUnit));
         }
 
+        public bool SupportsAggregatedIntervals()
+        {
+            return IsFixed && Utilities.SupportsAggregatedIntervals(Utilities.GetTimeUnit(TimeUnit));
+        }
+
         public void SetStart(long start)
         {
             Start = start is >= 0 and < long.MaxValue ? start : 0;
@@ -54,6 +64,13 @@ namespace DST.Models.Routes
         public void SetFixed(bool isFixed)
         {
             Fixed = isFixed && SupportsFixedTracking() ? Filter.On : Filter.Off;
+        }
+
+        public void SetAggregate(bool isAggregated)
+        {
+            // Default to On.
+            // Only set to Off if Aggregated is supported and the client explicitly disables the option.
+            Aggregate = !isAggregated && SupportsAggregatedIntervals() ? Filter.Off : Filter.On;
         }
 
         public void SetTimeUnit(string timeUnit)
@@ -115,6 +132,7 @@ namespace DST.Models.Routes
             {
                 { nameof(Start), Start.ToString().ToKebabCase() },
                 { nameof(Fixed), Fixed.ToKebabCase() },
+                { nameof(Aggregate), Aggregate.ToKebabCase() },
                 { nameof(TimeUnit), TimeUnit.ToKebabCase() },
 
                 // Do not call ToKebabCase() because we want negative numbers represented in the route URL.
@@ -133,7 +151,8 @@ namespace DST.Models.Routes
 
             SetStart(Start);
             SetTimeUnit(TimeUnit);
-            SetFixed(Fixed.IsFilterOn());
+            SetFixed(IsFixed);
+            SetAggregate(IsAggregated);
             SetPeriod(Period);
             SetInterval(Interval);
         }
