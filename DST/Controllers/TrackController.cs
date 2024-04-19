@@ -393,17 +393,16 @@ namespace DST.Controllers
 
                     // Get TimeScale
                     TimeScale timeScale = Utilities.GetTimeScale(algorithm, values.IsFixed);
+
                     // Get TimeUnit
                     TimeUnit timeUnit = Utilities.GetTimeUnit(values.TimeUnit);
+
                     // Get DateTimeAdder
                     IDateTimeAdder dateTimeAdder = Utilities.GetDateTimeAdder(timeScale, timeUnit);
+
                     // Get DateTimesBuilder
-                    /* New option - Aggregate/IsAggregated
-                     * (Only available for fixed tracking, Months and Years)
-                     * If true, then add from starting datetime
-                     * Else, add from previous interval
-                     */
-                    IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, addFromStart: true);
+                    IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, aggregate: values.IsAggregated);
+
                     // Build DateTimes[]
                     // Get Tracker
                     // Track DateTimes[] to get positions[]
@@ -427,6 +426,7 @@ namespace DST.Controllers
                     Algorithm = values.Algorithm,
                     Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
                     IsFixed = values.IsFixed,
+                    IsAggregated = values.IsAggregated,
                     TimeUnit = values.TimeUnit,
                     Period = values.Period,
                     Interval = values.Interval
@@ -455,6 +455,7 @@ namespace DST.Controllers
             values.SetStart(trackForm.GetTicks());
             values.SetTimeUnit(trackForm.TimeUnit);
             values.SetFixed(trackForm.IsFixed);
+            values.SetAggregate(trackForm.IsAggregated);
             values.SetPeriod(trackForm.Period);
             values.SetInterval(trackForm.Interval);
 
