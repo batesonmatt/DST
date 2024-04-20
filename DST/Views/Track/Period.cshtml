@@ -105,4 +105,65 @@
         </form>
     </div>
 
+    @if (Model.HasResults())
+    {
+        <div class="mb-3">
+            <div class="table-responsive">
+                <table class="table table-striped caption-top align-middle d-none d-sm-table">
+                    <caption>Track results</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" class="text-nowrap">Date/Time</th>
+                            <th scope="col" class="text-nowrap">Altitude</th>
+                            <th scope="col" class="text-nowrap">Azimuth</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int resultNumber = 1;
+                            foreach (var result in Model.Results)
+                            {
+                                if (result is not null)
+                                {
+                                    <tr>
+                                        <th scope="row">@resultNumber</th>
+                                        <td class="text-nowrap">@result.GetLocalDateTimeText()</td>
+                                        <td class="text-nowrap">@result.GetAltitudeText()</td>
+                                        <td class="text-nowrap">@result.GetAzimuthText()</td>
+                                    </tr>
+                                }
+                                resultNumber++;
+                            }
+                        }
+                    </tbody>
+                </table>
+
+                <table class="table table-striped caption-top align-middle d-table d-sm-none">
+                    <caption>Track results</caption>
+                    <tbody>
+                        @{
+                            foreach (var result in Model.Results)
+                            {
+                                if (result is not null)
+                                {
+                                    <tr>
+                                        <td class="py-3">
+                                            <div class="mx-3">
+                                                <small class="fst-italic">Time</small>
+                                                <h6 class="mb-2">@result.GetLocalDateTimeText()</h6>
+                                                <small class="fst-italic">Position</small>
+                                                <p class="mb-0">@result.GetCoordinateText()</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
 </div>
