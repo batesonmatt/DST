@@ -1,66 +1,15 @@
 ﻿To Do:
 
-*******************************************************************************************************
-
-Implement fixed tracking support (For Period tracking):
-
-Fixed tracking is already built in for Phase tracking, so it won't be an option in the Phase form.
-
-By default, fixed tracking is disabled for Period tracking, and the tracker should use the Mean Solar Time timescale.
-
-If the user enables fixed tracking in the period tracking form, then the timescale option should 
-either be hidden or disabled and set to the appropriate timescale in the front-end.
-
-When using the GMST/GAST timekeeping algorithms, fixed tracking will use the Sidereal timescale.
-When using the ERA timekeeping algorithm, fixed tracking will use the Stellar timescale.
-
-Fixed tracking will only be available as an option for timeunits of Days, Weeks, Months, and Years.
-If the user selects a timeunit of Seconds, Minutes, or Hours, then the tracker MUST use the Mean Solar timescale.
-See below for further explanation.
-
-----------------------------------------------------------------------------------------------
-
-Using IDateTimeAdder and/or ITimeScalable
-
-When adding in seconds, minutes, and hours in sidereal time and stellar time, 
-the datetimes are all the same.
-
-This is actually due to the ITimeScalable implementations converting the ticks
-to total days, then truncating the fractional part.
-	
-Since each interval being added is less than a whole day, the value will almost always be 0.
-
-Test a 24 hour period for 1 hour intervals, where each interval is based on the 
-starting datetime. Only the last interval will be different, since it is 24 hours
-from the start, which is 1 whole day.
-Likewise, testing a 168 hour period for 12 hour intervals, every two datetimes are the same.
-
-Solution - To avoid user confusion, only allow tracking in Sidereal/Stellar time if
-			tracking in days, weeks, months, and years.
-			This will be accomplished in the front-end.
-
-			The user may, however, still choose the Earth-rotational algorithm, 
-			but can only track in mean solar time if using seconds, minutes, and hours.
-
-*******************************************************************************************************
-
 Summary view
 - Need alternating colors for the rows
 - Consider spacing the rows better (see smaller screen widths)
 - Center the info
 - Display more info for the Position (EE, Obliquity, etc... everything)
 
-Use ValidationController for remote validation.
-- Call a static method in Utilities for both server-side and client-side validation.
-- Do this for all necessary track forms.
-
 Use bootstrap switches (checkbox) where necessary. See the toggle filters for the List view, etc.
 - Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, based on whether the given string is "on" or "off".
   Similar to SeoExtensions.Active
 - Need to use CSS to style the label as disabled (see Period view)
-
-Create resource strings for the validation attribute messages.                                                                  ...DONE
-Create resource strings for Utilities.ValidateClientPeriod and .ValidateClientInterval                                          ...DONE
 
 Consider Bootstrap input groups for tracking forms:
 - https://getbootstrap.com/docs/5.0/forms/input-group/
@@ -85,47 +34,26 @@ Fixed runtime markup issues
 - Remove asp-for attribute on label elements, and replace with the correct element id.
 - research this.
 
-Period route/validation:
-- {controller}/{action}/{catalog}/{id}/{algorithm}/{start}/fixed-tracking-{fixed}/{timeunit}/{period}/interval/{interval}       ...DONE
-- Add Period view and view model                                                                                                ...DONE
-- Add TrackPeriodModel                                                                                                          ...DONE
-- Consider moving to Utilities:                                                                                                 ...DONE
-  TrackSummaryRoute.GetAlgorithm                                                                                                ...DONE
-  TrackPhaseRoute.GetPhase                                                                                                      ...DONE
-  TrackPeriodRoute.SupportsFixedTracking                                                                                        ...DONE
-  TrackPeriodRoute.GetTimeUnit                                                                                                  ...DONE
-  TrackPeriodRoute.GetTimeScale                                                                                                 ...DONE
-  TrackPeriodRoute.GetDateTimeAdder                                                                                             ...DONE
-- Use Remote validation attributes for TrackPhaseModel.Period and TrackPhaseModel.Interval (Use AdditionalFields, pg. 428)      ...DONE
-  Use simple validation bounds checking for period/interval in TrackPeriodRoute (See TrackPhaseRoute.Cycles).                   ...DONE
-  Add ValidationController.ValidatePeriod and ValidationController.ValidateInterval.                                            ...DONE
-- Consider TrackModel base class for TrackPhaseModel and TrackPeriodModel.                                                      ...DONE
-- Add ITrackPhaseBuilder and concrete type. Implement DI.                                                                       ...DONE
-- Add post action method, SubmitPeriod                                                                                          ...DONE
-- Disable the form switch if fixed tracking is not supported                                                                    ...DONE
-- If Fixed is disabled, Display a message stating "Fixed tracking is not supported for the selected time unit."                 ...DONE
-  Need to check current.TimeUnit on load, then call JS function on time unit selection change.                                  ...DONE
-- BUG: The Fixed toggle switch/label becomes enabled after postback. Need to check current route values on load.                ...DONE
-- Set TrackPeriodViewModel.WarningMessage to notify the user whether the object is never visible from their location.           ...DONE
-- Need new option - Aggregated intervals                                                                                        ...DONE
-  Enable this toggle switch only for TimeUnit = Years or Months, and Fixed tracking = True                                      ...DONE
-  Add new route segment, Aggregate (string => On/Off), default to On                                                            ...DONE
-  Add jsonignore property, IsAggregated => bool                                                                                 ...DONE
-  Add TrackPeriodModel.IsAggregated property                                                                                    ...DONE
-- Finish PeriodViewModel (Results)                                                                                              ...DONE
-- Add Utilities.GetPeriodResults(...)
-- Finish Period view                                                                                                            ...DONE
+***
+
+Revise Utilities.GetPhaseResults to take in (ILocalObserver, algorithm, TrackPhaseModel)
+    Use shortcut condition for cycles (see GetPeriodResults)
+
+Revise TrackController.Summary HttpGet method to use a Utilities helper method.
 
 Period
+- Consider hiding the Aggregate option by default, then only show it when the user selects Months/Years and Fixed tracking.
 - Colorize each result where the object is above the horizon.
   Also display some icon in a new column at the end (Open/closed eye?).
   For small screens, just align this icon to the upper right.
 
 Tracking results
+- Display something for empty results ("No results", and an empty table)
+- Consider limiting results to ~20 by default, with a Show More button at the bottom.
 - Display the time scale used after posting, along with the results (Important for Period tracking, which supports fixed tracking).
-- For Phase and Period tracking.
-- Position tracking will most likely perform calulations with each time scale type, etc.
 - Consider adding funcionality to the *Result classes that returns more information (EE, OE, Rotation, LHA, etc...)
+  So that we don't need position tracking.
+- Position tracking (if implemented) will most likely perform calulations with each time scale type, etc.
 
 Feature (Phase and period)
 - Reconsider the Position view (See points below).
@@ -136,17 +64,6 @@ Feature (Phase and period)
 
 Use floating labels for the form controls.
 
-...DONE
-The Algorithm select control should be available in the Phase/Period forms.
-- The builders/routes will use this value that gets posted from the form, instead of the one already selected in the current route.
-- The current selection in the select list will be initially set to the Algorithm value in the current route.
-  This could affect the other controls in the Period form.
-  A similar thing will happen for the Phase form if the Dso (Catalog, Id) in the route is NeverRise or Circumpolar.
-  Use razor code to disable/hide certain options and display messages based on the route values.
-  There will also be server-side validation to ensure bad data doesn't get sent in.
-- The Summary view may still have an Algorithm select control.
-
-...SCRAP
 Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Takes DsoModel, GeolocationModel, and Algorithm
 - Inject into TrackController.
@@ -154,17 +71,6 @@ Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Provide methods to set the Target (takes DsoModel), the Location (takes GeolocationModel), and the TimeKeeper (takes Algorithm)
 - Provide methods/properties for dealing with the Season, Trajectory, etc.
 OR, Consider a builder for storing at least the client date time.
-
-...SCRAP
-Consider a TrackPhaseModel and TrackPeriodModel with custom server-side validation attributes for the properties.
-- See pg. 418
-- To use DI in validation attribute classes: 
-    IPhaseBuilder b = (IPhaseBuilder)validationContext.GetService(typeof(IPhaseBuilder));
-    OR:
-    using Microsoft.Extensions.DependencyInjection;
-    ...
-    IPhaseBuilder b = validationContext.GetService<IPhaseBuilder>()
-
 
 Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteBuilder and TrackPeriodRouteBuilder)
 1. so that switching between the Track views, it remembers the client's last settings.
@@ -174,23 +80,6 @@ Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteB
   If there is no saved routes, we need to use the TrackSummaryRoute values passed in.
   The routes will be saved to session in the regular actions methods that build the viewmodels and return the views.
 - We don't need a route builder for the summary view.
-
-...DONE
-Validation
-- The Start segment will be treated in the client's local time
-- The initial validation in the route classes (TrackPhaseRoute.Validate() and TrackPeriodRoute.Validate())
-  will only perform basic validation, but are not responsible for determining timezone checks for local/UTC conversions.
-  See SearchController.List() for an example of how the SearchRoute values are initially validated, modified,
-  then saved back into session state in the SearchRouteBuilder object.
-
-...DONE
-When visiting the Phase and Period views for the first time (i.e., from the Summary view), use the tracksummary route values.
-- Then when posting from those views, use their respective route values (TrackPhaseRoute and TrackPeriodRoute).
-- When navigating back to the Summary view from the Phase and Period views, use the TrackSummaryRoute values.
-
-...DONE
-Might need separate view models for the track views
-- Consider TrackPhaseViewModel : TrackSummaryViewModel that has a collection of IVector objects
 
 Consider a Bootstrap OffCanvas for the Geolocation and Details partial views.
 - Consider making the Details view a Partial view, and display it in a popup inside the List view.
@@ -224,8 +113,6 @@ Consider using DI in certain action methods, instead of through the controller c
 
 Consider revising Utilities.GetSortTag and its helper methods.
 - Consider moving methods to DsoSortTagViewComponent.
-
-For the tracking result in Phase and Period views, consider limiting results to ~50 by default, with a Show More button at the bottom.
 
 Consider using DI for ISearchUnitOfWork and ITrackUnitOfWork, or IUnitOfWork, in SearchController and TrackController, instead of MainDbContext.
 
