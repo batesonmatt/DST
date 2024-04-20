@@ -527,7 +527,7 @@ namespace DST.Models.BusinessLogic
         }
 
         // Returns a trajectory tracking at a given phase, beginning from the specified start date for the specified number of cycles.
-        public static IEnumerable<TrackPhaseResult> GetPhaseResults(ITrajectory trajectory, Phase phase, IAstronomicalDateTime start, int cycles)
+        public static IEnumerable<TrackResult> GetPhaseResults(ITrajectory trajectory, Phase phase, IAstronomicalDateTime start, int cycles)
         {
             IVector[] results = Array.Empty<IVector>();
 
@@ -557,7 +557,7 @@ namespace DST.Models.BusinessLogic
                 results = Array.Empty<IVector>();
             }
 
-            return results.OfType<ILocalVector>().Select(result => new TrackPhaseResult(result));
+            return results.OfType<ILocalVector>().Select(result => new TrackResult(result));
         }
 
         // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation during the current season.

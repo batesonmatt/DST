@@ -2,7 +2,7 @@
 
 namespace DST.Models.BusinessLogic
 {
-    public class TrackPhaseResult
+    public class TrackResult
     {
         #region Properties
 
@@ -12,7 +12,7 @@ namespace DST.Models.BusinessLogic
 
         #region Constructors
 
-        public TrackPhaseResult(ILocalVector vector)
+        public TrackResult(ILocalVector vector)
         {
             Vector = vector;
         }
