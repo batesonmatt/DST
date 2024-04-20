@@ -20,10 +20,6 @@ using DST.Core.TimeKeeper;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using DST.Core.TimeScalable;
-using DST.Core.DateTimeAdder;
-using DST.Core.DateTimesBuilder;
-using DST.Core.Vector;
 
 namespace DST.Controllers
 {
@@ -383,38 +379,7 @@ namespace DST.Controllers
                 // Calculate the period tracking results if an entry was submitted.
                 if (_periodBuilder.Current.IsReady)
                 {
-                    //results = Utilities.GetPeriodResults(
-                    //    trajectory, start,
-                    //    _periodBuilder.Current.TimeUnit,
-                    //    _periodBuilder.Current.Period,
-                    //    _periodBuilder.Current.Interval,
-                    //    _periodBuilder.Current.IsFixed);
-
-                    TimeScale timeScale = Utilities.GetTimeScale(algorithm, values.IsFixed);
-                    TimeUnit timeUnit = Utilities.GetTimeUnit(values.TimeUnit);
-                    IDateTimeAdder dateTimeAdder = Utilities.GetDateTimeAdder(timeScale, timeUnit);
-                    IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, aggregate: values.IsAggregated);
-                    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_periodBuilder.Current.Start, localObserver.DateTimeInfo);
-                    IAstronomicalDateTime[] dateTimes = DateTimeFactory.ConvertToAstronomical(
-                        dateTimesBuilder.Build(start, values.Period, values.Interval));
-                    ITracker tracker = TrackerFactory.Create(localObserver);
-                    ICoordinate[] positions = tracker.Track(dateTimes);
-
-                    int count = int.Min(positions.Length, dateTimes.Length);
-                    IMutableDateTime mutableDateTime;
-                    List<IVector> vectors = new(count);
-
-                    // Build LocalVector[] using the DateTimes and positions[]
-                    for (int i = 0; i < count; i++)
-                    {
-                        if (positions[i] is not null)
-                        {
-                            mutableDateTime = DateTimeFactory.ConvertToMutable(dateTimes[i]);
-                            vectors.Add(VectorFactory.Create(mutableDateTime, positions[i]));
-                        }
-                    }
-
-                    results = vectors.OfType<ILocalVector>().Select(result => new TrackResult(result));
+                    results = Utilities.GetPeriodResults(localObserver, algorithm, _periodBuilder.Current);
 
                     // Force the client to resubmit the form.
                     _periodBuilder.Current.IsReady = false;
