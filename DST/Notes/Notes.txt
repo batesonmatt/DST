@@ -112,9 +112,9 @@ Period route/validation:
   Add new route segment, Aggregate (string => On/Off), default to On                                                            ...DONE
   Add jsonignore property, IsAggregated => bool                                                                                 ...DONE
   Add TrackPeriodModel.IsAggregated property                                                                                    ...DONE
-- Finish PeriodViewModel (Results)
-- Add TrackPeriodResult
+- Finish PeriodViewModel (Results)                                                                                              ...DONE
 - Add Utilities.GetPeriodResults(...)
+- Finish Period view                                                                                                            ...DONE
 
 Period
 - Colorize each result where the object is above the horizon.
@@ -125,6 +125,7 @@ Tracking results
 - Display the time scale used after posting, along with the results (Important for Period tracking, which supports fixed tracking).
 - For Phase and Period tracking.
 - Position tracking will most likely perform calulations with each time scale type, etc.
+- Consider adding funcionality to the *Result classes that returns more information (EE, OE, Rotation, LHA, etc...)
 
 Feature (Phase and period)
 - Reconsider the Position view (See points below).
