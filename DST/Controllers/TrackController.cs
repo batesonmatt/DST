@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using DST.Core.TimeScalable;
 using DST.Core.DateTimeAdder;
 using DST.Core.DateTimesBuilder;
+using DST.Core.Vector;
 
 namespace DST.Controllers
 {
@@ -246,7 +247,7 @@ namespace DST.Controllers
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-            IEnumerable<TrackPhaseResult> results = Enumerable.Empty<TrackPhaseResult>();
+            IEnumerable<TrackResult> results = Enumerable.Empty<TrackResult>();
             List<SelectListItem> phases = new();
             string selectedPhase = string.Empty;
             string message = string.Empty;
@@ -362,7 +363,7 @@ namespace DST.Controllers
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-            //IEnumerable<TrackPeriodResult> results = Enumerable.Empty<TrackPeriodResult>();
+            IEnumerable<TrackResult> results = Enumerable.Empty<TrackResult>();
             string message = string.Empty;
 
             if (trajectory is NeverRiseTrajectory)
@@ -382,8 +383,6 @@ namespace DST.Controllers
                 // Calculate the period tracking results if an entry was submitted.
                 if (_periodBuilder.Current.IsReady)
                 {
-                    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_periodBuilder.Current.Start, localObserver.DateTimeInfo);
-
                     //results = Utilities.GetPeriodResults(
                     //    trajectory, start,
                     //    _periodBuilder.Current.TimeUnit,
@@ -391,22 +390,31 @@ namespace DST.Controllers
                     //    _periodBuilder.Current.Interval,
                     //    _periodBuilder.Current.IsFixed);
 
-                    // Get TimeScale
                     TimeScale timeScale = Utilities.GetTimeScale(algorithm, values.IsFixed);
-
-                    // Get TimeUnit
                     TimeUnit timeUnit = Utilities.GetTimeUnit(values.TimeUnit);
-
-                    // Get DateTimeAdder
                     IDateTimeAdder dateTimeAdder = Utilities.GetDateTimeAdder(timeScale, timeUnit);
-
-                    // Get DateTimesBuilder
                     IDateTimesBuilder dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, aggregate: values.IsAggregated);
+                    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_periodBuilder.Current.Start, localObserver.DateTimeInfo);
+                    IAstronomicalDateTime[] dateTimes = DateTimeFactory.ConvertToAstronomical(
+                        dateTimesBuilder.Build(start, values.Period, values.Interval));
+                    ITracker tracker = TrackerFactory.Create(localObserver);
+                    ICoordinate[] positions = tracker.Track(dateTimes);
 
-                    // Build DateTimes[]
-                    // Get Tracker
-                    // Track DateTimes[] to get positions[]
+                    int count = int.Min(positions.Length, dateTimes.Length);
+                    IMutableDateTime mutableDateTime;
+                    List<IVector> vectors = new(count);
+
                     // Build LocalVector[] using the DateTimes and positions[]
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (positions[i] is not null)
+                        {
+                            mutableDateTime = DateTimeFactory.ConvertToMutable(dateTimes[i]);
+                            vectors.Add(VectorFactory.Create(mutableDateTime, positions[i]));
+                        }
+                    }
+
+                    results = vectors.OfType<ILocalVector>().Select(result => new TrackResult(result));
 
                     // Force the client to resubmit the form.
                     _periodBuilder.Current.IsReady = false;
@@ -432,7 +440,7 @@ namespace DST.Controllers
                     Interval = values.Interval
                 },
 
-                //Results = results,
+                Results = results,
                 WarningMessage = message
             };
 
