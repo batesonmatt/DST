@@ -14,6 +14,8 @@ using System.Globalization;
 using DST.Core.Vector;
 using DST.Core.DateTimeAdder;
 using DST.Core.TimeScalable;
+using DST.Core.DateTimesBuilder;
+using DST.Core.Tracker;
 
 namespace DST.Models.BusinessLogic
 {
@@ -548,6 +550,62 @@ namespace DST.Models.BusinessLogic
                         else if (phase == Phase.Set)
                         {
                             results = riseSetTrajectory.GetSet(start, cycles);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                results = Array.Empty<IVector>();
+            }
+
+            return results.OfType<ILocalVector>().Select(result => new TrackResult(result));
+        }
+
+        public static IEnumerable<TrackResult> GetPeriodResults(ILocalObserver localObserver, Algorithm algorithm, TrackPeriodModel periodModel)
+        {
+            IVector[] results = Array.Empty<IVector>();
+            TimeScale timeScale;
+            TimeUnit timeUnit;
+            IDateTimeAdder dateTimeAdder;
+            IDateTimesBuilder dateTimesBuilder;
+            IAstronomicalDateTime start;
+            IBaseDateTime[] baseDateTimes;
+            IAstronomicalDateTime[] dateTimes;
+            ITracker tracker;
+            ICoordinate[] positions;
+            IMutableDateTime mutableDateTime;
+            int count;
+
+            try
+            {
+                if (periodModel is not null)
+                {
+                    if (periodModel.Period != 0 && periodModel.Interval > 0)
+                    {
+                        if (localObserver is not null)
+                        {
+                            timeScale = GetTimeScale(algorithm, periodModel.IsFixed);
+                            timeUnit = GetTimeUnit(periodModel.TimeUnit);
+                            dateTimeAdder = GetDateTimeAdder(timeScale, timeUnit);
+                            dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, aggregate: periodModel.IsAggregated);
+                            start = DateTimeFactory.CreateAstronomical(periodModel.Start, localObserver.DateTimeInfo);
+                            baseDateTimes = dateTimesBuilder.Build(start, periodModel.Period, periodModel.Interval);
+                            dateTimes = DateTimeFactory.ConvertToAstronomical(baseDateTimes);
+                            tracker = TrackerFactory.Create(localObserver);
+                            positions = tracker.Track(dateTimes);
+
+                            count = int.Min(positions.Length, dateTimes.Length);
+                            results = new IVector[count];
+
+                            for (int i = 0; i < count; i++)
+                            {
+                                if (positions[i] is not null)
+                                {
+                                    mutableDateTime = DateTimeFactory.ConvertToMutable(dateTimes[i]);
+                                    results[i] = VectorFactory.Create(mutableDateTime, positions[i]);
+                                }
+                            }
                         }
                     }
                 }
