@@ -2,6 +2,7 @@
 using DST.Models.DomainModels;
 using DST.Models.Routes;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DST.Models.ViewModels
 {
@@ -14,21 +15,17 @@ namespace DST.Models.ViewModels
         public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
         public IEnumerable<TimeUnitItem> TimeUnits { get; set; }
         public TrackPeriodModel TrackForm { get; set; }
-        
-        /*
-         * public IEnumerable<TrackPeriodResult> Results { get; set; }
-         */
-
+        public IEnumerable<TrackResult> Results { get; set; }
         public string WarningMessage { get; set; }
 
         #endregion
 
         #region Methods
 
-        //public bool HasResults()
-        //{
-        //    return Results?.Any() ?? false;
-        //}
+        public bool HasResults()
+        {
+            return Results?.Any() ?? false;
+        }
 
         public bool HasWarning()
         {
