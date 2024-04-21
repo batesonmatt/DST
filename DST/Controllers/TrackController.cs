@@ -239,7 +239,6 @@ namespace DST.Controllers
 
             DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
-            Phase phase = Utilities.GetPhase(values.Phase);
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
@@ -283,9 +282,7 @@ namespace DST.Controllers
                 // Calculate the phase tracking results if an entry was submitted.
                 if (_phaseBuilder.Current.IsReady)
                 {
-                    IAstronomicalDateTime start = DateTimeFactory.CreateAstronomical(_phaseBuilder.Current.Start, localObserver.DateTimeInfo);
-
-                    results = Utilities.GetPhaseResults(trajectory, phase, start, _phaseBuilder.Current.Cycles);
+                    results = Utilities.GetPhaseResults(localObserver, _phaseBuilder.Current);
 
                     // Force the client to resubmit the form.
                     _phaseBuilder.Current.IsReady = false;
