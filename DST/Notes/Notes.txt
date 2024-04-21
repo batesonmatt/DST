@@ -1,5 +1,8 @@
 ﻿To Do:
 
+*** Re-arrange this list according to topic and priority ***
+
+
 Summary view
 - Need alternating colors for the rows
 - Consider spacing the rows better (see smaller screen widths)
@@ -35,9 +38,6 @@ Fixed runtime markup issues
 - research this.
 
 ***
-
-Revise Utilities.GetPhaseResults to take in (ILocalObserver, algorithm, TrackPhaseModel)
-    Use shortcut condition for cycles (see GetPeriodResults)
 
 Revise TrackController.Summary HttpGet method to use a Utilities helper method.
 
@@ -134,138 +134,14 @@ Query update
 
 ---------------------------------------------------------------------------
 
-Plan:
-- Use tabular navbar for separate views (Summary/Overview, Vector/Phase, and Period)
-
-Add route endpoints: tracksummary, trackphase, and trackperiod
-- Finalize the segments before adding these.
-
-Add route classes.
-- Finalize the segments before adding these.
-
 List view
 - Add button to the dso items that navigates to the Track controller
   (see pg 531 for form submit button and controller link, and pg 519 for example controller).
 
 Details view
+- Consider a partial view, and display on a bootstrap offcanvas
 - Add all displayable information here
 - Add button to navigate to the Track controller
-
-----------------------------------------------------------------------------
-
-Track view/Controller
-
-NOTE - "start" segment represents the Ticks in string format.
-        Validate range from (Epoch - 200 years inclusive) up to (Epoch + 200 years exclusive)
-        [Jan. 1, 1800 0H ... Jan. 1, 2200 0H)
-        Get these values as Ticks.
-        Try parse the segment as long, or use long value type for the Start route property value.
-
-
-Routes:
-
-- name = "tracksummary"
-- pattern = "{controller}/{catalog}/{id}/{algorithm}"
-- default = new { action = "Summary" }
-- Ex: "/track/messier/13/gmst/"
-
-...
-
-- name = "trackphase"
-- pattern = "{controller}/{catalog}/{id}/{algorithm}/{phasetype}/{start}/cycles/{cycles}"
-- default = new { action = "Phase" }
-- Ex: "/track/messier/13/gmst/rise/13011995/cycles/-10/"
-
-...
-
-- name = "trackperiod"
-- pattern = "{controller}/{catalog}/{id}/{algorithm}/period/{start}/{timescale}/{timeunit}/{period}/interval/{interval}"
-- default = new { action = "Period" }
-- Ex: "/track/messier/13/gmst/period/13011995/mean-solar-time/hours/-24/interval/2/"
-
-  interval will have validation for >= 0 and <= period. So default to 0 if out of range.
-
-...
-
-? Create class DST.Models.Routes.TrackRoute : IRouteDictionary<TrackRoute>
-...
-
-TrackSummaryRoute
-- Catalog       Default => "messier"
-- Id            Default => 1
-
-                Catalog and Id are validated by checking the IRepository<DsoModel> TrackController._data
-                if _data.Get(catalog, id) is null, use default route values.
-
-- Algorithm     Default => "gmst"
-
-........
-
-TrackPhaseRoute : TrackSummaryRoute
-- PhaseType    Default => "rise"
-- Start         Default =>  Can I use a long value type for this? Default to J2000 Epoch in ticks. Validate +-200 years.
-                            OR
-                            Empty string, then get current client datetime in the route builder if value is null or whitespace.
-                            Make sure to validate range.
-- Cycles        Default => 1
-                            Validate based on DaysAdder.Min and .Max values. (Just hardcode +-100)
-                            Validate based on Tick range, see Start property.
-
-........
-
-TrackPeriodRoute : TrackSummaryRoute
-- Start         Default =>  Can I use a long value type for this? Default to J2000 Epoch in ticks. Validate +-500 years.
-                            OR
-                            Empty string, then get current client datetime in the route builder if value is null or whitespace.
-                            Make sure to validate range.
-- TimeScale     Default => "mean-solar-time"
-- TimeUnit      Default => "hours"
-- Period        Default => 0, Validate based on IDateTimeAdder.Min and .Max values.
-- Interval      Default => 0, Validate for >= 0 and <= validated period.
-- By default if timeunit, period, or interval is invalid, then track for only the validated Start datetime.
-
-
-
-TrackViewModel
-- GeolocationModel Geolocation (? - If I use a partial view, do I need to include this property for the viewmodels?)
-- IEnumerable<TimeZoneItem> TimeZoneItems (? - Same question for above)
-    For Geolocation and TimeZoneItems, consider a separate viewmodel, GeolocationViewModel.
-    Consider a View Component (pg. 632-635)
-- DsoModel Model (Necessary for displaying the object info)
-- ILocalObserver ClientObserver (Necessary for displaying all other relative info)
-- ... CurrentRoute (Use base class or interface track Route)
-
-
-** Revise this based on the new layout design (Summary, Phase, Period)
-
-Features
-Geo
-- Form to change geolocation/timezone (consider shared view or partial view)
-Summary
-- Display details (Compound Id, names, catalog, type, description, constellation, RA, DEC, 
-  distance, magnitude, ideal viewing season)
-- Display client observer info (geolocation, timezone, current datetime, algorithm type, current timekeeper, 
-  current local timekeeper, LHA)
-- Option to change the algorithm type.
-- Display current tracking info (The trajectory name, local?, visible?, current rise/apex/set cycle - datetime and position,
-  current altaz track position)
-? Refresh button to refresh the datetime, timekeeper, local timekeeper, LHA, and current tracking info.
-* Consider storing client datetime to session state, and check whenever the Summary view is loaded.
-  If it's been >= 5 minutes, save new datetime to session state and refresh calculated values.
-  Make a label saying when the last time it was refreshed, "Refreshed 2 minutes ago."
-Track selector (Rise, Set, Apex, Period):
-- Track vectors in full cycles in the underlying timescale (user does not choose timescale; it must use full days for the algorithm type)
-- Track "Rise" vectors over time
-  Select the starting datetime and the number of cycles, then click "Track" to see the results
-- Track "Apex" vectors over time
-  Select the starting datetime and the number of cycles, then click "Track" to see the results
-- Track "Set" vectors over time
-  Select the starting datetime and the number of cycles, then click "Track" to see the results
-- Track horizontal "Period" over time/specified datetime
-  Select the starting datetime, time scale, time unit, period, interval, add from start?, then click "Track" to see the results
-- Results List section for the rise, apex, set, and period track results.
-  For each list item, display: Local DateTime, position, is visible (Above horizon), is rising/setting
-- Need to disable/hide certain controls and information if the trajectory is never rise or circumpolar.
 
 ----------------------------------------------------------------------------
 
