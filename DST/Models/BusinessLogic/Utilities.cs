@@ -528,28 +528,38 @@ namespace DST.Models.BusinessLogic
             };
         }
 
-        // Returns a trajectory tracking at a given phase, beginning from the specified start date for the specified number of cycles.
-        public static IEnumerable<TrackResult> GetPhaseResults(ITrajectory trajectory, Phase phase, IAstronomicalDateTime start, int cycles)
+        public static IEnumerable<TrackResult> GetPhaseResults(ILocalObserver localObserver, TrackPhaseModel phaseModel)
         {
             IVector[] results = Array.Empty<IVector>();
+            ITrajectory trajectory;
+            Phase phase;
+            IAstronomicalDateTime start;
 
             try
             {
-                if (trajectory is not null and IVariableTrajectory variableTrajectory)
+                if (phaseModel is not null && localObserver is not null)
                 {
-                    if (phase == Phase.Apex)
+                    trajectory = TrajectoryCalculator.Calculate(localObserver);
+
+                    if (trajectory is not null and IVariableTrajectory variableTrajectory)
                     {
-                        results = variableTrajectory.GetApex(start, cycles);
-                    }
-                    else if (trajectory is IRiseSetTrajectory riseSetTrajectory)
-                    {
-                        if (phase == Phase.Rise)
+                        phase = GetPhase(phaseModel.Phase);
+                        start = DateTimeFactory.CreateAstronomical(phaseModel.Start, localObserver.DateTimeInfo);
+
+                        if (phase == Phase.Apex)
                         {
-                            results = riseSetTrajectory.GetRise(start, cycles);
+                            results = variableTrajectory.GetApex(start, phaseModel.Cycles);
                         }
-                        else if (phase == Phase.Set)
+                        else if (trajectory is IRiseSetTrajectory riseSetTrajectory)
                         {
-                            results = riseSetTrajectory.GetSet(start, cycles);
+                            if (phase == Phase.Rise)
+                            {
+                                results = riseSetTrajectory.GetRise(start, phaseModel.Cycles);
+                            }
+                            else if (phase == Phase.Set)
+                            {
+                                results = riseSetTrajectory.GetSet(start, phaseModel.Cycles);
+                            }
                         }
                     }
                 }
@@ -579,33 +589,27 @@ namespace DST.Models.BusinessLogic
 
             try
             {
-                if (periodModel is not null)
+                if (periodModel is not null && localObserver is not null)
                 {
-                    if (periodModel.Period != 0 && periodModel.Interval > 0)
+                    timeScale = GetTimeScale(algorithm, periodModel.IsFixed);
+                    timeUnit = GetTimeUnit(periodModel.TimeUnit);
+                    dateTimeAdder = GetDateTimeAdder(timeScale, timeUnit);
+                    dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, aggregate: periodModel.IsAggregated);
+                    start = DateTimeFactory.CreateAstronomical(periodModel.Start, localObserver.DateTimeInfo);
+                    baseDateTimes = dateTimesBuilder.Build(start, periodModel.Period, periodModel.Interval);
+                    dateTimes = DateTimeFactory.ConvertToAstronomical(baseDateTimes);
+                    tracker = TrackerFactory.Create(localObserver);
+                    positions = tracker.Track(dateTimes);
+
+                    count = int.Min(positions.Length, dateTimes.Length);
+                    results = new IVector[count];
+
+                    for (int i = 0; i < count; i++)
                     {
-                        if (localObserver is not null)
+                        if (positions[i] is not null)
                         {
-                            timeScale = GetTimeScale(algorithm, periodModel.IsFixed);
-                            timeUnit = GetTimeUnit(periodModel.TimeUnit);
-                            dateTimeAdder = GetDateTimeAdder(timeScale, timeUnit);
-                            dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, aggregate: periodModel.IsAggregated);
-                            start = DateTimeFactory.CreateAstronomical(periodModel.Start, localObserver.DateTimeInfo);
-                            baseDateTimes = dateTimesBuilder.Build(start, periodModel.Period, periodModel.Interval);
-                            dateTimes = DateTimeFactory.ConvertToAstronomical(baseDateTimes);
-                            tracker = TrackerFactory.Create(localObserver);
-                            positions = tracker.Track(dateTimes);
-
-                            count = int.Min(positions.Length, dateTimes.Length);
-                            results = new IVector[count];
-
-                            for (int i = 0; i < count; i++)
-                            {
-                                if (positions[i] is not null)
-                                {
-                                    mutableDateTime = DateTimeFactory.ConvertToMutable(dateTimes[i]);
-                                    results[i] = VectorFactory.Create(mutableDateTime, positions[i]);
-                                }
-                            }
+                            mutableDateTime = DateTimeFactory.ConvertToMutable(dateTimes[i]);
+                            results[i] = VectorFactory.Create(mutableDateTime, positions[i]);
                         }
                     }
                 }
