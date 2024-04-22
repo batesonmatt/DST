@@ -1,51 +1,44 @@
 ﻿To Do:
+___________________________________________________________________________
+```````````````````````````````````````````````````````````````````````````
 
-*** Re-arrange this list according to topic and priority ***
-
-
-Summary view
+Summary
+- Revise TrackController.Summary HttpGet method to use a Utilities helper method.
 - Need alternating colors for the rows
 - Consider spacing the rows better (see smaller screen widths)
 - Center the info
 - Display more info for the Position (EE, Obliquity, etc... everything)
 
-Use bootstrap switches (checkbox) where necessary. See the toggle filters for the List view, etc.
-- Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, based on whether the given string is "on" or "off".
-  Similar to SeoExtensions.Active
-- Need to use CSS to style the label as disabled (see Period view)
-
-Consider Bootstrap input groups for tracking forms:
-- https://getbootstrap.com/docs/5.0/forms/input-group/
-  | #    | Days     |  for every  | #    | Days
-- OR, build a string while the user fills out the form.
-  Every # day(s) for # total day(s).
-
-Revise updateFixedTrackingToggle JS function
-- Don't want to use hardcoded strings for the timeunit names.
-- Use hidden elements in the Period view for the time units that support fixed tracking
-- for the JS script, iterate the valid time units by value/id
-- Consider a new hidden selectlist of TimeUnitItem, and iterate the ID properties.
-    var x = document.getElementById("supported-timeunits");
-    for (i = 0; i < x.options.length; i++) { }
-- Consider putting the script in the period view to utilize razor functionality.
-
-Consider a toggle option in the Period view to allow the user to track just once
-- If checked, set Period and Interval both to 0, then disable the inputs for both. (Don't need to disable the labels)
-- Consider the same option for Phase tracking (No Cycles, just single result)
-
-Fixed runtime markup issues
-- Remove asp-for attribute on label elements, and replace with the correct element id.
-- research this.
-
-***
-
-Revise TrackController.Summary HttpGet method to use a Utilities helper method.
+Phase
+- Consider a toggle option to allow the user to track just once.
+  If checked, Cycles to 0, then disable the input. (Don't need to disable the label)
 
 Period
 - Consider hiding the Aggregate option by default, then only show it when the user selects Months/Years and Fixed tracking.
+- Consider a toggle option to allow the user to track just once.
+  If checked, set Period and Interval both to 0, then disable the inputs for both. (Don't need to disable the labels)
 - Colorize each result where the object is above the horizon.
   Also display some icon in a new column at the end (Open/closed eye?).
   For small screens, just align this icon to the upper right.
+
+List
+- Add button to the dso items that navigates to the Track controller
+  (see pg 531 for form submit button and controller link, and pg 519 for example controller).
+
+Details
+- Consider a partial view.
+- Consider a Bootstrap OffCanvas for the Details partial view, and display it in a popup inside the List view.
+  Or consider the result items in the List view to be expandable controls, and expand it to show the details.
+    |---------------------------------------------|
+    | ID - Name                             Track |
+    | ...                                         |
+    |              Expand Details                 |
+    |---------------------------------------------|
+- Add all displayable information here
+- Add button to navigate to the Track controller
+
+Geolocation
+- Consider a Bootstrap OffCanvas for the Geolocation partial view.
 
 Tracking results
 - Display something for empty results ("No results", and an empty table)
@@ -61,8 +54,6 @@ Feature (Phase and period)
 - For each result, provide an option to take the user to the Position page to view more info on that particular track record.
 - Reconsider the table-hover for this
 - Consider right click, or click to expand, or a button on the result row somewhere.
-
-Use floating labels for the form controls.
 
 Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Takes DsoModel, GeolocationModel, and Algorithm
@@ -80,20 +71,6 @@ Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteB
   If there is no saved routes, we need to use the TrackSummaryRoute values passed in.
   The routes will be saved to session in the regular actions methods that build the viewmodels and return the views.
 - We don't need a route builder for the summary view.
-
-Consider a Bootstrap OffCanvas for the Geolocation and Details partial views.
-- Consider making the Details view a Partial view, and display it in a popup inside the List view.
-  Or consider the result items in the List view to be expandable controls, and expand it to show the details.
-    |---------------------------------------------|
-    | ID - Name                             Track |
-    | ...                                         |
-    |              Expand Details                 |
-    |---------------------------------------------|
-
-Revise the JS files (wwwroot\js\...)
-- Consider separate files
-- Move the <script> declarations to _Layout?
-- Consider moving some of the scripts from _Layout into the views that need them. (See pg. 439 and 441)
 
 Consider removing TrackPhaseRoute routes = current.Clone(); from the Phase and Period views if not used.
 
@@ -126,28 +103,49 @@ Consider removing the paging endpoint, since it is never used.
 
 ---------------------------------------------------------------------------
 
+Bootstrap Misc
+
+Use floating labels for the form controls.
+
+Use bootstrap switches (checkbox) where necessary. See the toggle filters for the List view, etc.
+- Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, 
+  based on whether the given string is "on" or "off".
+  Similar to SeoExtensions.Active
+- Need to use CSS to style the label as disabled (see Period view)
+
+Consider Bootstrap input groups for tracking forms:
+- https://getbootstrap.com/docs/5.0/forms/input-group/
+  | #    | Days     |  for every  | #    | Days
+- OR, build a string while the user fills out the form.
+  Every # day(s) for # total day(s).
+
+Icons
+- https://icons.getbootstrap.com/
+
+---------------------------------------------------------------------------
+
+HTML Misc
+
+Fixed runtime markup issues
+- Remove asp-for attribute on label elements, and replace with the correct element id.
+- research this.
+
+Incorporate aria, title, and name (etc.) attributes in the markups
+
+---------------------------------------------------------------------------
+
+Project Misc
+
 Query update
 - Consider a new SQL Server Database Project to keep track of changes to the database and to store scripts
 - DST.Database
 - https://stackoverflow.com/questions/194652/sql-server-regular-expressions-in-t-sql
 - https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping
 
+Consider admin pages so that I may conveniently keep the Dso items up to date (?)
+- Could also be used to update other site info, like home page announcements.
+
 ---------------------------------------------------------------------------
-
-List view
-- Add button to the dso items that navigates to the Track controller
-  (see pg 531 for form submit button and controller link, and pg 519 for example controller).
-
-Details view
-- Consider a partial view, and display on a bootstrap offcanvas
-- Add all displayable information here
-- Add button to navigate to the Track controller
-
-----------------------------------------------------------------------------
-
-https://icons.getbootstrap.com/
-
-----------------------------------------------------------------------------
 
 Redesign List view
 - Pagination
@@ -171,33 +169,28 @@ Redesign Shared views
 
 Redesign Home and About views
 
-----------------------------------------------------------------------------
+---------------------------------------------------------------------------
 
-For the home page, consider selecting a random object and display its info
-Or perhaps a random object, and a random track or vector calculation, etc.
+Home
+
+Consider selecting a random object and display its info
+- Or perhaps a random object, and a random track or vector calculation, etc.
 - Use a bootstrap carousel
   https://getbootstrap.com/docs/5.0/components/carousel/
 
-Incorporate aria, title, and name (etc.) attributes in the markups
-
-Add admin pages so that I may keep the Dso items up to date (?)
-
-Graphing support (?)
-- Graph the trajectory of a tracked object as a sinosoidal wave (position over time)
-
-----------------------------------------------------------------------------
+---------------------------------------------------------------------------
 
 Create powershell script(s) to remove/update the database, rebuild the migrations, etc.
 - Run from PMC in visual studio
 - Keep commented out when not running, then uncomment when ready.
 
-----------------------------------------------------------------------------
+---------------------------------------------------------------------------
 
 Project -> Propeties -> Code Analysis
 
     Change level to "Latest All" and fix warnings.
 
-----------------------------------------------------------------------------
+---------------------------------------------------------------------------
 
 Localization
 - Add resource strings for the views' harcoded text.
@@ -212,7 +205,7 @@ Localization
 - https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization/
 - https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization/make-content-localizable?view=aspnetcore-7.0
 
-----------------------------------------------------------------------------
+---------------------------------------------------------------------------
 
 Exception handling and reporting
 
