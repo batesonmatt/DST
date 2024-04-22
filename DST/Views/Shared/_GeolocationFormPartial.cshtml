@@ -1,7 +1,5 @@
 ﻿@model GeolocationViewModel
 
-<script src="~/js/location.js"></script>
-
 <form id="form-geolocation" asp-action="@Model.ActionMethod" asp-all-route-data="@Model.Route" method="post" onchange="enableElement('form-geo-submit')" oninput="enableElement('form-geo-submit')">
     <div class="mb-3">
         <label class="form-label" asp-for="Geolocation.TimeZoneId">Time Zone</label>
