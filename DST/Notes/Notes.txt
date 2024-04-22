@@ -45,15 +45,11 @@ Tracking results
 - Consider limiting results to ~20 by default, with a Show More button at the bottom.
 - Display the time scale used after posting, along with the results (Important for Period tracking, which supports fixed tracking).
 - Consider adding funcionality to the *Result classes that returns more information (EE, OE, Rotation, LHA, etc...)
-  So that we don't need position tracking.
-- Position tracking (if implemented) will most likely perform calulations with each time scale type, etc.
-
-Feature (Phase and period)
-- Reconsider the Position view (See points below).
-  OR, consider the Position be a partial view, and display it via a Bootstrap OffCanvas.
-- For each result, provide an option to take the user to the Position page to view more info on that particular track record.
-- Reconsider the table-hover for this
-- Consider right click, or click to expand, or a button on the result row somewhere.
+  Might need view component instead of adding ILocalObserver and IAstronomicalDateTime to the *Result classes.
+  Or just add primitive value properties to the classes (double, etc.).
+  Consider a Position partial view, and display it via a Bootstrap OffCanvas, or expand the row.
+  For each result, provide an option to view more info on that particular track record.
+  Reconsider the table-hover for this.
 
 Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Takes DsoModel, GeolocationModel, and Algorithm
@@ -81,7 +77,7 @@ PageSizeItem, TimeZoneItem, TrackPhaseItem, TrackAlgorithmItem, etc.
 - OR, Consider using a single class, SelectItem.
   => string Id, string Text, int Value
 
-AlgorithmName, Filter, PhaseName, TimeUnitName
+AlgorithmName, PhaseName, TimeUnitName
 - Consider moving out of the Query namespace, and into BusinessLogic
 
 Consider using DI in certain action methods, instead of through the controller constructor. See pg. 568.
@@ -137,6 +133,10 @@ Incorporate aria, title, and name (etc.) attributes in the markups
 Project Misc
 
 Query update
+- Revise all queries (SearchQueryOptions, QueryOptions, Repository) to avoid Linq to Objects
+    so that they may be converted to valid SQL.
+  See initial call to ToList in Repository.BuildQuery.
+  We need to avoid this call because it adds unnecessary overhead by selecting all the data first, then again in Repository.List.
 - Consider a new SQL Server Database Project to keep track of changes to the database and to store scripts
 - DST.Database
 - https://stackoverflow.com/questions/194652/sql-server-regular-expressions-in-t-sql
