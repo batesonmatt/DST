@@ -2,7 +2,7 @@
 {
     if (navigator.geolocation)
     {
-        navigator.geolocation.getCurrentPosition(sendToForm, showError);
+        navigator.geolocation.getCurrentPosition(sendToForm, showGeolocationError);
     }
     else
     {
@@ -29,13 +29,11 @@ function sendToForm(position)
     //document.getElementById("input-longitude").value = position.coords.longitude;
     //document.getElementById("accuracy").value = position.coords.accuracy;
 
-    //document.getElementById("#form-geolocation").submit();
-    $("#form-geolocation").submit();
+    document.getElementById("form-geolocation").submit();
+    //$("#form-geolocation").submit();
 }
 
-// Consider new function sendToText(position) -> "latitude, longitude"
-
-function showError(error)
+function showGeolocationError(error)
 {
     switch (error.code)
     {
@@ -50,70 +48,6 @@ function showError(error)
         case error.UNKNOWN_ERROR:
         default:
             alert("An unknown error occurred.");
-            break;
-    }
-}
-
-function enableElement(elementId)
-{
-    let e = document.getElementById(elementId);
-
-    if (e.hasAttribute("disabled"))
-    {
-        e.removeAttribute("disabled");
-    }
-}
-
-function updateFixedTrackingToggle()
-{
-    let s = document.getElementById("select-period-timeunit");
-    let f = document.getElementById("input-period-fixed");
-    let w = document.getElementById("input-fixed-warning");
-
-    switch (s.value)
-    {
-        case "days":
-        case "weeks":
-        case "months":
-        case "years":
-            if (f.hasAttribute("disabled"))
-            {
-                f.removeAttribute("disabled");
-                w.hidden = true;
-            }
-            break;
-        default:
-            f.checked = false;
-            f.setAttribute("disabled", "disabled");
-            w.hidden = false;
-            break;
-    }
-}
-
-function updateAggregateToggle()
-{
-    let s = document.getElementById("select-period-timeunit");
-    let f = document.getElementById("input-period-fixed");
-    let a = document.getElementById("input-period-aggregate");
-    let w = document.getElementById("input-aggregate-warning");
-
-    switch (s.value)
-    {
-        case "months":
-        case "years":
-            if (f.checked === true)
-            {
-                if (a.hasAttribute("disabled"))
-                {
-                    a.removeAttribute("disabled");
-                    w.hidden = true;
-                }
-            }
-            break;
-        default:
-            a.checked = true;
-            a.setAttribute("disabled", "disabled");
-            w.hidden = false;
             break;
     }
 }
