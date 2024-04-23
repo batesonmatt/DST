@@ -3,8 +3,10 @@ ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
 Summary
-- Revise TrackController.Summary HttpGet method to use a Utilities helper method.
-- Need alternating colors for the rows
+- Revise TrackController.Summary HttpGet method to use a Utilities helper method.               ...DONE
+- Consider Lists (Flush, with responsive col items)
+  https://getbootstrap.com/docs/5.0/components/list-group/
+- Need alternating colors for the rows ?
 - Consider spacing the rows better (see smaller screen widths)
 - Center the info
 - Display more info for the Position (EE, Obliquity, etc... everything)
@@ -103,6 +105,9 @@ Bootstrap Misc
 
 Use floating labels for the form controls.
 
+Consider Collapse control for tooltips
+https://getbootstrap.com/docs/5.0/components/collapse/
+
 Use bootstrap switches (checkbox) where necessary. See the toggle filters for the List view, etc.
 - Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, 
   based on whether the given string is "on" or "off".
@@ -122,9 +127,9 @@ Icons
 
 HTML Misc
 
-Fixed runtime markup issues
+Fixed runtime markup issues (See Inspect->Issues section for all views.)
 - Remove asp-for attribute on label elements, and replace with the correct element id.
-- research this.
+- Migrate to HTTPS?
 
 Incorporate aria, title, and name (etc.) attributes in the markups
 
