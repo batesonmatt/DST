@@ -44,7 +44,7 @@
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a>
     </nav>
 
-    <div class="mb-3">
+    <div class="container mb-3">
         <h3>Target</h3>
         <div class="row">
             <label for="summary-right-ascension" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.RightAscension].Item1</label>
@@ -84,7 +84,7 @@
         </div>
     </div>
 
-    <div class="mb-3">
+    <div class="container mb-3">
         <h3>Observer</h3>
         <div class="row">
             <label for="summary-latitude" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Latitude].Item1</label>
@@ -108,7 +108,7 @@
         </div>
     </div>
 
-    <div class="mb-3">
+    <div class="container mb-3">
         <h3>Tracker</h3>
 
         <div class="row">
