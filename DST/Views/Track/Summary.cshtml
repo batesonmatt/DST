@@ -25,16 +25,16 @@
     <div class="mb-5">
         @if (Model.Dso.HasName)
         {
-            <h1>@Model.Dso.CompoundId - @Model.Dso.Name</h1>
+            <h1 class="display-5">@Model.Dso.CompoundId - @Model.Dso.Name</h1>
         }
         else
         {
-            <h1>@Model.Dso.CompoundId</h1>
+            <h1 class="display-5">@Model.Dso.CompoundId</h1>
         }
 
         @if (Model.Dso.HasMultipleNames)
         {
-            <p>Other names:&nbsp;&nbsp;<i>@string.Join(", ", Model.Dso.GetOtherNames())</i></p>
+            <p class="lead">Other names:&nbsp;&nbsp;<i>@string.Join(", ", Model.Dso.GetOtherNames())</i></p>
         }
     </div>
 
@@ -45,110 +45,158 @@
     </nav>
 
     <div class="container mb-3">
-        <h3>Target</h3>
-        <div class="row">
-            <label for="summary-right-ascension" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.RightAscension].Item1</label>
-            <label id="summary-right-ascension" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.RightAscension].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-declination" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Declination].Item1</label>
-            <label id="summary-declination" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Declination].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-catalog" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Catalog].Item1</label>
-            <label id="summary-catalog" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Catalog].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-type" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Type].Item1</label>
-            <label id="summary-type" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Type].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-description" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Description].Item1</label>
-            <label id="summary-description" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Description].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-constellation" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Constellation].Item1</label>
-            <label id="summary-constellation" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Constellation].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-distance" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Distance].Item1</label>
-            <label id="summary-distance" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Distance].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-magnitude" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Magnitude].Item1</label>
-            <label id="summary-magnitude" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Magnitude].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-season" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Season].Item1</label>
-            <label id="summary-season" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Season].Item2</label>
-        </div>
+        <p class="display-6">Target</p>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.RightAscension].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.RightAscension].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Declination].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Declination].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Catalog].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Catalog].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Type].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Type].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Description].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Description].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Constellation].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Constellation].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Distance].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Distance].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Magnitude].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Magnitude].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Season].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Season].Item2</h6>
+                </div>
+            </li>
+        </ul>
     </div>
 
     <div class="container mb-3">
-        <h3>Observer</h3>
-        <div class="row">
-            <label for="summary-latitude" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Latitude].Item1</label>
-            <label id="summary-latitude" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Latitude].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-longitude" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Longitude].Item1</label>
-            <label id="summary-longitude" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Longitude].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-timezone" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.TimeZone].Item1</label>
-            <label id="summary-timezone" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.TimeZone].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-local-time" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.LocalTime].Item1</label>
-            <label id="summary-local-time" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.LocalTime].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-universal-time" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.UniversalTime].Item1</label>
-            <label id="summary-universal-time" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.UniversalTime].Item2</label>
-        </div>
+        <p class="display-6">Observer</p>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Latitude].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Latitude].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Longitude].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Longitude].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.TimeZone].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.TimeZone].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.LocalTime].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.LocalTime].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.UniversalTime].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.UniversalTime].Item2</h6>
+                </div>
+            </li>
+        </ul>
     </div>
 
     <div class="container mb-3">
-        <h3>Tracker</h3>
-
-        <div class="row">
-            <label for="summary-algorithm" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Algorithm].Item1</label>
-            @{
-                routes = current.Clone();
-            }
-            <form asp-action="SetAlgorithm" asp-all-route-data="@routes.ToDictionary()" method="post" id="summary-algorithm" class="col-md">
-                <select name="algorithm" class="form-select" onchange="this.form.submit();"
-                        asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", current.Algorithm))"></select>
-            </form>
-        </div>
-
-        <div class="row">
-            <label for="summary-timekeeper" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.TimeKeeper].Item1</label>
-            <label id="summary-timekeeper" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.TimeKeeper].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-local-timekeeper" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.LocalTimeKeeper].Item1</label>
-            <label id="summary-local-timekeeper" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.LocalTimeKeeper].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-local-hour-angle" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.LocalHourAngle].Item1</label>
-            <label id="summary-local-hour-angle" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.LocalHourAngle].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-altitude" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Altitude].Item1</label>
-            <label id="summary-altitude" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Altitude].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-azimuth" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Azimuth].Item1</label>
-            <label id="summary-azimuth" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Azimuth].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-trajectory" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Trajectory].Item1</label>
-            <label id="summary-trajectory" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Trajectory].Item2</label>
-        </div>
-        <div class="row">
-            <label for="summary-visibility" class="col-md col-form-label text-wrap">@Model.DisplayInfo[TrackSummaryItem.Visibility].Item1</label>
-            <label id="summary-visibility" class="col-md col-form-label lead text-wrap">@Model.DisplayInfo[TrackSummaryItem.Visibility].Item2</label>
-        </div>
+        <p class="display-6">Tracker</p>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Algorithm].Item1</h5>
+                    @{
+                        routes = current.Clone();
+                    }
+                    <form asp-action="SetAlgorithm" asp-all-route-data="@routes.ToDictionary()" method="post" id="summary-algorithm" class="col-md">
+                        <select name="algorithm" class="form-select" onchange="this.form.submit();"
+                                asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", current.Algorithm))"></select>
+                    </form>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.TimeKeeper].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.TimeKeeper].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.LocalTimeKeeper].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.LocalTimeKeeper].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.LocalHourAngle].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.LocalHourAngle].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Altitude].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Altitude].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Azimuth].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Azimuth].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Trajectory].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Trajectory].Item2</h6>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center">
+                    <h5 class="col-md text-wrap">@Model.DisplayInfo[TrackSummaryItem.Visibility].Item1</h5>
+                    <h6 class="col-md text-wrap text-muted">@Model.DisplayInfo[TrackSummaryItem.Visibility].Item2</h6>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
