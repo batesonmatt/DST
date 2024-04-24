@@ -4,11 +4,9 @@ ___________________________________________________________________________
 
 Summary
 - Revise TrackController.Summary HttpGet method to use a Utilities helper method.               ...DONE
-- Consider Lists (Flush, with responsive col items)
-  https://getbootstrap.com/docs/5.0/components/list-group/
-- Need alternating colors for the rows ?
-- Consider spacing the rows better (see smaller screen widths)
-- Center the info
+- Consider Lists (Flush, with responsive col items)                                             ...DONE
+- Add bottom margins to the list items
+- Consider using loops to render the lists.
 - Display more info for the Position (EE, Obliquity, etc... everything)
 
 Phase
@@ -22,6 +20,10 @@ Period
 - Colorize each result where the object is above the horizon.
   Also display some icon in a new column at the end (Open/closed eye?).
   For small screens, just align this icon to the upper right.
+
+Track views
+- Consider a view component or partial view for the Dso name heading.
+- Use same headings across views.
 
 List
 - Add button to the dso items that navigates to the Track controller
@@ -104,6 +106,8 @@ Consider removing the paging endpoint, since it is never used.
 Bootstrap Misc
 
 Use floating labels for the form controls.
+
+Consider class="display-#" for certain headings (like the banners)
 
 Consider Collapse control for tooltips
 https://getbootstrap.com/docs/5.0/components/collapse/
