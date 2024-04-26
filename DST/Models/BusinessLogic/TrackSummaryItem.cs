@@ -20,6 +20,8 @@
         TimeKeeper,
         LocalTimeKeeper,
         LocalHourAngle,
+        EquationOfEquinoxes,
+        EquationOfOrigins,
         Altitude,
         Azimuth,
         Trajectory,
