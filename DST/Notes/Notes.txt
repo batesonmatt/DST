@@ -5,9 +5,11 @@ ___________________________________________________________________________
 Summary
 - Revise TrackController.Summary HttpGet method to use a Utilities helper method.               ...DONE
 - Consider Lists (Flush, with responsive col items)                                             ...DONE
-- Add bottom margins to the list items
-- Consider using loops to render the lists.
-- Display more info for the Position (EE, Obliquity, etc... everything)
+- Add bottom margins to the list items                                                          ...DONE
+- Display more info for the Tracker list group                                                  ...DONE
+    GetEquationOfEquinoxes();   Equation of the Equinoxes (EE)
+    GetEquationOfOrigins();     Equation of the Origins (EO)
+- Add resource strings for these.
 
 Phase
 - Consider a toggle option to allow the user to track just once.
@@ -23,7 +25,7 @@ Period
 
 Track views
 - Consider a view component or partial view for the Dso name heading.
-- Use same headings across views.
+- Use same headings/styles across views.
 
 List
 - Add button to the dso items that navigates to the Track controller
