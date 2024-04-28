@@ -6,10 +6,12 @@ Summary
 - Revise TrackController.Summary HttpGet method to use a Utilities helper method.               ...DONE
 - Consider Lists (Flush, with responsive col items)                                             ...DONE
 - Add bottom margins to the list items                                                          ...DONE
-- Display more info for the Tracker list group                                                  ...DONE
-    GetEquationOfEquinoxes();   Equation of the Equinoxes (EE)
-    GetEquationOfOrigins();     Equation of the Origins (EO)
-- Add resource strings for these.
+- Add Equation of the Equinoxes (EE)                                                            ...DONE
+- Add Equation of the Origins (EO)                                                              ...DONE
+- Add resource strings for these.                                                               ...DONE
+- Add Intermediate Right Ascension                                                              ...DONE
+- Add RA with Nutation                                                                          ...DONE
+- Add DEC with Nutation                                                                         ...DONE
 
 Phase
 - Consider a toggle option to allow the user to track just once.
