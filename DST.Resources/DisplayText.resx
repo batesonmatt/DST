@@ -297,6 +297,14 @@
     <value>Timekeeping Algorithm</value>
     <comment>The display text for an observer's timekeeping algorithm.</comment>
   </data>
+  <data name="ObserverEquationOfEquinoxes" xml:space="preserve">
+    <value>Equation of the Equinoxes (EE)</value>
+    <comment>The display text for the Equation of the Equinoxes.</comment>
+  </data>
+  <data name="ObserverEquationOfOrigins" xml:space="preserve">
+    <value>Equation of the Origins (EO)</value>
+    <comment>The display text for the Equation of the Origins.</comment>
+  </data>
   <data name="ObserverLatitudeLong" xml:space="preserve">
     <value>Latitude</value>
     <comment>The display text for an observer's geographic latitude.</comment>
@@ -473,6 +481,10 @@
     <value>Declination</value>
     <comment>The display text for a deep-sky object's declination.</comment>
   </data>
+  <data name="TargetDeclinationNutation" xml:space="preserve">
+    <value>Declination with Nutation</value>
+    <comment>The display text for a deep-sky object's declination with nutation applied.</comment>
+  </data>
   <data name="TargetDeclinationShort" xml:space="preserve">
     <value>DEC</value>
     <comment>The abbreviated display text for a deep-sky object's declination.</comment>
@@ -489,9 +501,17 @@
     <value>Magnitude</value>
     <comment>The display text for a deep-sky object's apparent magnitude.</comment>
   </data>
+  <data name="TargetRightAscensionIntermediate" xml:space="preserve">
+    <value>Intermediate Right Ascension (RAi)</value>
+    <comment>The display text for a deep-sky object's intermediate (CIO-based) right ascension.</comment>
+  </data>
   <data name="TargetRightAscensionLong" xml:space="preserve">
     <value>Right Ascension</value>
     <comment>The display text for a deep-sky object's right ascension.</comment>
+  </data>
+  <data name="TargetRightAscensionNutation" xml:space="preserve">
+    <value>Right Ascension with Nutation</value>
+    <comment>The display text for a deep-sky object's right ascension with nutation applied.</comment>
   </data>
   <data name="TargetRightAscensionShort" xml:space="preserve">
     <value>RA</value>

@@ -466,6 +466,24 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Equation of the Equinoxes (EE).
+        /// </summary>
+        public static string ObserverEquationOfEquinoxes {
+            get {
+                return ResourceManager.GetString("ObserverEquationOfEquinoxes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equation of the Origins (EO).
+        /// </summary>
+        public static string ObserverEquationOfOrigins {
+            get {
+                return ResourceManager.GetString("ObserverEquationOfOrigins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Latitude.
         /// </summary>
         public static string ObserverLatitudeLong {
@@ -862,6 +880,15 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Declination with Nutation.
+        /// </summary>
+        public static string TargetDeclinationNutation {
+            get {
+                return ResourceManager.GetString("TargetDeclinationNutation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DEC.
         /// </summary>
         public static string TargetDeclinationShort {
@@ -898,11 +925,29 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Intermediate Right Ascension (RAi).
+        /// </summary>
+        public static string TargetRightAscensionIntermediate {
+            get {
+                return ResourceManager.GetString("TargetRightAscensionIntermediate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Right Ascension.
         /// </summary>
         public static string TargetRightAscensionLong {
             get {
                 return ResourceManager.GetString("TargetRightAscensionLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right Ascension with Nutation.
+        /// </summary>
+        public static string TargetRightAscensionNutation {
+            get {
+                return ResourceManager.GetString("TargetRightAscensionNutation", resourceCulture);
             }
         }
         
