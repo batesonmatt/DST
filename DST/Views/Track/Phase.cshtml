@@ -13,6 +13,7 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/location.js"></script>
     <script src="~/js/misc.js"></script>
+    <script src="~/js/phase-toggle.js"></script>
 }
 
 <div class="container pt-3">
@@ -71,8 +72,17 @@
                     <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input id="input-phase-single" class="form-check-input" data-bs-toggle="collapse" href="#phase-cycles-collapse" role="button"
+                            asp-for="TrackForm.IsTrackOnce" type="checkbox"
+                               checked="@Model.TrackForm.IsTrackOnce" onchange="phaseTrackOnce()" />
+                        <label class="form-label" asp-for="TrackForm.IsTrackOnce">Track Once</label>
+                    </div>
+                </div>
+                <div id="phase-cycles-collapse" class="collapse @current.TrackOnce.Show() mb-3">
                     <label class="form-label" asp-for="TrackForm.Cycles">Cycles</label>
-                    <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles" />
+                    <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles"
+                           disabled="@Model.TrackForm.IsTrackOnce" />
                     <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
