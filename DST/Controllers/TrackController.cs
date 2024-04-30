@@ -232,6 +232,7 @@ namespace DST.Controllers
                     Algorithm = values.Algorithm,
                     Phase = selectedPhase,
                     Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
+                    IsTrackOnce = values.IsTrackOnce,
                     Cycles = values.Cycles
                 },
 
@@ -255,6 +256,7 @@ namespace DST.Controllers
             values.SetAlgorithm(trackForm.Algorithm);
             values.SetPhase(trackForm.Phase);
             values.SetStart(trackForm.GetTicks());
+            values.SetTrackOnce(trackForm.IsTrackOnce);
             values.SetCycles(trackForm.Cycles);
 
             // Mark the entry as ready so we can calculate the results.
