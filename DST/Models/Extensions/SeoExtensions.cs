@@ -89,6 +89,16 @@ namespace DST.Models.Extensions
             }
         }
 
+        public static string Show(this string value)
+        {
+            if (value.IsFilterOff())
+            {
+                return "show";
+            }
+
+            return string.Empty;
+        }
+
         public static bool IsFilterAll(this string value)
         {
             return value.EqualsSeo(Filter.All);
