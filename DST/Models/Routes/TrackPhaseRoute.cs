@@ -2,6 +2,7 @@
 using DST.Models.Extensions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace DST.Models.Routes
 {
@@ -11,7 +12,11 @@ namespace DST.Models.Routes
 
         public string Phase { get; set; } = PhaseName.Default;
         public long Start { get; set; }
+        public string TrackOnce { get; set; } = Filter.Off;
         public int Cycles { get; set; }
+
+        [JsonIgnore]
+        public bool IsTrackOnce => TrackOnce.IsFilterOn();
 
         #endregion
 
@@ -25,6 +30,7 @@ namespace DST.Models.Routes
         {
             Phase = values.Phase;
             Start = values.Start;
+            TrackOnce = values.TrackOnce;
             Cycles = values.Cycles;
         }
 
@@ -57,9 +63,14 @@ namespace DST.Models.Routes
             Start = start is >= 0 and < long.MaxValue ? start : 0;
         }
 
+        public void SetTrackOnce(bool isTrackOnce)
+        {
+            TrackOnce = isTrackOnce ? Filter.On : Filter.Off;
+        }
+
         public void SetCycles(int cycles)
         {
-            Cycles = cycles is > -100 and < 100 ? cycles : 0;
+            Cycles = !IsTrackOnce && cycles is > -100 and < 100 ? cycles : 0;
         }
 
         public new TrackPhaseRoute Clone()
@@ -73,6 +84,7 @@ namespace DST.Models.Routes
             {
                 { nameof(Phase), Phase.ToKebabCase() },
                 { nameof(Start), Start.ToString().ToKebabCase() },
+                { nameof(TrackOnce), TrackOnce.ToKebabCase() },
 
                 // Do not call ToKebabCase() because we want negative numbers represented in the route URL.
                 { nameof(Cycles), Cycles.ToString() }
@@ -88,6 +100,7 @@ namespace DST.Models.Routes
             base.Validate();
             SetPhase(Phase);
             SetStart(Start);
+            SetTrackOnce(IsTrackOnce);
             SetCycles(Cycles);
         }
 
