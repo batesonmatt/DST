@@ -17,6 +17,8 @@ namespace DST.Models.DomainModels
         [EpochDateRange]
         public DateTime Start { get; set; }
 
+        public bool IsTrackOnce { get; set; } = false;
+
         public bool IsReady { get; set; } = false;
 
         #endregion
