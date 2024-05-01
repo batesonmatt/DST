@@ -36,11 +36,43 @@ function updateAggregateToggle() {
                     w.hidden = true;
                 }
             }
+            else
+            {
+                a.checked = true;
+                a.setAttribute("disabled", "disabled");
+                w.hidden = false;
+            }
             break;
         default:
             a.checked = true;
             a.setAttribute("disabled", "disabled");
             w.hidden = false;
             break;
+    }
+}
+
+function periodTrackOnce()
+{
+    let t = document.getElementById("input-period-single");
+    let p = document.getElementById("input-period");
+    let i = document.getElementById("input-interval");
+
+    if (t.checked === true)
+    {
+        p.value = 0;
+        i.value = 0;
+        p.setAttribute("disabled", "disabled");
+        i.setAttribute("disabled", "disabled");
+    }
+    else
+    {
+        if (p.hasAttribute("disabled"))
+        {
+            p.removeAttribute("disabled");
+        }
+        if (i.hasAttribute("disabled"))
+        {
+            i.removeAttribute("disabled");
+        }
     }
 }
