@@ -327,6 +327,7 @@ namespace DST.Controllers
                 {
                     Algorithm = values.Algorithm,
                     Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
+                    IsTrackOnce = values.IsTrackOnce,
                     IsFixed = values.IsFixed,
                     IsAggregated = values.IsAggregated,
                     TimeUnit = values.TimeUnit,
@@ -341,7 +342,6 @@ namespace DST.Controllers
             return viewModel;
         }
 
-
         [HttpPost]
         public IActionResult SubmitPeriod(TrackPeriodModel trackForm, TrackPeriodRoute values)
         {
@@ -355,6 +355,7 @@ namespace DST.Controllers
             // The ordering is important here.
             values.SetAlgorithm(trackForm.Algorithm);
             values.SetStart(trackForm.GetTicks());
+            values.SetTrackOnce(trackForm.IsTrackOnce);
             values.SetTimeUnit(trackForm.TimeUnit);
             values.SetFixed(trackForm.IsFixed);
             values.SetAggregate(trackForm.IsAggregated);
@@ -373,7 +374,6 @@ namespace DST.Controllers
             // Redirect the action to calculate the results.
             return RedirectToAction("Period", values.ToDictionary());
         }
-
 
         public ViewResult Period(TrackPeriodRoute values)
         {
