@@ -72,39 +72,50 @@
                 <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label" asp-for="TrackForm.TimeUnit">Time Unit</label>
-                <select id="select-period-timeunit" class="form-control" asp-for="TrackForm.TimeUnit" 
-                    asp-items="@(new SelectList(Model.TimeUnits, "Id", "Text", Model.TrackForm.TimeUnit))"
-                        onchange="updateFixedTrackingToggle(); updateAggregateToggle()"></select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" asp-for="TrackForm.Period">Period</label>
-                <input id="input-period" class="form-control" asp-for="TrackForm.Period" type="number" value="@Model.TrackForm.Period" />
-                <span asp-validation-for="TrackForm.Period" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" asp-for="TrackForm.Interval">Interval</label>
-                <input id="input-interval" class="form-control" asp-for="TrackForm.Interval" type="number" value="@Model.TrackForm.Interval" />
-                <span asp-validation-for="TrackForm.Interval" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
                 <div class="form-check form-switch">
-                    <input id="input-period-fixed" class="form-check-input" asp-for="TrackForm.IsFixed" type="checkbox" checked="@Model.TrackForm.IsFixed"
-                           disabled="@(current?.SupportsFixedTracking() == false)" onchange="updateAggregateToggle()" />
-                    <label class="form-label" asp-for="TrackForm.IsFixed">Fixed Tracking</label>
-                </div>
-                <div id="input-fixed-warning" class="form-text" hidden="@(current?.SupportsFixedTracking())">
-                    Fixed tracking is only supported for days, weeks, months, and years.
+                    <input id="input-period-single" class="form-check-input" data-bs-toggle="collapse" href="#period-collapse" role="button"
+                           asp-for="TrackForm.IsTrackOnce" type="checkbox" checked="@Model.TrackForm.IsTrackOnce" onchange="periodTrackOnce()" />
+                    <label class="form-label" asp-for="TrackForm.IsTrackOnce">Track Once</label>
                 </div>
             </div>
-            <div class="mb-3">
-                <div class="form-check form-switch">
-                    <input id="input-period-aggregate" class="form-check-input" asp-for="TrackForm.IsAggregated" type="checkbox" checked="@Model.TrackForm.IsAggregated"
-                           disabled="@(current?.SupportsAggregatedIntervals() == false)" />
-                    <label class="form-label" asp-for="TrackForm.IsAggregated">Aggregated Intervals</label>
+            <div id="period-collapse" class="collapse @current.TrackOnce.Show()">
+                <div class="mb-3">
+                    <label class="form-label" asp-for="TrackForm.TimeUnit">Time Unit</label>
+                    <select id="select-period-timeunit" class="form-control" asp-for="TrackForm.TimeUnit"
+                            asp-items="@(new SelectList(Model.TimeUnits, "Id", "Text", Model.TrackForm.TimeUnit))"
+                            onchange="updateFixedTrackingToggle(); updateAggregateToggle()"></select>
                 </div>
-                <div id="input-aggregate-warning" class="form-text" hidden="@(current?.SupportsAggregatedIntervals())">
-                    Aggregation can only be disabled for fixed tracking in months and years.
+                <div class="mb-3">
+                    <label class="form-label" asp-for="TrackForm.Period">Period</label>
+                    <input id="input-period" class="form-control" asp-for="TrackForm.Period" type="number" value="@Model.TrackForm.Period"
+                           disabled="@Model.TrackForm.IsTrackOnce" />
+                    <span asp-validation-for="TrackForm.Period" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="TrackForm.Interval">Interval</label>
+                    <input id="input-interval" class="form-control" asp-for="TrackForm.Interval" type="number" value="@Model.TrackForm.Interval"
+                           disabled="@Model.TrackForm.IsTrackOnce" />
+                    <span asp-validation-for="TrackForm.Interval" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input id="input-period-fixed" class="form-check-input" asp-for="TrackForm.IsFixed" type="checkbox" checked="@Model.TrackForm.IsFixed"
+                               disabled="@(current?.SupportsFixedTracking() == false)" onchange="updateAggregateToggle()" />
+                        <label class="form-label" asp-for="TrackForm.IsFixed">Fixed Tracking</label>
+                    </div>
+                    <div id="input-fixed-warning" class="form-text" hidden="@(current?.SupportsFixedTracking())">
+                        Fixed tracking is only supported for days, weeks, months, and years.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input id="input-period-aggregate" class="form-check-input" asp-for="TrackForm.IsAggregated" type="checkbox" checked="@Model.TrackForm.IsAggregated"
+                               disabled="@(current?.SupportsAggregatedIntervals() == false)" />
+                        <label class="form-label" asp-for="TrackForm.IsAggregated">Aggregated Intervals</label>
+                    </div>
+                    <div id="input-aggregate-warning" class="form-text" hidden="@(current?.SupportsAggregatedIntervals())">
+                        Aggregation can only be disabled for fixed tracking in months and years.
+                    </div>
                 </div>
             </div>
             <div class="mb-3">
