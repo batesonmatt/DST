@@ -12,11 +12,15 @@ namespace DST.Models.Routes
         #region Properties
 
         public long Start { get; set; }
+        public string TrackOnce { get; set; } = Filter.Off;
         public string Fixed { get; set; } = Filter.Off;
         public string Aggregate { get; set; } = Filter.On;
         public string TimeUnit { get; set; } = TimeUnitName.Default;
         public int Period { get; set; }
         public int Interval { get; set; }
+
+        [JsonIgnore]
+        public bool IsTrackOnce => TrackOnce.IsFilterOn();
 
         [JsonIgnore]
         public bool IsFixed => Fixed.IsFilterOn();
@@ -35,6 +39,7 @@ namespace DST.Models.Routes
         public TrackPeriodRoute(TrackPeriodRoute values)
         {
             Start = values.Start;
+            TrackOnce = values.TrackOnce;
             Fixed = values.Fixed;
             Aggregate = values.Aggregate;
             TimeUnit = values.TimeUnit;
@@ -48,17 +53,22 @@ namespace DST.Models.Routes
 
         public bool SupportsFixedTracking()
         {
-            return Utilities.SupportsFixedTracking(Utilities.GetTimeUnit(TimeUnit));
+            return !IsTrackOnce && Utilities.SupportsFixedTracking(Utilities.GetTimeUnit(TimeUnit));
         }
 
         public bool SupportsAggregatedIntervals()
         {
-            return IsFixed && Utilities.SupportsAggregatedIntervals(Utilities.GetTimeUnit(TimeUnit));
+            return IsFixed && !IsTrackOnce && Utilities.SupportsAggregatedIntervals(Utilities.GetTimeUnit(TimeUnit));
         }
 
         public void SetStart(long start)
         {
             Start = start is >= 0 and < long.MaxValue ? start : 0;
+        }
+
+        public void SetTrackOnce(bool isTrackOnce)
+        {
+            TrackOnce = isTrackOnce ? Filter.On : Filter.Off;
         }
 
         public void SetFixed(bool isFixed)
@@ -75,7 +85,11 @@ namespace DST.Models.Routes
 
         public void SetTimeUnit(string timeUnit)
         {
-            if (timeUnit.EqualsSeo(TimeUnitName.Seconds))
+            if (IsTrackOnce)
+            {
+                TimeUnit = TimeUnitName.Default;
+            }
+            else if (timeUnit.EqualsSeo(TimeUnitName.Seconds))
             {
                 TimeUnit = TimeUnitName.Seconds;
             }
@@ -112,13 +126,13 @@ namespace DST.Models.Routes
         public void SetPeriod(int period)
         {
             // Fixed should already be validated here.
-            Period = Utilities.GetClientPeriod(period, Algorithm, TimeUnit, IsFixed);
+            Period = IsTrackOnce ? 0 : Utilities.GetClientPeriod(period, Algorithm, TimeUnit, IsFixed);
         }
 
         public void SetInterval(int interval)
         {
             // Period should already be validated here.
-            Interval = int.Clamp(interval, 0, Period);
+            Interval = IsTrackOnce ? 0 : int.Clamp(interval, 0, Period);
         }
 
         public new TrackPeriodRoute Clone()
@@ -131,6 +145,7 @@ namespace DST.Models.Routes
             Dictionary<string, string> route = new()
             {
                 { nameof(Start), Start.ToString().ToKebabCase() },
+                { nameof(TrackOnce), TrackOnce.ToKebabCase() },
                 { nameof(Fixed), Fixed.ToKebabCase() },
                 { nameof(Aggregate), Aggregate.ToKebabCase() },
                 { nameof(TimeUnit), TimeUnit.ToKebabCase() },
@@ -150,6 +165,7 @@ namespace DST.Models.Routes
             base.Validate();
 
             SetStart(Start);
+            SetTrackOnce(IsTrackOnce);
             SetTimeUnit(TimeUnit);
             SetFixed(IsFixed);
             SetAggregate(IsAggregated);
