@@ -22,15 +22,11 @@ Phase
 - Consider adding as a new route segment, TrackOnce.                                            ...DONE
 - Need to implement validation (If Single, set Cycles to 0).                                    ...DONE
 - Consider hiding/showing the Cycles input for Single tracking.                                 ...DONE
-  https://getbootstrap.com/docs/5.0/components/collapse/
 
 Period
-- Consider hiding the Aggregate option by default, then only show it when the user selects Months/Years and Fixed tracking.
-- Consider a toggle option to allow the user to track just once (See Phase).
-  If checked, set Period and Interval both to 0, then disable the inputs for both.
-  Disable other toggle switch options?
-- Consider hiding/showing the Period and Interval inputs, and other options, for Single tracking.
-  https://getbootstrap.com/docs/5.0/components/collapse/
+- Consider a toggle option to allow the user to track just once (See Phase).                    ...DONE
+  If checked, set Period and Interval both to 0, then disable the inputs for both.              ...DONE
+- Hide/Show the Period and Interval inputs, and other options, for Single tracking.             ...DONE
 - Colorize each result where the object is above the horizon.
   Also display some icon in a new column at the end (Open/closed eye?).
   For small screens, just align this icon to the upper right.
@@ -118,6 +114,9 @@ Consider removing the paging endpoint, since it is never used.
   but starting at the last DateTime value.
 - This could cause a bug where the datetime would eventually run to min/max value, or to a point where
   the results are not trustworthy.
+
+Period
+- Consider hiding the Aggregate option by default, then only show it when the user selects Months/Years and Fixed tracking.
 
 ---------------------------------------------------------------------------
 
