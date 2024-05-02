@@ -136,6 +136,7 @@
                             <th scope="col" class="text-nowrap">Date/Time</th>
                             <th scope="col" class="text-nowrap">Altitude</th>
                             <th scope="col" class="text-nowrap">Azimuth</th>
+                            <th scope="col" class="text-nowrap">Visibility</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -150,6 +151,9 @@
                                         <td class="text-nowrap">@result.GetLocalDateTimeText()</td>
                                         <td class="text-nowrap">@result.GetAltitudeText()</td>
                                         <td class="text-nowrap">@result.GetAzimuthText()</td>
+                                        <td class="text-nowrap">
+                                            <i class="bi @result.Vector.Visibility()"></i>
+                                        </td>
                                     </tr>
                                 }
                                 resultNumber++;
@@ -168,11 +172,14 @@
                                 {
                                     <tr>
                                         <td class="py-3">
-                                            <div class="mx-3">
-                                                <small class="fst-italic">Time</small>
-                                                <h6 class="mb-2">@result.GetLocalDateTimeText()</h6>
-                                                <small class="fst-italic">Position</small>
-                                                <p class="mb-0">@result.GetCoordinateText()</p>
+                                            <div class="d-flex justify-content-between mx-3">
+                                                <div>
+                                                    <small class="fst-italic">Time</small>
+                                                    <h6 class="mb-2">@result.GetLocalDateTimeText()</h6>
+                                                    <small class="fst-italic">Position</small>
+                                                    <p class="mb-0">@result.GetCoordinateText()</p>
+                                                </div>
+                                                <i class="bi @result.Vector.Visibility()"></i>
                                             </div>
                                         </td>
                                     </tr>
