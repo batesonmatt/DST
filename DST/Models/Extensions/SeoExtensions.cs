@@ -1,4 +1,5 @@
-﻿using DST.Models.DataLayer.Query;
+﻿using DST.Core.Vector;
+using DST.Models.DataLayer.Query;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -67,36 +68,22 @@ namespace DST.Models.Extensions
 
         public static string Active(this string a, string b)
         {
-            if (a.EqualsSeo(b))
-            {
-                return "active";
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return a.EqualsSeo(b) ? "active" : string.Empty;
         }
 
         public static string Active(this int a, int b)
         {
-            if (a == b)
-            {
-                return "active";
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return a == b ? "active" : string.Empty;
+        }
+
+        public static string Visibility(this IVector vector)
+        {
+            return vector.Coordinate.Components.Inclination > 0.0 ? "bi-eye-fill" : "bi-eye-slash";
         }
 
         public static string Show(this string value)
         {
-            if (value.IsFilterOff())
-            {
-                return "show";
-            }
-
-            return string.Empty;
+            return value.IsFilterOff() ? "show" : string.Empty;
         }
 
         public static bool IsFilterAll(this string value)
