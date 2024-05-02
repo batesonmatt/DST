@@ -27,9 +27,8 @@ Period
 - Consider a toggle option to allow the user to track just once (See Phase).                    ...DONE
   If checked, set Period and Interval both to 0, then disable the inputs for both.              ...DONE
 - Hide/Show the Period and Interval inputs, and other options, for Single tracking.             ...DONE
-- Colorize each result where the object is above the horizon.
-  Also display some icon in a new column at the end (Open/closed eye?).
-  For small screens, just align this icon to the upper right.
+- Display some icon in a new column at the end (Open/closed eye?).                              ...DONE
+  For small screens, just align this icon to the upper right.                                   ...DONE
 
 Track views
 - Consider a view component or partial view for the Dso name heading.
