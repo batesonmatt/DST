@@ -78,7 +78,7 @@ namespace DST.Models.Extensions
 
         public static string Visibility(this IVector vector)
         {
-            return vector.Coordinate.Components.Inclination > 0.0 ? "bi-eye-fill" : "bi-eye-slash";
+            return vector.Coordinate.Components.Inclination > 0.0 ? "bi-eye" : "bi-eye-slash";
         }
 
         public static string Show(this string value)
