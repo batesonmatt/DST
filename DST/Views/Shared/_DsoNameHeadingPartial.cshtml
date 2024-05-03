@@ -1,0 +1,17 @@
+﻿@model DsoModel
+
+<div class="mb-5">
+    @if (Model.HasName)
+    {
+        <h1 class="display-5">@Model.CompoundId - @Model.Name</h1>
+    }
+    else
+    {
+        <h1 class="display-5">@Model.CompoundId</h1>
+    }
+
+    @if (Model.HasMultipleNames)
+    {
+        <p class="lead">Other names:&nbsp;&nbsp;<i>@string.Join(", ", Model.GetOtherNames())</i></p>
+    }
+</div>
