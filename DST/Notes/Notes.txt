@@ -31,8 +31,7 @@ Period
   For small screens, just align this icon to the upper right.                                   ...DONE
 
 Track views
-- Consider a view component or partial view for the Dso name heading.
-- Use same headings/styles across views.
+- Consider a view component or partial view for the Dso name heading.                           ...DONE
 
 List
 - Add button to the dso items that navigates to the Track controller
@@ -120,6 +119,8 @@ Period
 ---------------------------------------------------------------------------
 
 Bootstrap Misc
+
+Consider sunrise, sun, and sunsest icons for Rise, Apex, and Set options in the Phase form.
 
 Use floating labels for the form controls.
 
