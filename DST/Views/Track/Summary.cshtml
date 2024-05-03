@@ -21,22 +21,7 @@
         <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitSummaryGeolocation"></vc:geolocation-form>
     </div>
 
-    @* Consider view component or partial view *@
-    <div class="mb-5">
-        @if (Model.Dso.HasName)
-        {
-            <h1 class="display-5">@Model.Dso.CompoundId - @Model.Dso.Name</h1>
-        }
-        else
-        {
-            <h1 class="display-5">@Model.Dso.CompoundId</h1>
-        }
-
-        @if (Model.Dso.HasMultipleNames)
-        {
-            <p class="lead">Other names:&nbsp;&nbsp;<i>@string.Join(", ", Model.Dso.GetOtherNames())</i></p>
-        }
-    </div>
+    <partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
 
     <nav class="nav nav-tabs mb-5">
         <a class="nav-item nav-link active">Summary</a>

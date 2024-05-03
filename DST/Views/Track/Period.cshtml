@@ -28,24 +28,7 @@
         <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitPeriodGeolocation"></vc:geolocation-form>
     </div>
 
-    @* Consider view component or partial view *@
-    <div class="mb-5">
-        @if (Model.Dso.HasName)
-        {
-            <h1>@Model.Dso.CompoundId - @Model.Dso.Name</h1>
-        }
-        else
-        {
-            <h1>@Model.Dso.CompoundId</h1>
-        }
-
-        @if (Model.Dso.HasMultipleNames)
-        {
-            <p>
-                <i>Other names:&nbsp;&nbsp;@string.Join(", ", Model.Dso.GetOtherNames())</i>
-            </p>
-        }
-    </div>
+    <partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
 
     <nav class="nav nav-tabs mb-5">
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Summary" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">Summary</a>
