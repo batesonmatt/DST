@@ -34,23 +34,45 @@ Track views
 - Consider a view component or partial view for the Dso name heading.                           ...DONE
 
 List
-- Add button to the dso items that navigates to the Track controller
-  (see pg 531 for form submit button and controller link, and pg 519 for example controller).
-
-Details
-- Consider a partial view.
-- Consider a Bootstrap OffCanvas for the Details partial view, and display it in a popup inside the List view.
-  Or consider the result items in the List view to be expandable controls, and expand it to show the details.
-    |---------------------------------------------|
-    | ID - Name                             Track |
-    | ...                                         |
-    |              Expand Details                 |
-    |---------------------------------------------|
-- Add all displayable information here
-- Add button to navigate to the Track controller
+- Consider using Bootstrap Cards for the list items
+  https://getbootstrap.com/docs/5.0/components/card/#grid-cards
+  ----------------------------
+  | CID             Sort Tag |
+  |--------------------------|
+  |                          |
+  | Name (Or "No Name")      |
+  | # other names            |
+  |                          |
+  | Catalog                  |
+  | Type                     |
+  | Description              |
+  | Constellation            |
+  |                          |
+  | Details link             |
+  |                          |
+  |--------------------------|
+  |                    Track |
+  ----------------------------
+- (Track button) Navigates to the Track controller, Summary view.
+  See pg. 531 for form submit button and controller link, and pg 519 for example controller.
+- (Details link) Displays the Details partial view in a Bootstrap OffCanvas (right-side)
+  Display data-ready information in here.
+  Include Track button to navigate to the Track controller, Summary view.
 
 Geolocation
 - Consider a Bootstrap OffCanvas for the Geolocation partial view.
+  
+  ---------------------------
+  | IANA Name          Icon |
+  | LAT, LON                |
+  ---------------------------
+  
+  A button
+  (IANA Name) Timezone name
+  (LAT, LON) A GeographicCoordinate object, displayed as full component string, italicized.
+  (Icon) Bootstrap geo-alt, geo-alt-fill, geo, or geo-fill icon, aligned top-right or vertically centered.
+
+- Or consider a Bootstrap Collapse, or Accordian.
 
 Tracking results
 - Display something for empty results ("No results", and an empty table)
@@ -127,7 +149,10 @@ Use floating labels for the form controls.
 Consider class="display-#" for certain headings (like the banners)
 
 Consider Collapse control for tooltips
-https://getbootstrap.com/docs/5.0/components/collapse/
+- https://getbootstrap.com/docs/5.0/components/collapse/
+- OR, consider tooltips and popovers for informational stuff
+  https://getbootstrap.com/docs/5.0/components/tooltips/
+  https://getbootstrap.com/docs/5.0/components/popovers/
 
 Use bootstrap switches (checkbox) where necessary. See the toggle filters for the List view, etc.
 - Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, 
@@ -140,6 +165,9 @@ Consider Bootstrap input groups for tracking forms:
   | #    | Days     |  for every  | #    | Days
 - OR, build a string while the user fills out the form.
   Every # day(s) for # total day(s).
+
+Navbar
+- Consider redesigning styles for navbar-toggler and navbar-dark.
 
 Icons
 - https://icons.getbootstrap.com/
@@ -173,36 +201,26 @@ Consider admin pages so that I may conveniently keep the Dso items up to date (?
 
 ---------------------------------------------------------------------------
 
-Redesign List view
-- Pagination
-  https://getbootstrap.com/docs/5.0/components/pagination/
+Redesign views
+
+List
 - Consider expanding/collapsable controls for the filter/sort lists
   https://getbootstrap.com/docs/5.0/components/accordion/
   https://getbootstrap.com/docs/5.0/components/collapse/
-- Consider using Bootstrap Cards for the list items
-  https://getbootstrap.com/docs/5.0/components/card/#grid-cards
-  https://getbootstrap.com/docs/5.0/components/list-group/#custom-content
-- For the navbar, redesign styles for navbar-toggler and navbar-dark. (?)
-- Consider tooltips and popovers for informational stuff
-  https://getbootstrap.com/docs/5.0/components/tooltips/
-  https://getbootstrap.com/docs/5.0/components/popovers/
 
-Redesign Details view
+Details
 
-Redesign Track views
+Track
 
-Redesign Shared views
-
-Redesign Home and About views
-
----------------------------------------------------------------------------
+Shared
 
 Home
-
 Consider selecting a random object and display its info
 - Or perhaps a random object, and a random track or vector calculation, etc.
 - Use a bootstrap carousel
   https://getbootstrap.com/docs/5.0/components/carousel/
+
+About
 
 ---------------------------------------------------------------------------
 
