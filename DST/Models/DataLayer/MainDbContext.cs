@@ -68,7 +68,8 @@ namespace DST.Models.DataLayer
             // DsoModel: Update property access mode(s).
             modelBuilder.Entity<DsoModel>()
                 .Property(dso => dso.Common)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .HasDefaultValue(null);
 
             // Seed initial data
             modelBuilder.ApplyConfiguration(new DataStore.CatalogStore());
