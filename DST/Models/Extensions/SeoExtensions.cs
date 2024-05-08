@@ -86,6 +86,16 @@ namespace DST.Models.Extensions
             return value.IsFilterOff() ? "show" : string.Empty;
         }
 
+        public static string OtherNames(this int value)
+        {
+            return value switch
+            {
+                > 1 => $"{value} other names",
+                1 => $"{value} other name",
+                _ => string.Empty
+            };
+        }
+
         public static bool IsFilterAll(this string value)
         {
             return value.EqualsSeo(Filter.All);
