@@ -295,36 +295,54 @@
     <div id="start">
         @if (Model.DsoItems is not null && Model.DsoItems.Any())
         {
-            @foreach (DsoModel dso in Model.DsoItems)
-            {
-                @if (dso is not null)
+            int nameCount = 0;
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+                @foreach (DsoModel dso in Model.DsoItems)
                 {
-                    <a asp-controller="Search" asp-action="Details" asp-route-catalog="@dso.CatalogName" asp-route-id="@dso.Id">
-                        <div>
-                            @if (dso.HasName)
-                            {
-                                <h3>@dso.CompoundId - @dso.Name</h3>
-                            }
-                            else
-                            {
-                                <h3>@dso.CompoundId</h3>
-                            }
+                    @if (dso is not null)
+                    {
+                        <div class="col">
+                            <div class="card h-100">
+                                <div class="card-header">@dso.CompoundId</div>
+                                <div class="card-body">
+                                    <vc:dso-sort-tag dso="@dso" sort-field="@current.SortField"></vc:dso-sort-tag>
 
-                            <vc:dso-sort-tag dso="@dso" sort-field="@current.SortField"></vc:dso-sort-tag>
+                                    @if (dso.HasName)
+                                    {
+                                        <h5 class="card-title">@dso.Name</h5>
 
-                            <p>
-                                @dso.CatalogName
-                                <br />
-                                @dso.Description
-                                <br />
-                                @dso.Type
-                                <br />
-                                @dso.ConstellationName
-                            </p>
+                                        @if (dso.HasMultipleNames)
+                                        {
+                                            nameCount = dso.NameCount - 1;
+                                            <h6 class="card-subtitle text-muted mb-2">@nameCount.OtherNames()</h6>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <h5 class="card-title">No Name</h5>
+                                    }
+
+                                    <p class="card-text">
+                                        @dso.CatalogName
+                                        <br />
+                                        @dso.Type
+                                        <br />
+                                        @dso.Description
+                                        <br />
+                                        @dso.ConstellationName
+                                    </p>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <a class="card-link link-primary text-decoration-underline"
+                                       asp-controller="Search" asp-action="Details" asp-route-catalog="@dso.CatalogName" asp-route-id="@dso.Id">Details</a>
+                                    <a href="#" class="btn btn-primary">Track</a>
+                                </div>
+                            </div>
                         </div>
-                    </a>
+                    }
                 }
-            }
+            </div>
         }
         else
         {
