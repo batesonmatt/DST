@@ -46,15 +46,29 @@ namespace DST.Models.DomainModels
             }
         }
 
+        /// <summary>The number of names associated to this object.</summary>
+        /// <value>A positive integer greater than, or equal to, <c>0</c>.</value>
+        [NotMapped]
+        public int NameCount => _names?.Length ?? 0;
+
+        /// <summary>Attempts to retrieve the first name found for this object, if any.</summary>
+        /// <value>A non-empty string, or <c>null</c> if this object has no names.</value>
         [NotMapped]
         public string Name => _names?[0];
 
+        /// <summary>Determines whether there are any names associated to this object.</summary>
+        /// <value><c>True</c> if this object has any names, otherwise <c>False</c>.</value>
         [NotMapped]
-        public bool HasName => !string.IsNullOrWhiteSpace(_names?[0]);
+        public bool HasName => NameCount > 0;
 
+        /// <summary>Determines whether there are multiple names associated to this object.</summary>
+        /// <value><c>True</c> if this object has more than <c>1</c> name, otherwise <c>False</c>.</value>
         [NotMapped]
-        public bool HasMultipleNames => _names?.Length > 1;
+        public bool HasMultipleNames => NameCount > 1;
 
+        /// <summary>The description for this object, if any.</summary>
+        /// <value>Supplementary information regarding the specific type of deep-sky object.</value>
+        /// <remarks>This value defaults to <c>null</c>.</remarks>
         [DefaultValue(null)]
         public string Description { get; set; }
 
@@ -75,9 +89,11 @@ namespace DST.Models.DomainModels
         public double Declination { get; set; }
 
         /// <summary>The distance of this object, as represented in kilolight-years (x1000 light-years) from Earth.</summary>
+        /// <value>A number greater than <c>0.0</c>.</value>
         public double Distance { get; set; }
 
         /// <summary>The apparent magnitude of this object, for which a lower magnitude resembles a brighter object.</summary>
+        /// <value>A positive or negative, non-zero value if this object has an apparent magnitude. Otherwise, <c>null</c>.</value>
         /// <remarks>This value defaults to <c>null</c>.</remarks>
         [DefaultValue(null)]
         public double? Magnitude { get; set; }
@@ -102,7 +118,7 @@ namespace DST.Models.DomainModels
 
         public IEnumerable<string> GetOtherNames()
         {
-            if (_names?.Length > 1)
+            if (HasMultipleNames)
             {
                 foreach (string name in _names.Skip(1))
                 {
