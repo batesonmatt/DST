@@ -37,8 +37,10 @@ List
 - Consider using Bootstrap Cards for the list items
   https://getbootstrap.com/docs/5.0/components/card/#grid-cards
   ----------------------------
-  | CID             Sort Tag |
+  | CID                      |
   |--------------------------|
+  |                          |
+  | Sort Tag                 |
   |                          |
   | Name (Or "No Name")      |
   | # other names            |
@@ -48,10 +50,9 @@ List
   | Description              |
   | Constellation            |
   |                          |
-  | Details link             |
   |                          |
   |--------------------------|
-  |                    Track |
+  | Details            Track |
   ----------------------------
 - (Track button) Navigates to the Track controller, Summary view.
   See pg. 531 for form submit button and controller link, and pg 519 for example controller.
@@ -70,7 +71,7 @@ Geolocation
   A button
   (IANA Name) Timezone name
   (LAT, LON) A GeographicCoordinate object, displayed as full component string, italicized.
-  (Icon) Bootstrap geo-alt, geo-alt-fill, geo, or geo-fill icon, aligned top-right or vertically centered.
+  (Icon) Bootstrap crosshair, geo-alt, geo-alt-fill, geo, or geo-fill icon, aligned top-right or vertically centered.
 
 - Or consider a Bootstrap Collapse, or Accordian.
 
