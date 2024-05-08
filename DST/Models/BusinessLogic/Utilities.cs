@@ -586,7 +586,7 @@ namespace DST.Models.BusinessLogic
                     { TrackSummaryItem.Description, new(Resources.DisplayText.TargetDescription, dso.Description) },
                     { TrackSummaryItem.Constellation, new(Resources.DisplayText.TargetConstellation, dso.ConstellationName) },
                     { TrackSummaryItem.Distance, new(Resources.DisplayText.TargetDistance, string.Format(Resources.DisplayText.DistanceFormatDecimalKly, dso.Distance)) },
-                    { TrackSummaryItem.Magnitude, new(Resources.DisplayText.TargetMagnitude, dso.Magnitude ?.ToString(CultureInfo.CurrentCulture) ?? Resources.DisplayText.None) },
+                    { TrackSummaryItem.Magnitude, new(Resources.DisplayText.TargetMagnitude, dso.Magnitude?.ToString(CultureInfo.CurrentCulture) ?? Resources.DisplayText.None) },
                     {
                         TrackSummaryItem.Season,
                         new(Resources.DisplayText.TargetSeason,
