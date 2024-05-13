@@ -34,35 +34,29 @@ Track views
 - Consider a view component or partial view for the Dso name heading.                           ...DONE
 
 List
-- Consider using Bootstrap Cards for the list items
-  https://getbootstrap.com/docs/5.0/components/card/#grid-cards
-  ----------------------------
-  | CID                      |
-  |--------------------------|
-  |                          |
-  | Sort Tag                 |
-  |                          |
-  | Name (Or "No Name")      |
-  | # other names            |
-  |                          |
-  | Catalog                  |
-  | Type                     |
-  | Description              |
-  | Constellation            |
-  |                          |
-  |                          |
-  |--------------------------|
-  | Details            Track |
-  ----------------------------
-- (Track button) Navigates to the Track controller, Summary view.
-  See pg. 531 for form submit button and controller link, and pg 519 for example controller.
+- Consider using Bootstrap Cards for the list items                                             ...DONE
+- (Track button) Navigates to the Track controller, Summary view.                               ...DONE
 - (Details link) Displays the Details partial view in a Bootstrap OffCanvas (right-side)
   Display data-ready information in here.
   Include Track button to navigate to the Track controller, Summary view.
+- Create a View Component for this because we need to format the string values.
+  Consider using TrackSummaryInfo and TrackSummaryItem.
+  Create Utilities.GetDetailsInfo()
+  Consider moving ViewModels.TrackSummaryInfo to BusinessLogic.
+- Remove Details and _DetailsLayout views from project.
+  Comment out SearchController.Details action method.
+
+    Consider <hr/> instead of list items.
+    Consider data-bs-* attributes and JavaScript to get the values.
+        https://getbootstrap.com/docs/5.0/components/modal/#varying-modal-content
+    Consider a single offcanvas component. Do not create several in a loop.
+
 
 Geolocation
 - Consider a Bootstrap OffCanvas for the Geolocation partial view.
+- Or, consider a Modal: https://getbootstrap.com/docs/5.0/components/modal/
   
+- The button to open the view:
   ---------------------------
   | IANA Name          Icon |
   | LAT, LON                |
@@ -142,6 +136,11 @@ Period
 ---------------------------------------------------------------------------
 
 Bootstrap Misc
+
+Text Interactions
+- https://getbootstrap.com/docs/5.0/utilities/interactions/
+
+Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text).
 
 Consider sunrise, sun, and sunsest icons for Rise, Apex, and Set options in the Phase form.
 
