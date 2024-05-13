@@ -39,6 +39,9 @@ namespace DST
             // Enable dependency injection and disable query tracking for DbContext objects.
             services.AddDbContext<MainDbContext>(options =>
             {
+                /* Microsoft.EntityFrameworkCore.SqlServer v8.0.0
+                 * SqlServerDbContextOptionsBuilder.UseCompatibilityLevel(Int32)
+                 */
                 options.UseSqlServer(Configuration.GetConnectionString("MainDbContext"));
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
@@ -118,11 +121,8 @@ namespace DST
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseSession();
-
             //app.UseAuthorization();
             
             app.UseEndpoints(endpoints =>
