@@ -17,7 +17,7 @@
 }
 
 <style>
-    .list-group {
+    .list-group.filter-group {
         max-height: 300px;
         overflow-y: auto;
         overflow-x: hidden;
@@ -34,7 +34,7 @@
     </div>
 
     <div>
-        <div class="list-group mb-3">
+        <div class="list-group filter-group mb-3">
             @{
                 routes = current.Clone();
 
@@ -93,7 +93,7 @@
 
         <hr />
 
-        <div class="list-group mb-3">
+        <div class="list-group filter-group mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
@@ -111,7 +111,7 @@
             }
         </div>
 
-        <div class="list-group mb-3">
+        <div class="list-group filter-group mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
@@ -129,7 +129,7 @@
             }
         </div>
 
-        <div class="list-group mb-3">
+        <div class="list-group filter-group mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
@@ -147,7 +147,7 @@
             }
         </div>
 
-        <div class="list-group mb-3">
+        <div class="list-group filter-group mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
@@ -165,7 +165,7 @@
             }
         </div>
 
-        <div class="list-group mb-3">
+        <div class="list-group filter-group mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
@@ -296,6 +296,7 @@
         @if (Model.DsoItems is not null && Model.DsoItems.Any())
         {
             int nameCount = 0;
+            string offcanvasId = string.Empty;
 
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
                 @foreach (DsoModel dso in Model.DsoItems)
@@ -329,14 +330,71 @@
                                         @dso.Type
                                         <br />
                                         @dso.Description
-                                        <br />
-                                        @dso.ConstellationName
                                     </p>
                                 </div>
+
                                 <div class="card-footer d-flex justify-content-between align-items-center">
-                                    <a class="card-link link-primary text-decoration-underline"
-                                       asp-controller="Search" asp-action="Details" asp-route-catalog="@dso.CatalogName" asp-route-id="@dso.Id">Details</a>
-                                    <a href="#" class="btn btn-primary">Track</a>
+                                    @{
+                                        offcanvasId = $"details-offcanvas-{dso.CompoundId}";
+                                    }
+                                    <a class="card-link link-primary text-decoration-underline" data-bs-toggle="offcanvas" href="#@offcanvasId" role="button">Details</a>
+
+                                    <div id="@offcanvasId" class="offcanvas offcanvas-end" tabindex="-1" aria-labelledby="details-title">
+                                        <div class="offcanvas-header">
+                                            <h5 id="details-title" class="offcanvas-title">@dso.CompoundId - Details</h5>
+                                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+                                        </div>
+                                        <div class="offcanvas-body">
+                                            @if (dso.HasName)
+                                            {
+                                                <h6 class="text-wrap mb-2">@dso.Name</h6>
+                                            }
+                                            <ul class="list-group list-group-flush">
+                                                @if (dso.HasMultipleNames)
+                                                {
+                                                    <li class="list-group-item">
+                                                        <div class="fw-bold">Other Names</div>
+                                                        <p class="text-wrap">@string.Join(", ", dso.GetOtherNames())</p>
+                                                    </li>
+                                                }
+                                                <li class="list-group-item">
+                                                    <div class="fw-bold">Catalog</div>
+                                                    <p class="text-wrap">@dso.CatalogName</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="fw-bold">Type</div>
+                                                    <p class="text-wrap">@dso.Type</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="fw-bold">Description</div>
+                                                    <p class="text-wrap">@dso.Description</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="fw-bold">Constellation</div>
+                                                    <p class="text-wrap">@dso.ConstellationName</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="fw-bold">Right Ascension</div>
+                                                    <p class="text-wrap">@dso.RightAscension</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="fw-bold">Declination</div>
+                                                    <p class="text-wrap">@dso.Declination</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="fw-bold">Distance</div>
+                                                    <p class="text-wrap">@dso.Distance</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="fw-bold">Apparent Magnitude</div>
+                                                    <p class="text-wrap">@dso.Magnitude</p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <a class="btn btn-primary" asp-controller="Track" asp-action="Summary" asp-route-catalog="@dso.CatalogName"
+                                       asp-route-id="@dso.Id" asp-route-algorithm="@AlgorithmName.Default">Track</a>
                                 </div>
                             </div>
                         </div>
