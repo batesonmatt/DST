@@ -341,55 +341,47 @@
 
                                     <div id="@offcanvasId" class="offcanvas offcanvas-end" tabindex="-1" aria-labelledby="details-title">
                                         <div class="offcanvas-header">
-                                            <h5 id="details-title" class="offcanvas-title">@dso.CompoundId - Details</h5>
+                                            <h6 id="details-title" class="offcanvas-title">@dso.CompoundId - Details</h6>
                                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
                                         </div>
-                                        <div class="offcanvas-body">
-                                            @if (dso.HasName)
+                                        @if (dso.HasName)
+                                        {
+                                            <h5 class="text-wrap px-3 pt-0 pb-3 mb-0 border-bottom">@dso.Name</h5>
+                                        }
+                                        <div class="offcanvas-body bg-light">
+                                            @if (dso.HasMultipleNames)
                                             {
-                                                <h6 class="text-wrap mb-2">@dso.Name</h6>
+                                                <div class="fw-bold">Other Names</div>
+                                                <small class="text-wrap mb-0">@string.Join(", ", dso.GetOtherNames())</small>
+                                                <hr />
                                             }
-                                            <ul class="list-group list-group-flush">
-                                                @if (dso.HasMultipleNames)
-                                                {
-                                                    <li class="list-group-item">
-                                                        <div class="fw-bold">Other Names</div>
-                                                        <p class="text-wrap">@string.Join(", ", dso.GetOtherNames())</p>
-                                                    </li>
-                                                }
-                                                <li class="list-group-item">
-                                                    <div class="fw-bold">Catalog</div>
-                                                    <p class="text-wrap">@dso.CatalogName</p>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="fw-bold">Type</div>
-                                                    <p class="text-wrap">@dso.Type</p>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="fw-bold">Description</div>
-                                                    <p class="text-wrap">@dso.Description</p>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="fw-bold">Constellation</div>
-                                                    <p class="text-wrap">@dso.ConstellationName</p>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="fw-bold">Right Ascension</div>
-                                                    <p class="text-wrap">@dso.RightAscension</p>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="fw-bold">Declination</div>
-                                                    <p class="text-wrap">@dso.Declination</p>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="fw-bold">Distance</div>
-                                                    <p class="text-wrap">@dso.Distance</p>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="fw-bold">Apparent Magnitude</div>
-                                                    <p class="text-wrap">@dso.Magnitude</p>
-                                                </li>
-                                            </ul>
+                                            <div class="fw-bold">Catalog</div>
+                                            <small class="text-wrap mb-0">@dso.CatalogName</small>
+                                            <hr />
+                                            <div class="fw-bold">Type</div>
+                                            <small class="text-wrap mb-0">@dso.Type</small>
+                                            <hr />
+                                            <div class="fw-bold">Description</div>
+                                            <small class="text-wrap mb-0">@dso.Description</small>
+                                            <hr />
+                                            <div class="fw-bold">Constellation</div>
+                                            <small class="text-wrap mb-0">@dso.ConstellationName</small>
+                                            <hr />
+                                            <div class="fw-bold">Right Ascension</div>
+                                            <small class="text-wrap mb-0">@dso.RightAscension</small>
+                                            <hr />
+                                            <div class="fw-bold">Declination</div>
+                                            <small class="text-wrap mb-0">@dso.Declination</small>
+                                            <hr />
+                                            <div class="fw-bold">Distance</div>
+                                            <small class="text-wrap mb-0">@dso.Distance</small>
+                                            <hr />
+                                            <div class="fw-bold">Apparent Magnitude</div>
+                                            <small class="text-wrap mb-0">@dso.Magnitude</small>
+                                        </div>
+                                        <div class="d-grid position-sticky bottom-0 p-3 border-top">
+                                            <a class="btn btn-primary" asp-controller="Track" asp-action="Summary" asp-route-catalog="@dso.CatalogName"
+                                               asp-route-id="@dso.Id" asp-route-algorithm="@AlgorithmName.Default">Track</a>
                                         </div>
                                     </div>
 
