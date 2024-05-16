@@ -36,44 +36,41 @@ Track views
 List
 - Consider using Bootstrap Cards for the list items                                             ...DONE
 - (Track button) Navigates to the Track controller, Summary view.                               ...DONE
-- (Details link) Displays the Details partial view in a Bootstrap OffCanvas (right-side)
-  Display data-ready information in here.
-  Include Track button to navigate to the Track controller, Summary view.
-- Create a View Component for this because we need to format the string values.
+- (Details link) Displays the Details partial view in a Bootstrap OffCanvas (right-side)        ...DONE
+  Display data-ready information in here.                                                       ...DONE
+- Include Track button to navigate to the Track controller, Summary view.                       ...DONE
+  Consider a fixed button at the bottom of the OffCanvas.                                       ...DONE
+- Revise layout so everything fits better vertically.                                           ...DONE
+- Consider <hr/> instead of list items, or set mx-0.                                            ...DONE
+- Consider a single offcanvas component. Do not create several in a loop.
+  Create a View Component for this because we need to format the string values.
+  Consider data-bs-* attributes and JavaScript to get the values.
+    https://getbootstrap.com/docs/5.0/components/modal/#varying-modal-content
   Consider using TrackSummaryInfo and TrackSummaryItem.
   Create Utilities.GetDetailsInfo()
   Consider moving ViewModels.TrackSummaryInfo to BusinessLogic.
 - Remove Details and _DetailsLayout views from project.
   Comment out SearchController.Details action method.
 
-    Consider <hr/> instead of list items.
-    Consider data-bs-* attributes and JavaScript to get the values.
-        https://getbootstrap.com/docs/5.0/components/modal/#varying-modal-content
-    Consider a single offcanvas component. Do not create several in a loop.
-
-
 Geolocation
 - Consider a Bootstrap OffCanvas for the Geolocation partial view.
 - Or, consider a Modal: https://getbootstrap.com/docs/5.0/components/modal/
-  
 - The button to open the view:
   ---------------------------
   | IANA Name          Icon |
   | LAT, LON                |
   ---------------------------
-  
   A button
   (IANA Name) Timezone name
   (LAT, LON) A GeographicCoordinate object, displayed as full component string, italicized.
   (Icon) Bootstrap crosshair, geo-alt, geo-alt-fill, geo, or geo-fill icon, aligned top-right or vertically centered.
-
 - Or consider a Bootstrap Collapse, or Accordian.
 
 Tracking results
 - Display something for empty results ("No results", and an empty table)
 - Consider limiting results to ~20 by default, with a Show More button at the bottom.
 - Display the time scale used after posting, along with the results (Important for Period tracking, which supports fixed tracking).
-- Consider adding funcionality to the *Result classes that returns more information (EE, OE, Rotation, LHA, etc...)
+- [OPTIONAL] Consider adding funcionality to the *Result classes that returns more information (EE, OE, Rotation, LHA, etc...)
   Might need view component instead of adding ILocalObserver and IAstronomicalDateTime to the *Result classes.
   Or just add primitive value properties to the classes (double, etc.).
   Consider a Position partial view, and display it via a Bootstrap OffCanvas, or expand the row.
