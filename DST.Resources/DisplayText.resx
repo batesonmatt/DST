@@ -498,8 +498,12 @@
     <comment>The display text for a deep-sky object's distance.</comment>
   </data>
   <data name="TargetMagnitude" xml:space="preserve">
-    <value>Magnitude</value>
+    <value>Apparent Magnitude</value>
     <comment>The display text for a deep-sky object's apparent magnitude.</comment>
+  </data>
+  <data name="TargetOtherNames" xml:space="preserve">
+    <value>Other Names</value>
+    <comment>The display text for a deep-sky object's other known aliases.</comment>
   </data>
   <data name="TargetRightAscensionIntermediate" xml:space="preserve">
     <value>Intermediate Right Ascension (RAi)</value>

@@ -916,11 +916,20 @@ namespace DST.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Magnitude.
+        ///   Looks up a localized string similar to Apparent Magnitude.
         /// </summary>
         public static string TargetMagnitude {
             get {
                 return ResourceManager.GetString("TargetMagnitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other Names.
+        /// </summary>
+        public static string TargetOtherNames {
+            get {
+                return ResourceManager.GetString("TargetOtherNames", resourceCulture);
             }
         }
         
