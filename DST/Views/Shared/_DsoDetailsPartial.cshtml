@@ -1,0 +1,36 @@
+﻿@model DsoDetailsViewModel
+
+<div class="offcanvas-header">
+    <h6 id="details-title" class="offcanvas-title">@Model.Dso.CompoundId - Details</h6>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+</div>
+
+@if (Model.Dso.HasName)
+{
+    <h5 class="text-wrap px-3 pt-0 pb-3 mb-0 border-bottom">@Model.Dso.Name</h5>
+}
+
+<div class="offcanvas-body bg-light">
+    @if (Model.DetailsInfo is not null && Model.DetailsInfo.Any())
+    {
+        int i = 0;
+
+        foreach (var info in Model.DetailsInfo)
+        {
+            <div class="fw-bold">@info.Value.Item1</div>
+            <small class="text-wrap mb-0">@info.Value.Item2</small>
+
+            i++;
+
+            if (i < Model.DetailsInfo.Count)
+            {
+                <hr />
+            }
+        }
+    }
+</div>
+
+<div class="d-grid position-sticky bottom-0 p-3 border-top">
+    <a class="btn btn-primary" asp-controller="Track" asp-action="Summary" asp-route-catalog="@Model.Dso.CatalogName"
+       asp-route-id="@Model.Dso.Id" asp-route-algorithm="@AlgorithmName.Default">Track</a>
+</div>
