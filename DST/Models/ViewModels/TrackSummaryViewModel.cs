@@ -11,7 +11,7 @@ namespace DST.Models.ViewModels
 
         public DsoModel Dso { get; set; }
         public TrackSummaryRoute CurrentRoute { get; set; }
-        public TrackSummaryInfo DisplayInfo { get; set; }
+        public TrackSummaryInfo SummaryInfo { get; set; }
         public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
 
         #endregion
