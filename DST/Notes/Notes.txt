@@ -42,15 +42,11 @@ List
   Consider a fixed button at the bottom of the OffCanvas.                                       ...DONE
 - Revise layout so everything fits better vertically.                                           ...DONE
 - Consider <hr/> instead of list items, or set mx-0.                                            ...DONE
-- Consider a single offcanvas component. Do not create several in a loop.
-  Create a View Component for this because we need to format the string values.
-  Consider data-bs-* attributes and JavaScript to get the values.
-    https://getbootstrap.com/docs/5.0/components/modal/#varying-modal-content
-  Consider using TrackSummaryInfo and TrackSummaryItem.
-  Create Utilities.GetDetailsInfo()
-  Consider moving ViewModels.TrackSummaryInfo to BusinessLogic.
-- Remove Details and _DetailsLayout views from project.
-  Comment out SearchController.Details action method.
+- Create a View Component for the OffCanvas because we need to format the string values.        ...DONE
+  Create Utilities.GetDetailsInfo()                                                             ...DONE
+  Consider moving ViewModels.TrackSummaryInfo to BusinessLogic.                                 ...DONE
+- Remove Details and _DetailsLayout views from project.                                         ...DONE
+  Comment out SearchController.Details action method.                                           ...DONE
 
 Geolocation
 - Consider a Bootstrap OffCanvas for the Geolocation partial view.
