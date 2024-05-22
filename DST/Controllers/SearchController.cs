@@ -211,13 +211,13 @@ namespace DST.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
-        public IActionResult Details(string catalog, int id)
-        {
-            DsoModel dso = _data.DsoItems.Get(catalog, id);
+        //[HttpGet]
+        //public IActionResult Details(string catalog, int id)
+        //{
+        //    DsoModel dso = _data.DsoItems.Get(catalog, id);
             
-            return View(dso);
-        }
+        //    return View(dso);
+        //}
 
         #endregion
     }
