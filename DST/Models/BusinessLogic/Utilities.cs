@@ -16,7 +16,6 @@ using DST.Core.DateTimeAdder;
 using DST.Core.TimeScalable;
 using DST.Core.DateTimesBuilder;
 using DST.Core.Tracker;
-using DST.Models.ViewModels;
 using DST.Core.Components;
 
 namespace DST.Models.BusinessLogic
@@ -528,6 +527,39 @@ namespace DST.Models.BusinessLogic
                 new TimeUnitItem(TimeUnitName.Months.ToKebabCase(), Resources.DisplayText.TimeUnitMonths),
                 new TimeUnitItem(TimeUnitName.Years.ToKebabCase(), Resources.DisplayText.TimeUnitYears)
             };
+        }
+
+        public static DsoDetailsInfo GetDetailsInfo(DsoModel dso)
+        {
+            DsoDetailsInfo info;
+            IEquatorialCoordinate target;
+
+            try
+            {
+                target = CoordinateFactory.CreateEquatorial(new(dso.RightAscension), new(dso.Declination));
+
+                info = new();
+                
+                if (dso.HasMultipleNames)
+                {
+                    info.Add(DsoDetailsItem.OtherNames, new(Resources.DisplayText.TargetOtherNames, string.Join(", ", dso.GetOtherNames())));
+                }
+
+                info.Add(DsoDetailsItem.Catalog, new(Resources.DisplayText.TargetCatalog, dso.CatalogName));
+                info.Add(DsoDetailsItem.Type, new(Resources.DisplayText.TargetType, dso.Type));
+                info.Add(DsoDetailsItem.Description, new(Resources.DisplayText.TargetDescription, dso.Description));
+                info.Add(DsoDetailsItem.Constellation, new(Resources.DisplayText.TargetConstellation, dso.ConstellationName));
+                info.Add(DsoDetailsItem.RightAscension, new(Resources.DisplayText.TargetRightAscensionLong, target.Format(FormatType.Component, ComponentType.Rotation)));
+                info.Add(DsoDetailsItem.Declination, new(Resources.DisplayText.TargetDeclinationLong, target.Format(FormatType.Component, ComponentType.Inclination)));
+                info.Add(DsoDetailsItem.Distance, new(Resources.DisplayText.TargetDistance, string.Format(Resources.DisplayText.DistanceFormatDecimalKly, dso.Distance)));
+                info.Add(DsoDetailsItem.Magnitude, new(Resources.DisplayText.TargetMagnitude, dso.Magnitude?.ToString(CultureInfo.CurrentCulture) ?? Resources.DisplayText.None));
+            }
+            catch
+            {
+                info = new();
+            }
+
+            return info;
         }
 
         public static TrackSummaryInfo GetSummaryInfo(
