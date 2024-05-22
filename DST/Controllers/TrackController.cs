@@ -155,7 +155,7 @@ namespace DST.Controllers
             {
                 Dso = dso,
                 CurrentRoute = values,
-                DisplayInfo = Utilities.GetSummaryInfo(dso, season, constellation, _geoBuilder.CurrentGeolocation, algorithm),
+                SummaryInfo = Utilities.GetSummaryInfo(dso, season, constellation, _geoBuilder.CurrentGeolocation, algorithm),
                 Algorithms = Utilities.GetAlgorithmItems()
             };
 
