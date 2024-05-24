@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DST.Core.Coordinate;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace DST.Models.DomainModels
@@ -179,6 +180,16 @@ namespace DST.Models.DomainModels
                 // No timezone was selected or found. Default to UTC.
                 ResetTimeZone();
             }
+        }
+
+        public IGeographicCoordinate GetCoordinate()
+        {
+            return CoordinateFactory.CreateGeographic(latitude: new(Latitude), longitude: new(Longitude));
+        }
+
+        public string GetCoordinateText()
+        {
+            return GetCoordinate().ToString();
         }
 
         #endregion
