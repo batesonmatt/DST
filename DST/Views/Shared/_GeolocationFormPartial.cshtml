@@ -1,27 +1,39 @@
 ﻿@model GeolocationViewModel
 
-<form id="form-geolocation" asp-action="@Model.ActionMethod" asp-all-route-data="@Model.Route" method="post" onchange="enableElement('form-geo-submit')" oninput="enableElement('form-geo-submit')">
-    <div class="mb-3">
-        <label class="form-label" asp-for="Geolocation.TimeZoneId">Time Zone</label>
-        <input id="input-timezone" class="form-control" type="hidden" asp-for="Geolocation.UserTimeZoneId" value="@Model.Geolocation.TimeZoneId" />
-        <select id="select-timezone" class="form-control" asp-for="Geolocation.TimeZoneId" asp-items="@(new SelectList(Model.TimeZoneItems, "Id", "Name", Model.Geolocation.TimeZoneId))"></select>
+<div id="geolocation-modal" class="modal fade" tabindex="-1" aria-labelledby="geolocation-modal-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="geolocation-modal-title" class="modal-title">Geolocation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-geolocation" asp-action="@Model.ActionMethod" asp-all-route-data="@Model.Route" method="post" onchange="enableElement('form-geo-submit')" oninput="enableElement('form-geo-submit')">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Geolocation.TimeZoneId">Time Zone</label>
+                        <input id="input-timezone" class="form-control" type="hidden" asp-for="Geolocation.UserTimeZoneId" value="@Model.Geolocation.TimeZoneId" />
+                        <select id="select-timezone" class="form-control" asp-for="Geolocation.TimeZoneId" asp-items="@(new SelectList(Model.TimeZoneItems, "Id", "Name", Model.Geolocation.TimeZoneId))"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Geolocation.Latitude">Latitude</label>
+                        <input id="input-latitude" class="form-control" asp-for="Geolocation.Latitude" type="number" value="@Model.Geolocation.Latitude" />
+                        <span asp-validation-for="Geolocation.Latitude" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Geolocation.Longitude">Longitude</label>
+                        <input id="input-longitude" class="form-control" asp-for="Geolocation.Longitude" type="number" value="@Model.Geolocation.Longitude" />
+                        <span asp-validation-for="Geolocation.Longitude" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <div id="location-help" class="form-text">Your location will not be shared.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="form-geo-submit" class="btn btn-primary" type="submit" disabled>Submit</button>
+                        <button class="btn btn-outline-secondary" type="button" onclick="getLocation()" formnovalidate>Use my location</button>
+                        <button class="btn btn-secondary" type="submit" name="reset" value="true" formnovalidate>Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label class="form-label" asp-for="Geolocation.Latitude">Latitude</label>
-        <input id="input-latitude" class="form-control" asp-for="Geolocation.Latitude" type="number" value="@Model.Geolocation.Latitude" />
-        <span asp-validation-for="Geolocation.Latitude" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label class="form-label" asp-for="Geolocation.Longitude">Longitude</label>
-        <input id="input-longitude" class="form-control" asp-for="Geolocation.Longitude" type="number" value="@Model.Geolocation.Longitude" />
-        <span asp-validation-for="Geolocation.Longitude" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <div id="location-help" class="form-text">Your location will not be shared.</div>
-    </div>
-    <div class="mb-3">
-        <button id="form-geo-submit" class="btn btn-primary" type="submit" disabled>Submit</button>
-        <button class="btn btn-outline-secondary" type="button" onclick="getLocation()" formnovalidate>Use my location</button>
-        <button class="btn btn-secondary" type="submit" name="reset" value="true" formnovalidate>Reset</button>
-    </div>
-</form>
+</div>
