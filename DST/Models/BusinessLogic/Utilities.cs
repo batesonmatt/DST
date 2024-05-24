@@ -536,7 +536,8 @@ namespace DST.Models.BusinessLogic
 
             try
             {
-                target = CoordinateFactory.CreateEquatorial(new(dso.RightAscension), new(dso.Declination));
+                target = CoordinateFactory.CreateEquatorial(
+                    rightAscension: new Angle(dso.RightAscension), declination: new Angle(dso.Declination));
 
                 info = new();
                 
