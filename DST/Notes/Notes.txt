@@ -49,18 +49,10 @@ List
   Comment out SearchController.Details action method.                                           ...DONE
 
 Geolocation
-- Consider a Bootstrap OffCanvas for the Geolocation partial view.
-- Or, consider a Modal: https://getbootstrap.com/docs/5.0/components/modal/
-- The button to open the view:
-  ---------------------------
-  | IANA Name          Icon |
-  | LAT, LON                |
-  ---------------------------
-  A button
-  (IANA Name) Timezone name
-  (LAT, LON) A GeographicCoordinate object, displayed as full component string, italicized.
-  (Icon) Bootstrap crosshair, geo-alt, geo-alt-fill, geo, or geo-fill icon, aligned top-right or vertically centered.
-- Or consider a Bootstrap Collapse, or Accordian.
+- Consider a Bootstrap Modal for the Geolocation partial view.                                  ...DONE
+  https://getbootstrap.com/docs/5.0/components/modal/
+- Consider using a new view component for this to use DI for IGeolocationBuilder
+  Avoids specifying a GeolocationModel in the Search and Track view models
 
 Tracking results
 - Display something for empty results ("No results", and an empty table)
