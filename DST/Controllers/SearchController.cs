@@ -170,6 +170,8 @@ namespace DST.Controllers
 
             SearchListViewModel viewModel = new()
             {
+                Geolocation = _geoBuilder.CurrentGeolocation,
+
                 Search = _searchBuilder.CurrentSearch,
 
                 DsoItems = _data.DsoItems.List(options),
