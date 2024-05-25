@@ -9,8 +9,6 @@ namespace DST.Models.ViewModels
     {
         #region Properties
 
-        public GeolocationModel Geolocation { get; set; }
-
         public SearchModel Search { get; set; }
 
         public SearchRoute CurrentRoute { get; set; }
