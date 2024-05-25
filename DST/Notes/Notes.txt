@@ -50,15 +50,14 @@ List
 
 Geolocation
 - Consider a Bootstrap Modal for the Geolocation partial view.                                  ...DONE
-  https://getbootstrap.com/docs/5.0/components/modal/
-- Consider using a new view component for this to use DI for IGeolocationBuilder
-  Avoids specifying a GeolocationModel in the Search and Track view models
 
 Tracking results
 - Display something for empty results ("No results", and an empty table)
 - Consider limiting results to ~20 by default, with a Show More button at the bottom.
-- Display the time scale used after posting, along with the results (Important for Period tracking, which supports fixed tracking).
-- [OPTIONAL] Consider adding funcionality to the *Result classes that returns more information (EE, OE, Rotation, LHA, etc...)
+- Display the time scale used after posting, along with the results.
+  (Important for Period tracking, which supports fixed tracking).
+- [OPTIONAL] Consider adding funcionality to the *Result classes that returns more information.
+  (EE, OE, Rotation, LHA, etc...)
   Might need view component instead of adding ILocalObserver and IAstronomicalDateTime to the *Result classes.
   Or just add primitive value properties to the classes (double, etc.).
   Consider a Position partial view, and display it via a Bootstrap OffCanvas, or expand the row.
