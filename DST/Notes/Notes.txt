@@ -2,68 +2,12 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
-Summary
-- Revise TrackController.Summary HttpGet method to use a Utilities helper method.               ...DONE
-- Consider Lists (Flush, with responsive col items)                                             ...DONE
-- Add bottom margins to the list items                                                          ...DONE
-- Add Equation of the Equinoxes (EE)                                                            ...DONE
-- Add Equation of the Origins (EO)                                                              ...DONE
-- Add resource strings for these.                                                               ...DONE
-- Add Intermediate Right Ascension                                                              ...DONE
-- Add RA with Nutation                                                                          ...DONE
-- Add DEC with Nutation                                                                         ...DONE
-
-Phase
-- Consider a toggle option to allow the user to track just once.                                ...DONE
-  If checked, Cycles to 0, then disable the input. (Don't need to disable the label)            ...DONE
-- Add to TrackPhaseModel (Or TrackModel).                                                       ...DONE
-- Add form toggle switch option "Track Once"                                                    ...DONE
-- Set TrackPhaseViewModel.TrackForm.TrackOnce in TrackController.GetPhaseViewModel              ...DONE
-- Consider adding as a new route segment, TrackOnce.                                            ...DONE
-- Need to implement validation (If Single, set Cycles to 0).                                    ...DONE
-- Consider hiding/showing the Cycles input for Single tracking.                                 ...DONE
-
-Period
-- Consider a toggle option to allow the user to track just once (See Phase).                    ...DONE
-  If checked, set Period and Interval both to 0, then disable the inputs for both.              ...DONE
-- Hide/Show the Period and Interval inputs, and other options, for Single tracking.             ...DONE
-- Display some icon in a new column at the end (Open/closed eye?).                              ...DONE
-  For small screens, just align this icon to the upper right.                                   ...DONE
-
-Track views
-- Consider a view component or partial view for the Dso name heading.                           ...DONE
-
-List
-- Consider using Bootstrap Cards for the list items                                             ...DONE
-- (Track button) Navigates to the Track controller, Summary view.                               ...DONE
-- (Details link) Displays the Details partial view in a Bootstrap OffCanvas (right-side)        ...DONE
-  Display data-ready information in here.                                                       ...DONE
-- Include Track button to navigate to the Track controller, Summary view.                       ...DONE
-  Consider a fixed button at the bottom of the OffCanvas.                                       ...DONE
-- Revise layout so everything fits better vertically.                                           ...DONE
-- Consider <hr/> instead of list items, or set mx-0.                                            ...DONE
-- Create a View Component for the OffCanvas because we need to format the string values.        ...DONE
-  Create Utilities.GetDetailsInfo()                                                             ...DONE
-  Consider moving ViewModels.TrackSummaryInfo to BusinessLogic.                                 ...DONE
-- Remove Details and _DetailsLayout views from project.                                         ...DONE
-  Comment out SearchController.Details action method.                                           ...DONE
-
-Geolocation
-- Consider a Bootstrap Modal for the Geolocation partial view.                                  ...DONE
-
 Tracking results
-- Display something for empty results ("No results", and an empty table)
+- Display something for empty results                                                                   ...DONE
 - Consider limiting results to ~20 by default, with a Show More button at the bottom.
 - Display the time scale used after posting, along with the results.
   (Important for Period tracking, which supports fixed tracking).
-- [OPTIONAL] Consider adding funcionality to the *Result classes that returns more information.
-  (EE, OE, Rotation, LHA, etc...)
-  Might need view component instead of adding ILocalObserver and IAstronomicalDateTime to the *Result classes.
-  Or just add primitive value properties to the classes (double, etc.).
-  Consider a Position partial view, and display it via a Bootstrap OffCanvas, or expand the row.
-  For each result, provide an option to view more info on that particular track record.
-  Reconsider the table-hover for this.
-
+  
 Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Takes DsoModel, GeolocationModel, and Algorithm
 - Inject into TrackController.
