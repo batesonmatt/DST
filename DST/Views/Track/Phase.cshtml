@@ -74,9 +74,9 @@
         </div>
     }
 
-    @if (Model.HasResults())
-    {
-        <div class="mb-3">
+    <div class="mb-5">
+        @if (Model.HasResults())
+        {
             <div class="table-responsive">
                 <table class="table table-striped caption-top align-middle d-none d-sm-table">
                     <caption>Track results</caption>
@@ -132,6 +132,13 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-    }
+        }
+        else
+        {
+            <div>
+                <hr/>
+            </div>
+        }
+    </div>
+
 </div>
