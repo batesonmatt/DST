@@ -30,6 +30,21 @@ namespace DST.Core.Trajectory
         // Returns a value that indicates whether the target is in the observer's local sky at the specified date and time.
         public abstract bool IsAboveHorizon(IAstronomicalDateTime dateTime);
 
+        // Returns the type of time scale this ITrajectory instance will use for calculating vectors over multiple cycles.
+        public virtual TimeScale GetTimeScale()
+        {
+            // The current tracking algorithms perform in either sidereal time (GMST and GAST) or stellar time (ERA).
+            // Technically, apparent sidereal time should be using a different timescale than mean sidereal time, 
+            // though the difference is only a few arc-seconds at most.
+            return _localObserver.TimeKeeper switch
+            {
+                MeanSiderealTimeKeeper => TimeScale.SiderealTime,
+                SiderealTimeKeeper => TimeScale.SiderealTime,
+                StellarTimeKeeper => TimeScale.StellarTime,
+                _ => throw new NotSupportedException($"ITimeKeeper object '{_localObserver.TimeKeeper.GetType()}' is not supported.")
+            };
+        }
+
         // Returns a tracking of the targeting object at a specified local hour angle, beginning on a specified date and time.
         // If 'cycle' is HourAngleCycle.Next, this will track the target for the next date/time it reaches the local hour angle.
         // Otherwise, this will track the target for the previous date/time it reached the local hour angle.
@@ -72,16 +87,8 @@ namespace DST.Core.Trajectory
                 return new IAstronomicalDateTime[] { DateTimeFactory.ConvertToAstronomical(start) };
             }
 
-            // The current tracking algorithms perform in either sidereal time (GMST and GAST) or stellar time (ERA).
-            // Technically, apparent sidereal time should be using a different timescale than mean sidereal time, 
-            // though the difference is only a few arc-seconds at most.
-            TimeScale timeScale = _localObserver.TimeKeeper switch
-            {
-                MeanSiderealTimeKeeper => TimeScale.SiderealTime,
-                SiderealTimeKeeper => TimeScale.SiderealTime,
-                StellarTimeKeeper => TimeScale.StellarTime,
-                _ => throw new NotSupportedException($"ITimeKeeper object '{_localObserver.TimeKeeper.GetType()}' is not supported.")
-            };
+            // Get the underlying time scale.
+            TimeScale timeScale = GetTimeScale();
 
             // The appropriate time unit will be in days, since the cycles are incremented/decremented
             // in single, full cycles of the underlying time scale.
