@@ -657,9 +657,10 @@ namespace DST.Models.BusinessLogic
             return info;
         }
 
-        public static IEnumerable<TrackResult> GetPhaseResults(ILocalObserver localObserver, TrackPhaseModel phaseModel)
+        public static TrackResults GetPhaseResults(ILocalObserver localObserver, TrackPhaseModel phaseModel)
         {
             IVector[] results = Array.Empty<IVector>();
+            TimeScale timeScale = TimeScale.Default;
             ITrajectory trajectory;
             Phase phase;
             IAstronomicalDateTime start;
@@ -669,6 +670,7 @@ namespace DST.Models.BusinessLogic
                 if (phaseModel is not null && localObserver is not null)
                 {
                     trajectory = TrajectoryCalculator.Calculate(localObserver);
+                    timeScale = trajectory.GetTimeScale();
 
                     if (trajectory is not null and IVariableTrajectory variableTrajectory)
                     {
@@ -696,15 +698,16 @@ namespace DST.Models.BusinessLogic
             catch
             {
                 results = Array.Empty<IVector>();
+                timeScale = TimeScale.Default;
             }
 
-            return results.OfType<ILocalVector>().Select(result => new TrackResult(result));
+            return new(results.OfType<ILocalVector>().Select(result => new TrackResult(result)), timeScale);
         }
 
-        public static IEnumerable<TrackResult> GetPeriodResults(ILocalObserver localObserver, Algorithm algorithm, TrackPeriodModel periodModel)
+        public static TrackResults GetPeriodResults(ILocalObserver localObserver, Algorithm algorithm, TrackPeriodModel periodModel)
         {
             IVector[] results = Array.Empty<IVector>();
-            TimeScale timeScale;
+            TimeScale timeScale = TimeScale.Default;
             TimeUnit timeUnit;
             IDateTimeAdder dateTimeAdder;
             IDateTimesBuilder dateTimesBuilder;
@@ -746,9 +749,10 @@ namespace DST.Models.BusinessLogic
             catch
             {
                 results = Array.Empty<IVector>();
+                timeScale = TimeScale.Default;
             }
 
-            return results.OfType<ILocalVector>().Select(result => new TrackResult(result));
+            return new(results.OfType<ILocalVector>().Select(result => new TrackResult(result)), timeScale);
         }
 
         // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation during the current season.
