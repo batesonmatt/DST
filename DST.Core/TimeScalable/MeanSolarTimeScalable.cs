@@ -11,5 +11,11 @@
         {
             return value == long.MinValue || value == long.MaxValue ? 0 : value;
         }
+
+        // Returns the string-representation of this MeanSolarTimeScalable instance.
+        public override string ToString()
+        {
+            return Resources.DisplayText.TimeScaleSolar;
+        }
     }
 }

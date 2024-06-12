@@ -23,5 +23,11 @@ namespace DST.Core.TimeScalable
             // Convert back to ticks.
             return (long)(result * Constants.TicksPerDay);
         }
+
+        // Returns the string-representation of this StellarTimeScalable instance.
+        public override string ToString()
+        {
+            return Resources.DisplayText.TimeScaleStellar;
+        }
     }
 }
