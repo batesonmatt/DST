@@ -4,9 +4,14 @@ ___________________________________________________________________________
 
 Tracking results
 - Display something for empty results                                                                   ...DONE
-- Consider limiting results to ~20 by default, with a Show More button at the bottom.
-- Display the time scale used after posting, along with the results.
-  (Important for Period tracking, which supports fixed tracking).
+- Display the time scale used after posting, along with the results.                                    ...DONE
+  (Important for Period tracking, which supports fixed tracking).                                       ...DONE
+  Consider TrackResultsCollection or TrackResults : IEnumerable<TrackResult>                            ...DONE
+    with property to get the TimeScale string.                                                          ...DONE
+    Build during GetPhaseResults and GetPeriodResults                                                   ...DONE
+    Modify BaseTrajectory (ITrajectory) with a method to retrieve the TimeScale (see GetDateTimes).     ...DONE
+    Modify the concrete ITimeScalable types with ToString overrides to get the displayable string.      ...DONE
+    Use Resources.DisplayText.TimeScaleSolar, .TimeScaleSidereal, and .TimeScaleStellar                 ...DONE
   
 Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Takes DsoModel, GeolocationModel, and Algorithm
