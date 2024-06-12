@@ -172,7 +172,7 @@ namespace DST.Controllers
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-            IEnumerable<TrackResult> results = Enumerable.Empty<TrackResult>();
+            TrackResults results = new();
             List<SelectListItem> phases = new();
             string selectedPhase = string.Empty;
             string message = string.Empty;
@@ -288,7 +288,7 @@ namespace DST.Controllers
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-            IEnumerable<TrackResult> results = Enumerable.Empty<TrackResult>();
+            TrackResults results = new();
             string message = string.Empty;
 
             if (trajectory is NeverRiseTrajectory)
