@@ -15,7 +15,7 @@ namespace DST.Models.ViewModels
         public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
         public IEnumerable<TimeUnitItem> TimeUnits { get; set; }
         public TrackPeriodModel TrackForm { get; set; }
-        public IEnumerable<TrackResult> Results { get; set; }
+        public TrackResults Results { get; set; }
         public string WarningMessage { get; set; }
 
         #endregion

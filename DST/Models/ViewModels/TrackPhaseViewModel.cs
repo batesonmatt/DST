@@ -16,7 +16,7 @@ namespace DST.Models.ViewModels
         public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
         public IEnumerable<SelectListItem> Phases { get; set; }
         public TrackPhaseModel TrackForm { get; set; }
-        public IEnumerable<TrackResult> Results { get; set; }
+        public TrackResults Results { get; set; }
         public string WarningMessage { get; set; }
 
         #endregion
