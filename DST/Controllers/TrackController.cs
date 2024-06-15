@@ -1,7 +1,6 @@
 ﻿using DST.Core.Observer;
 using DST.Models.Builders;
 using DST.Models.BusinessLogic;
-using DST.Models.DataLayer.Query;
 using DST.Models.DataLayer.Repositories;
 using DST.Models.DomainModels;
 using DST.Models.Extensions;
@@ -13,6 +12,7 @@ using DST.Core.Trajectory;
 using DST.Core.TimeKeeper;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace DST.Controllers
 {
@@ -150,12 +150,8 @@ namespace DST.Controllers
             ConstellationModel constellation = _data.GetConstellation(dso);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
 
-            IEnumerable<SelectListItem> algorithms = new List<SelectListItem>()
-            {
-                new SelectListItem(Resources.DisplayText.AlgorithmGMSTLong, AlgorithmName.GMST.ToKebabCase(), AlgorithmName.GMST.ToKebabCase() == values.Algorithm),
-                new SelectListItem(Resources.DisplayText.AlgorithmGASTLong, AlgorithmName.GAST.ToKebabCase(), AlgorithmName.GAST.ToKebabCase() == values.Algorithm),
-                new SelectListItem(Resources.DisplayText.AlgorithmERALong, AlgorithmName.ERA.ToKebabCase(), AlgorithmName.ERA.ToKebabCase() == values.Algorithm)
-            };
+            IEnumerable<SelectListItem> algorithms = AlgorithmName.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.Algorithm));
 
             TrackSummaryViewModel viewModel = new()
             {
@@ -179,7 +175,7 @@ namespace DST.Controllers
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
             TrackResults results = new();
-            List<SelectListItem> phases = new();
+            IEnumerable<SelectListItem> phases = System.Array.Empty<SelectListItem>();
             string selectedPhase = string.Empty;
             string message = string.Empty;
 
@@ -187,9 +183,9 @@ namespace DST.Controllers
             {
                 selectedPhase = values.Phase;
 
-                phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), PhaseName.Rise.ToKebabCase() == selectedPhase));
-                phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), PhaseName.Apex.ToKebabCase() == selectedPhase));
-                phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), PhaseName.Set.ToKebabCase() == selectedPhase));
+                phases = PhaseName.GetTextValuePairs().Select(
+                    i => new SelectListItem(i.Text, i.Value, i.Value == selectedPhase));
+
             }
             else if (trajectory is ICircumpolarTrajectory and not IVariableTrajectory)
             {
@@ -198,12 +194,10 @@ namespace DST.Controllers
             else if (trajectory is ICircumpolarTrajectory and IVariableTrajectory)
             {
                 message = Resources.DisplayText.TrackPhaseWarningCircumpolarOffset;
-
                 selectedPhase = PhaseName.Apex.ToKebabCase();
 
-                phases.Add(new SelectListItem(PhaseName.Rise, PhaseName.Rise.ToKebabCase(), selected: false, disabled: true));
-                phases.Add(new SelectListItem(PhaseName.Apex, PhaseName.Apex.ToKebabCase(), selected: true));
-                phases.Add(new SelectListItem(PhaseName.Set, PhaseName.Set.ToKebabCase(), selected: false, disabled: true));
+                phases = PhaseName.GetTextValuePairs().Select(
+                    i => new SelectListItem(i.Text, i.Value, i.Value == selectedPhase, i.Value != selectedPhase));
             }
             else
             {
@@ -226,12 +220,8 @@ namespace DST.Controllers
                 }
             }
 
-            IEnumerable<SelectListItem> algorithms = new List<SelectListItem>()
-            {
-                new SelectListItem(Resources.DisplayText.AlgorithmGMSTLong, AlgorithmName.GMST.ToKebabCase(), AlgorithmName.GMST.ToKebabCase() == values.Algorithm),
-                new SelectListItem(Resources.DisplayText.AlgorithmGASTLong, AlgorithmName.GAST.ToKebabCase(), AlgorithmName.GAST.ToKebabCase() == values.Algorithm),
-                new SelectListItem(Resources.DisplayText.AlgorithmERALong, AlgorithmName.ERA.ToKebabCase(), AlgorithmName.ERA.ToKebabCase() == values.Algorithm)
-            };
+            IEnumerable<SelectListItem> algorithms = AlgorithmName.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.Algorithm));
 
             TrackPhaseViewModel viewModel = new()
             {
@@ -329,23 +319,11 @@ namespace DST.Controllers
                 }
             }
 
-            IEnumerable<SelectListItem> algorithms = new List<SelectListItem>()
-            {
-                new SelectListItem(Resources.DisplayText.AlgorithmGMSTLong, AlgorithmName.GMST.ToKebabCase(), AlgorithmName.GMST.ToKebabCase() == values.Algorithm),
-                new SelectListItem(Resources.DisplayText.AlgorithmGASTLong, AlgorithmName.GAST.ToKebabCase(), AlgorithmName.GAST.ToKebabCase() == values.Algorithm),
-                new SelectListItem(Resources.DisplayText.AlgorithmERALong, AlgorithmName.ERA.ToKebabCase(), AlgorithmName.ERA.ToKebabCase() == values.Algorithm)
-            };
+            IEnumerable<SelectListItem> algorithms = AlgorithmName.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.Algorithm));
 
-            IEnumerable<SelectListItem> timeUnits = new List<SelectListItem>()
-            {
-                new SelectListItem(Resources.DisplayText.TimeUnitSeconds, TimeUnitName.Seconds.ToKebabCase(), TimeUnitName.Seconds.ToKebabCase() == values.TimeUnit),
-                new SelectListItem(Resources.DisplayText.TimeUnitMinutes, TimeUnitName.Minutes.ToKebabCase(), TimeUnitName.Minutes.ToKebabCase() == values.TimeUnit),
-                new SelectListItem(Resources.DisplayText.TimeUnitHours, TimeUnitName.Hours.ToKebabCase(), TimeUnitName.Hours.ToKebabCase() == values.TimeUnit),
-                new SelectListItem(Resources.DisplayText.TimeUnitDays, TimeUnitName.Days.ToKebabCase(), TimeUnitName.Days.ToKebabCase() == values.TimeUnit),
-                new SelectListItem(Resources.DisplayText.TimeUnitWeeks, TimeUnitName.Weeks.ToKebabCase(), TimeUnitName.Weeks.ToKebabCase() == values.TimeUnit),
-                new SelectListItem(Resources.DisplayText.TimeUnitMonths, TimeUnitName.Months.ToKebabCase(), TimeUnitName.Months.ToKebabCase() == values.TimeUnit),
-                new SelectListItem(Resources.DisplayText.TimeUnitYears, TimeUnitName.Years.ToKebabCase(), TimeUnitName.Years.ToKebabCase() == values.TimeUnit)
-            };
+            IEnumerable<SelectListItem> timeUnits = TimeUnitName.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.TimeUnit));
 
             TrackPeriodViewModel viewModel = new()
             {
