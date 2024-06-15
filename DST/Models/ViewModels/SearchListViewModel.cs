@@ -1,7 +1,7 @@
 ﻿using DST.Models.DomainModels;
 using System.Collections.Generic;
-using DST.Models.BusinessLogic;
 using DST.Models.Routes;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DST.Models.ViewModels
 {
@@ -13,7 +13,7 @@ namespace DST.Models.ViewModels
 
         public SearchRoute CurrentRoute { get; set; }
         public int TotalPages { get; set; }
-        public IEnumerable<PageSizeItem> PageSizes { get; set; }
+        public IEnumerable<SelectListItem> PageSizes { get; set; }
         public string Results { get; set; }
 
         public IEnumerable<DsoModel> DsoItems { get; set; }

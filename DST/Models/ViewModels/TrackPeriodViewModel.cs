@@ -1,6 +1,7 @@
 ﻿using DST.Models.BusinessLogic;
 using DST.Models.DomainModels;
 using DST.Models.Routes;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,8 +13,8 @@ namespace DST.Models.ViewModels
 
         public DsoModel Dso { get; set; }
         public TrackPeriodRoute CurrentRoute { get; set; }
-        public IEnumerable<TrackAlgorithmItem> Algorithms { get; set; }
-        public IEnumerable<TimeUnitItem> TimeUnits { get; set; }
+        public IEnumerable<SelectListItem> Algorithms { get; set; }
+        public IEnumerable<SelectListItem> TimeUnits { get; set; }
         public TrackPeriodModel TrackForm { get; set; }
         public TrackResults Results { get; set; }
         public string WarningMessage { get; set; }
