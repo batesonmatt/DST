@@ -42,19 +42,19 @@ namespace DST.Models.Routes
         {
             if (phase.EqualsSeo(PhaseName.Rise))
             {
-                Phase = PhaseName.Rise;
+                Phase = PhaseName.Rise.ToKebabCase();
             }
             else if (phase.EqualsSeo(PhaseName.Apex))
             {
-                Phase = PhaseName.Apex;
+                Phase = PhaseName.Apex.ToKebabCase();
             }
             else if (phase.EqualsSeo(PhaseName.Set))
             {
-                Phase = PhaseName.Set;
+                Phase = PhaseName.Set.ToKebabCase();
             }
             else
             {
-                Phase = PhaseName.Default;
+                Phase = PhaseName.Default.ToKebabCase();
             }
         }
 

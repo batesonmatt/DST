@@ -87,39 +87,39 @@ namespace DST.Models.Routes
         {
             if (IsTrackOnce)
             {
-                TimeUnit = TimeUnitName.Default;
+                TimeUnit = TimeUnitName.Default.ToKebabCase();
             }
             else if (timeUnit.EqualsSeo(TimeUnitName.Seconds))
             {
-                TimeUnit = TimeUnitName.Seconds;
+                TimeUnit = TimeUnitName.Seconds.ToKebabCase();
             }
             else if (timeUnit.EqualsSeo(TimeUnitName.Minutes))
             {
-                TimeUnit = TimeUnitName.Minutes;
+                TimeUnit = TimeUnitName.Minutes.ToKebabCase();
             }
             else if (timeUnit.EqualsSeo(TimeUnitName.Hours))
             {
-                TimeUnit = TimeUnitName.Hours;
+                TimeUnit = TimeUnitName.Hours.ToKebabCase();
             }
             else if (timeUnit.EqualsSeo(TimeUnitName.Days))
             {
-                TimeUnit = TimeUnitName.Days;
+                TimeUnit = TimeUnitName.Days.ToKebabCase();
             }
             else if (timeUnit.EqualsSeo(TimeUnitName.Weeks))
             {
-                TimeUnit = TimeUnitName.Weeks;
+                TimeUnit = TimeUnitName.Weeks.ToKebabCase();
             }
             else if (timeUnit.EqualsSeo(TimeUnitName.Months))
             {
-                TimeUnit = TimeUnitName.Months;
+                TimeUnit = TimeUnitName.Months.ToKebabCase();
             }
             else if (timeUnit.EqualsSeo(TimeUnitName.Years))
             {
-                TimeUnit = TimeUnitName.Years;
+                TimeUnit = TimeUnitName.Years.ToKebabCase();
             }
             else
             {
-                TimeUnit = TimeUnitName.Default;
+                TimeUnit = TimeUnitName.Default.ToKebabCase();
             }
         }
 

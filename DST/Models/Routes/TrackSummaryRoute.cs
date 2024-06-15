@@ -43,19 +43,19 @@ namespace DST.Models.Routes
         {
             if (algorithm.EqualsSeo(AlgorithmName.GMST))
             {
-                Algorithm = AlgorithmName.GMST;
+                Algorithm = AlgorithmName.GMST.ToKebabCase();
             }
             else if (algorithm.EqualsSeo(AlgorithmName.GAST))
             {
-                Algorithm = AlgorithmName.GAST;
+                Algorithm = AlgorithmName.GAST.ToKebabCase();
             }
             else if (algorithm.EqualsSeo(AlgorithmName.ERA))
             {
-                Algorithm = AlgorithmName.ERA;
+                Algorithm = AlgorithmName.ERA.ToKebabCase();
             }
             else
             {
-                Algorithm = AlgorithmName.Default;
+                Algorithm = AlgorithmName.Default.ToKebabCase();
             }
         }
 
