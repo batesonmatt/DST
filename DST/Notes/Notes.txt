@@ -2,49 +2,25 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
-Tracking results
-- Display something for empty results                                                                   ...DONE
-- Display the time scale used after posting, along with the results.                                    ...DONE
-  (Important for Period tracking, which supports fixed tracking).                                       ...DONE
-  Consider TrackResultsCollection or TrackResults : IEnumerable<TrackResult>                            ...DONE
-    with property to get the TimeScale string.                                                          ...DONE
-    Build during GetPhaseResults and GetPeriodResults                                                   ...DONE
-    Modify BaseTrajectory (ITrajectory) with a method to retrieve the TimeScale (see GetDateTimes).     ...DONE
-    Modify the concrete ITimeScalable types with ToString overrides to get the displayable string.      ...DONE
-    Use Resources.DisplayText.TimeScaleSolar, .TimeScaleSidereal, and .TimeScaleStellar                 ...DONE
-  
-Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
-- Takes DsoModel, GeolocationModel, and Algorithm
-- Inject into TrackController.
-- Save to session state
-- Provide methods to set the Target (takes DsoModel), the Location (takes GeolocationModel), and the TimeKeeper (takes Algorithm)
-- Provide methods/properties for dealing with the Season, Trajectory, etc.
-OR, Consider a builder for storing at least the client date time.
-
-Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteBuilder and TrackPeriodRouteBuilder)
-1. so that switching between the Track views, it remembers the client's last settings.
-2. Because the route values are prone to user error
-3. When navigating Phase and Period views, we should call different action methods, LoadPhase and LoadPeriod, 
-    and also pass the TrackSummaryRoute values.
-  These actions would load the previously saved routes, if any, for those views before redirecting to the appropriate action method with the routes.
-  If there is no saved routes, we need to use the TrackSummaryRoute values passed in.
-  The routes will be saved to session in the regular actions methods that build the viewmodels and return the views.
-- We don't need a route builder for the summary view.
-- Would need to add any properties not already included in the routes.
-
-Consider removing TrackPhaseRoute routes = current.Clone(); from the Phase and Period views if not used.
-
-PageSizeItem, TimeZoneItem, TrackPhaseItem, TrackAlgorithmItem, etc.
-- These types are used in select lists
-- Consider replacing with IEnumerable<SelectListItem> in the viewmodels.
-  Build these in the controller via helper methods in Utilities.
-- OR, Consider using a single class, SelectItem.
-  => string Id, string Text, int Value
-- Consider revising all SelectLists so they are defined as IEnumerable<SelectListItem> in their viewmodels.
-  See TrackPhasViewModel.Phases
+PageSizeItem, TimeZoneItem, TrackAlgorithmItem, TimeUnitItem, etc.
+- Revise all SelectLists so they are defined as IEnumerable<SelectListItem> in their viewmodels.
+    See TrackPhaseViewModel.Phases
+- Revise GeolocationViewModel.TimeZoneItems                                 ...DONE
+- Revise SearchListViewModel.PageSizeItem                                   ...DONE
+- Revise TrackPeriodViewModel.TimeUnits                                     ...DONE
+- Revise TrackPeriodViewModel.Algorithms                                    ...DONE
+- Revise TrackPhaseViewModel.Algorithms                                     ...DONE
+- Revise TrackSummaryViewModel.Algorithms                                   ...DONE
+- Update SetAlgorithm, SetTimeUnit, SetPhase                                ...DONE
+- Remove Utilities.GetTimeZoneItems and BusinessLogic.TimeZoneItem          ...DONE
+- Remove Utilities.GetPageSizeItems and BusinessLogic.PageSizeItem          ...DONE
+- Remove Utilities.GetTimeUnitItems and BusinessLogic.TimeUnitItem          ...DONE
+- Remove Utilities.GetAlgorithmItems and BusinessLogic.TrackAlgorithmItem   ...DONE
 
 AlgorithmName, PhaseName, TimeUnitName
 - Consider moving out of the Query namespace, and into BusinessLogic
+- Consider a method/property to retrieve a list of the values along with ToKebabCase()
+  Use this to revise the IEnumerable<SelectListItem> definitions.
 
 Consider using DI in certain action methods, instead of through the controller constructor. See pg. 568.
 - Important for the Track controller, where certain dependencies are unused.
@@ -195,3 +171,24 @@ https://stackoverflow.com/questions/56772155/asp-net-core-how-to-handle-error-pa
 https://learn.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-7.0
 https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-7.0&viewFallbackFrom=aspnetcore-2.2#exception-handler-lambda
 https://blog.kloud.com.au/2016/03/23/aspnet-core-tips-and-tricks-global-exception-handling/
+
+---------------------------------------------------------------------------
+
+Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
+- Takes DsoModel, GeolocationModel, and Algorithm
+- Inject into TrackController.
+- Save to session state
+- Provide methods to set the Target (takes DsoModel), the Location (takes GeolocationModel), and the TimeKeeper (takes Algorithm)
+- Provide methods/properties for dealing with the Season, Trajectory, etc.
+OR, Consider a builder for storing at least the client date time.
+
+Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteBuilder and TrackPeriodRouteBuilder)
+1. so that switching between the Track views, it remembers the client's last settings.
+2. Because the route values are prone to user error
+3. When navigating Phase and Period views, we should call different action methods, LoadPhase and LoadPeriod, 
+    and also pass the TrackSummaryRoute values.
+  These actions would load the previously saved routes, if any, for those views before redirecting to the appropriate action method with the routes.
+  If there is no saved routes, we need to use the TrackSummaryRoute values passed in.
+  The routes will be saved to session in the regular actions methods that build the viewmodels and return the views.
+- We don't need a route builder for the summary view.
+- Would need to add any properties not already included in the routes.
