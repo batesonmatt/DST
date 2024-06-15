@@ -485,50 +485,6 @@ namespace DST.Models.BusinessLogic
             };
         }
 
-        // Returns all the displayable time zones.
-        public static IEnumerable<TimeZoneItem> GetTimeZoneItems()
-        {
-            return TimeZoneInfo.GetSystemTimeZones()
-                .OrderByDescending(t => t.Id == GeolocationModel.DefaultId)
-                .ThenBy(t => t.BaseUtcOffset.TotalHours)
-                .Select(t => new TimeZoneItem(t.Id, t.DisplayName));
-        }
-
-        // Returns all the allowable page sizes and the display text for the Search controller, List view.
-        public static IEnumerable<PageSizeItem> GetPageSizeItems()
-        {
-            return Enumerable.Range(1, 5).Select(
-                    i => new PageSizeItem(
-                        i * 10,
-                        string.Format(Resources.DisplayText.PageSizeFormat, i * 10)));
-        }
-
-        // Returns all the displayable timekeeping algorithm names.
-        public static IEnumerable<TrackAlgorithmItem> GetAlgorithmItems()
-        {
-            return new TrackAlgorithmItem[]
-            {
-                new TrackAlgorithmItem(AlgorithmName.GMST.ToKebabCase(), Resources.DisplayText.AlgorithmGMSTLong),
-                new TrackAlgorithmItem(AlgorithmName.GAST.ToKebabCase(), Resources.DisplayText.AlgorithmGASTLong),
-                new TrackAlgorithmItem(AlgorithmName.ERA.ToKebabCase(), Resources.DisplayText.AlgorithmERALong)
-            };
-        }
-
-        // Returns all the displayable time unit names.
-        public static IEnumerable<TimeUnitItem> GetTimeUnitItems()
-        {
-            return new TimeUnitItem[]
-            {
-                new TimeUnitItem(TimeUnitName.Seconds.ToKebabCase(), Resources.DisplayText.TimeUnitSeconds),
-                new TimeUnitItem(TimeUnitName.Minutes.ToKebabCase(), Resources.DisplayText.TimeUnitMinutes),
-                new TimeUnitItem(TimeUnitName.Hours.ToKebabCase(), Resources.DisplayText.TimeUnitHours),
-                new TimeUnitItem(TimeUnitName.Days.ToKebabCase(), Resources.DisplayText.TimeUnitDays),
-                new TimeUnitItem(TimeUnitName.Weeks.ToKebabCase(), Resources.DisplayText.TimeUnitWeeks),
-                new TimeUnitItem(TimeUnitName.Months.ToKebabCase(), Resources.DisplayText.TimeUnitMonths),
-                new TimeUnitItem(TimeUnitName.Years.ToKebabCase(), Resources.DisplayText.TimeUnitYears)
-            };
-        }
-
         public static DsoDetailsInfo GetDetailsInfo(DsoModel dso)
         {
             DsoDetailsInfo info;
