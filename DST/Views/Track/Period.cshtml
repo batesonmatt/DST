@@ -47,7 +47,7 @@
         <form id="form-period" class="mb-5" asp-action="SubmitPeriod" asp-all-route-data="@routes.ToDictionary()" method="post">
             <div class="mb-3">
                 <label class="form-label" asp-for="TrackForm.Algorithm">Timekeeping Algorithm</label>
-                <select id="select-period-algorithm" class="form-control" asp-for="TrackForm.Algorithm" asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", Model.TrackForm.Algorithm))"></select>
+                <select id="select-period-algorithm" class="form-control" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
             </div>
             <div class="mb-3">
                 <label class="form-label" asp-for="TrackForm.Start">Start</label>
@@ -65,7 +65,7 @@
                 <div class="mb-3">
                     <label class="form-label" asp-for="TrackForm.TimeUnit">Time Unit</label>
                     <select id="select-period-timeunit" class="form-control" asp-for="TrackForm.TimeUnit"
-                            asp-items="@(new SelectList(Model.TimeUnits, "Id", "Text", Model.TrackForm.TimeUnit))"
+                            asp-items="@Model.TimeUnits"
                             onchange="updateFixedTrackingToggle(); updateAggregateToggle()"></select>
                 </div>
                 <div class="mb-3">

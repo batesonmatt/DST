@@ -43,7 +43,7 @@
             <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post">
                 <div class="mb-3">
                     <label class="form-label" asp-for="TrackForm.Algorithm">Timekeeping Algorithm</label>
-                    <select id="select-phase-algorithm" class="form-control" asp-for="TrackForm.Algorithm" asp-items="@(new SelectList(Model.Algorithms, "Id", "Text", Model.TrackForm.Algorithm))"></select>
+                    <select id="select-phase-algorithm" class="form-control" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" asp-for="TrackForm.Phase">Phase</label>

@@ -269,8 +269,7 @@
             routes = current.Clone();
         }
         <form asp-action="PageSize" asp-all-route-data="@routes.ToDictionary()" method="post">
-            <select name="size" class="form-select" onchange="this.form.submit();"
-                    asp-items="@(new SelectList(Model.PageSizes, "Size", "Text", current.PageSize))"></select>
+            <select name="size" class="form-select" onchange="this.form.submit();" asp-items="@Model.PageSizes"></select>
         </form>
     </div>
 
