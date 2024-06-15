@@ -1,4 +1,4 @@
-﻿using DST.Models.DataLayer.Query;
+﻿using DST.Models.BusinessLogic;
 using DST.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
 using System;

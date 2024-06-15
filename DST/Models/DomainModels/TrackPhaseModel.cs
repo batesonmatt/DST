@@ -1,4 +1,4 @@
-﻿using DST.Models.DataLayer.Query;
+﻿using DST.Models.BusinessLogic;
 using System;
 using System.ComponentModel.DataAnnotations;
 
