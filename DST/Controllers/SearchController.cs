@@ -9,6 +9,9 @@ using DST.Models.Builders;
 using DST.Models.BusinessLogic;
 using DST.Models.Routes;
 using DST.Models.Extensions;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace DST.Controllers
 {
@@ -168,6 +171,12 @@ namespace DST.Controllers
 
             options.SortFilter(values, _geoBuilder.CurrentGeolocation, _searchBuilder.CurrentSearch);
 
+            IEnumerable<SelectListItem> pageSizes = Enumerable.Range(1, 5).Select(
+                    i => new SelectListItem(
+                        string.Format(Resources.DisplayText.PageSizeFormat, i * 10),
+                        (i * 10).ToString(),
+                        (i * 10) == values.PageSize));
+
             SearchListViewModel viewModel = new()
             {
                 Search = _searchBuilder.CurrentSearch,
@@ -192,7 +201,7 @@ namespace DST.Controllers
                 }),
 
                 Trajectories = Utilities.GetTrajectoryNames(),
-                PageSizes = Utilities.GetPageSizeItems()
+                PageSizes = pageSizes
             };
 
             int count = _data.DsoItems.Count;
