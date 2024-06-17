@@ -385,6 +385,10 @@
     <value>{0} sec ago</value>
     <comment>Formats the past rising time for a particular deep-sky object measured in integral seconds.</comment>
   </data>
+  <data name="RiseTimeOutOfRange" xml:space="preserve">
+    <value>Target out of range</value>
+    <comment>The display text for when a particular deep-sky object is out of visible range for calculating its rising time.</comment>
+  </data>
   <data name="SearchLengthValidationMessage" xml:space="preserve">
     <value>Maximum 50 characters allowed</value>
     <comment>The validation message for a search input length.</comment>

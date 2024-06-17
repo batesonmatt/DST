@@ -664,6 +664,15 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Target out of range.
+        /// </summary>
+        public static string RiseTimeOutOfRange {
+            get {
+                return ResourceManager.GetString("RiseTimeOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum 50 characters allowed.
         /// </summary>
         public static string SearchLengthValidationMessage {
