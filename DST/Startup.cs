@@ -1,5 +1,6 @@
 using DST.Models.Builders;
 using DST.Models.DataLayer;
+using DST.Models.DataLayer.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -50,6 +51,8 @@ namespace DST
             services.AddHttpContextAccessor();
 
             // Enable dependency injection for miscellaneous objects.
+            services.AddTransient<ISearchUnitOfWork, SearchUnitOfWork>();
+            services.AddTransient<ITrackUnitOfWork, TrackUnitOfWork>();
             services.AddTransient<ISearchRouteBuilder, SearchRouteBuilder>();
             services.AddTransient<IGeolocationBuilder, GeolocationBuilder>();
             services.AddTransient<ISearchBuilder, SearchBuilder>();
