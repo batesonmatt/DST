@@ -7,7 +7,6 @@ using DST.Models.Extensions;
 using DST.Models.Routes;
 using DST.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using DST.Models.DataLayer;
 using DST.Core.Trajectory;
 using DST.Core.TimeKeeper;
 using System.Collections.Generic;
@@ -18,30 +17,6 @@ namespace DST.Controllers
 {
     public class TrackController : Controller
     {
-        #region Fields
-
-        private readonly TrackUnitOfWork _data;
-        private readonly IGeolocationBuilder _geoBuilder;
-        private readonly ITrackPhaseBuilder _phaseBuilder;
-        private readonly ITrackPeriodBuilder _periodBuilder;
-
-        #endregion
-
-        #region Constructors
-
-        public TrackController(MainDbContext context, IGeolocationBuilder geoBuilder, ITrackPhaseBuilder phaseBuilder, ITrackPeriodBuilder periodBuilder)
-        {
-            _data = new TrackUnitOfWork(context);
-            _geoBuilder = geoBuilder;
-            _phaseBuilder = phaseBuilder;
-            _periodBuilder = periodBuilder;
-
-            // Load the client geolocation, if any.
-            _geoBuilder.Load();
-        }
-
-        #endregion
-
         #region Methods
 
         public IActionResult Index()
@@ -51,7 +26,11 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitSummaryGeolocation(GeolocationModel geolocation, TrackSummaryRoute values, bool reset = false)
+        public IActionResult SubmitSummaryGeolocation(
+            [FromServices] IGeolocationBuilder geoBuilder,
+            GeolocationModel geolocation,
+            TrackSummaryRoute values,
+            bool reset = false)
         {
             // Check model state.
             if (!ModelState.IsValid)
@@ -60,25 +39,32 @@ namespace DST.Controllers
                 return RedirectToAction("Summary", values.ToDictionary());
             }
 
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
             if (reset)
             {
                 // Reset geolocation and timezone to defaults.
-                _geoBuilder.CurrentGeolocation.Reset();
+                geoBuilder.CurrentGeolocation.Reset();
             }
             else
             {
                 // Update geolocation and timezone.
-                _geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
+                geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
             }
 
             // Save the geolocation in session and create a persistent cookie.
-            _geoBuilder.Save();
+            geoBuilder.Save();
 
             return RedirectToAction("Summary", values.ToDictionary());
         }
 
         [HttpPost]
-        public IActionResult SubmitPhaseGeolocation(GeolocationModel geolocation, TrackPhaseRoute values, bool reset = false)
+        public IActionResult SubmitPhaseGeolocation(
+            [FromServices] IGeolocationBuilder geoBuilder,
+            GeolocationModel geolocation,
+            TrackPhaseRoute values,
+            bool reset = false)
         {
             // Check model state.
             if (!ModelState.IsValid)
@@ -87,25 +73,32 @@ namespace DST.Controllers
                 return RedirectToAction("Phase", values.ToDictionary());
             }
 
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
             if (reset)
             {
                 // Reset geolocation and timezone to defaults.
-                _geoBuilder.CurrentGeolocation.Reset();
+                geoBuilder.CurrentGeolocation.Reset();
             }
             else
             {
                 // Update geolocation and timezone.
-                _geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
+                geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
             }
 
             // Save the geolocation in session and create a persistent cookie.
-            _geoBuilder.Save();
+            geoBuilder.Save();
 
             return RedirectToAction("Phase", values.ToDictionary());
         }
 
         [HttpPost]
-        public IActionResult SubmitPeriodGeolocation(GeolocationModel geolocation, TrackPeriodRoute values, bool reset = false)
+        public IActionResult SubmitPeriodGeolocation(
+            [FromServices] IGeolocationBuilder geoBuilder,
+            GeolocationModel geolocation,
+            TrackPeriodRoute values,
+            bool reset = false)
         {
             // Check model state.
             if (!ModelState.IsValid)
@@ -114,19 +107,22 @@ namespace DST.Controllers
                 return RedirectToAction("Period", values.ToDictionary());
             }
 
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
             if (reset)
             {
                 // Reset geolocation and timezone to defaults.
-                _geoBuilder.CurrentGeolocation.Reset();
+                geoBuilder.CurrentGeolocation.Reset();
             }
             else
             {
                 // Update geolocation and timezone.
-                _geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
+                geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
             }
 
             // Save the geolocation in session and create a persistent cookie.
-            _geoBuilder.Save();
+            geoBuilder.Save();
 
             return RedirectToAction("Period", values.ToDictionary());
         }
@@ -140,14 +136,20 @@ namespace DST.Controllers
         }
 
         [HttpGet]
-        public ViewResult Summary(TrackSummaryRoute values)
+        public ViewResult Summary(
+            [FromServices] ITrackUnitOfWork data,
+            [FromServices] IGeolocationBuilder geoBuilder,
+            TrackSummaryRoute values)
         {
             // Validate route values.
             values.Validate();
 
-            DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
-            SeasonModel season = _data.GetSeason(dso);
-            ConstellationModel constellation = _data.GetConstellation(dso);
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
+            DsoModel dso = data.DsoItems.Get(values.Catalog, values.Id);
+            SeasonModel season = data.GetSeason(dso);
+            ConstellationModel constellation = data.GetConstellation(dso);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
 
             IEnumerable<SelectListItem> algorithms = AlgorithmName.GetTextValuePairs().Select(
@@ -157,21 +159,29 @@ namespace DST.Controllers
             {
                 Dso = dso,
                 CurrentRoute = values,
-                SummaryInfo = Utilities.GetSummaryInfo(dso, season, constellation, _geoBuilder.CurrentGeolocation, algorithm),
+                SummaryInfo = Utilities.GetSummaryInfo(dso, season, constellation, geoBuilder.CurrentGeolocation, algorithm),
                 Algorithms = algorithms
             };
 
             return View(viewModel);
         }
 
-        private TrackPhaseViewModel GetPhaseViewModel(TrackPhaseRoute values, bool buildResults)
+        private static TrackPhaseViewModel GetPhaseViewModel(
+            ITrackUnitOfWork data,
+            IGeolocationBuilder geoBuilder,
+            ITrackPhaseBuilder phaseBuilder,
+            TrackPhaseRoute values,
+            bool buildResults)
         {
             // Validate route values.
             values.Validate();
 
-            DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
+            DsoModel dso = data.DsoItems.Get(values.Catalog, values.Id);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
-            ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
+            ILocalObserver localObserver = Utilities.GetLocalObserver(dso, geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
             TrackResults results = new();
@@ -207,16 +217,16 @@ namespace DST.Controllers
             if (buildResults)
             {
                 // Load the previous phase entry, if any.
-                _phaseBuilder.Load();
+                phaseBuilder.Load();
 
                 // Calculate the phase tracking results if an entry was submitted.
-                if (_phaseBuilder.Current.IsReady)
+                if (phaseBuilder.Current.IsReady)
                 {
-                    results = Utilities.GetPhaseResults(localObserver, _phaseBuilder.Current);
+                    results = Utilities.GetPhaseResults(localObserver, phaseBuilder.Current);
 
                     // Force the client to resubmit the form.
-                    _phaseBuilder.Current.IsReady = false;
-                    _phaseBuilder.Save();
+                    phaseBuilder.Current.IsReady = false;
+                    phaseBuilder.Save();
                 }
             }
 
@@ -234,7 +244,7 @@ namespace DST.Controllers
                 {
                     Algorithm = values.Algorithm,
                     Phase = selectedPhase,
-                    Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
+                    Start = Utilities.GetClientDateTime(geoBuilder.CurrentGeolocation, values.Start),
                     IsTrackOnce = values.IsTrackOnce,
                     Cycles = values.Cycles
                 },
@@ -247,13 +257,18 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitPhase(TrackPhaseModel trackForm, TrackPhaseRoute values)
+        public IActionResult SubmitPhase(
+            [FromServices] ITrackUnitOfWork data,
+            [FromServices] IGeolocationBuilder geoBuilder,
+            [FromServices] ITrackPhaseBuilder phaseBuilder,
+            TrackPhaseModel trackForm,
+            TrackPhaseRoute values)
         {
             // Check server-side validation state.
             if (!ModelState.IsValid)
             {
                 // Re-render the view so that server-side validation messages are displayed.
-                return View("Phase", GetPhaseViewModel(values, buildResults: false));
+                return View("Phase", GetPhaseViewModel(data, geoBuilder, phaseBuilder, values, buildResults: false));
             }
 
             values.SetAlgorithm(trackForm.Algorithm);
@@ -266,29 +281,41 @@ namespace DST.Controllers
             trackForm.IsReady = true;
 
             // Set the current phase entry.
-            _phaseBuilder.Current = trackForm;
+            phaseBuilder.Current = trackForm;
 
             // Save the phase entry to session state.
-            _phaseBuilder.Save();
+            phaseBuilder.Save();
 
             // Redirect the action to calculate the results.
             return RedirectToAction("Phase", values.ToDictionary());
         }
 
         [HttpGet]
-        public ViewResult Phase(TrackPhaseRoute values)
+        public ViewResult Phase(
+            [FromServices] ITrackUnitOfWork data,
+            [FromServices] IGeolocationBuilder geoBuilder,
+            [FromServices] ITrackPhaseBuilder phaseBuilder,
+            TrackPhaseRoute values)
         {
-            return View(GetPhaseViewModel(values, buildResults: true));
+            return View(GetPhaseViewModel(data, geoBuilder, phaseBuilder, values, buildResults: true));
         }
 
-        private TrackPeriodViewModel GetPeriodViewModel(TrackPeriodRoute values, bool buildResults)
+        private static TrackPeriodViewModel GetPeriodViewModel(
+            ITrackUnitOfWork data,
+            IGeolocationBuilder geoBuilder,
+            ITrackPeriodBuilder periodBuilder,
+            TrackPeriodRoute values,
+            bool buildResults)
         {
             // Validate route values.
             values.Validate();
 
-            DsoModel dso = _data.DsoItems.Get(values.Catalog, values.Id);
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
+            DsoModel dso = data.DsoItems.Get(values.Catalog, values.Id);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
-            ILocalObserver localObserver = Utilities.GetLocalObserver(dso, _geoBuilder.CurrentGeolocation, algorithm);
+            ILocalObserver localObserver = Utilities.GetLocalObserver(dso, geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
             TrackResults results = new();
@@ -306,16 +333,16 @@ namespace DST.Controllers
             if (buildResults)
             {
                 // Load the previous period entry, if any.
-                _periodBuilder.Load();
+                periodBuilder.Load();
 
                 // Calculate the period tracking results if an entry was submitted.
-                if (_periodBuilder.Current.IsReady)
+                if (periodBuilder.Current.IsReady)
                 {
-                    results = Utilities.GetPeriodResults(localObserver, algorithm, _periodBuilder.Current);
+                    results = Utilities.GetPeriodResults(localObserver, algorithm, periodBuilder.Current);
 
                     // Force the client to resubmit the form.
-                    _periodBuilder.Current.IsReady = false;
-                    _periodBuilder.Save();
+                    periodBuilder.Current.IsReady = false;
+                    periodBuilder.Save();
                 }
             }
 
@@ -335,7 +362,7 @@ namespace DST.Controllers
                 TrackForm = new TrackPeriodModel()
                 {
                     Algorithm = values.Algorithm,
-                    Start = Utilities.GetClientDateTime(_geoBuilder.CurrentGeolocation, values.Start),
+                    Start = Utilities.GetClientDateTime(geoBuilder.CurrentGeolocation, values.Start),
                     IsTrackOnce = values.IsTrackOnce,
                     IsFixed = values.IsFixed,
                     IsAggregated = values.IsAggregated,
@@ -352,13 +379,18 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitPeriod(TrackPeriodModel trackForm, TrackPeriodRoute values)
+        public IActionResult SubmitPeriod(
+            [FromServices] ITrackUnitOfWork data,
+            [FromServices] IGeolocationBuilder geoBuilder,
+            [FromServices] ITrackPeriodBuilder periodBuilder,
+            TrackPeriodModel trackForm,
+            TrackPeriodRoute values)
         {
             // Check server-side validation state.
             if (!ModelState.IsValid)
             {
                 // Re-render the view so that server-side validation messages are displayed.
-                return View("Period", GetPeriodViewModel(values, buildResults: false));
+                return View("Period", GetPeriodViewModel(data, geoBuilder, periodBuilder, values, buildResults: false));
             }
 
             // The ordering is important here.
@@ -375,18 +407,22 @@ namespace DST.Controllers
             trackForm.IsReady = true;
 
             // Set the current period entry.
-            _periodBuilder.Current = trackForm;
+            periodBuilder.Current = trackForm;
 
             // Save the period entry to session state.
-            _periodBuilder.Save();
+            periodBuilder.Save();
 
             // Redirect the action to calculate the results.
             return RedirectToAction("Period", values.ToDictionary());
         }
 
-        public ViewResult Period(TrackPeriodRoute values)
+        public ViewResult Period(
+            [FromServices] ITrackUnitOfWork data,
+            [FromServices] IGeolocationBuilder geoBuilder,
+            [FromServices] ITrackPeriodBuilder periodBuilder,
+            TrackPeriodRoute values)
         {
-            return View(GetPeriodViewModel(values, buildResults: true));
+            return View(GetPeriodViewModel(data, geoBuilder, periodBuilder, values, buildResults: true));
         }
 
         #endregion
