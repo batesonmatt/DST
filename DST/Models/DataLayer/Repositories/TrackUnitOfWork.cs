@@ -7,7 +7,7 @@ namespace DST.Models.DataLayer.Repositories
     /// <summary>
     /// A unit of work providing repositories for a read-only MainDbContext.
     /// </summary>
-    public class TrackUnitOfWork
+    public class TrackUnitOfWork : ITrackUnitOfWork
     {
         #region Properties
 
