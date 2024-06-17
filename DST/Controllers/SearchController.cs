@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 //using Microsoft.EntityFrameworkCore;
 using DST.Models.DomainModels;
-using DST.Models.DataLayer;
 using DST.Models.DataLayer.Repositories;
 using DST.Models.DataLayer.Query;
 using DST.Models.ViewModels;
@@ -17,58 +16,22 @@ namespace DST.Controllers
 {
     public class SearchController : Controller
     {
-        #region Fields
-
-        private readonly SearchUnitOfWork _data;
-        private readonly ISearchRouteBuilder _routeBuilder;
-        private readonly IGeolocationBuilder _geoBuilder;
-        private readonly ISearchBuilder _searchBuilder;
-
-        #endregion
-
-        #region Constructors
-
-        public SearchController(MainDbContext context, ISearchRouteBuilder routeBuilder, IGeolocationBuilder geoBuilder, ISearchBuilder searchBuilder)
-        {
-            _data = new SearchUnitOfWork(context);
-            _routeBuilder = routeBuilder;
-            _geoBuilder = geoBuilder;
-            _searchBuilder = searchBuilder;
-
-            // Load the client geolocation, if any.
-            _geoBuilder.Load();
-
-            // Load the client's previous search entry, if any.
-            _searchBuilder.Load();
-        }
-
-        #endregion
-
         #region Methods
 
-        private void ClearSearch()
-        {
-            // Only clear the search session if the stored input is not already empty.
-            if (!_searchBuilder.CurrentSearch.IsEmpty)
-            {
-                // Clear the current SearchModel object.
-                _searchBuilder.CurrentSearch.Clear();
-
-                // Save the search entry in session.
-                _searchBuilder.Save();
-            }
-        }
-
-        public IActionResult Index()
+        public IActionResult Index([FromServices] ISearchRouteBuilder routeBuilder)
         {
             // Load a saved route from session state, if any.
-            _routeBuilder.Load();
+            routeBuilder.Load();
 
-            return RedirectToAction("List", _routeBuilder.Route.ToDictionary());
+            return RedirectToAction("List", routeBuilder.Route.ToDictionary());
         }
 
         [HttpPost]
-        public IActionResult SubmitGeolocation(GeolocationModel geolocation, SearchRoute values, bool reset = false)
+        public IActionResult SubmitGeolocation(
+            [FromServices] IGeolocationBuilder geoBuilder,
+            GeolocationModel geolocation,
+            SearchRoute values,
+            bool reset = false)
         {
             // Check model state.
             if (!ModelState.IsValid)
@@ -77,25 +40,47 @@ namespace DST.Controllers
                 return RedirectToAction("List", values.ToDictionary());
             }
 
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
             if (reset)
             {
                 // Reset geolocation and timezone to defaults.
-                _geoBuilder.CurrentGeolocation.Reset();
+                geoBuilder.CurrentGeolocation.Reset();
             }
             else
             {
                 // Update geolocation and timezone.
-                _geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
+                geoBuilder.CurrentGeolocation.SetGeolocation(geolocation);
             }
 
             // Save the geolocation in session and create a persistent cookie.
-            _geoBuilder.Save();
+            geoBuilder.Save();
 
             return RedirectToAction("List", values.ToDictionary());
         }
 
+        private static void ClearSearch(ISearchBuilder searchBuilder)
+        {
+            // Load the client's previous search entry, if any.
+            searchBuilder.Load();
+
+            // Only clear the search session if the stored input is not already empty.
+            if (!searchBuilder.CurrentSearch.IsEmpty)
+            {
+                // Clear the current SearchModel object.
+                searchBuilder.CurrentSearch.Clear();
+
+                // Save the search entry in session.
+                searchBuilder.Save();
+            }
+        }
+
         [HttpGet]
-        public IActionResult ClearFilter(SearchRoute values, string name)
+        public IActionResult ClearFilter(
+            [FromServices] ISearchBuilder searchBuilder,
+            SearchRoute values,
+            string name)
         {
             // Clear the filter route segment by name.
             if (values.TryClearFilter(name))
@@ -104,7 +89,7 @@ namespace DST.Controllers
                 if (name.EqualsExact(nameof(SearchRoute.Search)))
                 {
                     // Clear the search session.
-                    ClearSearch();
+                    ClearSearch(searchBuilder);
                 }
             }
 
@@ -112,13 +97,15 @@ namespace DST.Controllers
         }
 
         [HttpGet]
-        public IActionResult ClearFilters(SearchRoute values)
+        public IActionResult ClearFilters(
+            [FromServices] ISearchBuilder searchBuilder,
+            SearchRoute values)
         {
             // Clear all filters, but retain the paging and sorting values.
             values = values.Reset();
 
             // Clear the search session.
-            ClearSearch();
+            ClearSearch(searchBuilder);
 
             return RedirectToAction("List", values.ToDictionary());
         }
@@ -132,7 +119,10 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitSearch(SearchModel search, SearchRoute values)
+        public IActionResult SubmitSearch(
+            [FromServices] ISearchBuilder searchBuilder,
+            SearchModel search,
+            SearchRoute values)
         {
             // Check model state.
             if (!ModelState.IsValid)
@@ -144,16 +134,24 @@ namespace DST.Controllers
             // Set the route segment.
             values.SetSearch(search.Input);
 
+            // Load the client's previous search entry, if any.
+            searchBuilder.Load();
+
             // Set the current SearchModel object.
-            _searchBuilder.CurrentSearch = search;
+            searchBuilder.CurrentSearch = search;
 
             // Save the search entry in session.
-            _searchBuilder.Save();
+            searchBuilder.Save();
 
             return RedirectToAction("List", values.ToDictionary());
         }
 
-        public ViewResult List(SearchRoute values)
+        public ViewResult List(
+            [FromServices] ISearchUnitOfWork data,
+            [FromServices] ISearchRouteBuilder routeBuilder,
+            [FromServices] IGeolocationBuilder geoBuilder,
+            [FromServices] ISearchBuilder searchBuilder,
+            SearchRoute values)
         {
             // Validate route values.
             values.Validate();
@@ -169,7 +167,13 @@ namespace DST.Controllers
                 SortDirection = values.SortDirection
             };
 
-            options.SortFilter(values, _geoBuilder.CurrentGeolocation, _searchBuilder.CurrentSearch);
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
+            // Load the client's previous search entry, if any.
+            searchBuilder.Load();
+
+            options.SortFilter(values, geoBuilder.CurrentGeolocation, searchBuilder.CurrentSearch);
 
             IEnumerable<SelectListItem> pageSizes = Enumerable.Range(1, 5).Select(
                     i => new SelectListItem(
@@ -179,23 +183,23 @@ namespace DST.Controllers
 
             SearchListViewModel viewModel = new()
             {
-                Search = _searchBuilder.CurrentSearch,
+                Search = searchBuilder.CurrentSearch,
 
-                DsoItems = _data.DsoItems.List(options),
+                DsoItems = data.DsoItems.List(options),
 
-                Types = _data.DsoTypes.List(new QueryOptions<DsoTypeModel>
+                Types = data.DsoTypes.List(new QueryOptions<DsoTypeModel>
                 {
                     OrderBy = obj => obj.Type
                 }),
-                Catalogs = _data.Catalogs.List(new QueryOptions<CatalogModel>
+                Catalogs = data.Catalogs.List(new QueryOptions<CatalogModel>
                 {
                     OrderBy = obj => obj.Name
                 }),
-                Constellations = _data.Constellations.List(new QueryOptions<ConstellationModel>
+                Constellations = data.Constellations.List(new QueryOptions<ConstellationModel>
                 {
                     OrderBy = obj => obj.Name
                 }),
-                Seasons = _data.Seasons.List(new QueryOptions<SeasonModel>
+                Seasons = data.Seasons.List(new QueryOptions<SeasonModel>
                 {
                     OrderBy = obj => obj.Id
                 }),
@@ -204,7 +208,7 @@ namespace DST.Controllers
                 PageSizes = pageSizes
             };
 
-            int count = _data.DsoItems.Count;
+            int count = data.DsoItems.Count;
 
             // The requested paging values are subject to user error when attempting to modify the URL directly.
             // Calculate the page number again, now that we know the total number of items after filtering.
@@ -214,19 +218,11 @@ namespace DST.Controllers
             viewModel.CurrentRoute = values;
 
             // Save the current route to session state.
-            _routeBuilder.Route = values;
-            _routeBuilder.Save();
+            routeBuilder.Route = values;
+            routeBuilder.Save();
 
             return View(viewModel);
         }
-
-        //[HttpGet]
-        //public IActionResult Details(string catalog, int id)
-        //{
-        //    DsoModel dso = _data.DsoItems.Get(catalog, id);
-            
-        //    return View(dso);
-        //}
 
         #endregion
     }
