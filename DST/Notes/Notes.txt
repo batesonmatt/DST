@@ -2,44 +2,21 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
-PageSizeItem, TimeZoneItem, TrackAlgorithmItem, TimeUnitItem, etc.                                              ...DONE
-- Revise all SelectLists to use IEnumerable<SelectListItem>                                                     ...DONE
-- Revise GeolocationViewModel.TimeZoneItems                                                                     ...DONE
-- Revise SearchListViewModel.PageSizeItem                                                                       ...DONE
-- Revise TrackPeriodViewModel.TimeUnits                                                                         ...DONE
-- Revise TrackPeriodViewModel.Algorithms                                                                        ...DONE
-- Revise TrackPhaseViewModel.Algorithms                                                                         ...DONE
-- Revise TrackSummaryViewModel.Algorithms                                                                       ...DONE
-- Update SetAlgorithm, SetTimeUnit, SetPhase                                                                    ...DONE
-- Remove Utilities.GetTimeZoneItems and BusinessLogic.TimeZoneItem                                              ...DONE
-- Remove Utilities.GetPageSizeItems and BusinessLogic.PageSizeItem                                              ...DONE
-- Remove Utilities.GetTimeUnitItems and BusinessLogic.TimeUnitItem                                              ...DONE
-- Remove Utilities.GetAlgorithmItems and BusinessLogic.TrackAlgorithmItem                                       ...DONE
-
-AlgorithmName, PhaseName, TimeUnitName                                                                          ...DONE
-- Consider moving out of the Query namespace, and into BusinessLogic                                            ...DONE
-- Consider a method/property to retrieve a list of the values along with ToKebabCase()                          ...DONE
-  Use this to revise the IEnumerable<SelectListItem> definitions.                                               ...DONE
+Use DI for ISearchUnitOfWork and ITrackUnitOfWork in the controllers instead of MainDbContext.                      ...DONE
 
 Consider using DI in certain action methods, instead of through the controller constructor. See pg. 568.
-- Important for the Track controller, where certain dependencies are unused.
-- Also see ValidationController methods.
+- Important for the Track controller, where certain dependencies are unused.                                        ...DONE
+- Also see ValidationController methods (Only ValidateStartDate needs the IGeolocationBuilder DI).                  ...DONE
+- SearchController                                                                                                  ...DONE
 
 Consider revising Utilities.GetSortTag and its helper methods.
 - Consider moving methods to DsoSortTagViewComponent.
 
-Consider using DI for ISearchUnitOfWork and ITrackUnitOfWork, or IUnitOfWork, in SearchController and TrackController, instead of MainDbContext.
-
 Consider removing the paging endpoint, since it is never used.
 
-"Continuous" Tracking
-- After tracking over time, allow the user to click a button to continue tracking for the same period/interval, 
-  but starting at the last DateTime value.
-- This could cause a bug where the datetime would eventually run to min/max value, or to a point where
-  the results are not trustworthy.
-
 Period
-- Consider hiding the Aggregate option by default, then only show it when the user selects Months/Years and Fixed tracking.
+- Consider hiding the Aggregate option by default, then only show it when the user
+  selects Months/Years and Fixed tracking.
 
 ---------------------------------------------------------------------------
 
@@ -49,8 +26,6 @@ Text Interactions
 - https://getbootstrap.com/docs/5.0/utilities/interactions/
 
 Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text).
-
-Consider sunrise, sun, and sunsest icons for Rise, Apex, and Set options in the Phase form.
 
 Use floating labels for the form controls.
 
@@ -87,8 +62,6 @@ HTML Misc
 Fixed runtime markup issues (See Inspect->Issues section for all views.)
 - Remove asp-for attribute on label elements, and replace with the correct element id.
 - Migrate to HTTPS?
-
-Incorporate aria, title, and name (etc.) attributes in the markups
 
 ---------------------------------------------------------------------------
 
