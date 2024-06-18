@@ -6,7 +6,6 @@ using DST.Core.TimeKeeper;
 using DST.Core.Observer;
 using DST.Core.Trajectory;
 using System;
-using DST.Models.DataLayer.Query;
 using DST.Models.Extensions;
 using System.Collections.Generic;
 using System.Linq;
@@ -948,120 +947,6 @@ namespace DST.Models.BusinessLogic
             }
 
             return result;
-        }
-
-        public static string GetTypeInfo(DsoObserverOptions options)
-        {
-            if (options is null || options.Dso is null)
-            {
-                return string.Empty;
-            }
-
-            return options.Dso.Type ?? string.Empty;
-        }
-
-        public static string GetConstellationInfo(DsoObserverOptions options)
-        {
-            if (options is null || options.Dso is null)
-            {
-                return string.Empty;
-            }
-
-            return options.Dso.ConstellationName ?? string.Empty;
-        }
-
-        public static string GetDistanceInfo(DsoObserverOptions options)
-        {
-            if (options is null || options.Dso is null)
-            {
-                return string.Empty;
-            }
-
-            return string.Format(Resources.DisplayText.DistanceFormatDecimalKly, options.Dso.Distance);
-        }
-
-        public static string GetBrightnessInfo(DsoObserverOptions options)
-        {
-            if (options is null || options.Dso is null)
-            {
-                return string.Empty;
-            }
-
-            return options.Dso.Magnitude switch
-            {
-                null => Resources.DisplayText.ApparentMagnitudeDefault,
-                _ => string.Format(Resources.DisplayText.ApparentMagnitudeFormatDecimal, options.Dso.Magnitude)
-            };
-        }
-
-        public static string GetRiseTimeInfo(DsoObserverOptions options)
-        {
-            if (options is null || options.Dso is null || options.Geolocation is null)
-            {
-                return string.Empty;
-            }
-
-            string result;
-            long ticks;
-            TimeSpan timeSpan;
-
-            try
-            {
-                // Calculate the object's recent/next rise time relative to the observer's geolocation on the
-                // current date and time for the client.
-                ticks = GetRiseTime(options.Dso, options.Geolocation);
-
-                // Get the rise time duration as a timespan.
-                timeSpan = TimeSpan.FromTicks(ticks);
-
-                // The rise time could not be calculated.
-                if (timeSpan == TimeSpan.MaxValue)
-                {
-                    return Resources.DisplayText.RiseTimeDefault;
-                }
-
-                // Format the result.
-                if (timeSpan.Days > 0 || timeSpan.Hours > 0)
-                {
-                    result = string.Format(Resources.DisplayText.RiseTimeFormatHoursFuture, timeSpan.TotalHours);
-                }
-                else if (timeSpan.Minutes > 0)
-                {
-                    result = string.Format(Resources.DisplayText.RiseTimeFormatMinutesFuture, timeSpan.Minutes);
-                }
-                else if (timeSpan.Ticks >= 0)
-                {
-                    result = string.Format(Resources.DisplayText.RiseTimeFormatSecondsFuture, timeSpan.Seconds);
-                }
-                else if (timeSpan.Days < 0 || timeSpan.Hours < 0)
-                {
-                    result = string.Format(Resources.DisplayText.RiseTimeFormatHoursPast, timeSpan.Duration().TotalHours);
-                }
-                else if (timeSpan.Minutes < 0)
-                {
-                    result = string.Format(Resources.DisplayText.RiseTimeFormatMinutesPast, timeSpan.Duration().Minutes);
-                }
-                else
-                {
-                    result = string.Format(Resources.DisplayText.RiseTimeFormatSecondsPast, timeSpan.Duration().Seconds);
-                }
-            }
-            catch
-            {
-                result = Resources.DisplayText.RiseTimeDefault;
-            }
-
-            return result;
-        }
-
-        public static string GetSortTag(DsoObserverOptions options, string sortField)
-        {
-            if (sortField.EqualsSeo(Sort.Type)) return GetTypeInfo(options);
-            if (sortField.EqualsSeo(Sort.Constellation)) return GetConstellationInfo(options);
-            if (sortField.EqualsSeo(Sort.Distance)) return GetDistanceInfo(options);
-            if (sortField.EqualsSeo(Sort.Brightness)) return GetBrightnessInfo(options);
-            if (sortField.EqualsSeo(Sort.RiseTime)) return GetRiseTimeInfo(options);
-            return string.Empty;
         }
     }
 }
