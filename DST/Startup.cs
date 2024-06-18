@@ -153,9 +153,9 @@ namespace DST
                     "local-{local}/visible-{visible}/rising-{rising}/hasname-{hasname}/{search?}");
 
                 // Paging route
-                endpoints.MapControllerRoute(
-                    name: "paging",
-                    pattern: "{controller}/{action}/page/{pagenumber}/size/{pagesize}/sort/{sortfield}/{sortdirection}");
+                //endpoints.MapControllerRoute(
+                //    name: "paging",
+                //    pattern: "{controller}/{action}/page/{pagenumber}/size/{pagesize}/sort/{sortfield}/{sortdirection}");
 
                 // Details route
                 endpoints.MapControllerRoute(
