@@ -4,15 +4,16 @@ ___________________________________________________________________________
 
 Use DI for ISearchUnitOfWork and ITrackUnitOfWork in the controllers instead of MainDbContext.                      ...DONE
 
-Consider using DI in certain action methods, instead of through the controller constructor. See pg. 568.
+Consider using DI in certain action methods, instead of through the controller constructor.                         ...DONE
 - Important for the Track controller, where certain dependencies are unused.                                        ...DONE
 - Also see ValidationController methods (Only ValidateStartDate needs the IGeolocationBuilder DI).                  ...DONE
 - SearchController                                                                                                  ...DONE
 
-Consider revising Utilities.GetSortTag and its helper methods.
-- Consider moving methods to DsoSortTagViewComponent.
+Consider revising Utilities.GetSortTag and its helper methods.                                                      ...DONE
+- Consider moving methods to DsoSortTagViewComponent.                                                               ...DONE
+- Check for ticks == long.MinValue || ticks == long.MaxValue, and use a new resource string.                        ...DONE
 
-Consider removing the paging endpoint, since it is never used.
+Consider removing the paging endpoint, since it is never used.                                                      ...DONE
 
 Period
 - Consider hiding the Aggregate option by default, then only show it when the user
