@@ -1,4 +1,8 @@
-﻿using DST.Models.DomainModels;
+﻿using DST.Models.BusinessLogic;
+using DST.Models.DataLayer.Query;
+using DST.Models.DomainModels;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DST.Models.DataLayer.Repositories
 {
@@ -77,6 +81,66 @@ namespace DST.Models.DataLayer.Repositories
 
         public SearchUnitOfWork(MainDbContext context)
             => _context = context;
+
+        #endregion
+
+        #region Methods
+
+        public IEnumerable<TextValuePair> GetTypeTextValuePairs()
+        {
+            return DsoTypes
+                .List(
+                    new QueryOptions<DsoTypeModel>
+                    {
+                        OrderBy = type => type.Type
+                    })
+                .Select(
+                    type => new TextValuePair(type.Type, type.Type))
+                .Prepend(
+                    new TextValuePair(Filter.All, Filter.All));
+        }
+
+        public IEnumerable<TextValuePair> GetCatalogTextValuePairs()
+        {
+            return Catalogs
+                .List(
+                    new QueryOptions<CatalogModel>
+                    {
+                        OrderBy = catalog => catalog.Name
+                    })
+                .Select(
+                    catalog => new TextValuePair(catalog.Name, catalog.Name))
+                .Prepend(
+                    new TextValuePair(Filter.All, Filter.All));
+        }
+
+        public IEnumerable<TextValuePair> GetConstellationTextValuePairs()
+        {
+            return Constellations
+                .List(
+                    new QueryOptions<ConstellationModel>
+                    {
+                        OrderBy = constellation => constellation.Name
+                    })
+                .Select(
+                    constellation => new TextValuePair(constellation.Name, constellation.Name))
+                .Prepend(
+                    new TextValuePair(Filter.All, Filter.All));
+        }
+
+        public IEnumerable<TextValuePair> GetSeasonTextValuePairs()
+        {
+            return Seasons
+                .List(
+                    new QueryOptions<SeasonModel>
+                    {
+                        OrderBy = season => season.Name
+                    })
+                .Select(
+                    season => new TextValuePair(season.Name, season.Name))
+                .Prepend(
+                    new TextValuePair(Filter.All, Filter.All));
+        }
 
         #endregion
     }

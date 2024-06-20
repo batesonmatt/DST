@@ -1,4 +1,6 @@
-﻿using DST.Models.DomainModels;
+﻿using DST.Models.BusinessLogic;
+using DST.Models.DomainModels;
+using System.Collections.Generic;
 
 namespace DST.Models.DataLayer.Repositories
 {
@@ -9,5 +11,10 @@ namespace DST.Models.DataLayer.Repositories
         Repository<CatalogModel> Catalogs { get; }
         Repository<ConstellationModel> Constellations { get; }
         Repository<SeasonModel> Seasons { get; }
+
+        IEnumerable<TextValuePair> GetTypeTextValuePairs();
+        IEnumerable<TextValuePair> GetCatalogTextValuePairs();
+        IEnumerable<TextValuePair> GetConstellationTextValuePairs();
+        IEnumerable<TextValuePair> GetSeasonTextValuePairs();
     }
 }
