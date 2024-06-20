@@ -1,4 +1,7 @@
-﻿namespace DST.Models.DataLayer.Query
+﻿using DST.Models.BusinessLogic;
+using System.Collections.Generic;
+
+namespace DST.Models.DataLayer.Query
 {
     public static class Sort
     {
@@ -18,17 +21,19 @@
 
         #region Methods
 
-        public static string[] GetFields()
-            => new[]
+        public static IEnumerable<TextValuePair> GetTextValuePairs()
+        {
+            return new TextValuePair[]
             {
-                Id,
-                Name,
-                Type,
-                Constellation,
-                Distance,
-                Brightness,
-                RiseTime
+                new(Id, Id),
+                new(Name, Name),
+                new(Type, Type),
+                new(Constellation, Constellation),
+                new(Distance, Distance),
+                new(Brightness, Brightness),
+                new(RiseTime, RiseTime)
             };
+        }
 
         #endregion
     }
