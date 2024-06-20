@@ -2,33 +2,43 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
-Use DI for ISearchUnitOfWork and ITrackUnitOfWork in the controllers instead of MainDbContext.                      ...DONE
+List view
+- Consider using SelectLists (IEnumerable<SelectListItem>)                                              ...DONE
+- Sort                                                                                                  ...DONE
+- Catalog                                                                                               ...DONE
+- Type                                                                                                  ...DONE
+- Constellation                                                                                         ...DONE
+- Season                                                                                                ...DONE
+- Trajectory                                                                                            ...DONE
+- Remove .filter-group class style                                                                      ...DONE
+- remove Sort.GetFields()                                                                               ...DONE
 
-Consider using DI in certain action methods, instead of through the controller constructor.                         ...DONE
-- Important for the Track controller, where certain dependencies are unused.                                        ...DONE
-- Also see ValidationController methods (Only ValidateStartDate needs the IGeolocationBuilder DI).                  ...DONE
-- SearchController                                                                                                  ...DONE
+Revise Search List toggle filters
+- Create post methods for each button
+- Toggle related filters in the method before redirecting to List
+- Use bootstrap switches (checkbox)
+  Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, 
+  based on whether the given string is "on" or "off".
+  Similar to SeoExtensions.Active
+- Might need to finish the toggle animation before postback
 
-Consider revising Utilities.GetSortTag and its helper methods.                                                      ...DONE
-- Consider moving methods to DsoSortTagViewComponent.                                                               ...DONE
-- Check for ticks == long.MinValue || ticks == long.MaxValue, and use a new resource string.                        ...DONE
+Period View
+- Move css styles to layout.css
 
-Consider removing the paging endpoint, since it is never used.                                                      ...DONE
+Consider removing @using DST.Models.DataLayer.Query from _ViewImports
+- Only if I revise the search list toggle filters and sort direction markup
 
-Period
-- Consider hiding the Aggregate option by default, then only show it when the user
-  selects Months/Years and Fixed tracking.
+Consider revising all SelectList definitions to replace == with SeoEquals
 
 ---------------------------------------------------------------------------
-
 Bootstrap Misc
 
-Text Interactions
+Text Interactions (Text selection)                                                                      ...IN PROGRESS
 - https://getbootstrap.com/docs/5.0/utilities/interactions/
 
-Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text).
+Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text).               ...IN PROGRESS
 
-Use floating labels for the form controls.
+Use floating labels for the form controls.                                                              ...IN PROGRESS
 
 Consider class="display-#" for certain headings (like the banners)
 
@@ -38,17 +48,9 @@ Consider Collapse control for tooltips
   https://getbootstrap.com/docs/5.0/components/tooltips/
   https://getbootstrap.com/docs/5.0/components/popovers/
 
-Use bootstrap switches (checkbox) where necessary. See the toggle filters for the List view, etc.
-- Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, 
-  based on whether the given string is "on" or "off".
-  Similar to SeoExtensions.Active
-- Need to use CSS to style the label as disabled (see Period view)
-
 Consider Bootstrap input groups for tracking forms:
 - https://getbootstrap.com/docs/5.0/forms/input-group/
   | #    | Days     |  for every  | #    | Days
-- OR, build a string while the user fills out the form.
-  Every # day(s) for # total day(s).
 
 Navbar
 - Consider redesigning styles for navbar-toggler and navbar-dark.
@@ -61,8 +63,7 @@ Icons
 HTML Misc
 
 Fixed runtime markup issues (See Inspect->Issues section for all views.)
-- Remove asp-for attribute on label elements, and replace with the correct element id.
-- Migrate to HTTPS?
+- Remove asp-for attribute on label elements, and replace with the correct element id.                  ...IN PROGRESS
 
 ---------------------------------------------------------------------------
 
@@ -112,9 +113,17 @@ Create powershell script(s) to remove/update the database, rebuild the migration
 
 ---------------------------------------------------------------------------
 
-Project -> Propeties -> Code Analysis
+Exception handling and reporting
 
-    Change level to "Latest All" and fix warnings.
+Enable error reporting via GoDaddy email
+- Add code to Services namespace
+- Consider moving Services namespace up one level (out of Models)
+
+https://stackoverflow.com/questions/40614184/handling-exception-in-asp-net-core
+https://stackoverflow.com/questions/56772155/asp-net-core-how-to-handle-error-pages-in-area
+https://learn.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-7.0
+https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-7.0&viewFallbackFrom=aspnetcore-2.2#exception-handler-lambda
+https://blog.kloud.com.au/2016/03/23/aspnet-core-tips-and-tricks-global-exception-handling/
 
 ---------------------------------------------------------------------------
 
@@ -133,19 +142,9 @@ Localization
 
 ---------------------------------------------------------------------------
 
-Exception handling and reporting
-
-Enable error reporting via GoDaddy email
-- Add code to Services namespace
-- Consider moving Services namespace up one level (out of Models)
-
-https://stackoverflow.com/questions/40614184/handling-exception-in-asp-net-core
-https://stackoverflow.com/questions/56772155/asp-net-core-how-to-handle-error-pages-in-area
-https://learn.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-7.0
-https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-7.0&viewFallbackFrom=aspnetcore-2.2#exception-handler-lambda
-https://blog.kloud.com.au/2016/03/23/aspnet-core-tips-and-tricks-global-exception-handling/
-
----------------------------------------------------------------------------
+Period
+- Consider hiding the Aggregate option by default, then only show it when the user
+  selects Months/Years and Fixed tracking.
 
 Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Takes DsoModel, GeolocationModel, and Algorithm
