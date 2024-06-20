@@ -473,17 +473,6 @@ namespace DST.Models.BusinessLogic
             return result;
         }
 
-        // Returns all the displayable Trajectory names.
-        public static IEnumerable<string> GetTrajectoryNames()
-        {
-            return new string[]
-            {
-                Resources.DisplayText.TrajectoryCircumpolar,
-                Resources.DisplayText.TrajectoryNeverRise,
-                Resources.DisplayText.TrajectoryRiseAndSet
-            };
-        }
-
         public static DsoDetailsInfo GetDetailsInfo(DsoModel dso)
         {
             DsoDetailsInfo info;
