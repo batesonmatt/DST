@@ -16,14 +16,6 @@
     <script src="~/js/misc.js"></script>
 }
 
-<style>
-    .list-group.filter-group {
-        max-height: 300px;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-</style>
-
 <div id="search-container" class="container pt-3">
 
     <div class="mb-3">
@@ -34,21 +26,6 @@
     </div>
 
     <div>
-        <div class="list-group filter-group mb-3">
-            @{
-                routes = current.Clone();
-
-                foreach (var sortField in Sort.GetFields())
-                {
-                    active = current.SortField.Active(sortField);
-                    routes.SetSort(sortField);
-                    <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@sortField</a>
-                }
-            }
-        </div>
-
-        <hr />
-
         <div class="mb-3">
             @{
                 routes = current.Clone();
@@ -67,7 +44,6 @@
                         <a asp-action="ClearFilters" asp-all-route-data="@routes.ToDictionary()">
                             <span class="badge bg-secondary"><i class="bi bi-x"></i>&nbsp;Clear all</span>
                         </a>
-
                     </div>
                 }
             }
@@ -93,94 +69,83 @@
 
         <hr />
 
-        <div class="list-group filter-group mb-3">
+        <div class="mb-3">
             @{
                 routes = current.Clone();
-                routes.PageNumber = 1;
-
-                active = current.Catalog.Active(Filter.All);
-                routes.Catalog = Filter.All;
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
-
-                foreach (var catalog in Model.Catalogs)
-                {
-                    active = current.Catalog.Active(catalog.Name);
-                    routes.Catalog = catalog.Name;
-                    <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@catalog.Name</a>
-                }
             }
+            <form asp-action="SubmitSortField" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-floating">
+                    <select name="sort" id="select-search-sort" class="form-select" onchange="this.form.submit();" asp-items="@Model.SortFields"></select>
+                    <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
+                </div>
+            </form>
         </div>
 
-        <div class="list-group filter-group mb-3">
+        <hr />
+
+        <div class="mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
-
-                active = current.Type.Active(Filter.All);
-                routes.Type = Filter.All;
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
-
-                foreach (var type in Model.Types)
-                {
-                    active = current.Type.Active(type.Type);
-                    routes.Type = type.Type;
-                    <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@type.Type</a>
-                }
             }
+            <form asp-action="SubmitCatalogFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-floating">
+                    <select name="catalog" id="select-search-catalog" class="form-select" onchange="this.form.submit();" asp-items="@Model.Catalogs"></select>
+                    <label class="form-label user-select-none" for="select-search-catalog">Catalog</label>
+                </div>
+            </form>
         </div>
 
-        <div class="list-group filter-group mb-3">
+        <div class="mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
-
-                active = current.Constellation.Active(Filter.All);
-                routes.Constellation = Filter.All;
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
-
-                foreach (var constellation in Model.Constellations)
-                {
-                    active = current.Constellation.Active(constellation.Name);
-                    routes.Constellation = constellation.Name;
-                    <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@constellation.Name</a>
-                }
             }
+            <form asp-action="SubmitTypeFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-floating">
+                    <select name="type" id="select-search-type" class="form-select" onchange="this.form.submit();" asp-items="@Model.Types"></select>
+                    <label class="form-label user-select-none" for="select-search-type">Type</label>
+                </div>
+            </form>
         </div>
 
-        <div class="list-group filter-group mb-3">
+        <div class="mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
-
-                active = current.Season.Active(Filter.All);
-                routes.Season = Filter.All;
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
-
-                foreach (var season in Model.Seasons)
-                {
-                    active = current.Season.Active(season.Name);
-                    routes.Season = season.Name;
-                    <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@season.Name</a>
-                }
             }
+            <form asp-action="SubmitConstellationFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-floating">
+                    <select name="constellation" id="select-search-constellation" class="form-select" onchange="this.form.submit();" asp-items="@Model.Constellations"></select>
+                    <label class="form-label user-select-none" for="select-search-constellation">Constellation</label>
+                </div>
+            </form>
         </div>
 
-        <div class="list-group filter-group mb-3">
+        <div class="mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
-
-                active = current.Trajectory.Active(Filter.All);
-                routes.Trajectory = Filter.All;
-                <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@Filter.All</a>
-
-                foreach (var trajectory in Model.Trajectories)
-                {
-                    active = current.Trajectory.Active(trajectory);
-                    routes.Trajectory = trajectory;
-                    <a class="list-group-item @active" asp-action="List" asp-all-route-data="@routes.ToDictionary()">@trajectory</a>
-                }
             }
+            <form asp-action="SubmitSeasonFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-floating">
+                    <select name="season" id="select-search-season" class="form-select" onchange="this.form.submit();" asp-items="@Model.Seasons"></select>
+                    <label class="form-label user-select-none" for="select-search-season">Season</label>
+                </div>
+            </form>
+        </div>
+
+        <div class="mb-3">
+            @{
+                routes = current.Clone();
+                routes.PageNumber = 1;
+            }
+            <form asp-action="SubmitTrajectoryFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-floating">
+                    <select name="trajectory" id="select-search-trajectory" class="form-select" onchange="this.form.submit();" asp-items="@Model.Trajectories"></select>
+                    <label class="form-label user-select-none" for="select-search-trajectory">Trajectory</label>
+                </div>
+            </form>
         </div>
 
         <div class="mb-3">
@@ -268,13 +233,13 @@
         @{
             routes = current.Clone();
         }
-        <form asp-action="PageSize" asp-all-route-data="@routes.ToDictionary()" method="post">
+        <form asp-action="SubmitPageSize" asp-all-route-data="@routes.ToDictionary()" method="post">
             <select name="size" class="form-select" onchange="this.form.submit();" asp-items="@Model.PageSizes"></select>
         </form>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Results">@Model.Results</label>
+        <p>@Model.Results</p>
     </div>
 
     <div>
