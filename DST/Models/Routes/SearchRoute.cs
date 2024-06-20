@@ -117,6 +117,31 @@ namespace DST.Models.Routes
             return new SearchRoute(this as PageSortRoute);
         }
 
+        public void SetType(string type)
+        {
+            Type = string.IsNullOrWhiteSpace(type) ? Filter.All : type.Trim();
+        }
+
+        public void SetCatalog(string catalog)
+        {
+            Catalog = string.IsNullOrWhiteSpace(catalog) ? Filter.All : catalog.Trim();
+        }
+
+        public void SetConstellation(string constellation)
+        {
+            Constellation = string.IsNullOrWhiteSpace(constellation) ? Filter.All : constellation.Trim();
+        }
+
+        public void SetSeason(string season)
+        {
+            Season = string.IsNullOrWhiteSpace(season) ? Filter.All : season.Trim();
+        }
+
+        public void SetTrajectory(string trajectory)
+        {
+            Trajectory = string.IsNullOrWhiteSpace(trajectory) ? Filter.All : trajectory.Trim();
+        }
+
         public void SetSearch(string input)
         {
             Search = string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim();
@@ -179,6 +204,27 @@ namespace DST.Models.Routes
                 IsSortByDistance || IsSortByBrightness || IsSortByRiseTime))
             {
                 SortField = Sort.Default;
+            }
+
+            if (IsFilterByType)
+            {
+                SetType(Type);
+            }
+            if (IsFilterByCatalog)
+            {
+                SetCatalog(Catalog);
+            }
+            if (IsFilterByConstellation)
+            {
+                SetConstellation(Constellation);
+            }
+            if (IsFilterBySeason)
+            {
+                SetSeason(Season);
+            }
+            if (IsFilterByTrajectory)
+            {
+                SetTrajectory(Trajectory);
             }
 
             if (!(Local.IsFilterOn() || Local.IsFilterOff()))
