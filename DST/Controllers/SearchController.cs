@@ -111,14 +111,6 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult PageSize(SearchRoute values, int size)
-        {
-            values.SetPageSize(size);
-
-            return RedirectToAction("List", values.ToDictionary());
-        }
-
-        [HttpPost]
         public IActionResult SubmitSearch(
             [FromServices] ISearchBuilder searchBuilder,
             SearchModel search,
@@ -142,6 +134,62 @@ namespace DST.Controllers
 
             // Save the search entry in session.
             searchBuilder.Save();
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitSortField(SearchRoute values, string sort)
+        {
+            values.SetSort(sort);
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitPageSize(SearchRoute values, int size)
+        {
+            values.SetPageSize(size);
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitCatalogFilter(SearchRoute values, string catalog)
+        {
+            values.SetCatalog(catalog);
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitTypeFilter(SearchRoute values, string type)
+        {
+            values.SetType(type);
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitConstellationFilter(SearchRoute values, string constellation)
+        {
+            values.SetConstellation(constellation);
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitSeasonFilter(SearchRoute values, string season)
+        {
+            values.SetSeason(season);
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitTrajectoryFilter(SearchRoute values, string trajectory)
+        {
+            values.SetTrajectory(trajectory);
 
             return RedirectToAction("List", values.ToDictionary());
         }
@@ -175,37 +223,41 @@ namespace DST.Controllers
 
             options.SortFilter(values, geoBuilder.CurrentGeolocation, searchBuilder.CurrentSearch);
 
+            IEnumerable<SelectListItem> sortFields = Sort.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.SortField));
+
             IEnumerable<SelectListItem> pageSizes = Enumerable.Range(1, 5).Select(
-                    i => new SelectListItem(
-                        string.Format(Resources.DisplayText.PageSizeFormat, i * 10),
-                        (i * 10).ToString(),
-                        (i * 10) == values.PageSize));
+                i => new SelectListItem(
+                    string.Format(Resources.DisplayText.PageSizeFormat, i * 10),
+                    (i * 10).ToString(),
+                    (i * 10) == values.PageSize));
+
+            IEnumerable<SelectListItem> catalogs = data.GetCatalogTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.Catalog));
+
+            IEnumerable<SelectListItem> types = data.GetTypeTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.Type));
+
+            IEnumerable<SelectListItem> constellations = data.GetConstellationTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.Constellation));
+
+            IEnumerable<SelectListItem> seasons = data.GetSeasonTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.Season));
+
+            IEnumerable<SelectListItem> trajectories = TrajectoryName.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.Trajectory));
 
             SearchListViewModel viewModel = new()
             {
                 Search = searchBuilder.CurrentSearch,
-
+                SortFields = sortFields,
+                PageSizes = pageSizes,
                 DsoItems = data.DsoItems.List(options),
-
-                Types = data.DsoTypes.List(new QueryOptions<DsoTypeModel>
-                {
-                    OrderBy = obj => obj.Type
-                }),
-                Catalogs = data.Catalogs.List(new QueryOptions<CatalogModel>
-                {
-                    OrderBy = obj => obj.Name
-                }),
-                Constellations = data.Constellations.List(new QueryOptions<ConstellationModel>
-                {
-                    OrderBy = obj => obj.Name
-                }),
-                Seasons = data.Seasons.List(new QueryOptions<SeasonModel>
-                {
-                    OrderBy = obj => obj.Id
-                }),
-
-                Trajectories = Utilities.GetTrajectoryNames(),
-                PageSizes = pageSizes
+                Catalogs = catalogs,
+                Types = types,
+                Constellations = constellations,
+                Seasons = seasons,
+                Trajectories = trajectories
             };
 
             int count = data.DsoItems.Count;
