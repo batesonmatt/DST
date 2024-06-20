@@ -9,19 +9,20 @@ namespace DST.Models.ViewModels
     {
         #region Properties
 
-        public SearchModel Search { get; set; }
-
         public SearchRoute CurrentRoute { get; set; }
-        public int TotalPages { get; set; }
-        public IEnumerable<SelectListItem> PageSizes { get; set; }
-        public string Results { get; set; }
-
+        public SearchModel Search { get; set; }
         public IEnumerable<DsoModel> DsoItems { get; set; }
-        public IEnumerable<DsoTypeModel> Types { get; set; }
-        public IEnumerable<CatalogModel> Catalogs { get; set; }
-        public IEnumerable<ConstellationModel> Constellations { get; set; }
-        public IEnumerable<SeasonModel> Seasons { get; set; }
-        public IEnumerable<string> Trajectories { get; set; }
+
+        public IEnumerable<SelectListItem> SortFields { get; set; }
+        public IEnumerable<SelectListItem> PageSizes { get; set; }
+        public IEnumerable<SelectListItem> Catalogs { get; set; }
+        public IEnumerable<SelectListItem> Types { get; set; }
+        public IEnumerable<SelectListItem> Constellations { get; set; }
+        public IEnumerable<SelectListItem> Seasons { get; set; }
+        public IEnumerable<SelectListItem> Trajectories { get; set; }
+
+        public string Results { get; set; }
+        public int TotalPages { get; set; }
 
         #endregion
     }
