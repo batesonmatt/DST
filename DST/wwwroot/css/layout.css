@@ -50,6 +50,10 @@ a, a:hover {
     padding: 7rem 0 10rem 0;
 }
 
+/* Disabled checkbox label */
+input[type=checkbox][disabled] + label {
+    color: #ccc;
+}
 
 #title-banner {
     background-color: var(--clr-accent-transparent);
