@@ -194,6 +194,38 @@ namespace DST.Controllers
             return RedirectToAction("List", values.ToDictionary());
         }
 
+        [HttpPost]
+        public IActionResult SubmitLocalFilter(SearchRoute values)
+        {
+            values.ToggleLocal();
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitVisibleFilter(SearchRoute values)
+        {
+            values.ToggleVisible();
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitRisingFilter(SearchRoute values)
+        {
+            values.ToggleRising();
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
+        [HttpPost]
+        public IActionResult SubmitHasNameFilter(SearchRoute values)
+        {
+            values.ToggleHasName();
+
+            return RedirectToAction("List", values.ToDictionary());
+        }
+
         public ViewResult List(
             [FromServices] ISearchUnitOfWork data,
             [FromServices] ISearchRouteBuilder routeBuilder,
