@@ -13,17 +13,16 @@ List view
 - Remove .filter-group class style                                                                      ...DONE
 - remove Sort.GetFields()                                                                               ...DONE
 
-Revise Search List toggle filters
-- Create post methods for each button
-- Toggle related filters in the method before redirecting to List
-- Use bootstrap switches (checkbox)
-  Need a new SeoExtension method, Checked, to retrieve either "checked" or string.Empty, 
-  based on whether the given string is "on" or "off".
-  Similar to SeoExtensions.Active
-- Might need to finish the toggle animation before postback
+Revise Search List toggle filters                                                                       ...DONE
+- Create post methods for each button                                                                   ...DONE
+- Toggle related filters in the method/route class before redirecting to List                           ...DONE
+- Use bootstrap switches (checkbox)                                                                     ...DONE
 
-Period View
-- Move css styles to layout.css
+Move Period css styles to layout.css                                                                    ...DONE
+
+Revise Search List sort direction buttons
+- Use bootstrap radio buttons
+- Consider bootstrap icons
 
 Consider removing @using DST.Models.DataLayer.Query from _ViewImports
 - Only if I revise the search list toggle filters and sort direction markup
@@ -75,7 +74,7 @@ Query update
   See initial call to ToList in Repository.BuildQuery.
   We need to avoid this call because it adds unnecessary overhead by selecting all the data first, then again in Repository.List.
 - Consider a new SQL Server Database Project to keep track of changes to the database and to store scripts
-- DST.Database
+  DST.Database
 - https://stackoverflow.com/questions/194652/sql-server-regular-expressions-in-t-sql
 - https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping
 
@@ -87,6 +86,11 @@ Consider admin pages so that I may conveniently keep the Dso items up to date (?
 Redesign views
 
 List
+- Consider a modal for the options on small screens
+- Consider putting all filters, sorting, and search options inside a single form.
+  Use a single post action method to apply the options (with helper methods), then redirect to List.
+  For toggle filters, need to bind to boolean properties (right now they're just posting nothing and toggling the filter).
+- Consider using radio buttons for Local, Visible, and Rising filters.
 - Consider expanding/collapsable controls for the filter/sort lists
   https://getbootstrap.com/docs/5.0/components/accordion/
   https://getbootstrap.com/docs/5.0/components/collapse/
