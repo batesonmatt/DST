@@ -147,6 +147,53 @@ namespace DST.Models.Routes
             Search = string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim();
         }
 
+        public void ToggleLocal()
+        {
+            if (IsFilterByLocal)
+            {
+                Local = Filter.Off;
+            }
+            else
+            {
+                Local = Filter.On;
+                Visible = Filter.Off;
+                Rising = Filter.Off;
+            }
+        }
+
+        public void ToggleVisible()
+        {
+            if (IsFilterByVisible)
+            {
+                Visible = Filter.Off;
+            }
+            else
+            {
+                Visible = Filter.On;
+                Local = Filter.Off;
+                Rising = Filter.Off;
+            }
+        }
+
+        public void ToggleRising()
+        {
+            if (IsFilterByRising)
+            {
+                Rising = Filter.Off;
+            }
+            else
+            {
+                Rising = Filter.On;
+                Local = Filter.Off;
+                Visible = Filter.Off;
+            }
+        }
+
+        public void ToggleHasName()
+        {
+            HasName = IsFilterByHasName ? Filter.Off : Filter.On;
+        }
+
         public void ClearSearch()
         {
             Search = string.Empty;
@@ -231,20 +278,33 @@ namespace DST.Models.Routes
             {
                 Local = Filter.Off;
             }
-
             if (!(Visible.IsFilterOn() || Visible.IsFilterOff()))
             {
                 Visible = Filter.Off;
             }
-
             if (!(Rising.IsFilterOn() || Rising.IsFilterOff()))
             {
                 Rising = Filter.Off;
             }
-
             if (!(HasName.IsFilterOn() || HasName.IsFilterOff()))
             {
                 HasName = Filter.Off;
+            }
+
+            if (IsFilterByLocal)
+            {
+                Visible = Filter.Off;
+                Rising = Filter.Off;
+            }
+            if (IsFilterByVisible)
+            {
+                Local = Filter.Off;
+                Rising = Filter.Off;
+            }
+            if (IsFilterByRising)
+            {
+                Local = Filter.Off;
+                Visible = Filter.Off;
             }
 
             if (HasSearch)
