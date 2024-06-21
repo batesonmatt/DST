@@ -29,6 +29,7 @@
         <div class="mb-3">
             @{
                 routes = current.Clone();
+                routes.PageNumber = 1;
 
                 if (routes.HasFilters())
                 {
@@ -79,6 +80,18 @@
                     <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
                 </div>
             </form>
+        </div>
+
+        <div class="mb-3">
+            @{
+                routes = current.Clone();
+
+                routes.SortAscending();
+                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()">@OrderDirection.Ascending</a>
+
+                routes.SortDescending();
+                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()">@OrderDirection.Descending</a>
+            }
         </div>
 
         <hr />
@@ -152,78 +165,52 @@
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
-
-                if (current.Local.IsFilterOn())
-                {
-                    routes.Local = Filter.Off;
-                    <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Local</a>
-                }
-                else
-                {
-                    routes.Visible = Filter.Off;
-                    routes.Rising = Filter.Off;
-                    routes.Local = Filter.On;
-                    <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Local</a>
-                }
             }
+            <form asp-action="SubmitLocalFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-check form-switch">
+                    <input id="input-search-local" class="form-check-input" type="checkbox" checked="@current.IsFilterByLocal" onchange="this.form.submit();" />
+                    <label class="form-label" for="input-search-local">Local</label>
+                </div>
+            </form>
         </div>
 
         <div class="mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
-
-                if (current.Visible.IsFilterOn())
-                {
-                    routes.Visible = Filter.Off;
-                    <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Visible</a>
-                }
-                else
-                {
-                    routes.Local = Filter.Off;
-                    routes.Rising = Filter.Off;
-                    routes.Visible = Filter.On;
-                    <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Visible</a>
-                }
             }
+            <form asp-action="SubmitVisibleFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-check form-switch">
+                    <input id="input-search-visible" class="form-check-input" type="checkbox" checked="@current.IsFilterByVisible" onchange="this.form.submit();" />
+                    <label class="form-label" for="input-search-visible">Visible</label>
+                </div>
+            </form>
         </div>
 
         <div class="mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
-
-                if (current.Rising.IsFilterOn())
-                {
-                    routes.Rising = Filter.Off;
-                    <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Rising</a>
-                }
-                else
-                {
-                    routes.Local = Filter.Off;
-                    routes.Visible = Filter.Off;
-                    routes.Rising = Filter.On;
-                    <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Rising</a>
-                }
             }
+            <form asp-action="SubmitRisingFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-check form-switch">
+                    <input id="input-search-rising" class="form-check-input" type="checkbox" checked="@current.IsFilterByRising" onchange="this.form.submit();" />
+                    <label class="form-label" for="input-search-rising">Rising</label>
+                </div>
+            </form>
         </div>
 
         <div class="mb-3">
             @{
                 routes = current.Clone();
                 routes.PageNumber = 1;
-
-                if (current.HasName.IsFilterOn())
-                {
-                    routes.HasName = Filter.Off;
-                    <a class="btn btn-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Has Name</a>
-                }
-                else
-                {
-                    routes.HasName = Filter.On;
-                    <a class="btn btn-outline-secondary" asp-action="List" asp-all-route-data="@routes.ToDictionary()">Has Name</a>
-                }
             }
+            <form asp-action="SubmitHasNameFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-check form-switch">
+                    <input id="input-search-hasname" class="form-check-input" type="checkbox" checked="@current.IsFilterByHasName" onchange="this.form.submit();" />
+                    <label class="form-label" for="input-search-hasname">Has name</label>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -240,18 +227,6 @@
 
     <div class="mb-3">
         <p>@Model.Results</p>
-    </div>
-
-    <div>
-        @{
-            routes = current.Clone();
-
-            routes.SortAscending();
-            <a asp-action="List" asp-all-route-data="@routes.ToDictionary()">@OrderDirection.Ascending</a>
-
-            routes.SortDescending();
-            <a asp-action="List" asp-all-route-data="@routes.ToDictionary()">@OrderDirection.Descending</a>
-        }
     </div>
 
     <hr />
