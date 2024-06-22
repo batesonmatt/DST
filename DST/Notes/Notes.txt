@@ -2,32 +2,8 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
-List view
-- Consider using SelectLists (IEnumerable<SelectListItem>)                                              ...DONE
-- Sort                                                                                                  ...DONE
-- Catalog                                                                                               ...DONE
-- Type                                                                                                  ...DONE
-- Constellation                                                                                         ...DONE
-- Season                                                                                                ...DONE
-- Trajectory                                                                                            ...DONE
-- Remove .filter-group class style                                                                      ...DONE
-- remove Sort.GetFields()                                                                               ...DONE
-
-Revise Search List toggle filters                                                                       ...DONE
-- Create post methods for each button                                                                   ...DONE
-- Toggle related filters in the method/route class before redirecting to List                           ...DONE
-- Use bootstrap switches (checkbox)                                                                     ...DONE
-
-Move Period css styles to layout.css                                                                    ...DONE
-
-Revise Search List sort direction buttons
-- Use bootstrap radio buttons
-- Consider bootstrap icons
-
-Consider removing @using DST.Models.DataLayer.Query from _ViewImports
-- Only if I revise the search list toggle filters and sort direction markup
-
 Consider revising all SelectList definitions to replace == with SeoEquals
+- update TextValuePair with single arg constructor for using same value as text
 
 ---------------------------------------------------------------------------
 Bootstrap Misc
