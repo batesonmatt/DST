@@ -85,13 +85,25 @@
         <div class="mb-3">
             @{
                 routes = current.Clone();
-
-                routes.SortAscending();
-                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()">@OrderDirection.Ascending</a>
-
-                routes.SortDescending();
-                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()">@OrderDirection.Descending</a>
             }
+            <div class="btn-group" role="group">
+                @{
+                    routes.SortAscending();
+                    active = current.SortDirection.Active(OrderDirection.AscendingAbbr);
+                }
+                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()" class="btn btn-light @active"
+                    role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="@OrderDirection.Ascending">
+                        <i class="bi bi-sort-up"></i>
+                </a>
+                @{
+                    routes.SortDescending();
+                    active = current.SortDirection.Active(OrderDirection.DescendingAbbr);
+                }
+                <a asp-action="List" asp-all-route-data="@routes.ToDictionary()" class="btn btn-light @active"
+                    role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="@OrderDirection.Descending">
+                        <i class="bi bi-sort-down"></i>
+                </a>
+            </div>
         </div>
 
         <hr />
