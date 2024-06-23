@@ -2,43 +2,34 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
-Consider revising all SelectList definitions to replace == with SeoEquals
-- update TextValuePair with single arg constructor for using same value as text
+Use a single form for the Search List options (Sort and Filter).
+Use a new model class, SearchSortFilterModel
+Use a single HttpPost action method, SubmitSearchSortFilter
+For toggle filters, need to bind to boolean properties
+    (right now they're just posting nothing and toggling the filter).
+Consider using radio buttons for Local, Visible, and Rising filters.
+Redirect to List
+
+Reconsider the paging endpoint as a landing route for the Search page.
+- pattern: {controller}/{action}
+- Example: .../search/index or just .../search
+- Do not redirect to List from SearchController.Index
+- Need new view for Search.Index
+
+- Consider a partial view for the filters, sort, search, etc.
+  Include this for both the Index and List views.
+- Put inside a modal
 
 ---------------------------------------------------------------------------
-Bootstrap Misc
+Bootstrap/HTML Misc
 
-Text Interactions (Text selection)                                                                      ...IN PROGRESS
-- https://getbootstrap.com/docs/5.0/utilities/interactions/
-
-Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text).               ...IN PROGRESS
-
-Use floating labels for the form controls.                                                              ...IN PROGRESS
-
-Consider class="display-#" for certain headings (like the banners)
-
-Consider Collapse control for tooltips
+Tooltips
+- Consider hover over hint icon
+- Consider Collapse control for tooltips
 - https://getbootstrap.com/docs/5.0/components/collapse/
 - OR, consider tooltips and popovers for informational stuff
   https://getbootstrap.com/docs/5.0/components/tooltips/
   https://getbootstrap.com/docs/5.0/components/popovers/
-
-Consider Bootstrap input groups for tracking forms:
-- https://getbootstrap.com/docs/5.0/forms/input-group/
-  | #    | Days     |  for every  | #    | Days
-
-Navbar
-- Consider redesigning styles for navbar-toggler and navbar-dark.
-
-Icons
-- https://icons.getbootstrap.com/
-
----------------------------------------------------------------------------
-
-HTML Misc
-
-Fixed runtime markup issues (See Inspect->Issues section for all views.)
-- Remove asp-for attribute on label elements, and replace with the correct element id.                  ...IN PROGRESS
 
 ---------------------------------------------------------------------------
 
@@ -48,9 +39,11 @@ Query update
 - Revise all queries (SearchQueryOptions, QueryOptions, Repository) to avoid Linq to Objects
     so that they may be converted to valid SQL.
   See initial call to ToList in Repository.BuildQuery.
-  We need to avoid this call because it adds unnecessary overhead by selecting all the data first, then again in Repository.List.
-- Consider a new SQL Server Database Project to keep track of changes to the database and to store scripts
-  DST.Database
+  We need to avoid this call because it adds unnecessary overhead by selecting all the data 
+  first, then again in Repository.List.
+- Consider a new SQL Server Database Project to keep track of changes to the database 
+    and to store scripts
+    (DST.Database)
 - https://stackoverflow.com/questions/194652/sql-server-regular-expressions-in-t-sql
 - https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping
 
@@ -61,19 +54,22 @@ Consider admin pages so that I may conveniently keep the Dso items up to date (?
 
 Redesign views
 
+Icons
+- https://icons.getbootstrap.com/
+
+Consider class="display-#" for certain headings (like the banners)
+
 List
-- Consider a modal for the options on small screens
-- Consider putting all filters, sorting, and search options inside a single form.
-  Use a single post action method to apply the options (with helper methods), then redirect to List.
-  For toggle filters, need to bind to boolean properties (right now they're just posting nothing and toggling the filter).
-- Consider using radio buttons for Local, Visible, and Rising filters.
-- Consider expanding/collapsable controls for the filter/sort lists
-  https://getbootstrap.com/docs/5.0/components/accordion/
-  https://getbootstrap.com/docs/5.0/components/collapse/
 
 Details
 
-Track
+Summary
+- Consider moving the Algorithm SelectList off to the side/top, in a modal, etc.
+  Use floating label for the SelectList
+
+Phase
+
+Period
 
 Shared
 
@@ -84,6 +80,21 @@ Consider selecting a random object and display its info
   https://getbootstrap.com/docs/5.0/components/carousel/
 
 About
+
+Navbar
+- Consider redesigning styles for navbar-toggler and navbar-dark.
+  _HeaderFooterLayout
+
+Footer
+
+Consider Bootstrap input groups for tracking forms:
+- https://getbootstrap.com/docs/5.0/forms/input-group/
+  | #    | Days     |  for every  | #    | Days
+
+Text Interactions (Text selection)
+- https://getbootstrap.com/docs/5.0/utilities/interactions/
+
+Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text)
 
 ---------------------------------------------------------------------------
 
