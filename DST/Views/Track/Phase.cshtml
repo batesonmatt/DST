@@ -41,31 +41,33 @@
     {
         <div class="mb-3">
             <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="mb-3">
-                    <label class="form-label" asp-for="TrackForm.Algorithm">Timekeeping Algorithm</label>
-                    <select id="select-phase-algorithm" class="form-control" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
+                <div class="form-floating mb-3">
+                    <select id="select-phase-algorithm" class="form-select" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
+                    <label class="form-label user-select-none" for="select-phase-algorithm">Timekeeping Algorithm</label>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" asp-for="TrackForm.Phase">Phase</label>
-                    <select id="select-phase" class="form-control" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
+                <div class="form-floating mb-3">
+                    <select id="select-phase" class="form-select" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
+                    <label class="form-label user-select-none" for="select-phase">Phase</label>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" asp-for="TrackForm.Start">Start</label>
+                <div class="form-floating mb-3">
                     <input id="input-phase-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
+                    <label class="form-label user-select-none" for="input-phase-start">Start</label>
                     <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <div class="form-check form-switch">
                         <input id="input-phase-single" class="form-check-input" data-bs-toggle="collapse" href="#phase-collapse" role="button"
                                asp-for="TrackForm.IsTrackOnce" type="checkbox" checked="@Model.TrackForm.IsTrackOnce" onchange="phaseTrackOnce()" />
-                        <label class="form-label" asp-for="TrackForm.IsTrackOnce">Track Once</label>
+                        <label class="form-label" for="input-phase-single">Track Once</label>
                     </div>
                 </div>
                 <div id="phase-collapse" class="collapse @current.TrackOnce.Show() mb-3">
-                    <label class="form-label" asp-for="TrackForm.Cycles">Cycles</label>
-                    <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles"
-                           disabled="@Model.TrackForm.IsTrackOnce" />
-                    <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
+                    <div class="form-floating">
+                        <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles"
+                               disabled="@Model.TrackForm.IsTrackOnce" />
+                        <label class="form-label user-select-none" for="input-phase-cycles">Cycles</label>
+                        <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
