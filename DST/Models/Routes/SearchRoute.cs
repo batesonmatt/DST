@@ -1,4 +1,5 @@
-﻿using DST.Models.DataLayer.Query;
+﻿using DST.Models.BusinessLogic;
+using DST.Models.DataLayer.Query;
 using DST.Models.DomainModels;
 using DST.Models.Extensions;
 using System.Collections.Generic;
@@ -16,9 +17,7 @@ namespace DST.Models.Routes
         public string Constellation { get; set; } = Filter.All;
         public string Season { get; set; } = Filter.All;
         public string Trajectory { get; set; } = Filter.All;
-        public string Local { get; set; } = Filter.Off;
-        public string Visible { get; set; } = Filter.Off;
-        public string Rising { get; set; } = Filter.Off;
+        public string Visibility { get; set; } = Filter.Any;
         public string HasName { get; set; } = Filter.Off;
         public string Search {  get; set; } = string.Empty;
 
@@ -34,9 +33,10 @@ namespace DST.Models.Routes
         [JsonIgnore] public bool IsFilterByConstellation => !Constellation.IsFilterAll();
         [JsonIgnore] public bool IsFilterBySeason => !Season.IsFilterAll();
         [JsonIgnore] public bool IsFilterByTrajectory => !Trajectory.IsFilterAll();
-        [JsonIgnore] public bool IsFilterByLocal => Local.IsFilterOn();
-        [JsonIgnore] public bool IsFilterByVisible => Visible.IsFilterOn();
-        [JsonIgnore] public bool IsFilterByRising => Rising.IsFilterOn();
+        [JsonIgnore] public bool IsFilterByVisibility => !Visibility.IsFilterAny();
+        [JsonIgnore] public bool IsFilterByLocal => Visibility.EqualsSeo(VisibilityName.Local);
+        [JsonIgnore] public bool IsFilterByVisible => Visibility.EqualsSeo(VisibilityName.Visible);
+        [JsonIgnore] public bool IsFilterByRising => Visibility.EqualsSeo(VisibilityName.Rising);
         [JsonIgnore] public bool IsFilterByHasName => HasName.IsFilterOn();
         [JsonIgnore] public bool HasSearch => !string.IsNullOrWhiteSpace(Search);
 
@@ -92,14 +92,8 @@ namespace DST.Models.Routes
                 case nameof(Trajectory) when IsFilterByTrajectory:
                     Trajectory = Filter.All;
                     return true;
-                case nameof(Local) when IsFilterByLocal:
-                    Local = Filter.Off;
-                    return true;
-                case nameof(Visible) when IsFilterByVisible:
-                    Visible = Filter.Off;
-                    return true;
-                case nameof(Rising) when IsFilterByRising:
-                    Rising = Filter.Off;
+                case nameof(Visibility) when IsFilterByVisibility:
+                    Visibility = Filter.Any;
                     return true;
                 case nameof(HasName) when IsFilterByHasName:
                     HasName = Filter.Off;
@@ -142,56 +136,19 @@ namespace DST.Models.Routes
             Trajectory = string.IsNullOrWhiteSpace(trajectory) ? Filter.All : trajectory.Trim();
         }
 
+        public void SetVisibility(string visibility)
+        {
+            Visibility = string.IsNullOrWhiteSpace(visibility) ? Filter.Any : visibility.Trim();
+        }
+
         public void SetSearch(string input)
         {
             Search = string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim();
         }
 
-        public void ToggleLocal()
+        public void SetHasName(bool value)
         {
-            if (IsFilterByLocal)
-            {
-                Local = Filter.Off;
-            }
-            else
-            {
-                Local = Filter.On;
-                Visible = Filter.Off;
-                Rising = Filter.Off;
-            }
-        }
-
-        public void ToggleVisible()
-        {
-            if (IsFilterByVisible)
-            {
-                Visible = Filter.Off;
-            }
-            else
-            {
-                Visible = Filter.On;
-                Local = Filter.Off;
-                Rising = Filter.Off;
-            }
-        }
-
-        public void ToggleRising()
-        {
-            if (IsFilterByRising)
-            {
-                Rising = Filter.Off;
-            }
-            else
-            {
-                Rising = Filter.On;
-                Local = Filter.Off;
-                Visible = Filter.Off;
-            }
-        }
-
-        public void ToggleHasName()
-        {
-            HasName = IsFilterByHasName ? Filter.Off : Filter.On;
+            HasName = value ? Filter.On : Filter.Off;
         }
 
         public void ClearSearch()
@@ -208,9 +165,7 @@ namespace DST.Models.Routes
             if (IsFilterByConstellation) filters.Add(nameof(Constellation), Resources.DisplayText.FilterConstellation);
             if (IsFilterBySeason) filters.Add(nameof(Season), Resources.DisplayText.FilterSeason);
             if (IsFilterByTrajectory) filters.Add(nameof(Trajectory), Resources.DisplayText.FilterTrajectory);
-            if (IsFilterByLocal) filters.Add(nameof(Local), Resources.DisplayText.FilterLocal);
-            if (IsFilterByVisible) filters.Add(nameof(Visible), Resources.DisplayText.FilterVisible);
-            if (IsFilterByRising) filters.Add(nameof(Rising), Resources.DisplayText.FilterRising);
+            if (IsFilterByVisibility) filters.Add(nameof(Visibility), Resources.DisplayText.TargetVisibility);
             if (IsFilterByHasName) filters.Add(nameof(HasName), Resources.DisplayText.FilterName);
             if (HasSearch) filters.Add(nameof(Search), Resources.DisplayText.FilterSearch);
 
@@ -231,9 +186,7 @@ namespace DST.Models.Routes
                 { nameof(Constellation), Constellation.ToKebabCase() },
                 { nameof(Season), Season.ToKebabCase() },
                 { nameof(Trajectory), Trajectory.ToKebabCase() },
-                { nameof(Local), Local.ToKebabCase() },
-                { nameof(Visible), Visible.ToKebabCase() },
-                { nameof(Rising), Rising.ToKebabCase() },
+                { nameof(Visibility), Visibility.ToKebabCase() },
                 { nameof(HasName), HasName.ToKebabCase() },
                 { nameof(Search), Search.ToKebabCase() },
             };
@@ -273,38 +226,14 @@ namespace DST.Models.Routes
             {
                 SetTrajectory(Trajectory);
             }
+            if (IsFilterByVisibility)
+            {
+                SetVisibility(Visibility);
+            }
 
-            if (!(Local.IsFilterOn() || Local.IsFilterOff()))
-            {
-                Local = Filter.Off;
-            }
-            if (!(Visible.IsFilterOn() || Visible.IsFilterOff()))
-            {
-                Visible = Filter.Off;
-            }
-            if (!(Rising.IsFilterOn() || Rising.IsFilterOff()))
-            {
-                Rising = Filter.Off;
-            }
             if (!(HasName.IsFilterOn() || HasName.IsFilterOff()))
             {
                 HasName = Filter.Off;
-            }
-
-            if (IsFilterByLocal)
-            {
-                Visible = Filter.Off;
-                Rising = Filter.Off;
-            }
-            if (IsFilterByVisible)
-            {
-                Local = Filter.Off;
-                Rising = Filter.Off;
-            }
-            if (IsFilterByRising)
-            {
-                Local = Filter.Off;
-                Visible = Filter.Off;
             }
 
             if (HasSearch)
