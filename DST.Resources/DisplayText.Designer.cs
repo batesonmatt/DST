@@ -313,6 +313,15 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Any.
+        /// </summary>
+        public static string FilterAny {
+            get {
+                return ResourceManager.GetString("FilterAny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Catalog.
         /// </summary>
         public static string FilterCatalog {
@@ -336,6 +345,15 @@ namespace DST.Resources {
         public static string FilterLocal {
             get {
                 return ResourceManager.GetString("FilterLocal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currently in season.
+        /// </summary>
+        public static string FilterLocalDescription {
+            get {
+                return ResourceManager.GetString("FilterLocalDescription", resourceCulture);
             }
         }
         
@@ -372,6 +390,15 @@ namespace DST.Resources {
         public static string FilterRising {
             get {
                 return ResourceManager.GetString("FilterRising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rising now.
+        /// </summary>
+        public static string FilterRisingDescription {
+            get {
+                return ResourceManager.GetString("FilterRisingDescription", resourceCulture);
             }
         }
         
@@ -426,6 +453,15 @@ namespace DST.Resources {
         public static string FilterVisible {
             get {
                 return ResourceManager.GetString("FilterVisible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Above the horizon.
+        /// </summary>
+        public static string FilterVisibleDescription {
+            get {
+                return ResourceManager.GetString("FilterVisibleDescription", resourceCulture);
             }
         }
         

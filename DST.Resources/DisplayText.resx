@@ -229,6 +229,10 @@
     <value>All</value>
     <comment>The display text for enabling all options in a filter.</comment>
   </data>
+  <data name="FilterAny" xml:space="preserve">
+    <value>Any</value>
+    <comment>The display text for allowing any filter option.</comment>
+  </data>
   <data name="FilterCatalog" xml:space="preserve">
     <value>Catalog</value>
     <comment>The display text for a Catalog filter.</comment>
@@ -240,6 +244,10 @@
   <data name="FilterLocal" xml:space="preserve">
     <value>Local</value>
     <comment>The display text for a Local filter.</comment>
+  </data>
+  <data name="FilterLocalDescription" xml:space="preserve">
+    <value>Currently in season</value>
+    <comment>The alternative display text for a Local filter.</comment>
   </data>
   <data name="FilterName" xml:space="preserve">
     <value>Name</value>
@@ -256,6 +264,10 @@
   <data name="FilterRising" xml:space="preserve">
     <value>Rising</value>
     <comment>The display text for a Rising filter.</comment>
+  </data>
+  <data name="FilterRisingDescription" xml:space="preserve">
+    <value>Rising now</value>
+    <comment>The alternative display text for a Rising filter.</comment>
   </data>
   <data name="FilterSearch" xml:space="preserve">
     <value>Search</value>
@@ -280,6 +292,10 @@
   <data name="FilterVisible" xml:space="preserve">
     <value>Visible</value>
     <comment>The display text for a Visible filter.</comment>
+  </data>
+  <data name="FilterVisibleDescription" xml:space="preserve">
+    <value>Above the horizon</value>
+    <comment>The alternative display text for a Visible filter.</comment>
   </data>
   <data name="LatitudeValidationMessage" xml:space="preserve">
     <value>Latitude must be in the range from -90.0 to 90.0</value>
