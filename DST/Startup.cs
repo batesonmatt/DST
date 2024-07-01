@@ -58,6 +58,7 @@ namespace DST
             services.AddTransient<ISearchBuilder, SearchBuilder>();
             services.AddTransient<ITrackPhaseBuilder, TrackPhaseBuilder>();
             services.AddTransient<ITrackPeriodBuilder, TrackPeriodBuilder>();
+            // services.AddTransient<ISortFilterBuilder, SortFilterBuilder>();
 
             // Make URLs lowercase and end with a trailing slash.
             services.AddRouting(options =>
@@ -150,7 +151,7 @@ namespace DST
                     name: "filtering",
                     pattern: "{controller}/{action}/page/{pagenumber}/size/{pagesize}/sort/{sortfield}/{sortdirection}/" +
                     "filter/type-{type}/catalog-{catalog}/constellation-{constellation}/season-{season}/trajectory-{trajectory}/" +
-                    "local-{local}/visible-{visible}/rising-{rising}/hasname-{hasname}/{search?}");
+                    "visibility-{visibility}/hasname-{hasname}/{search?}");
 
                 // Paging route
                 //endpoints.MapControllerRoute(
