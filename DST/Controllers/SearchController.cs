@@ -139,89 +139,43 @@ namespace DST.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitSortField(SearchRoute values, string sort)
-        {
-            values.SetSort(sort);
-
-            return RedirectToAction("List", values.ToDictionary());
-        }
-
-        [HttpPost]
         public IActionResult SubmitPageSize(SearchRoute values, int size)
         {
             values.SetPageSize(size);
 
             return RedirectToAction("List", values.ToDictionary());
         }
-
+        
         [HttpPost]
-        public IActionResult SubmitCatalogFilter(SearchRoute values, string catalog)
+        public IActionResult SubmitSortFilter(
+            //[FromServices] ISortFilterBuilder sortFilterBuilder,
+            SortFilterModel sortFilter,
+            SearchRoute values)
         {
-            values.SetCatalog(catalog);
+            // Check server-side validation state.
+            if (!ModelState.IsValid)
+            {
+                // The view is not being re-rendered here, so any server-side validation messages will not be shown.
+                return RedirectToAction("List", values.ToDictionary());
+            }
 
-            return RedirectToAction("List", values.ToDictionary());
-        }
+            values.SetSort(sortFilter.SortField);
+            values.SetCatalog(sortFilter.Catalog);
+            values.SetType(sortFilter.Type);
+            values.SetConstellation(sortFilter.Constellation);
+            values.SetSeason(sortFilter.Season);
+            values.SetTrajectory(sortFilter.Trajectory);
+            values.SetVisibility(sortFilter.Visibility);
+            values.SetHasName(sortFilter.IsFilterByHasName);
 
-        [HttpPost]
-        public IActionResult SubmitTypeFilter(SearchRoute values, string type)
-        {
-            values.SetType(type);
+            // Load the previous sort-filter entry, if any.
+            // sortFilterBuilder.Load();
 
-            return RedirectToAction("List", values.ToDictionary());
-        }
+            // Set the current sort-filter entry.
+            // sortFilterBuilder.CurrentSortFilter = sortFilter;
 
-        [HttpPost]
-        public IActionResult SubmitConstellationFilter(SearchRoute values, string constellation)
-        {
-            values.SetConstellation(constellation);
-
-            return RedirectToAction("List", values.ToDictionary());
-        }
-
-        [HttpPost]
-        public IActionResult SubmitSeasonFilter(SearchRoute values, string season)
-        {
-            values.SetSeason(season);
-
-            return RedirectToAction("List", values.ToDictionary());
-        }
-
-        [HttpPost]
-        public IActionResult SubmitTrajectoryFilter(SearchRoute values, string trajectory)
-        {
-            values.SetTrajectory(trajectory);
-
-            return RedirectToAction("List", values.ToDictionary());
-        }
-
-        [HttpPost]
-        public IActionResult SubmitLocalFilter(SearchRoute values)
-        {
-            values.ToggleLocal();
-
-            return RedirectToAction("List", values.ToDictionary());
-        }
-
-        [HttpPost]
-        public IActionResult SubmitVisibleFilter(SearchRoute values)
-        {
-            values.ToggleVisible();
-
-            return RedirectToAction("List", values.ToDictionary());
-        }
-
-        [HttpPost]
-        public IActionResult SubmitRisingFilter(SearchRoute values)
-        {
-            values.ToggleRising();
-
-            return RedirectToAction("List", values.ToDictionary());
-        }
-
-        [HttpPost]
-        public IActionResult SubmitHasNameFilter(SearchRoute values)
-        {
-            values.ToggleHasName();
+            // Save the sort-filter entry to session state.
+            // sortFilterBuilder.Save();
 
             return RedirectToAction("List", values.ToDictionary());
         }
@@ -231,10 +185,20 @@ namespace DST.Controllers
             [FromServices] ISearchRouteBuilder routeBuilder,
             [FromServices] IGeolocationBuilder geoBuilder,
             [FromServices] ISearchBuilder searchBuilder,
+            //[FromServices] ISortFilterBuilder sortFilterBuilder,
             SearchRoute values)
         {
             // Validate route values.
             values.Validate();
+
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
+            // Load the client's previous search entry, if any.
+            searchBuilder.Load();
+
+            // Load the previous sort-filter entry, if any.
+            // sortFilterBuilder.Load();
 
             // Set initial options from the route segments.
             SearchQueryOptions options = new()
@@ -246,12 +210,6 @@ namespace DST.Controllers
                 PageSize = values.PageSize,
                 SortDirection = values.SortDirection
             };
-
-            // Load the client geolocation, if any.
-            geoBuilder.Load();
-
-            // Load the client's previous search entry, if any.
-            searchBuilder.Load();
 
             options.SortFilter(values, geoBuilder.CurrentGeolocation, searchBuilder.CurrentSearch);
 
@@ -279,9 +237,25 @@ namespace DST.Controllers
             IEnumerable<SelectListItem> trajectories = TrajectoryName.GetTextValuePairs().Select(
                 i => new SelectListItem(i.Text, i.Value, i.Value == values.Trajectory));
 
+            IEnumerable<SelectListItem> visibilities = VisibilityName.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.Visibility));
+
             SearchListViewModel viewModel = new()
             {
                 Search = searchBuilder.CurrentSearch,
+
+                SortFilter = new SortFilterModel()
+                {
+                    SortField = values.SortField,
+                    Catalog = values.Catalog,
+                    Type = values.Type,
+                    Constellation = values.Constellation,
+                    Season = values.Season,
+                    Trajectory = values.Trajectory,
+                    Visibility = values.Visibility,
+                    IsFilterByHasName = values.IsFilterByHasName
+                },
+
                 SortFields = sortFields,
                 PageSizes = pageSizes,
                 DsoItems = data.DsoItems.List(options),
@@ -289,7 +263,8 @@ namespace DST.Controllers
                 Types = types,
                 Constellations = constellations,
                 Seasons = seasons,
-                Trajectories = trajectories
+                Trajectories = trajectories,
+                Visibilities = visibilities
             };
 
             int count = data.DsoItems.Count;
