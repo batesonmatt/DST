@@ -12,7 +12,7 @@
                     <div class="form-floating mb-3">
                         <input id="input-timezone" class="form-control" type="hidden" asp-for="Geolocation.UserTimeZoneId" value="@Model.Geolocation.TimeZoneId" />
                         <select id="select-timezone" class="form-select" asp-for="Geolocation.TimeZoneId" asp-items="@Model.TimeZones"></select>
-                        <label class="form-label user-select-none" for="input-timezone">Time Zone</label>
+                        <label class="form-label user-select-none" for="select-timezone">Time Zone</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input id="input-latitude" class="form-control" asp-for="Geolocation.Latitude" type="number" value="@Model.Geolocation.Latitude" />
