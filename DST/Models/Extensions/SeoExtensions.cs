@@ -101,6 +101,11 @@ namespace DST.Models.Extensions
             return value.EqualsSeo(Filter.All);
         }
 
+        public static bool IsFilterAny(this string value)
+        {
+            return value.EqualsSeo(Filter.Any);
+        }
+
         public static bool IsFilterOff(this string value)
         {
             return value.EqualsSeo(Filter.Off);
