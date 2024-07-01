@@ -2,34 +2,28 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
-Use a single form for the Search List options (Sort and Filter).
-Use a new model class, SearchSortFilterModel
-Use a single HttpPost action method, SubmitSearchSortFilter
-For toggle filters, need to bind to boolean properties
-    (right now they're just posting nothing and toggling the filter).
-Consider using radio buttons for Local, Visible, and Rising filters.
-Redirect to List
+use a selectlist for Visibility                                                         ...DONE
+- "Any" => any                                                                          ...DONE
+- "Currently in season" => local                                                        ...DONE
+- "Above the horizon" => visible                                                        ...DONE
+- "Rising now" => rising                                                                ...DONE
+- Add resource strings for the value and description                                    ...DONE
+- Revise route segments                                                                 ...DONE
+- revise route class and affected code                                                  ...DONE
 
-Reconsider the paging endpoint as a landing route for the Search page.
-- pattern: {controller}/{action}
-- Example: .../search/index or just .../search
-- Do not redirect to List from SearchController.Index
-- Need new view for Search.Index
+Use a single form for the Search List options (Sort and Filter).                        ...DONE
+Use a new model class, SearchSortFilterModel                                            ...DONE
+Add ISearchSortFilterBuilder and SearchSortFilterBuilder                                ...DONE
+Enable DI for ISearchSortFilterBuilder                                                  ...DONE
+Add SearchSortFilterModel SortFilter property to SearchListViewModel                    ...DONE
+Use a single HttpPost action method, SubmitSearchSortFilter                             ...DONE
+For toggle filters, need to bind to boolean properties                                  ...DONE
+Local, Visible, and Rising filters are mutually exclusive.                              ...DONE
+Redirect to List                                                                        ...DONE
 
 - Consider a partial view for the filters, sort, search, etc.
-  Include this for both the Index and List views.
-- Put inside a modal
-
----------------------------------------------------------------------------
-Bootstrap/HTML Misc
-
-Tooltips
-- Consider hover over hint icon
-- Consider Collapse control for tooltips
-- https://getbootstrap.com/docs/5.0/components/collapse/
-- OR, consider tooltips and popovers for informational stuff
-  https://getbootstrap.com/docs/5.0/components/tooltips/
-  https://getbootstrap.com/docs/5.0/components/popovers/
+- Put inside a modal for small-medium screens, left side for large screens
+  Same for Period and Phase forms.
 
 ---------------------------------------------------------------------------
 
@@ -52,6 +46,18 @@ Consider admin pages so that I may conveniently keep the Dso items up to date (?
 
 ---------------------------------------------------------------------------
 
+Bootstrap/HTML Misc
+
+Tooltips (Do not use the Tooltip compoenent, which relies on the Popper library)
+- Consider hover over hint icon
+- Consider Collapse control for tooltips
+- https://getbootstrap.com/docs/5.0/components/collapse/
+- OR, consider tooltips and popovers for informational stuff
+  https://getbootstrap.com/docs/5.0/components/tooltips/
+  https://getbootstrap.com/docs/5.0/components/popovers/
+
+---------------------------------------------------------------------------
+
 Redesign views
 
 Icons
@@ -59,9 +65,18 @@ Icons
 
 Consider class="display-#" for certain headings (like the banners)
 
+Forms
+- Use .form-text class
+- Users might disable JavaScript.
+  Consider a message stating JavaScript must be enabled on this browser to run scripts.
+
 List
 
 Details
+
+Geolocation
+- revise buttons on small screen
+- consider link for "Use my location"
 
 Summary
 - Consider moving the Algorithm SelectList off to the side/top, in a modal, etc.
