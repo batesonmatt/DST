@@ -74,18 +74,6 @@
             @{
                 routes = current.Clone();
             }
-            <form asp-action="SubmitSortField" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-floating">
-                    <select name="sort" id="select-search-sort" class="form-select" onchange="this.form.submit();" asp-items="@Model.SortFields"></select>
-                    <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
-                </div>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-            }
             <div class="btn-group" role="group">
                 @{
                     routes.SortAscending();
@@ -113,114 +101,41 @@
                 routes = current.Clone();
                 routes.PageNumber = 1;
             }
-            <form asp-action="SubmitCatalogFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-floating">
-                    <select name="catalog" id="select-search-catalog" class="form-select" onchange="this.form.submit();" asp-items="@Model.Catalogs"></select>
+            <form id="form-search-sort-filter" class="mb-5" asp-action="SubmitSortFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
+                <div class="form-floating mb-3">
+                    <select id="select-search-sort" class="form-select" asp-for="SortFilter.SortField" asp-items="@Model.SortFields"></select>
+                    <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <select id="select-search-catalog" class="form-select" asp-for="SortFilter.Catalog" asp-items="@Model.Catalogs"></select>
                     <label class="form-label user-select-none" for="select-search-catalog">Catalog</label>
                 </div>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-                routes.PageNumber = 1;
-            }
-            <form asp-action="SubmitTypeFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-floating">
-                    <select name="type" id="select-search-type" class="form-select" onchange="this.form.submit();" asp-items="@Model.Types"></select>
+                <div class="form-floating mb-3">
+                    <select id="select-search-type" class="form-select" asp-for="SortFilter.Type" asp-items="@Model.Types"></select>
                     <label class="form-label user-select-none" for="select-search-type">Type</label>
                 </div>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-                routes.PageNumber = 1;
-            }
-            <form asp-action="SubmitConstellationFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-floating">
-                    <select name="constellation" id="select-search-constellation" class="form-select" onchange="this.form.submit();" asp-items="@Model.Constellations"></select>
+                <div class="form-floating mb-3">
+                    <select id="select-search-constellation" class="form-select" asp-for="SortFilter.Constellation" asp-items="@Model.Constellations"></select>
                     <label class="form-label user-select-none" for="select-search-constellation">Constellation</label>
                 </div>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-                routes.PageNumber = 1;
-            }
-            <form asp-action="SubmitSeasonFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-floating">
-                    <select name="season" id="select-search-season" class="form-select" onchange="this.form.submit();" asp-items="@Model.Seasons"></select>
+                <div class="form-floating mb-3">
+                    <select id="select-search-season" class="form-select" asp-for="SortFilter.Season" asp-items="@Model.Seasons"></select>
                     <label class="form-label user-select-none" for="select-search-season">Season</label>
                 </div>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-                routes.PageNumber = 1;
-            }
-            <form asp-action="SubmitTrajectoryFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-floating">
-                    <select name="trajectory" id="select-search-trajectory" class="form-select" onchange="this.form.submit();" asp-items="@Model.Trajectories"></select>
+                <div class="form-floating mb-3">
+                    <select id="select-search-trajectory" class="form-select" asp-for="SortFilter.Trajectory" asp-items="@Model.Trajectories"></select>
                     <label class="form-label user-select-none" for="select-search-trajectory">Trajectory</label>
                 </div>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-                routes.PageNumber = 1;
-            }
-            <form asp-action="SubmitLocalFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-check form-switch">
-                    <input id="input-search-local" class="form-check-input" type="checkbox" checked="@current.IsFilterByLocal" onchange="this.form.submit();" />
-                    <label class="form-label" for="input-search-local">Local</label>
+                <div class="form-floating mb-3">
+                    <select id="select-search-visibility" class="form-select" asp-for="SortFilter.Visibility" asp-items="@Model.Visibilities"></select>
+                    <label class="form-label user-select-none" for="select-search-visibility">Visibility</label>
                 </div>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-                routes.PageNumber = 1;
-            }
-            <form asp-action="SubmitVisibleFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-check form-switch">
-                    <input id="input-search-visible" class="form-check-input" type="checkbox" checked="@current.IsFilterByVisible" onchange="this.form.submit();" />
-                    <label class="form-label" for="input-search-visible">Visible</label>
-                </div>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-                routes.PageNumber = 1;
-            }
-            <form asp-action="SubmitRisingFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-check form-switch">
-                    <input id="input-search-rising" class="form-check-input" type="checkbox" checked="@current.IsFilterByRising" onchange="this.form.submit();" />
-                    <label class="form-label" for="input-search-rising">Rising</label>
-                </div>
-            </form>
-        </div>
-
-        <div class="mb-3">
-            @{
-                routes = current.Clone();
-                routes.PageNumber = 1;
-            }
-            <form asp-action="SubmitHasNameFilter" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-check form-switch">
-                    <input id="input-search-hasname" class="form-check-input" type="checkbox" checked="@current.IsFilterByHasName" onchange="this.form.submit();" />
+                <div class="form-check form-switch my-3">
+                    <input id="input-search-hasname" class="form-check-input" asp-for="SortFilter.IsFilterByHasName" type="checkbox" checked="@Model.SortFilter.IsFilterByHasName" />
                     <label class="form-label" for="input-search-hasname">Has name</label>
+                </div>
+                <div class="mb-3">
+                    <button id="form-search-sort-filter-submit" class="btn btn-primary" type="submit">Apply</button>
                 </div>
             </form>
         </div>
