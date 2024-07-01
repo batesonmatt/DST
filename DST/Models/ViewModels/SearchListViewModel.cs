@@ -11,6 +11,7 @@ namespace DST.Models.ViewModels
 
         public SearchRoute CurrentRoute { get; set; }
         public SearchModel Search { get; set; }
+        public SortFilterModel SortFilter { get; set; }
         public IEnumerable<DsoModel> DsoItems { get; set; }
 
         public IEnumerable<SelectListItem> SortFields { get; set; }
@@ -20,6 +21,7 @@ namespace DST.Models.ViewModels
         public IEnumerable<SelectListItem> Constellations { get; set; }
         public IEnumerable<SelectListItem> Seasons { get; set; }
         public IEnumerable<SelectListItem> Trajectories { get; set; }
+        public IEnumerable<SelectListItem> Visibilities { get; set; }
 
         public string Results { get; set; }
         public int TotalPages { get; set; }
