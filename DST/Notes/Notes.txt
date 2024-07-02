@@ -2,53 +2,12 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
-use a selectlist for Visibility                                                         ...DONE
-- "Any" => any                                                                          ...DONE
-- "Currently in season" => local                                                        ...DONE
-- "Above the horizon" => visible                                                        ...DONE
-- "Rising now" => rising                                                                ...DONE
-- Add resource strings for the value and description                                    ...DONE
-- Revise route segments                                                                 ...DONE
-- revise route class and affected code                                                  ...DONE
+Redesign views
 
-Use a single form for the Search List options (Sort and Filter).                        ...DONE
-Use a new model class, SearchSortFilterModel                                            ...DONE
-Add ISearchSortFilterBuilder and SearchSortFilterBuilder                                ...DONE
-Enable DI for ISearchSortFilterBuilder                                                  ...DONE
-Add SearchSortFilterModel SortFilter property to SearchListViewModel                    ...DONE
-Use a single HttpPost action method, SubmitSearchSortFilter                             ...DONE
-For toggle filters, need to bind to boolean properties                                  ...DONE
-Local, Visible, and Rising filters are mutually exclusive.                              ...DONE
-Redirect to List                                                                        ...DONE
+Icons
+- https://icons.getbootstrap.com/
 
-- Consider a partial view for the filters, sort, search, etc.
-- Put inside a modal for small-medium screens, left side for large screens
-  Same for Period and Phase forms.
-
----------------------------------------------------------------------------
-
-Project Misc
-
-Query update
-- Revise all queries (SearchQueryOptions, QueryOptions, Repository) to avoid Linq to Objects
-    so that they may be converted to valid SQL.
-  See initial call to ToList in Repository.BuildQuery.
-  We need to avoid this call because it adds unnecessary overhead by selecting all the data 
-  first, then again in Repository.List.
-- Consider a new SQL Server Database Project to keep track of changes to the database 
-    and to store scripts
-    (DST.Database)
-- https://stackoverflow.com/questions/194652/sql-server-regular-expressions-in-t-sql
-- https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping
-
-Consider admin pages so that I may conveniently keep the Dso items up to date (?)
-- Could also be used to update other site info, like home page announcements.
-
----------------------------------------------------------------------------
-
-Bootstrap/HTML Misc
-
-Tooltips (Do not use the Tooltip compoenent, which relies on the Popper library)
+Tooltips (Do not use the Tooltip component, which relies on the Popper library)
 - Consider hover over hint icon
 - Consider Collapse control for tooltips
 - https://getbootstrap.com/docs/5.0/components/collapse/
@@ -56,16 +15,12 @@ Tooltips (Do not use the Tooltip compoenent, which relies on the Popper library)
   https://getbootstrap.com/docs/5.0/components/tooltips/
   https://getbootstrap.com/docs/5.0/components/popovers/
 
----------------------------------------------------------------------------
-
-Redesign views
-
-Icons
-- https://icons.getbootstrap.com/
-
 Consider class="display-#" for certain headings (like the banners)
 
 Forms
+- Consider a partial view for the filters, sort, search, etc.
+- Put inside a modal for small-medium screens, left side for large screens
+  Same for Period and Phase forms.
 - Use .form-text class
 - Users might disable JavaScript.
   Consider a message stating JavaScript must be enabled on this browser to run scripts.
@@ -170,3 +125,23 @@ Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteB
   The routes will be saved to session in the regular actions methods that build the viewmodels and return the views.
 - We don't need a route builder for the summary view.
 - Would need to add any properties not already included in the routes.
+
+Query update
+- Revise all queries (SearchQueryOptions, QueryOptions, Repository) to avoid Linq to Objects
+    so that they may be converted to valid SQL.
+  See initial call to ToList in Repository.BuildQuery.
+  We need to avoid this call because it adds unnecessary overhead by selecting all the data 
+  first, then again in Repository.List.
+- Revise sort-filter form/model so that the posted values are the actual data values/ids (do not use ToKebabCase).
+- Might need to revise TextValuePair to not call ToKebabCase.
+- The TextValuePair.Value property should be the model's key value. (Consider updating the database with INT primary keys)
+- Use ISortFilterBuilder dependency to access the values.
+- Consider a new SQL Server Database Project to keep track of changes to the database 
+    and to store scripts
+    (DST.Database)
+- https://stackoverflow.com/questions/194652/sql-server-regular-expressions-in-t-sql
+- https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping
+
+Admin
+Consider admin pages so that I may conveniently keep the Dso items up to date (?)
+- Could also be used to update other site info, like home page announcements.
