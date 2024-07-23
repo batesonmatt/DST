@@ -7,16 +7,6 @@ Redesign views
 Icons
 - https://icons.getbootstrap.com/
 
-Tooltips (Do not use the Tooltip component, which relies on the Popper library)
-- Consider hover over hint icon
-- Consider Collapse control for tooltips
-- https://getbootstrap.com/docs/5.0/components/collapse/
-- OR, consider tooltips and popovers for informational stuff
-  https://getbootstrap.com/docs/5.0/components/tooltips/
-  https://getbootstrap.com/docs/5.0/components/popovers/
-
-Consider class="display-#" for certain headings (like the banners)
-
 Forms
 - Consider a partial view for the filters, sort, search, etc.
 - Put inside a modal for small-medium screens, left side for large screens
@@ -24,6 +14,12 @@ Forms
 - Use .form-text class
 - Users might disable JavaScript.
   Consider a message stating JavaScript must be enabled on this browser to run scripts.
+
+Tooltips (Do not use the Tooltip component, which relies on the Popper library)
+- Consider hover over hint icon (?) at the end of the text.
+- Consider Collapse or OffCanvas control for tooltips
+
+Consider class="display-#" for certain headings (like the banners)
 
 List
 
@@ -68,12 +64,6 @@ Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end 
 
 ---------------------------------------------------------------------------
 
-Create powershell script(s) to remove/update the database, rebuild the migrations, etc.
-- Run from PMC in visual studio
-- Keep commented out when not running, then uncomment when ready.
-
----------------------------------------------------------------------------
-
 Exception handling and reporting
 
 Enable error reporting via GoDaddy email
@@ -103,6 +93,12 @@ Localization
 
 ---------------------------------------------------------------------------
 
+[Misc]
+
+Create powershell script(s) to remove/update the database, rebuild the migrations, etc.
+- Run from PMC in visual studio
+- Keep commented out when not running, then uncomment when ready.
+
 Period
 - Consider hiding the Aggregate option by default, then only show it when the user
   selects Months/Years and Fixed tracking.
@@ -126,21 +122,21 @@ Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteB
 - We don't need a route builder for the summary view.
 - Would need to add any properties not already included in the routes.
 
-Query update
+Query & Database update
 - Revise all queries (SearchQueryOptions, QueryOptions, Repository) to avoid Linq to Objects
     so that they may be converted to valid SQL.
   See initial call to ToList in Repository.BuildQuery.
   We need to avoid this call because it adds unnecessary overhead by selecting all the data 
   first, then again in Repository.List.
 - Revise sort-filter form/model so that the posted values are the actual data values/ids (do not use ToKebabCase).
-- Might need to revise TextValuePair to not call ToKebabCase.
-- The TextValuePair.Value property should be the model's key value. (Consider updating the database with INT primary keys)
+  Might need to revise TextValuePair to not call ToKebabCase.
+  The TextValuePair.Value property should be the model's key value. (Consider updating the database with INT primary keys)
 - Use ISortFilterBuilder dependency to access the values.
 - Consider a new SQL Server Database Project to keep track of changes to the database 
     and to store scripts
     (DST.Database)
 - https://stackoverflow.com/questions/194652/sql-server-regular-expressions-in-t-sql
-- https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping
+- https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping#mapping-a-method-to-a-custom-sql
 
 Admin
 Consider admin pages so that I may conveniently keep the Dso items up to date (?)
