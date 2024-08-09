@@ -8,14 +8,14 @@ Icons
 - https://icons.getbootstrap.com/
 
 Forms
-- Consider a partial view for the filters, sort, search, etc.
-- Put inside a modal for small-medium screens, left side for large screens
-  Same for Period and Phase forms.
-- Use .form-text class
+(See search sort/filter, phase, period, and Geolocation forms.)
+- Use modals.                                                                                           ...IN PROGRESS
+- Use .form-text class where necessary
 - Users might disable JavaScript.
   Consider a message stating JavaScript must be enabled on this browser to run scripts.
 
 Tooltips (Do not use the Tooltip component, which relies on the Popper library)
+- Revise tooltips on sort order buttons in the List view.
 - Consider hover over hint icon (?) at the end of the text.
 - Consider Collapse or OffCanvas control for tooltips
 
