@@ -1,12 +1,18 @@
-﻿function getLocation()
+﻿const options = {
+    enableHighAccuracy: false,
+    timeout: 5000,
+    maximumAge: 0
+}
+
+function getLocation()
 {
     if (navigator.geolocation)
     {
-        navigator.geolocation.getCurrentPosition(sendToForm, showGeolocationError);
+        navigator.geolocation.getCurrentPosition(sendToForm, showGeolocationError, options);
     }
     else
     {
-        alert("Geolocation is not supported by this browser.");
+        alert("Location service is not available.");
     }
 }
 
@@ -38,12 +44,13 @@ function showGeolocationError(error)
     switch (error.code)
     {
         case error.PERMISSION_DENIED:
+            alert("Location service is blocked for this site. Please allow permission to access this device's location to continue.");
             break;
         case error.POSITION_UNAVAILABLE:
-            alert("Location information is unavailable.");
+            alert("Location service is unavailable.");
             break;
         case error.TIMEOUT:
-            alert("The request to get user location timed out.");
+            alert("The request timed out.");
             break;
         case error.UNKNOWN_ERROR:
         default:
