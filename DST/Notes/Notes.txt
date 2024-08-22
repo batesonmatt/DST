@@ -2,6 +2,10 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
+Rename GeoLocationModel.cs to GeolocationModel.cs to match the class name.
+
+---------------------------------------------------------------------------
+
 Redesign views
 
 Icons
@@ -13,6 +17,12 @@ Forms
 - Use .form-text class where necessary
 - Users might disable JavaScript.
   Consider a message stating JavaScript must be enabled on this browser to run scripts.
+- Use defaultbutton="TheSubmitButtonID" attribute in certain forms where necessary.
+
+Details OffCanvas
+- Use a Modal instead of the OffCanvas
+- Use a single Modal
+- Implement support for varying data in the modal to avoid creating a modal per object in the loop.
 
 Tooltips (Do not use the Tooltip component, which relies on the Popper library)
 - Revise tooltips on sort order buttons in the List view.
