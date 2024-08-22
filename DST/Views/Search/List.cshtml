@@ -16,83 +16,121 @@
     <script src="~/js/misc.js"></script>
 }
 
-<div id="search-container" class="container pt-3">
+<div id="modal-sort-filter" class="modal fade" tabindex="-1" aria-labelledby="modal-sort-filter-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modal-sort-filter-title" class="modal-title user-select-none">Sort and Filter</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @{
+                    routes = current.Clone();
+                    routes.PageNumber = 1;
+                }
+                <form id="form-sort-filter" asp-action="SubmitSortFilter" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableElement('sort-filter-submit')">
+                    <div class="form-floating mb-3">
+                        <select id="select-search-sort" class="form-select" asp-for="SortFilter.SortField" asp-items="@Model.SortFields"></select>
+                        <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select id="select-search-catalog" class="form-select" asp-for="SortFilter.Catalog" asp-items="@Model.Catalogs"></select>
+                        <label class="form-label user-select-none" for="select-search-catalog">Catalog</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select id="select-search-type" class="form-select" asp-for="SortFilter.Type" asp-items="@Model.Types"></select>
+                        <label class="form-label user-select-none" for="select-search-type">Type</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select id="select-search-constellation" class="form-select" asp-for="SortFilter.Constellation" asp-items="@Model.Constellations"></select>
+                        <label class="form-label user-select-none" for="select-search-constellation">Constellation</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select id="select-search-season" class="form-select" asp-for="SortFilter.Season" asp-items="@Model.Seasons"></select>
+                        <label class="form-label user-select-none" for="select-search-season">Season</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select id="select-search-trajectory" class="form-select" asp-for="SortFilter.Trajectory" asp-items="@Model.Trajectories"></select>
+                        <label class="form-label user-select-none" for="select-search-trajectory">Trajectory</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select id="select-search-visibility" class="form-select" asp-for="SortFilter.Visibility" asp-items="@Model.Visibilities"></select>
+                        <label class="form-label user-select-none" for="select-search-visibility">Visibility</label>
+                    </div>
+                    <div class="form-check form-switch my-3">
+                        <input id="input-search-hasname" class="form-check-input" asp-for="SortFilter.IsFilterByHasName" type="checkbox" checked="@Model.SortFilter.IsFilterByHasName" />
+                        <label class="form-label" for="input-search-hasname">Has name</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="sort-filter-submit" class="btn btn-primary" type="submit" disabled>Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <div class="mb-3">
+<div id="offcanvas-search" class="offcanvas offcanvas-top" tabindex="-1">
+    <div class="offcanvas-header">
         @{
             routes = current.Clone();
             routes.PageNumber = 1;
         }
-        <form id="form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()" method="post" oninput="enableElement('form-search-submit')">
-            <div class="input-group mb-3">
-                <input id="input-search" class="form-control" placeholder="Search" asp-for="Search.Input" type="text" value="@Model.Search.Input" />
-                <button id="form-search-submit" class="btn btn-primary" type="submit" disabled>
-                    <i class="bi bi-search"></i>
-                </button>
+        <form id="offcanvas-form-search" class="flex-grow-1" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()"
+              method="post" oninput="enableElement('offcanvas-form-search-submit')" defaultbutton="offcanvas-form-search-submit">
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+            <div class="">
+                <input id="offcanvas-input-search" class="form-control ms-3 mb-3" placeholder="Search" autocomplete="off"
+                    asp-for="Search.Input" type="text" value="@Model.Search.Input" />
+                <button id="offcanvas-form-search-submit" type="submit" disabled hidden></button>
+                <span asp-validation-for="Search.Input" class="text-danger"></span>
             </div>
-            <span asp-validation-for="Search.Input" class="text-danger"></span>
         </form>
     </div>
+</div>
 
-    <hr />
+<div class="container pt-3">
 
-    <div id="sort-filter-modal" class="modal fade" tabindex="-1" aria-labelledby="sort-filter-modal-title">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="sort-filter-modal-title" class="modal-title user-select-none">Sort and Filter</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+    <div class="mb-3">
+        <div class="row">
+            <div class="col col-auto col-md">
+                <div class="d-none d-md-block">
                     @{
                         routes = current.Clone();
                         routes.PageNumber = 1;
                     }
-                    <form id="form-sort-filter" asp-action="SubmitSortFilter" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableElement('sort-filter-submit')">
-                        <div class="form-floating mb-3">
-                            <select id="select-search-sort" class="form-select" asp-for="SortFilter.SortField" asp-items="@Model.SortFields"></select>
-                            <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
+                    <form id="form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()"
+                          method="post" oninput="enableElement('form-search-submit')" defaultbutton="form-search-submit">
+                        <div class="input-group mb-3">
+                            <input id="input-search" class="form-control" placeholder="Search" asp-for="Search.Input" type="text" value="@Model.Search.Input" />
+                            <button id="form-search-submit" class="btn btn-primary" type="submit" disabled>
+                                <i class="bi bi-search"></i>
+                            </button>
                         </div>
-                        <div class="form-floating mb-3">
-                            <select id="select-search-catalog" class="form-select" asp-for="SortFilter.Catalog" asp-items="@Model.Catalogs"></select>
-                            <label class="form-label user-select-none" for="select-search-catalog">Catalog</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <select id="select-search-type" class="form-select" asp-for="SortFilter.Type" asp-items="@Model.Types"></select>
-                            <label class="form-label user-select-none" for="select-search-type">Type</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <select id="select-search-constellation" class="form-select" asp-for="SortFilter.Constellation" asp-items="@Model.Constellations"></select>
-                            <label class="form-label user-select-none" for="select-search-constellation">Constellation</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <select id="select-search-season" class="form-select" asp-for="SortFilter.Season" asp-items="@Model.Seasons"></select>
-                            <label class="form-label user-select-none" for="select-search-season">Season</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <select id="select-search-trajectory" class="form-select" asp-for="SortFilter.Trajectory" asp-items="@Model.Trajectories"></select>
-                            <label class="form-label user-select-none" for="select-search-trajectory">Trajectory</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <select id="select-search-visibility" class="form-select" asp-for="SortFilter.Visibility" asp-items="@Model.Visibilities"></select>
-                            <label class="form-label user-select-none" for="select-search-visibility">Visibility</label>
-                        </div>
-                        <div class="form-check form-switch my-3">
-                            <input id="input-search-hasname" class="form-check-input" asp-for="SortFilter.IsFilterByHasName" type="checkbox" checked="@Model.SortFilter.IsFilterByHasName" />
-                            <label class="form-label" for="input-search-hasname">Has name</label>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="sort-filter-submit" class="btn btn-primary" type="submit" disabled>Apply</button>
-                        </div>
+                        <span asp-validation-for="Search.Input" class="text-danger"></span>
                     </form>
                 </div>
+                <div class="d-md-none">
+                    <a class="btn" role="button" data-bs-toggle="offcanvas" href="#offcanvas-search" onclick="focusElement('offcanvas-input-search')">
+                        <i class="bi bi-search fs-4"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-auto">
+                <a class="btn" role="button" data-bs-toggle="modal" href="#modal-sort-filter">
+                    <i class="bi bi-sliders2 fs-4"></i>
+                </a>
+            </div>
+            <div class="col-auto">
+                @{
+                    routes.PageNumber = 1;
+                }
+                <vc:geolocation-form route="@routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitGeolocation"></vc:geolocation-form>
             </div>
         </div>
     </div>
 
-    <a class="btn btn-light mb-3" role="button" data-bs-toggle="modal" href="#sort-filter-modal">
-        <i class="bi bi-sliders2"></i>
-    </a>
+    <hr />
 
     <div class="mb-3">
         @{
@@ -116,13 +154,6 @@
                 </div>
             }
         }
-    </div>
-
-    <div class="mb-3">
-        @{
-            routes.PageNumber = 1;
-        }
-        <vc:geolocation-form route="@routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitGeolocation"></vc:geolocation-form>
     </div>
 
     <div class="mb-3">
