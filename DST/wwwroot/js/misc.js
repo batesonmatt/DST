@@ -5,3 +5,7 @@
         e.removeAttribute("disabled");
     }
 }
+
+function focusElement(elementId) {
+    setTimeout(() => { document.getElementById(elementId).focus() }, 1000);
+}
