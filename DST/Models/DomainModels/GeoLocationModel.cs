@@ -189,7 +189,7 @@ namespace DST.Models.DomainModels
 
         public string GetCoordinateText()
         {
-            return GetCoordinate().ToString();
+            return GetCoordinate().Format(FormatType.Compact);
         }
 
         #endregion
