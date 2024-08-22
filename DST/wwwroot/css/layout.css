@@ -20,6 +20,10 @@
     --etc-clr-dk: #1C0B2F;
 }
 
+/*.offcanvas-top {
+    --bs-offcanvas-height: 20vh;
+}*/
+
 html {
     font-size: 20px;
     line-height: 1.5;
