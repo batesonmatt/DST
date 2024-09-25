@@ -70,67 +70,36 @@
     </div>
 </div>
 
-<div id="offcanvas-search" class="offcanvas offcanvas-top" tabindex="-1">
-    @{
-        routes = current.Clone();
-        routes.PageNumber = 1;
-    }
-    <form id="offcanvas-form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()"
-          method="post" oninput="enableElement('offcanvas-form-search-submit')" defaultbutton="offcanvas-form-search-submit">
-        <div class="row align-items-center m-3 ms-0">
-            <div class="col-auto text-center p-0">
-                <a class="btn" role="button" data-bs-dismiss="offcanvas">
-                    <i class="bi bi-arrow-left fs-4"></i>
-                </a>
-            </div>
-            <div class="col p-0">
-                <input id="offcanvas-input-search" class="col form-control" placeholder="Search" 
-                    autocomplete="off" asp-for="Search.Input" type="text" value="@Model.Search.Input" />
-                <button id="offcanvas-form-search-submit" type="submit" disabled hidden></button>
-            </div>
-        </div>
-        <div class="row align-items-center m-3 ms-0">
-            <div class="col-1 p-0"></div>
-            <div class="col ps-3 pe-0">
-                <span asp-validation-for="Search.Input" class="text-danger"></span>
-            </div>
-        </div>
-    </form>
-</div>
-
 <div class="container pt-3">
 
     <div class="mb-3">
-        <div class="row">
-            <div class="col col-auto col-md">
-                <div class="d-none d-md-block">
-                    @{
-                        routes = current.Clone();
-                        routes.PageNumber = 1;
-                    }
-                    <form id="form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()"
-                          method="post" oninput="enableElement('form-search-submit')" defaultbutton="form-search-submit">
-                        <div class="input-group mb-3">
-                            <input id="input-search" class="form-control" placeholder="Search" asp-for="Search.Input" type="text" value="@Model.Search.Input" />
-                            <button id="form-search-submit" class="btn btn-primary" type="submit" disabled>
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                        <span asp-validation-for="Search.Input" class="text-danger"></span>
-                    </form>
-                </div>
-                <div class="d-md-none">
-                    <a class="btn" role="button" data-bs-toggle="offcanvas" href="#offcanvas-search" onclick="focusElement('offcanvas-input-search')">
-                        <i class="bi bi-search fs-4"></i>
-                    </a>
-                </div>
+        <div class="row gx-2 gx-lg-5">
+            <div class="col-12 col-md-6 mb-2 mb-md-0">
+                @{
+                    routes = current.Clone();
+                    routes.PageNumber = 1;
+                }
+                <form id="form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()"
+                      method="post" oninput="enableElement('form-search-submit')" defaultbutton="form-search-submit">
+                    <span asp-validation-for="Search.Input" class="text-danger mb-2"></span>
+                    <div class="input-group">
+                        <input id="input-search" class="form-control" placeholder="Search" asp-for="Search.Input" type="text" value="@Model.Search.Input" />
+                        <button id="form-search-submit" class="btn btn-primary" type="submit" disabled>
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="col-auto">
-                <a class="btn" role="button" data-bs-toggle="modal" href="#modal-sort-filter">
-                    <i class="bi bi-sliders2 fs-4"></i>
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                <a class="btn btn-light d-flex justify-content-between justify-content-md-center" role="button" data-bs-toggle="modal" href="#modal-sort-filter">
+                    <div class="d-flex gap-2">
+                        <i class="bi bi-sliders"></i>
+                        <span class="text-truncate">Options</span>
+                    </div>
+                    <i class="bi bi-chevron-right d-md-none"></i>
                 </a>
             </div>
-            <div class="col-auto">
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
                 @{
                     routes.PageNumber = 1;
                 }
