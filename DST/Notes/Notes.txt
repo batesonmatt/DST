@@ -6,6 +6,10 @@ Rename GeoLocationModel.cs to GeolocationModel.cs to match the class name.
 
 ---------------------------------------------------------------------------
 
+Revise all id tags as camelCase
+
+---------------------------------------------------------------------------
+
 Redesign views
 
 Icons
@@ -71,6 +75,10 @@ Text Interactions (Text selection)
 - https://getbootstrap.com/docs/5.0/utilities/interactions/
 
 Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text)
+
+---------------------------------------------------------------------------
+
+Update .NET SDK
 
 ---------------------------------------------------------------------------
 
