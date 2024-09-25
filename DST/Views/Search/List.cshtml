@@ -70,27 +70,28 @@
     </div>
 </div>
 
-<div class="container pt-3">
+<vc:geolocation-form route="@routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitGeolocation"></vc:geolocation-form>
 
-    <div class="mb-3">
-        <div class="row gx-2 gx-lg-5">
-            <div class="col-12 col-md-6 mb-2 mb-md-0">
-                @{
-                    routes = current.Clone();
-                    routes.PageNumber = 1;
-                }
-                <form id="form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()"
-                      method="post" oninput="enableElement('form-search-submit')" defaultbutton="form-search-submit">
-                    <span asp-validation-for="Search.Input" class="text-danger mb-2"></span>
-                    <div class="input-group">
-                        <input id="input-search" class="form-control" placeholder="Search" asp-for="Search.Input" type="text" value="@Model.Search.Input" />
-                        <button id="form-search-submit" class="btn btn-primary" type="submit" disabled>
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="col-12 col-md-3 mb-2 mb-md-0">
+<div id="searchOptionsContainer" class="container-md pt-3 mb-3">
+    <div class="row row-cols-1 row-cols-md-auto gx-2">
+        <div class="flex-md-grow-1 mb-1 mb-md-0">
+            @{
+                routes = current.Clone();
+                routes.PageNumber = 1;
+            }
+            <form id="form-search" asp-action="SubmitSearch" asp-all-route-data="@routes.ToDictionary()"
+                  method="post" oninput="enableElement('form-search-submit')" defaultbutton="form-search-submit">
+                <span asp-validation-for="Search.Input" class="text-danger mb-2"></span>
+                <div class="input-group">
+                    <input id="input-search" class="form-control" placeholder="Search" asp-for="Search.Input" type="text" value="@Model.Search.Input" />
+                    <button id="form-search-submit" class="btn btn-primary" type="submit" disabled>
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div id="optionsCollapse" class="collapse d-md-flex gap-md-2">
+            <div class="mb-1 mb-md-0">
                 <a class="btn btn-light d-flex justify-content-between justify-content-md-center" role="button" data-bs-toggle="modal" href="#modal-sort-filter">
                     <div class="d-flex gap-2">
                         <i class="bi bi-sliders"></i>
@@ -99,16 +100,30 @@
                     <i class="bi bi-chevron-right d-md-none"></i>
                 </a>
             </div>
-            <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <div class="mb-1 mb-md-0">
                 @{
                     routes.PageNumber = 1;
                 }
-                <vc:geolocation-form route="@routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitGeolocation"></vc:geolocation-form>
+                <a class="btn btn-light d-flex justify-content-between justify-content-md-center" role="button" data-bs-toggle="modal" href="#geolocation-modal">
+                    <div class="d-flex gap-2">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span class="text-truncate">Geolocation</span>
+                    </div>
+                    <i class="bi bi-chevron-right d-md-none"></i>
+                </a>
             </div>
         </div>
+        <div class="my-0 d-flex d-md-none justify-content-center">
+            <a class="btn flex-fill pt-0 pb-1" data-bs-toggle="collapse" onclick="toggleCollapseIcon('optionsToggleIcon');" data-toggle-class href="#optionsCollapse"
+                role="button" aria-expanded="false" aria-controls="#optionsCollapse">
+                <i id="optionsToggleIcon" class="bi bi-chevron-compact-down"></i>
+            </a>
+        </div>
+        <hr class="my-0" />
     </div>
+</div>
 
-    <hr />
+<div class="container pt-3">
 
     <div class="mb-3">
         @{
