@@ -30,12 +30,12 @@ body {
     background-attachment: fixed;*/
 }
 
-#searchOptionsContainer {
+.sticky-top-container {
 }
 
 /* Bootstrap Medium (md) Breakpoint - Down */
 @media screen and (max-width: 768px) {
-    #searchOptionsContainer {
+    .sticky-top-container {
         z-index: 1000;
         position: sticky;
         top: 0;
