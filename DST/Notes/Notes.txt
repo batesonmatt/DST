@@ -17,11 +17,22 @@ Icons
 
 Forms
 (See search sort/filter, phase, period, and Geolocation forms.)
-- Use modals.                                                                                           ...IN PROGRESS
 - Use .form-text class where necessary
-- Users might disable JavaScript.
-  Consider a message stating JavaScript must be enabled on this browser to run scripts.
-- Use defaultbutton="TheSubmitButtonID" attribute in certain forms where necessary.
+
+Search filter tags and Track navigation tabs
+- Apply horizontal scrolling on < md screens
+- On the container:
+  overflow-x: auto
+  overflow-y: hidden
+  flex-wrap: nowrap
+- On the items:
+  white-space: nowrap ??
+
+Consider < Back to Search link above object name title in the track views.
+Consider _GeolocationFormTogglerPartial shared view, if possible.
+
+Users might disable JavaScript.
+- Consider a message stating JavaScript must be enabled on this browser to run scripts.
 
 Details OffCanvas
 - Use a Modal instead of the OffCanvas
