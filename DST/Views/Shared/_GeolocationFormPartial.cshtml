@@ -1,14 +1,15 @@
 ﻿@model GeolocationViewModel
 
 <div id="geolocation-modal" class="modal fade" tabindex="-1" aria-labelledby="geolocation-modal-title">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 id="geolocation-modal-title" class="modal-title user-select-none">Geolocation</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="form-geolocation" asp-action="@Model.ActionMethod" asp-all-route-data="@Model.Route" method="post" onchange="enableElement('form-geo-submit')" oninput="enableElement('form-geo-submit')">
+                <form id="form-geolocation" asp-action="@Model.ActionMethod" asp-all-route-data="@Model.Route" method="post"
+                      onchange="enableElement('form-geo-submit')" oninput="enableElement('form-geo-submit')" defaultbutton="form-geo-submit">
                     <div class="form-floating mb-3">
                         <input id="input-timezone" class="form-control" type="hidden" asp-for="Geolocation.UserTimeZoneId" value="@Model.Geolocation.TimeZoneId" />
                         <select id="select-timezone" class="form-select" asp-for="Geolocation.TimeZoneId" asp-items="@Model.TimeZones"></select>
