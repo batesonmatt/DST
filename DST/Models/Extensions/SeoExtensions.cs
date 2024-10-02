@@ -76,6 +76,11 @@ namespace DST.Models.Extensions
             return a == b ? "active" : string.Empty;
         }
 
+        public static string Disabled(this bool value)
+        {
+            return !value ? "disabled" : string.Empty;
+        }
+
         public static string Visibility(this IVector vector)
         {
             return vector.Coordinate.Components.Inclination > 0.0 ? "bi-eye" : "bi-eye-slash";
