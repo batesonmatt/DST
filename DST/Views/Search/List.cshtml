@@ -17,7 +17,7 @@
 }
 
 <div id="modal-sort-filter" class="modal fade" tabindex="-1" aria-labelledby="modal-sort-filter-title">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 id="modal-sort-filter-title" class="modal-title user-select-none">Sort and Filter</h5>
@@ -28,7 +28,8 @@
                     routes = current.Clone();
                     routes.PageNumber = 1;
                 }
-                <form id="form-sort-filter" asp-action="SubmitSortFilter" asp-all-route-data="@routes.ToDictionary()" method="post" onchange="enableElement('sort-filter-submit')">
+                <form id="form-sort-filter" asp-action="SubmitSortFilter" asp-all-route-data="@routes.ToDictionary()" method="post"
+                      onchange="enableElement('sort-filter-submit')" defaultbutton="sort-filter-submit">
                     <div class="form-floating mb-3">
                         <select id="select-search-sort" class="form-select" asp-for="SortFilter.SortField" asp-items="@Model.SortFields"></select>
                         <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
@@ -72,7 +73,7 @@
 
 <vc:geolocation-form route="@routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitGeolocation"></vc:geolocation-form>
 
-<div id="searchOptionsContainer" class="container-md pt-3 mb-3">
+<div class="sticky-top-container container-md pt-3 mt-5 mb-5">
     <div class="row row-cols-1 row-cols-md-auto gx-2">
         <div class="flex-md-grow-1 mb-1 mb-md-0">
             @{
@@ -90,7 +91,7 @@
                 </div>
             </form>
         </div>
-        <div id="optionsCollapse" class="collapse d-md-flex gap-md-2">
+        <div id="searchOptionsCollapse" class="collapse d-md-flex gap-md-2">
             <div class="mb-1 mb-md-0">
                 <a class="btn btn-light d-flex justify-content-between justify-content-md-center" role="button" data-bs-toggle="modal" href="#modal-sort-filter">
                     <div class="d-flex gap-2">
@@ -114,12 +115,12 @@
             </div>
         </div>
         <div class="my-0 d-flex d-md-none justify-content-center">
-            <a class="btn flex-fill pt-0 pb-1" data-bs-toggle="collapse" onclick="toggleCollapseIcon('optionsToggleIcon');" data-toggle-class href="#optionsCollapse"
-                role="button" aria-expanded="false" aria-controls="#optionsCollapse">
+            <a class="btn flex-fill pt-0 pb-1" data-bs-toggle="collapse" onclick="toggleCollapseIcon('optionsToggleIcon');" data-toggle-class href="#searchOptionsCollapse"
+               role="button" aria-expanded="false" aria-controls="#searchOptionsCollapse">
                 <i id="optionsToggleIcon" class="bi bi-chevron-compact-down"></i>
             </a>
         </div>
-        <hr class="my-0" />
+        <hr class="my-0 d-md-none" />
     </div>
 </div>
 
