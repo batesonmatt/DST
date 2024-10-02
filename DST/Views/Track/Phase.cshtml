@@ -6,6 +6,8 @@
 
     TrackPhaseRoute current = Model.CurrentRoute;
     TrackPhaseRoute routes = current.Clone();
+
+    string disabled;
 }
 
 @section scripts {
@@ -16,63 +18,117 @@
     <script src="~/js/phase-toggle.js"></script>
 }
 
-<div class="container pt-3">
+<partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
 
-    <div class="mb-3">
-        <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitPhaseGeolocation"></vc:geolocation-form>
-    </div>
-
-    <partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
-
+<div class="container-md pt-3 mb-3">
     <nav class="nav nav-tabs mb-5">
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Summary" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">Summary</a>
         <a class="nav-item nav-link active">Phase</a>
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">Period</a>
     </nav>
+</div>
+
+<div id="phaseOptionsModal" class="modal fade" tabindex="-1" aria-labelledby="phaseOptionsModalTitle">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="phaseOptionsModalTitle" class="modal-title user-select-none">Phase Tracking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (Model.IsTrackingSupported())
+                {
+                    <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post" defaultbutton="form-phase-submit">
+                        <div class="form-floating mb-3">
+                            <select id="select-phase-algorithm" class="form-select" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
+                            <label class="form-label user-select-none" for="select-phase-algorithm">Timekeeping Algorithm</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select id="select-phase" class="form-select" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
+                            <label class="form-label user-select-none" for="select-phase">Phase</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input id="input-phase-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
+                            <label class="form-label user-select-none" for="input-phase-start">Start</label>
+                            <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input id="input-phase-single" class="form-check-input" data-bs-toggle="collapse" href="#phase-collapse" role="button"
+                                       asp-for="TrackForm.IsTrackOnce" type="checkbox" checked="@Model.TrackForm.IsTrackOnce" onchange="phaseTrackOnce()" />
+                                <label class="form-label" for="input-phase-single">Track Once</label>
+                            </div>
+                        </div>
+                        <div id="phase-collapse" class="collapse @current.TrackOnce.Show() mb-3">
+                            <div class="form-floating">
+                                <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles"
+                                       disabled="@Model.TrackForm.IsTrackOnce" />
+                                <label class="form-label user-select-none" for="input-phase-cycles">Cycles</label>
+                                <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer mb-3">
+                            <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
+                        </div>
+                    </form>
+                }
+                else if (Model.HasWarning())
+                {
+                    <div class="mb-3">
+                        <label class="form-label text-warning">@Model.WarningMessage</label>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitPhaseGeolocation"></vc:geolocation-form>
+
+<div class="sticky-top-container container-md d-md-grid justify-content-md-end pt-3 mb-3">
+    <div class="row row-cols-1 row-cols-md-auto gx-2">
+        <div class="d-none d-md-flex flex-md-grow-1 align-items-center mb-1 mb-md-0">
+            <span class="text-truncate">Start here</span>
+        </div>
+        <div class="mb-1 mb-md-0">
+            @{
+                disabled = Model.IsTrackingSupported().Disabled();
+            }
+            <a class="btn btn-light d-flex justify-content-between justify-content-md-center @disabled" role="button" data-bs-toggle="modal" href="#phaseOptionsModal">
+                <div class="d-flex gap-2">
+                    <i class="bi bi-sliders"></i>
+                    <span class="text-truncate">Options</span>
+                </div>
+                <i class="bi bi-chevron-right d-md-none"></i>
+            </a>
+        </div>
+        <div id="phaseOptionsCollapse" class="collapse d-md-flex gap-md-2">
+            <div class="mb-1 mb-md-0">
+                <a class="btn btn-light d-flex justify-content-between justify-content-md-center" role="button" data-bs-toggle="modal" href="#geolocation-modal">
+                    <div class="d-flex gap-2">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span class="text-truncate">Geolocation</span>
+                    </div>
+                    <i class="bi bi-chevron-right d-md-none"></i>
+                </a>
+            </div>
+        </div>
+        <div class="my-0 d-flex d-md-none justify-content-center">
+            <a class="btn flex-fill pt-0 pb-1" data-bs-toggle="collapse" onclick="toggleCollapseIcon('optionsToggleIcon');" data-toggle-class href="#phaseOptionsCollapse"
+               role="button" aria-expanded="false" aria-controls="#phaseOptionsCollapse">
+                <i id="optionsToggleIcon" class="bi bi-chevron-compact-down"></i>
+            </a>
+        </div>
+        <hr class="my-0 d-md-none" />
+    </div>
+</div>
+
+<div class="container pt-3">
 
     @if (Model.HasWarning())
     {
         <div class="mb-3">
             <label class="form-label text-warning">@Model.WarningMessage</label>
-        </div>
-    }
-
-    @if (Model.IsTrackingSupported())
-    {
-        <div class="mb-3">
-            <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post">
-                <div class="form-floating mb-3">
-                    <select id="select-phase-algorithm" class="form-select" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
-                    <label class="form-label user-select-none" for="select-phase-algorithm">Timekeeping Algorithm</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <select id="select-phase" class="form-select" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
-                    <label class="form-label user-select-none" for="select-phase">Phase</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input id="input-phase-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
-                    <label class="form-label user-select-none" for="input-phase-start">Start</label>
-                    <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <div class="form-check form-switch">
-                        <input id="input-phase-single" class="form-check-input" data-bs-toggle="collapse" href="#phase-collapse" role="button"
-                               asp-for="TrackForm.IsTrackOnce" type="checkbox" checked="@Model.TrackForm.IsTrackOnce" onchange="phaseTrackOnce()" />
-                        <label class="form-label" for="input-phase-single">Track Once</label>
-                    </div>
-                </div>
-                <div id="phase-collapse" class="collapse @current.TrackOnce.Show() mb-3">
-                    <div class="form-floating">
-                        <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles"
-                               disabled="@Model.TrackForm.IsTrackOnce" />
-                        <label class="form-label user-select-none" for="input-phase-cycles">Cycles</label>
-                        <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
-                </div>
-            </form>
         </div>
     }
 

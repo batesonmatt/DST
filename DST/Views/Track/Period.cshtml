@@ -16,19 +16,127 @@
     <script src="~/js/period-toggle.js"></script>
 }
 
-<div class="container pt-3">
+<partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
 
-    <div class="mb-3">
-        <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitPeriodGeolocation"></vc:geolocation-form>
-    </div>
-
-    <partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
-
+<div class="container-md pt-3 mb-3">
     <nav class="nav nav-tabs mb-5">
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Summary" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">Summary</a>
         <a class="nav-item nav-link" asp-controller="Track" asp-action="Phase" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">Phase</a>
         <a class="nav-item nav-link active">Period</a>
     </nav>
+</div>
+
+<div id="periodOptionsModal" class="modal fade" tabindex="-1" aria-labelledby="periodOptionsModalTitle">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="periodOptionsModalTitle" class="modal-title user-select-none">Period Tracking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-period" class="mb-5" asp-action="SubmitPeriod" asp-all-route-data="@routes.ToDictionary()" method="post" defaultbutton="form-period-submit">
+                    <div class="form-floating mb-3">
+                        <select id="select-period-algorithm" class="form-select" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
+                        <label class="form-label user-select-none" for="select-period-algorithm">Timekeeping Algorithm</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input id="input-period-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
+                        <label class="form-label user-select-none" for="input-period-start">Start</label>
+                        <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input id="input-period-single" class="form-check-input" data-bs-toggle="collapse" href="#period-collapse" role="button"
+                                   asp-for="TrackForm.IsTrackOnce" type="checkbox" checked="@Model.TrackForm.IsTrackOnce" onchange="periodTrackOnce()" />
+                            <label class="form-label" for="input-period-single">Track Once</label>
+                        </div>
+                    </div>
+                    <div id="period-collapse" class="collapse @current.TrackOnce.Show()">
+                        <div class="form-floating mb-3">
+                            <select id="select-period-timeunit" class="form-select" asp-for="TrackForm.TimeUnit" asp-items="@Model.TimeUnits"
+                                    onchange="updateFixedTrackingToggle(); updateAggregateToggle()"></select>
+                            <label class="form-label user-select-none" for="select-period-timeunit">Time Unit</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input id="input-period" class="form-control" asp-for="TrackForm.Period" type="number" value="@Model.TrackForm.Period"
+                                   disabled="@Model.TrackForm.IsTrackOnce" />
+                            <label class="form-label user-select-none" for="input-period">Period</label>
+                            <span asp-validation-for="TrackForm.Period" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input id="input-interval" class="form-control" asp-for="TrackForm.Interval" type="number" value="@Model.TrackForm.Interval"
+                                   disabled="@Model.TrackForm.IsTrackOnce" />
+                            <label class="form-label user-select-none" for="input-interval">Interval</label>
+                            <span asp-validation-for="TrackForm.Interval" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input id="input-period-fixed" class="form-check-input" asp-for="TrackForm.IsFixed" type="checkbox" checked="@Model.TrackForm.IsFixed"
+                                       disabled="@(current?.SupportsFixedTracking() == false)" onchange="updateAggregateToggle()" />
+                                <label class="form-label" for="input-period-fixed">Fixed Tracking</label>
+                            </div>
+                            <div id="input-fixed-warning" class="form-text" hidden="@(current?.SupportsFixedTracking())">
+                                Fixed tracking is only supported for days, weeks, months, and years.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input id="input-period-aggregate" class="form-check-input" asp-for="TrackForm.IsAggregated" type="checkbox" checked="@Model.TrackForm.IsAggregated"
+                                       disabled="@(current?.SupportsAggregatedIntervals() == false)" />
+                                <label class="form-label" for="input-period-aggregate">Aggregated Intervals</label>
+                            </div>
+                            <div id="input-aggregate-warning" class="form-text" hidden="@(current?.SupportsAggregatedIntervals())">
+                                Aggregation can only be disabled for fixed tracking in months and years.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mb-3">
+                        <button id="form-period-submit" class="btn btn-primary" type="submit">Track</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitPeriodGeolocation"></vc:geolocation-form>
+
+<div class="sticky-top-container container-md d-md-grid justify-content-md-end pt-3 mb-3">
+    <div class="row row-cols-1 row-cols-md-auto gx-2">
+        <div class="d-none d-md-flex flex-md-grow-1 align-items-center mb-1 mb-md-0">
+            <span class="text-truncate">Start here</span>
+        </div>
+        <div class="mb-1 mb-md-0">
+            <a class="btn btn-light d-flex justify-content-between justify-content-md-center" role="button" data-bs-toggle="modal" href="#periodOptionsModal">
+                <div class="d-flex gap-2">
+                    <i class="bi bi-sliders"></i>
+                    <span class="text-truncate">Options</span>
+                </div>
+                <i class="bi bi-chevron-right d-md-none"></i>
+            </a>
+        </div>
+        <div id="periodOptionsCollapse" class="collapse d-md-flex gap-md-2">
+            <div class="mb-1 mb-md-0">
+                <a class="btn btn-light d-flex justify-content-between justify-content-md-center" role="button" data-bs-toggle="modal" href="#geolocation-modal">
+                    <div class="d-flex gap-2">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span class="text-truncate">Geolocation</span>
+                    </div>
+                    <i class="bi bi-chevron-right d-md-none"></i>
+                </a>
+            </div>
+        </div>
+        <div class="my-0 d-flex d-md-none justify-content-center">
+            <a class="btn flex-fill pt-0 pb-1" data-bs-toggle="collapse" onclick="toggleCollapseIcon('optionsToggleIcon');" data-toggle-class href="#periodOptionsCollapse"
+               role="button" aria-expanded="false" aria-controls="#periodOptionsCollapse">
+                <i id="optionsToggleIcon" class="bi bi-chevron-compact-down"></i>
+            </a>
+        </div>
+        <hr class="my-0 d-md-none" />
+    </div>
+</div>
+
+<div class="container pt-3">
 
     @if (Model.HasWarning())
     {
@@ -36,69 +144,6 @@
             <label class="form-label text-warning">@Model.WarningMessage</label>
         </div>
     }
-
-    <div class="mb-3">
-        <form id="form-period" class="mb-5" asp-action="SubmitPeriod" asp-all-route-data="@routes.ToDictionary()" method="post">
-            <div class="form-floating mb-3">
-                <select id="select-period-algorithm" class="form-select" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
-                <label class="form-label user-select-none" for="select-period-algorithm">Timekeeping Algorithm</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input id="input-period-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
-                <label class="form-label user-select-none" for="input-period-start">Start</label>
-                <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <div class="form-check form-switch">
-                    <input id="input-period-single" class="form-check-input" data-bs-toggle="collapse" href="#period-collapse" role="button"
-                           asp-for="TrackForm.IsTrackOnce" type="checkbox" checked="@Model.TrackForm.IsTrackOnce" onchange="periodTrackOnce()" />
-                    <label class="form-label" for="input-period-single">Track Once</label>
-                </div>
-            </div>
-            <div id="period-collapse" class="collapse @current.TrackOnce.Show()">
-                <div class="form-floating mb-3">
-                    <select id="select-period-timeunit" class="form-select" asp-for="TrackForm.TimeUnit" asp-items="@Model.TimeUnits"
-                        onchange="updateFixedTrackingToggle(); updateAggregateToggle()"></select>
-                    <label class="form-label user-select-none" for="select-period-timeunit">Time Unit</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input id="input-period" class="form-control" asp-for="TrackForm.Period" type="number" value="@Model.TrackForm.Period"
-                           disabled="@Model.TrackForm.IsTrackOnce" />
-                    <label class="form-label user-select-none" for="input-period">Period</label>
-                    <span asp-validation-for="TrackForm.Period" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input id="input-interval" class="form-control" asp-for="TrackForm.Interval" type="number" value="@Model.TrackForm.Interval"
-                           disabled="@Model.TrackForm.IsTrackOnce" />
-                    <label class="form-label user-select-none" for="input-interval">Interval</label>
-                    <span asp-validation-for="TrackForm.Interval" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <div class="form-check form-switch">
-                        <input id="input-period-fixed" class="form-check-input" asp-for="TrackForm.IsFixed" type="checkbox" checked="@Model.TrackForm.IsFixed"
-                               disabled="@(current?.SupportsFixedTracking() == false)" onchange="updateAggregateToggle()" />
-                        <label class="form-label" for="input-period-fixed">Fixed Tracking</label>
-                    </div>
-                    <div id="input-fixed-warning" class="form-text" hidden="@(current?.SupportsFixedTracking())">
-                        Fixed tracking is only supported for days, weeks, months, and years.
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-check form-switch">
-                        <input id="input-period-aggregate" class="form-check-input" asp-for="TrackForm.IsAggregated" type="checkbox" checked="@Model.TrackForm.IsAggregated"
-                               disabled="@(current?.SupportsAggregatedIntervals() == false)" />
-                        <label class="form-label" for="input-period-aggregate">Aggregated Intervals</label>
-                    </div>
-                    <div id="input-aggregate-warning" class="form-text" hidden="@(current?.SupportsAggregatedIntervals())">
-                        Aggregation can only be disabled for fixed tracking in months and years.
-                    </div>
-                </div>
-            </div>
-            <div class="mb-3">
-                <button id="form-period-submit" class="btn btn-primary" type="submit">Track</button>
-            </div>
-        </form>
-    </div>
 
     <div class="mb-5">
         @if (Model.HasResults())
