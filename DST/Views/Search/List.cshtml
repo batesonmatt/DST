@@ -20,53 +20,59 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 id="modal-sort-filter-title" class="modal-title user-select-none">Sort and Filter</h5>
+                <h5 id="modal-sort-filter-title" class="modal-title user-select-none text-truncate">Search Options</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                @{
-                    routes = current.Clone();
-                    routes.PageNumber = 1;
-                }
-                <form id="form-sort-filter" asp-action="SubmitSortFilter" asp-all-route-data="@routes.ToDictionary()" method="post"
-                      onchange="enableElement('sort-filter-submit')" defaultbutton="sort-filter-submit">
-                    <div class="form-floating mb-3">
-                        <select id="select-search-sort" class="form-select" asp-for="SortFilter.SortField" asp-items="@Model.SortFields"></select>
-                        <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
+            @{
+                routes = current.Clone();
+                routes.PageNumber = 1;
+            }
+            <form id="form-sort-filter" asp-action="SubmitSortFilter" asp-all-route-data="@routes.ToDictionary()" method="post"
+                  onchange="enableElement('sort-filter-submit')" defaultbutton="sort-filter-submit">
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <h6>Sort</h6>
                     </div>
                     <div class="form-floating mb-3">
-                        <select id="select-search-catalog" class="form-select" asp-for="SortFilter.Catalog" asp-items="@Model.Catalogs"></select>
+                        <select id="select-search-sort" class="form-select text-truncate" asp-for="SortFilter.SortField" asp-items="@Model.SortFields"></select>
+                        <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
+                    </div>
+                    <div class="mb-2">
+                        <h6>Filter</h6>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select id="select-search-catalog" class="form-select text-truncate" asp-for="SortFilter.Catalog" asp-items="@Model.Catalogs"></select>
                         <label class="form-label user-select-none" for="select-search-catalog">Catalog</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select id="select-search-type" class="form-select" asp-for="SortFilter.Type" asp-items="@Model.Types"></select>
+                        <select id="select-search-type" class="form-select text-truncate" asp-for="SortFilter.Type" asp-items="@Model.Types"></select>
                         <label class="form-label user-select-none" for="select-search-type">Type</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select id="select-search-constellation" class="form-select" asp-for="SortFilter.Constellation" asp-items="@Model.Constellations"></select>
+                        <select id="select-search-constellation" class="form-select text-truncate" asp-for="SortFilter.Constellation" asp-items="@Model.Constellations"></select>
                         <label class="form-label user-select-none" for="select-search-constellation">Constellation</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select id="select-search-season" class="form-select" asp-for="SortFilter.Season" asp-items="@Model.Seasons"></select>
+                        <select id="select-search-season" class="form-select text-truncate" asp-for="SortFilter.Season" asp-items="@Model.Seasons"></select>
                         <label class="form-label user-select-none" for="select-search-season">Season</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select id="select-search-trajectory" class="form-select" asp-for="SortFilter.Trajectory" asp-items="@Model.Trajectories"></select>
+                        <select id="select-search-trajectory" class="form-select text-truncate" asp-for="SortFilter.Trajectory" asp-items="@Model.Trajectories"></select>
                         <label class="form-label user-select-none" for="select-search-trajectory">Trajectory</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select id="select-search-visibility" class="form-select" asp-for="SortFilter.Visibility" asp-items="@Model.Visibilities"></select>
+                        <select id="select-search-visibility" class="form-select text-truncate" asp-for="SortFilter.Visibility" asp-items="@Model.Visibilities"></select>
                         <label class="form-label user-select-none" for="select-search-visibility">Visibility</label>
                     </div>
-                    <div class="form-check form-switch my-3">
+                    <div class="form-check form-switch">
                         <input id="input-search-hasname" class="form-check-input" asp-for="SortFilter.IsFilterByHasName" type="checkbox" checked="@Model.SortFilter.IsFilterByHasName" />
                         <label class="form-label" for="input-search-hasname">Has name</label>
                     </div>
-                    <div class="modal-footer">
-                        <button id="sort-filter-submit" class="btn btn-primary" type="submit" disabled>Apply</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="sort-filter-submit" class="btn btn-primary" type="submit" disabled>Apply</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
