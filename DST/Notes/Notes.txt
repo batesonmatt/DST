@@ -2,6 +2,11 @@
 ___________________________________________________________________________
 ```````````````````````````````````````````````````````````````````````````
 
+Icons
+- https://icons.getbootstrap.com/
+
+---------------------------------------------------------------------------
+
 Rename GeoLocationModel.cs to GeolocationModel.cs to match the class name.
 
 ---------------------------------------------------------------------------
@@ -10,14 +15,23 @@ Revise all id tags as camelCase
 
 ---------------------------------------------------------------------------
 
-Redesign views
+Use text-truncate class everywhere.
+Use user-select-none class everywhere.
 
-Icons
-- https://icons.getbootstrap.com/
+Consider using .stretched-link to the search results card details link 
+- need to revise the layout so the Track button is still clickable.
 
 Forms
-(See search sort/filter, phase, period, and Geolocation forms.)
-- Use .form-text class where necessary
+- Use .form-text class where necessary (also useful for collapseable tooltips)
+- Move the modal-body inside the form (see geolocation and search modals)
+
+Search List Modal Form
+*Revise sections
+- Title = Search Options
+- Sort
+- Filter
+- Results
+*Add a Reset button for postback to set all values to default.
 
 Search filter tags and Track navigation tabs
 - Apply horizontal scrolling on < md screens
@@ -31,9 +45,6 @@ Search filter tags and Track navigation tabs
 Consider < Back to Search link above object name title in the track views.
 Consider _GeolocationFormTogglerPartial shared view, if possible.
 
-Users might disable JavaScript.
-- Consider a message stating JavaScript must be enabled on this browser to run scripts.
-
 Details OffCanvas
 - Use a Modal instead of the OffCanvas
 - Use a single Modal
@@ -46,13 +57,16 @@ Tooltips (Do not use the Tooltip component, which relies on the Popper library)
 
 Consider class="display-#" for certain headings (like the banners)
 
+Users might disable JavaScript.
+- Consider a message stating JavaScript must be enabled on this browser to run scripts.
+
+---------------------------------------------------------------------------
+
+REDESIGN VIEWS
+
 List
 
 Details
-
-Geolocation
-- revise buttons on small screen
-- consider link for "Use my location"
 
 Summary
 - Consider moving the Algorithm SelectList off to the side/top, in a modal, etc.
