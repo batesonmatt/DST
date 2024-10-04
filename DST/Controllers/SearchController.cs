@@ -137,14 +137,6 @@ namespace DST.Controllers
 
             return RedirectToAction("List", values.ToDictionary());
         }
-
-        [HttpPost]
-        public IActionResult SubmitPageSize(SearchRoute values, int size)
-        {
-            values.SetPageSize(size);
-
-            return RedirectToAction("List", values.ToDictionary());
-        }
         
         [HttpPost]
         public IActionResult SubmitSortFilter(
@@ -160,6 +152,8 @@ namespace DST.Controllers
             }
 
             values.SetSort(sortFilter.SortField);
+            values.SetSortDirection(sortFilter.SortDirection);
+            values.SetPageSize(sortFilter.PageSize);
             values.SetCatalog(sortFilter.Catalog);
             values.SetType(sortFilter.Type);
             values.SetConstellation(sortFilter.Constellation);
@@ -247,6 +241,8 @@ namespace DST.Controllers
                 SortFilter = new SortFilterModel()
                 {
                     SortField = values.SortField,
+                    SortDirection = values.SortDirection,
+                    PageSize = values.PageSize,
                     Catalog = values.Catalog,
                     Type = values.Type,
                     Constellation = values.Constellation,
