@@ -27,11 +27,12 @@ Forms
 
 Search List Modal Form
 *Revise sections
-- Title = Search Options
-- Sort
-- Filter
-- Results
-*Add a Reset button for postback to set all values to default.
+- Title = Search Options                                                                            ...DONE
+- Sort                                                                                              ...IN PROGRESS
+  Revise Page size and sort order layout                                                            ...IN PROGRESS
+- Filter                                                                                            ...DONE
+- Results                                                                                           ...IN PROGRESS
+*Add a Reset button for postback to set all values to default.                                      ...IN PROGRESS
 
 Search filter tags and Track navigation tabs
 - Apply horizontal scrolling on < md screens
