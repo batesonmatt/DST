@@ -37,6 +37,24 @@
                         <select id="select-search-sort" class="form-select text-truncate" asp-for="SortFilter.SortField" asp-items="@Model.SortFields"></select>
                         <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
                     </div>
+                    <div class="form-floating mb-3">
+                        <select id="select-search-pagesize" class="form-select text-truncate" asp-for="SortFilter.PageSize" asp-items="@Model.PageSizes"></select>
+                        <label class="form-label user-select-none" for="select-search-pagesize">Page size</label>
+                    </div>
+                    <div class="mb-3">
+                        <input id="input-search-ascending" class="btn-check" asp-for="SortFilter.SortDirection" type="radio" value="@OrderDirection.AscendingAbbr"
+                            checked="@Model.SortFilter.IsSortAscending" />
+                        <label class="btn btn-light" for="input-search-ascending">
+                            <i class="bi bi-sort-up"></i>
+                            @OrderDirection.Ascending
+                        </label>
+                        <input id="input-search-descending" class="btn-check" asp-for="SortFilter.SortDirection" type="radio" value="@OrderDirection.DescendingAbbr"
+                            checked="@Model.SortFilter.IsSortDescending" />
+                        <label class="btn btn-light" for="input-search-descending">
+                            <i class="bi bi-sort-down"></i>
+                            @OrderDirection.Descending
+                        </label>
+                    </div>
                     <div class="mb-2">
                         <h6>Filter</h6>
                     </div>
@@ -154,39 +172,6 @@
                 </div>
             }
         }
-    </div>
-
-    <div class="mb-3">
-        @{
-            routes = current.Clone();
-        }
-        <form asp-action="SubmitPageSize" asp-all-route-data="@routes.ToDictionary()" method="post">
-            <select name="size" class="form-select" onchange="this.form.submit();" asp-items="@Model.PageSizes"></select>
-        </form>
-    </div>
-
-    <div class="mb-3">
-        @{
-            routes = current.Clone();
-        }
-        <div class="btn-group" role="group">
-            @{
-                routes.SortAscending();
-                active = current.SortDirection.Active(OrderDirection.AscendingAbbr);
-            }
-            <a asp-action="List" asp-all-route-data="@routes.ToDictionary()" class="btn btn-light @active"
-               role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="@OrderDirection.Ascending">
-                <i class="bi bi-sort-up"></i>
-            </a>
-            @{
-                routes.SortDescending();
-                active = current.SortDirection.Active(OrderDirection.DescendingAbbr);
-            }
-            <a asp-action="List" asp-all-route-data="@routes.ToDictionary()" class="btn btn-light @active"
-               role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="@OrderDirection.Descending">
-                <i class="bi bi-sort-down"></i>
-            </a>
-        </div>
     </div>
 
     <hr />
