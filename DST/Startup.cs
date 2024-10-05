@@ -1,6 +1,7 @@
 using DST.Models.Builders;
 using DST.Models.DataLayer;
 using DST.Models.DataLayer.Repositories;
+using DST.Models.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -28,12 +29,36 @@ namespace DST
         {
             services.AddMemoryCache();
 
+            // Configure the cookie policy.
+            services.Configure<CookiePolicyOptions>(
+                options =>
+                {
+                    options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                    options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                    options.HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always;
+                    options.OnAppendCookie = cookieContext => cookieContext.SetPartitionedCookie();
+                });
+
+            // Configure session state options.
             services.AddSession(
-                //options =>
-                //{
-                //    options.IdleTimeout = TimeSpan.FromMinutes(5);
-                //}
-                );
+                options =>
+                {
+                    //options.IdleTimeout = TimeSpan.FromMinutes(5);
+                    options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                    options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.Path = "/; samesite=None; Partitioned";
+                });
+
+            // Configure antiforgery options.
+            services.AddAntiforgery(
+                options =>
+                {
+                    options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                    options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.Path = "/; samesite=None; Partitioned";
+                });
 
             services.AddControllersWithViews();
 
@@ -122,11 +147,12 @@ namespace DST
                  * See https://aka.ms/aspnetcore-hsts. */
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseSession();
+            app.UseCookiePolicy();
             //app.UseAuthorization();
             
             app.UseEndpoints(endpoints =>
