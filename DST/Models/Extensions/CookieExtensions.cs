@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Text.Json;
 
@@ -55,6 +56,25 @@ namespace DST.Models.Extensions
         public static void SetObject<T>(this IResponseCookies cookies, string key, T value, int days = 30)
         {
             cookies.SetString(key, JsonSerializer.Serialize(value), days);
+        }
+
+        // Set the property for Cookies Having Independent Partitioned State (CHIPS).
+        public static void SetPartitionedCookie(this AppendCookieContext cookieContext)
+        {
+            if (cookieContext.Context is null || cookieContext.CookieOptions is null)
+            {
+                return;
+            }
+
+            if (cookieContext.CookieOptions.SameSite == SameSiteMode.None)
+            {
+                if (cookieContext.Context.Request.IsHttps)
+                {
+                    // Support for setting CHIPS directly is expected in .NET 9.
+                    // Until then, add the Partitioned attribute to the cookie path.
+                    cookieContext.CookieOptions.Path = "/; samesite=None; Partitioned";
+                }
+            }
         }
     }
 }
