@@ -33,54 +33,78 @@
                     <div class="mb-2">
                         <h6>Sort</h6>
                     </div>
-                    <div class="form-floating mb-3">
-                        <select id="select-search-sort" class="form-select text-truncate" asp-for="SortFilter.SortField" asp-items="@Model.SortFields"></select>
-                        <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
+                    <div class="row row-cols-lg-2 gx-2">
+                        <div class="col-lg">
+                            <div class="form-floating mb-3">
+                                <select id="select-search-sort" class="form-select text-truncate" asp-for="SortFilter.SortField" asp-items="@Model.SortFields"></select>
+                                <label class="form-label user-select-none" for="select-search-sort">Sort by</label>
+                            </div>
+                        </div>
+                        <div class="col-lg">
+                            <div class="form-floating mb-3">
+                                <select id="select-search-pagesize" class="form-select text-truncate" asp-for="SortFilter.PageSize" asp-items="@Model.PageSizes"></select>
+                                <label class="form-label user-select-none" for="select-search-pagesize">Page size</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-floating mb-3">
-                        <select id="select-search-pagesize" class="form-select text-truncate" asp-for="SortFilter.PageSize" asp-items="@Model.PageSizes"></select>
-                        <label class="form-label user-select-none" for="select-search-pagesize">Page size</label>
-                    </div>
-                    <div class="mb-3">
+                    <div class="d-flex flex-column flex-sm-row gap-2 mb-3">
                         <input id="input-search-ascending" class="btn-check" asp-for="SortFilter.SortDirection" type="radio" value="@OrderDirection.AscendingAbbr"
                             checked="@Model.SortFilter.IsSortAscending" />
-                        <label class="btn btn-light" for="input-search-ascending">
+                        <label class="btn btn-light d-flex flex-nowrap justify-content-center gap-2" for="input-search-ascending">
                             <i class="bi bi-sort-up"></i>
-                            @OrderDirection.Ascending
+                            <span class="text-truncate">@OrderDirection.Ascending</span>
                         </label>
                         <input id="input-search-descending" class="btn-check" asp-for="SortFilter.SortDirection" type="radio" value="@OrderDirection.DescendingAbbr"
                             checked="@Model.SortFilter.IsSortDescending" />
-                        <label class="btn btn-light" for="input-search-descending">
+                        <label class="btn btn-light d-flex flex-nowrap justify-content-center gap-2" for="input-search-descending">
                             <i class="bi bi-sort-down"></i>
-                            @OrderDirection.Descending
+                            <span class="text-truncate">@OrderDirection.Descending</span>
                         </label>
                     </div>
                     <div class="mb-2">
                         <h6>Filter</h6>
                     </div>
-                    <div class="form-floating mb-3">
-                        <select id="select-search-catalog" class="form-select text-truncate" asp-for="SortFilter.Catalog" asp-items="@Model.Catalogs"></select>
-                        <label class="form-label user-select-none" for="select-search-catalog">Catalog</label>
+                    <div class="row row-cols-lg-2 gx-2">
+                        <div class="col-lg">
+                            <div class="form-floating mb-3">
+                                <select id="select-search-catalog" class="form-select text-truncate" asp-for="SortFilter.Catalog" asp-items="@Model.Catalogs"></select>
+                                <label class="form-label user-select-none" for="select-search-catalog">Catalog</label>
+                            </div>
+                        </div>
+                        <div class="col-lg">
+                            <div class="form-floating mb-3">
+                                <select id="select-search-type" class="form-select text-truncate" asp-for="SortFilter.Type" asp-items="@Model.Types"></select>
+                                <label class="form-label user-select-none" for="select-search-type">Type</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-floating mb-3">
-                        <select id="select-search-type" class="form-select text-truncate" asp-for="SortFilter.Type" asp-items="@Model.Types"></select>
-                        <label class="form-label user-select-none" for="select-search-type">Type</label>
+                    <div class="row row-cols-lg-2 gx-2">
+                        <div class="col-lg">
+                            <div class="form-floating mb-3">
+                                <select id="select-search-constellation" class="form-select text-truncate" asp-for="SortFilter.Constellation" asp-items="@Model.Constellations"></select>
+                                <label class="form-label user-select-none" for="select-search-constellation">Constellation</label>
+                            </div>
+                        </div>
+                        <div class="col-lg">
+                            <div class="form-floating mb-3">
+                                <select id="select-search-season" class="form-select text-truncate" asp-for="SortFilter.Season" asp-items="@Model.Seasons"></select>
+                                <label class="form-label user-select-none" for="select-search-season">Season</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-floating mb-3">
-                        <select id="select-search-constellation" class="form-select text-truncate" asp-for="SortFilter.Constellation" asp-items="@Model.Constellations"></select>
-                        <label class="form-label user-select-none" for="select-search-constellation">Constellation</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <select id="select-search-season" class="form-select text-truncate" asp-for="SortFilter.Season" asp-items="@Model.Seasons"></select>
-                        <label class="form-label user-select-none" for="select-search-season">Season</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <select id="select-search-trajectory" class="form-select text-truncate" asp-for="SortFilter.Trajectory" asp-items="@Model.Trajectories"></select>
-                        <label class="form-label user-select-none" for="select-search-trajectory">Trajectory</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <select id="select-search-visibility" class="form-select text-truncate" asp-for="SortFilter.Visibility" asp-items="@Model.Visibilities"></select>
-                        <label class="form-label user-select-none" for="select-search-visibility">Visibility</label>
+                    <div class="row row-cols-lg-2 gx-2">
+                        <div class="col-lg">
+                            <div class="form-floating mb-3">
+                                <select id="select-search-trajectory" class="form-select text-truncate" asp-for="SortFilter.Trajectory" asp-items="@Model.Trajectories"></select>
+                                <label class="form-label user-select-none" for="select-search-trajectory">Trajectory</label>
+                            </div>
+                        </div>
+                        <div class="col-lg">
+                            <div class="form-floating mb-3">
+                                <select id="select-search-visibility" class="form-select text-truncate" asp-for="SortFilter.Visibility" asp-items="@Model.Visibilities"></select>
+                                <label class="form-label user-select-none" for="select-search-visibility">Visibility</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-check form-switch">
                         <input id="input-search-hasname" class="form-check-input" asp-for="SortFilter.IsFilterByHasName" type="checkbox" checked="@Model.SortFilter.IsFilterByHasName" />
