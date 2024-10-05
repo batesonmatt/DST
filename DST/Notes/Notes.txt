@@ -28,11 +28,13 @@ Forms
 Search List Modal Form
 *Revise sections
 - Title = Search Options                                                                            ...DONE
-- Sort                                                                                              ...IN PROGRESS
-  Revise Page size and sort order layout                                                            ...IN PROGRESS
+- Sort                                                                                              ...DONE
 - Filter                                                                                            ...DONE
-- Results                                                                                           ...IN PROGRESS
 *Add a Reset button for postback to set all values to default.                                      ...IN PROGRESS
+
+Track Modal Forms
+- Truncate text                                                                                     ...IN PROGRESS
+- Consider using grid layout. See search options form.                                              ...IN PROGRESS
 
 Search filter tags and Track navigation tabs
 - Apply horizontal scrolling on < md screens
