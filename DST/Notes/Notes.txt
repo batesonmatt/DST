@@ -25,13 +25,6 @@ Forms
 - Use .form-text class where necessary (also useful for collapseable tooltips)
 - Move the modal-body inside the form (see geolocation and search modals)
 
-Search List Modal Form
-*Revise sections
-- Title = Search Options                                                                            ...DONE
-- Sort                                                                                              ...DONE
-- Filter                                                                                            ...DONE
-*Add a Reset button for postback to set all values to default.                                      ...IN PROGRESS
-
 Track Modal Forms
 - Truncate text                                                                                     ...IN PROGRESS
 - Consider using grid layout. See search options form.                                              ...IN PROGRESS
