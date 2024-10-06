@@ -46,6 +46,8 @@ namespace DST.Models.Routes
 
         public SearchRoute() { }
 
+        public SearchRoute(string search) => Search = search;
+
         public SearchRoute(PageSortRoute values) : base(values) { }
 
         #endregion
@@ -106,9 +108,21 @@ namespace DST.Models.Routes
             }
         }
 
+        public void ClearSearch()
+        {
+            Search = string.Empty;
+        }
+
         public SearchRoute Reset()
         {
+            // Reset all filters and search data, but retain paging and sorting.
             return new SearchRoute(this as PageSortRoute);
+        }
+
+        public SearchRoute ResetOptions()
+        {
+            // Reset all filters, paging, and sorting, but retain the search data.
+            return new SearchRoute(Search);
         }
 
         public void SetType(string type)
@@ -149,11 +163,6 @@ namespace DST.Models.Routes
         public void SetHasName(bool value)
         {
             HasName = value ? Filter.On : Filter.Off;
-        }
-
-        public void ClearSearch()
-        {
-            Search = string.Empty;
         }
 
         public IDictionary<string, string> GetActiveFilters()
