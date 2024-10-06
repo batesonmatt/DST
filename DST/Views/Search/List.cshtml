@@ -31,7 +31,7 @@
                   onchange="enableElement('sort-filter-submit')" defaultbutton="sort-filter-submit">
                 <div class="modal-body">
                     <div class="mb-2">
-                        <h6>Sort</h6>
+                        <h6 class="user-select-none text-truncate">Sort</h6>
                     </div>
                     <div class="row row-cols-lg-2 gx-2">
                         <div class="col-lg">
@@ -62,7 +62,7 @@
                         </label>
                     </div>
                     <div class="mb-2">
-                        <h6>Filter</h6>
+                        <h6 class="user-select-none text-truncate">Filter</h6>
                     </div>
                     <div class="row row-cols-lg-2 gx-2">
                         <div class="col-lg">
@@ -108,7 +108,7 @@
                     </div>
                     <div class="form-check form-switch">
                         <input id="input-search-hasname" class="form-check-input" asp-for="SortFilter.IsFilterByHasName" type="checkbox" checked="@Model.SortFilter.IsFilterByHasName" />
-                        <label class="form-label" for="input-search-hasname">Has name</label>
+                        <label class="form-label user-select-none text-truncate" for="input-search-hasname">Has name</label>
                     </div>
                 </div>
                 <div class="modal-footer">

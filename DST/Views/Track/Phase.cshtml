@@ -32,19 +32,19 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 id="phaseOptionsModalTitle" class="modal-title user-select-none">Phase Tracking</h5>
+                <h5 id="phaseOptionsModalTitle" class="modal-title user-select-none text-truncate">Phase Tracking</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                @if (Model.IsTrackingSupported())
-                {
-                    <form id="form-phase" class="mb-5" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post" defaultbutton="form-phase-submit">
+            @if (Model.IsTrackingSupported())
+            {
+                <form id="form-phase" asp-action="SubmitPhase" asp-all-route-data="@routes.ToDictionary()" method="post" defaultbutton="form-phase-submit">
+                    <div class="modal-body">
                         <div class="form-floating mb-3">
-                            <select id="select-phase-algorithm" class="form-select" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
+                            <select id="select-phase-algorithm" class="form-select text-truncate" asp-for="TrackForm.Algorithm" asp-items="@Model.Algorithms"></select>
                             <label class="form-label user-select-none" for="select-phase-algorithm">Timekeeping Algorithm</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select id="select-phase" class="form-select" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
+                            <select id="select-phase" class="form-select text-truncate" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
                             <label class="form-label user-select-none" for="select-phase">Phase</label>
                         </div>
                         <div class="form-floating mb-3">
@@ -56,29 +56,34 @@
                             <div class="form-check form-switch">
                                 <input id="input-phase-single" class="form-check-input" data-bs-toggle="collapse" href="#phase-collapse" role="button"
                                        asp-for="TrackForm.IsTrackOnce" type="checkbox" checked="@Model.TrackForm.IsTrackOnce" onchange="phaseTrackOnce()" />
-                                <label class="form-label" for="input-phase-single">Track Once</label>
+                                <label class="form-label d-block user-select-none text-truncate" for="input-phase-single">Track Once</label>
                             </div>
                         </div>
                         <div id="phase-collapse" class="collapse @current.TrackOnce.Show() mb-3">
                             <div class="form-floating">
-                                <input id="input-phase-cycles" class="form-control" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles"
+                                <input id="input-phase-cycles" class="form-control text-truncate" asp-for="TrackForm.Cycles" type="number" value="@Model.TrackForm.Cycles"
                                        disabled="@Model.TrackForm.IsTrackOnce" />
                                 <label class="form-label user-select-none" for="input-phase-cycles">Cycles</label>
                                 <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="modal-footer mb-3">
-                            <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
-                        </div>
-                    </form>
-                }
-                else if (Model.HasWarning())
-                {
+                    </div>
+                    <div class="modal-footer">
+                        <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
+                    </div>
+                </form>
+            }
+            else if (Model.HasWarning())
+            {
+                <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label text-warning">@Model.WarningMessage</label>
                     </div>
-                }
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            }
         </div>
     </div>
 </div>
