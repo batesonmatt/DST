@@ -142,7 +142,8 @@ namespace DST.Controllers
         public IActionResult SubmitSortFilter(
             //[FromServices] ISortFilterBuilder sortFilterBuilder,
             SortFilterModel sortFilter,
-            SearchRoute values)
+            SearchRoute values,
+            bool reset = false)
         {
             // Check server-side validation state.
             if (!ModelState.IsValid)
@@ -151,22 +152,31 @@ namespace DST.Controllers
                 return RedirectToAction("List", values.ToDictionary());
             }
 
-            values.SetSort(sortFilter.SortField);
-            values.SetSortDirection(sortFilter.SortDirection);
-            values.SetPageSize(sortFilter.PageSize);
-            values.SetCatalog(sortFilter.Catalog);
-            values.SetType(sortFilter.Type);
-            values.SetConstellation(sortFilter.Constellation);
-            values.SetSeason(sortFilter.Season);
-            values.SetTrajectory(sortFilter.Trajectory);
-            values.SetVisibility(sortFilter.Visibility);
-            values.SetHasName(sortFilter.IsFilterByHasName);
-
             // Load the previous sort-filter entry, if any.
             // sortFilterBuilder.Load();
 
-            // Set the current sort-filter entry.
-            // sortFilterBuilder.CurrentSortFilter = sortFilter;
+            if (reset)
+            {
+                // Clear all filters, paging, and sorting values.
+                // Retain the search data and session state.
+                values = values.ResetOptions();
+            }
+            else
+            {
+                // Set the current sort-filter entry.
+                // sortFilterBuilder.CurrentSortFilter = sortFilter;
+
+                values.SetSort(sortFilter.SortField);
+                values.SetSortDirection(sortFilter.SortDirection);
+                values.SetPageSize(sortFilter.PageSize);
+                values.SetCatalog(sortFilter.Catalog);
+                values.SetType(sortFilter.Type);
+                values.SetConstellation(sortFilter.Constellation);
+                values.SetSeason(sortFilter.Season);
+                values.SetTrajectory(sortFilter.Trajectory);
+                values.SetVisibility(sortFilter.Visibility);
+                values.SetHasName(sortFilter.IsFilterByHasName);
+            }
 
             // Save the sort-filter entry to session state.
             // sortFilterBuilder.Save();
