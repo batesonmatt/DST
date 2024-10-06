@@ -15,19 +15,21 @@ Revise all id tags as camelCase
 
 ---------------------------------------------------------------------------
 
-Use text-truncate class everywhere.
-Use user-select-none class everywhere.
+Use text-truncate class everywhere.                                                                 ...IN PROGRESS
+Use user-select-none class everywhere.                                                              ...IN PROGRESS
+- Hint: Ctrl+A
 
 Consider using .stretched-link to the search results card details link 
 - need to revise the layout so the Track button is still clickable.
 
 Forms
-- Use .form-text class where necessary (also useful for collapseable tooltips)
-- Move the modal-body inside the form (see geolocation and search modals)
+- Use .form-text class where necessary (also useful for collapseable tooltips)                      ...IN PROGRESS
+  Consider pt-1 and mt-0 on the form-text
+  OR, consider pb-1 and mb-0 on the control.
 
-Track Modal Forms
-- Truncate text                                                                                     ...IN PROGRESS
-- Consider using grid layout. See search options form.                                              ...IN PROGRESS
+Phase                                                                                               ...IN PROGRESS
+- Should the Start route segment come before the Phase segment?
+  Also, consider moving the Start date form control above the Phase type control.
 
 Search filter tags and Track navigation tabs
 - Apply horizontal scrolling on < md screens
