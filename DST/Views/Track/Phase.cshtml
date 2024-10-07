@@ -44,13 +44,13 @@
                             <label class="form-label user-select-none" for="select-phase-algorithm">Timekeeping Algorithm</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select id="select-phase" class="form-select text-truncate" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
-                            <label class="form-label user-select-none" for="select-phase">Phase</label>
-                        </div>
-                        <div class="form-floating mb-3">
                             <input id="input-phase-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
                             <label class="form-label user-select-none" for="input-phase-start">Start</label>
                             <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select id="select-phase" class="form-select text-truncate" asp-for="TrackForm.Phase" asp-items="@Model.Phases"></select>
+                            <label class="form-label user-select-none" for="select-phase">Phase</label>
                         </div>
                         <div class="mb-3">
                             <div class="form-check form-switch">
