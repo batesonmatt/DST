@@ -165,7 +165,7 @@ namespace DST
                 // Track Phase route
                 endpoints.MapControllerRoute(
                     name: "trackphase",
-                    pattern: "{controller}/{action}/{catalog}/{id}/{algorithm}/{phase}/{start}/track-once-{trackonce}/cycles/{cycles}");
+                    pattern: "{controller}/{action}/{catalog}/{id}/{algorithm}/{start}/{phase}/track-once-{trackonce}/cycles/{cycles}");
 
                 // Track Summary route
                 endpoints.MapControllerRoute(
