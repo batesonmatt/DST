@@ -11,8 +11,8 @@ namespace DST.Models.Routes
     {
         #region Properties
 
-        public string Phase { get; set; } = PhaseName.Default;
         public long Start { get; set; }
+        public string Phase { get; set; } = PhaseName.Default;
         public string TrackOnce { get; set; } = Filter.Off;
         public int Cycles { get; set; }
 
@@ -29,8 +29,8 @@ namespace DST.Models.Routes
 
         public TrackPhaseRoute(TrackPhaseRoute values)
         {
-            Phase = values.Phase;
             Start = values.Start;
+            Phase = values.Phase;
             TrackOnce = values.TrackOnce;
             Cycles = values.Cycles;
         }
@@ -83,8 +83,8 @@ namespace DST.Models.Routes
         {
             Dictionary<string, string> route = new()
             {
-                { nameof(Phase), Phase.ToKebabCase() },
                 { nameof(Start), Start.ToString().ToKebabCase() },
+                { nameof(Phase), Phase.ToKebabCase() },
                 { nameof(TrackOnce), TrackOnce.ToKebabCase() },
 
                 // Do not call ToKebabCase() because we want negative numbers represented in the route URL.
@@ -99,8 +99,8 @@ namespace DST.Models.Routes
         public new void Validate()
         {
             base.Validate();
-            SetPhase(Phase);
             SetStart(Start);
+            SetPhase(Phase);
             SetTrackOnce(IsTrackOnce);
             SetCycles(Cycles);
         }
