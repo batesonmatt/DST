@@ -243,8 +243,8 @@ namespace DST.Controllers
                 TrackForm = new TrackPhaseModel()
                 {
                     Algorithm = values.Algorithm,
-                    Phase = selectedPhase,
                     Start = Utilities.GetClientDateTime(geoBuilder.CurrentGeolocation, values.Start),
+                    Phase = selectedPhase,
                     IsTrackOnce = values.IsTrackOnce,
                     Cycles = values.Cycles
                 },
@@ -272,8 +272,8 @@ namespace DST.Controllers
             }
 
             values.SetAlgorithm(trackForm.Algorithm);
-            values.SetPhase(trackForm.Phase);
             values.SetStart(trackForm.GetTicks());
+            values.SetPhase(trackForm.Phase);
             values.SetTrackOnce(trackForm.IsTrackOnce);
             values.SetCycles(trackForm.Cycles);
 
