@@ -7,10 +7,6 @@ Icons
 
 ---------------------------------------------------------------------------
 
-Rename GeoLocationModel.cs to GeolocationModel.cs to match the class name.
-
----------------------------------------------------------------------------
-
 Revise all id tags as camelCase
 
 ---------------------------------------------------------------------------
@@ -21,15 +17,6 @@ Use user-select-none class everywhere.                                          
 
 Consider using .stretched-link to the search results card details link 
 - need to revise the layout so the Track button is still clickable.
-
-Forms
-- Use .form-text class where necessary (also useful for collapseable tooltips)                      ...IN PROGRESS
-  Consider pt-1 and mt-0 on the form-text
-  OR, consider pb-1 and mb-0 on the control.
-
-Phase                                                                                               ...IN PROGRESS
-- Should the Start route segment come before the Phase segment?
-  Also, consider moving the Start date form control above the Phase type control.
 
 Search filter tags and Track navigation tabs
 - Apply horizontal scrolling on < md screens
@@ -49,9 +36,11 @@ Details OffCanvas
 - Implement support for varying data in the modal to avoid creating a modal per object in the loop.
 
 Tooltips (Do not use the Tooltip component, which relies on the Popper library)
-- Revise tooltips on sort order buttons in the List view.
 - Consider hover over hint icon (?) at the end of the text.
-- Consider Collapse or OffCanvas control for tooltips
+- Consider Collapse control for tooltips
+- Use .form-text for tooltips
+  Consider pt-1 and mt-0 on the form-text
+  OR, consider pb-1 and mb-0 on the control.
 
 Consider class="display-#" for certain headings (like the banners)
 
