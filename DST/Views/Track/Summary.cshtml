@@ -15,29 +15,42 @@
     <script src="~/js/misc.js"></script>
 }
 
-<partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
-
-<div class="container-md pt-3 mb-3">
-    <nav class="nav nav-tabs mb-5">
-        <a class="nav-item nav-link active">Summary</a>
-        <a class="nav-item nav-link" asp-controller="Track" asp-action="Phase" asp-all-route-data="@routes.ToDictionary()">Phase</a>
-        <a class="nav-item nav-link" asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">Period</a>
-    </nav>
-</div>
-
 <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitSummaryGeolocation"></vc:geolocation-form>
 
-<div class="sticky-top-container container-md d-md-grid justify-content-md-end pt-3 mb-3">
-    <div class="mb-1 mb-md-0">
-        <a class="btn btn-light d-flex justify-content-between justify-content-md-center" role="button" data-bs-toggle="modal" href="#geolocation-modal">
-            <div class="d-flex gap-2">
+<partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
+
+<div class="sticky-top-container container-md border-bottom pt-3 pb-md-2 mb-5">
+    <div class="d-flex flex-column flex-md-row gap-1 gap-md-2">
+        <div class="flex-md-grow-1 order-1 order-md-0">
+            <div id="summaryOptionsCollapse" class="collapse d-md-flex">
+                <nav class="nav nav-pills d-flex flex-column flex-md-row gap-1 gap-md-2">
+                    <a class="nav-item nav-link active">Summary</a>
+                    <a class="nav-item nav-link d-flex justify-content-between justify-content-md-center border"
+                        asp-controller="Track" asp-action="Phase" asp-all-route-data="@routes.ToDictionary()">
+                        <span>Phase</span>
+                        <i class="bi bi-chevron-right d-md-none"></i>
+                    </a>
+                    <a class="nav-item nav-link d-flex justify-content-between justify-content-md-center border"
+                        asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.ToDictionary()">
+                        <span>Period</span>
+                        <i class="bi bi-chevron-right d-md-none"></i>
+                    </a>
+                </nav>
+            </div>
+        </div>
+        <a class="btn btn-light d-flex justify-content-md-center border" role="button" data-bs-toggle="modal" href="#geolocation-modal">
+            <div class="d-flex gap-3 gap-md-2 text-truncate">
                 <i class="bi bi-geo-alt-fill"></i>
                 <span class="text-truncate">Geolocation</span>
             </div>
-            <i class="bi bi-chevron-right d-md-none"></i>
         </a>
     </div>
-    <hr class="mt-3 d-md-none" />
+    <div class="d-flex d-md-none justify-content-center my-0">
+        <a class="btn flex-fill pt-0 pb-1" data-bs-toggle="collapse" href="#summaryOptionsCollapse" role="button"
+           aria-expanded="false" aria-controls="#summaryOptionsCollapse" onclick="toggleCollapseIcon('optionsToggleIcon')">
+            <i id="optionsToggleIcon" class="bi bi-chevron-compact-down"></i>
+        </a>
+    </div>
 </div>
 
 <div class="container pt-3">
