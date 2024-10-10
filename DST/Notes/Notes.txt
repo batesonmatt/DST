@@ -7,28 +7,56 @@ Icons
 
 ---------------------------------------------------------------------------
 
+*********************************************************************
+Consider revising options menu on all pages.
+- Use just icons on < md width (remove labels)
+- same row on search bar
+- Think of something else for track navigation.
+*********************************************************************
+
+JavaScript
+- Consider replacing inline javascript calls with listeners and attributes
+- https://stackoverflow.com/questions/70732244/
+
+toggleCollapseIcon (JS)
+- Check whether the control is collapsed
+- Check if it has 'collapse' or 'show' in the class list
+
+Search bar
+- Move the bi-search icon to the left with no background on < md width                              ...IN PROGRESS
+- Remove the placeholder on < md width                                                              ...IN PROGRESS
+
+Consider _GeolocationFormTogglerPartial shared view, if possible.                                   ...IN PROGRESS
+
+Revise Track navigation                                                                             ...IN PROGRESS
+- See Summary and List
+- Consider adding a chevron-right (>) to the end below md width
+- Remove > icon from options and geolocation buttons
+- Fix text-truncate not working on the toggle buttons
+
+d-flex justify-content-between justify-content-md-center
+<i class="bi bi-chevron-right d-md-none"></i>
+
+
 Revise all id tags as camelCase
 
----------------------------------------------------------------------------
-
-Use text-truncate class everywhere.                                                                 ...IN PROGRESS
-Use user-select-none class everywhere.                                                              ...IN PROGRESS
+Use text-truncate class everywhere.
+Use user-select-none class everywhere.
 - Hint: Ctrl+A
 
 Consider using .stretched-link to the search results card details link 
 - need to revise the layout so the Track button is still clickable.
 
-Search filter tags and Track navigation tabs
-- Apply horizontal scrolling on < md screens
-- On the container:
-  overflow-x: auto
-  overflow-y: hidden
-  flex-wrap: nowrap
-- On the items:
-  white-space: nowrap ??
+Search Active Filters                                                                               ...IN PROGRESS
+- Give the Active Filters section a title
+- Revise the active filter badge sizing
 
-Consider < Back to Search link above object name title in the track views.
-Consider _GeolocationFormTogglerPartial shared view, if possible.
+Consider < Back to Search link above object name title in the track views.                          ...IN PROGRESS
+
+Phase and Period views
+- Consider adding padding to the bottom of the empty body,
+  or use an empty container with message when the results pane is empty,
+  This way the screen isn't squished vertically.
 
 Details OffCanvas
 - Use a Modal instead of the OffCanvas
