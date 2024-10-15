@@ -82,56 +82,51 @@
 
 <partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
 
-<div class="sticky-top-container container-md border-bottom pt-3 pb-md-2 mb-5">
-    <div class="d-flex flex-column flex-md-row gap-1 gap-md-2">
-        <div class="flex-md-grow-1 order-1 order-md-0">
+<div class="sticky-top-container container-sm px-1 py-2 p-sm-3 my-0 my-sm-3 my-md-5">
+    <div class="d-flex flex-column flex-md-row gap-0 gap-sm-2 gap-md-3">
+        <div class="flex-grow-1 order-1 order-md-0">
             <div id="phaseOptionsCollapse" class="collapse d-md-flex">
-                <div class="d-flex flex-column flex-md-row gap-1 gap-md-0">
-                    <a class="btn btn-light d-flex d-md-none justify-content-md-center border" role="button" data-bs-toggle="modal" href="#geolocation-modal">
-                        <div class="d-flex gap-3 gap-md-2 text-truncate">
-                            <i class="bi bi-geo-alt-fill"></i>
-                            <span class="text-truncate">Geolocation</span>
-                        </div>
+                <nav class="nav nav-pills d-flex flex-column flex-md-row gap-1 gap-md-2">
+                    <a class="nav-item nav-link d-flex justify-content-between justify-content-md-center border"
+                       asp-controller="Track" asp-action="Summary" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">
+                        <span>Summary</span>
+                        <i class="bi bi-chevron-right d-md-none"></i>
                     </a>
-                    <nav class="nav nav-pills d-flex flex-column flex-md-row gap-1 gap-md-2">
-                        <a class="nav-item nav-link d-flex justify-content-between justify-content-md-center border"
-                           asp-controller="Track" asp-action="Summary" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">
-                            <span>Summary</span>
-                            <i class="bi bi-chevron-right d-md-none"></i>
-                        </a>
-                        <a class="nav-item nav-link active">Phase</a>
-                        <a class="nav-item nav-link d-flex justify-content-between justify-content-md-center border"
-                           asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">
-                            <span>Period</span>
-                            <i class="bi bi-chevron-right d-md-none"></i>
-                        </a>
-                    </nav>
-                </div>
+                    <a class="nav-item nav-link d-none d-md-flex active">Phase</a>
+                    <a class="nav-item nav-link d-flex justify-content-between justify-content-md-center border"
+                       asp-controller="Track" asp-action="Period" asp-all-route-data="@routes.GetSummaryRoute().ToDictionary()">
+                        <span>Period</span>
+                        <i class="bi bi-chevron-right d-md-none"></i>
+                    </a>
+                </nav>
             </div>
         </div>
-        <div class="d-flex flex-column flex-md-row gap-1 gap-md-2">
-            @{
-                disabled = Model.IsTrackingSupported().Disabled();
-            }
-            <a class="btn btn-light d-flex justify-content-md-center border @disabled" role="button" data-bs-toggle="modal" href="#phaseOptionsModal">
-                <div class="d-flex gap-3 gap-md-2 text-truncate">
-                    <i class="bi bi-sliders"></i>
-                    <span class="text-truncate">Options</span>
-                </div>
-            </a>
-            <a class="btn btn-light d-none d-md-flex justify-content-md-center border" role="button" data-bs-toggle="modal" href="#geolocation-modal">
-                <div class="d-flex gap-3 gap-md-2 text-truncate">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    <span class="text-truncate">Geolocation</span>
-                </div>
-            </a>
+        <div class="d-flex flex-nowrap justify-content-between">
+            <div class="d-flex d-md-none">
+                <a class="btn btn-white d-flex flex-nowrap rounded-0 px-1" data-bs-toggle="collapse" href="#phaseOptionsCollapse" role="button"
+                   aria-expanded="false" aria-controls="#phaseOptionsCollapse">
+                    <i class="bi bi-three-dots-vertical me-1 me-sm-2"></i>
+                    <span class="text-truncate">Phase</span>
+                </a>
+            </div>
+            <div class="d-flex gap-0 gap-sm-2">
+                @{
+                    disabled = Model.IsTrackingSupported().Disabled();
+                }
+                <a class="btn btn-white d-flex justify-content-md-center rounded-0 @disabled" role="button" data-bs-toggle="modal" href="#phaseOptionsModal">
+                    <div class="d-flex gap-0 gap-md-2 text-truncate">
+                        <i class="bi bi-sliders"></i>
+                        <span class="d-none d-md-flex text-truncate">Options</span>
+                    </div>
+                </a>
+                <a class="btn btn-white d-flex justify-content-md-center rounded-0" role="button" data-bs-toggle="modal" href="#geolocation-modal">
+                    <div class="d-flex gap-3 gap-md-2 text-truncate">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span class="d-none d-md-flex text-truncate">Geolocation</span>
+                    </div>
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="d-flex d-md-none justify-content-center my-0">
-        <a class="btn flex-fill pt-0 pb-1" data-bs-toggle="collapse" onclick="toggleCollapseIcon('optionsToggleIcon')" href="#phaseOptionsCollapse"
-           role="button" aria-expanded="false" aria-controls="#phaseOptionsCollapse">
-            <i id="optionsToggleIcon" class="bi bi-chevron-compact-down"></i>
-        </a>
     </div>
 </div>
 
