@@ -28,6 +28,7 @@ body {
     /*background-image: url("../images/background.jpg");
     background-repeat: repeat;
     background-attachment: fixed;*/
+    min-width: 320px;
 }
 
 .sticky-top-container {
