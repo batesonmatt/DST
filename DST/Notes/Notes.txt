@@ -7,29 +7,10 @@ Icons
 
 ---------------------------------------------------------------------------
 
-JavaScript
-- Consider replacing inline javascript calls with listeners and attributes
-- https://stackoverflow.com/questions/70732244/
-
-
-Search bar
-- Remove the placeholder on < md width                                                              ...OPTIONAL
-
-Consider _GeolocationFormTogglerPartial shared view, if possible.                                   ...IN PROGRESS
-
-
-Revise all id tags as camelCase
-
-Use text-truncate class everywhere.
-Use user-select-none class everywhere.
-- Hint: Ctrl+A
-
-Consider using .stretched-link to the search results card details link 
-- need to revise the layout so the Track button is still clickable.
+Summary track view
+- Create a modal and Options toggle button for setting the Algorithm type.                          ...IN PROGRESS
 
 Search Active Filters                                                                               ...IN PROGRESS
-- Give the Active Filters section a title
-- Revise the active filter badge sizing
 
 Consider < Back to Search link above object name title in the track views.                          ...IN PROGRESS
 
@@ -37,6 +18,10 @@ Phase and Period views
 - Consider adding padding to the bottom of the empty body,
   or use an empty container with message when the results pane is empty,
   This way the screen isn't squished vertically.
+- Consider adding a second Options toggle button to the body when it's empty.
+  "Start here" or "Start tracking"
+- Give the Active Filters section a title
+- Revise the active filter badge sizing
 
 Details OffCanvas
 - Use a Modal instead of the OffCanvas
@@ -49,6 +34,19 @@ Tooltips (Do not use the Tooltip component, which relies on the Popper library)
 - Use .form-text for tooltips
   Consider pt-1 and mt-0 on the form-text
   OR, consider pb-1 and mb-0 on the control.
+  
+
+Search bar
+- Remove the placeholder on < md width                                                              ...OPTIONAL
+
+Revise all id tags as camelCase
+
+Use text-truncate class everywhere.
+Use user-select-none class everywhere.
+- Hint: Ctrl+Shift+F
+
+Consider using .stretched-link to the search results card details link 
+- need to revise the layout so the Track button is still clickable.
 
 Consider class="display-#" for certain headings (like the banners)
 
@@ -59,13 +57,17 @@ Users might disable JavaScript.
 
 REDESIGN VIEWS
 
+Get images
+- Use Wikimedia Commons
+- Add new linking table, DsoImages
+  Add DsoImageID field to DsoItems
+  Contains fields for ImageID, file path in hosting directory (include in solution ?), thumbnail path (?), credits
+
 List
 
 Details
 
 Summary
-- Consider moving the Algorithm SelectList off to the side/top, in a modal, etc.
-  Use floating label for the SelectList
 
 Phase
 
@@ -74,8 +76,10 @@ Period
 Shared
 
 Home
-Consider selecting a random object and display its info
-- Or perhaps a random object, and a random track or vector calculation, etc.
+- Include short summary
+Consider selecting 3 random objects and display its info, image, etc.
+- Consider a random object, random track or vector calculation, random location and time, etc.
+- Consider option to allow the user to set their own geolocation
 - Use a bootstrap carousel
   https://getbootstrap.com/docs/5.0/components/carousel/
 
