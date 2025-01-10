@@ -128,18 +128,8 @@
                 </a>
             </div>
             <div class="d-flex gap-0 gap-sm-2">
-                <a class="btn btn-white d-flex justify-content-md-center rounded-0" role="button" data-bs-toggle="modal" href="#periodOptionsModal">
-                    <div class="d-flex gap-0 gap-md-2 text-truncate">
-                        <i class="bi bi-sliders"></i>
-                        <span class="d-none d-md-flex text-truncate">Options</span>
-                    </div>
-                </a>
-                <a class="btn btn-white d-flex justify-content-md-center rounded-0" role="button" data-bs-toggle="modal" href="#geolocation-modal">
-                    <div class="d-flex gap-3 gap-md-2 text-truncate">
-                        <i class="bi bi-geo-alt-fill"></i>
-                        <span class="d-none d-md-flex text-truncate">Geolocation</span>
-                    </div>
-                </a>
+                <vc:options-form-toggle form-id="#periodOptionsModal"></vc:options-form-toggle>
+                <vc:geolocation-form-toggle form-id="#geolocation-modal"></vc:geolocation-form-toggle>
             </div>
         </div>
     </div>
