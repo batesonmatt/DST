@@ -7,21 +7,13 @@ Icons
 
 ---------------------------------------------------------------------------
 
-Summary track view
-- Create a modal and Options toggle button for setting the Algorithm type.                          ...IN PROGRESS
-
-Search Active Filters                                                                               ...IN PROGRESS
-
-Consider < Back to Search link above object name title in the track views.                          ...IN PROGRESS
-
 Phase and Period views
 - Consider adding padding to the bottom of the empty body,
   or use an empty container with message when the results pane is empty,
   This way the screen isn't squished vertically.
 - Consider adding a second Options toggle button to the body when it's empty.
   "Start here" or "Start tracking"
-- Give the Active Filters section a title
-- Revise the active filter badge sizing
+
 
 Details OffCanvas
 - Use a Modal instead of the OffCanvas
@@ -34,10 +26,6 @@ Tooltips (Do not use the Tooltip component, which relies on the Popper library)
 - Use .form-text for tooltips
   Consider pt-1 and mt-0 on the form-text
   OR, consider pb-1 and mb-0 on the control.
-  
-
-Search bar
-- Remove the placeholder on < md width                                                              ...OPTIONAL
 
 Revise all id tags as camelCase
 
@@ -74,6 +62,9 @@ Phase
 Period
 
 Shared
+- Move any duplicate markup into layout views.
+  Anything that doesn't need to be a partial view (doesn't require arguments).
+  See "Back to search" markup in the Track views.
 
 Home
 - Include short summary
