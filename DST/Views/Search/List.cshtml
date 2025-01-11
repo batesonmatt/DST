@@ -161,17 +161,25 @@
 
             if (routes.HasFilters())
             {
+                <p>Filters</p>
+
                 <div class="d-flex flex-nowrap flex-md-wrap overflow-auto gap-2 pb-2">
 
                     @foreach (var filter in current.GetActiveFilters())
                     {
                         <a asp-action="ClearFilter" asp-all-route-data="@routes.ToDictionary()" asp-route-name="@filter.Key">
-                            <span class="badge bg-secondary"><i class="bi bi-x"></i>&nbsp;@filter.Value</span>
+                            <div class="badge bg-secondary py-2 ps-2 pe-3 rounded-0">
+                                <i class="bi bi-x me-2"></i>
+                                <span>@filter.Value</span>
+                            </div>
                         </a>
                     }
 
                     <a asp-action="ClearFilters" asp-all-route-data="@routes.ToDictionary()">
-                        <span class="badge bg-secondary"><i class="bi bi-x"></i>&nbsp;Clear all</span>
+                        <div class="badge bg-secondary py-2 ps-2 pe-3 rounded-0">
+                            <i class="bi bi-x me-2"></i>
+                            <span>Clear all</span>
+                        </div>
                     </a>
                 </div>
             }
