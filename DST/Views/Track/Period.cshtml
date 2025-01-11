@@ -97,6 +97,15 @@
 
 <vc:geolocation-form route="routes.ToDictionary() as Dictionary<string, string>" action-method="SubmitPeriodGeolocation"></vc:geolocation-form>
 
+<div class="container-md pt-3">
+    <div class="d-inline-block">
+        <a class="btn btn-link d-flex flex-nowrap align-middle gap-2 w-auto" asp-controller="Search" asp-action="Index">
+            <i class="bi bi-arrow-left"></i>
+            <span class="text-truncate">Back to search</span>
+        </a>
+    </div>
+</div>
+
 <partial name="_DsoNameHeadingPartial" model="@Model.Dso" />
 
 <div class="sticky-top-container container-sm px-1 py-2 p-sm-3 my-0 my-sm-3 my-md-5">
