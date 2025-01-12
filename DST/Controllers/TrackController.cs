@@ -188,6 +188,7 @@ namespace DST.Controllers
             IEnumerable<SelectListItem> phases = System.Array.Empty<SelectListItem>();
             string selectedPhase = string.Empty;
             string message = string.Empty;
+            AlertType messageType = AlertType.Default;
 
             if (trajectory is IRiseSetTrajectory)
             {
@@ -195,15 +196,16 @@ namespace DST.Controllers
 
                 phases = PhaseName.GetTextValuePairs().Select(
                     i => new SelectListItem(i.Text, i.Value, i.Value == selectedPhase));
-
             }
             else if (trajectory is ICircumpolarTrajectory and not IVariableTrajectory)
             {
                 message = Resources.DisplayText.TrackPhaseWarningCircumpolar;
+                messageType = AlertType.Danger;
             }
             else if (trajectory is ICircumpolarTrajectory and IVariableTrajectory)
             {
                 message = Resources.DisplayText.TrackPhaseWarningCircumpolarOffset;
+                messageType = AlertType.Warning;
                 selectedPhase = PhaseName.Apex.ToKebabCase();
 
                 phases = PhaseName.GetTextValuePairs().Select(
@@ -212,6 +214,7 @@ namespace DST.Controllers
             else
             {
                 message = Resources.DisplayText.TrackPhaseWarningNeverRise;
+                messageType = AlertType.Danger;
             }
 
             if (buildResults)
@@ -250,7 +253,7 @@ namespace DST.Controllers
                 },
 
                 Results = results,
-                WarningMessage = message
+                Alert = new(message, messageType)
             };
 
             return viewModel;
@@ -320,14 +323,17 @@ namespace DST.Controllers
 
             TrackResults results = new();
             string message = string.Empty;
+            AlertType messageType = AlertType.Default;
 
             if (trajectory is NeverRiseTrajectory)
             {
                 message = Resources.DisplayText.TrackPeriodWarningNeverRise;
+                messageType = AlertType.Warning;
             }
             else if (trajectory is ICircumpolarTrajectory)
             {
                 message = Resources.DisplayText.TrackPeriodWarningCircumpolar;
+                messageType = AlertType.Warning;
             }
 
             if (buildResults)
@@ -372,7 +378,7 @@ namespace DST.Controllers
                 },
 
                 Results = results,
-                WarningMessage = message
+                Alert = new(message, messageType)
             };
 
             return viewModel;
