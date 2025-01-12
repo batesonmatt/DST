@@ -7,12 +7,9 @@ Icons
 
 ---------------------------------------------------------------------------
 
-Phase and Period views
-- Consider adding padding to the bottom of the empty body,
-  or use an empty container with message when the results pane is empty,
-  This way the screen isn't squished vertically.
-- Consider adding a second Options toggle button to the body when it's empty.
-  "Start here" or "Start tracking"
+Phase and Period views                                                                              ...IN PROGRESS
+- Revise warning message verbiage
+- Revise results layout
 
 
 Details OffCanvas
@@ -20,7 +17,7 @@ Details OffCanvas
 - Use a single Modal
 - Implement support for varying data in the modal to avoid creating a modal per object in the loop.
 
-Tooltips (Do not use the Tooltip component, which relies on the Popper library)
+Tooltips (Do not use the Tooltip nor Popover components, which rely on the Popper library)
 - Consider hover over hint icon (?) at the end of the text.
 - Consider Collapse control for tooltips
 - Use .form-text for tooltips
