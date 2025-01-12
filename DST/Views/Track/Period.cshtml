@@ -146,17 +146,15 @@
 
 <div class="container pt-3">
 
-    @if (Model.HasWarning())
+    @if (Model.HasMessage())
     {
-        <div class="mb-3">
-            <label class="form-label text-warning">@Model.WarningMessage</label>
-        </div>
+        <partial name="_AlertMessagePartial" model="@Model.Alert"></partial>
     }
 
     <div class="mb-5">
         @if (Model.HasResults())
         {
-            <div class="mb-3">
+            <div class="alert">
                 <i>@Model.Results.TimeScaleName</i>
             </div>
 

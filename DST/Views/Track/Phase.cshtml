@@ -61,12 +61,10 @@
                     </div>
                 </form>
             }
-            else if (Model.HasWarning())
+            else if (Model.HasMessage())
             {
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label text-warning">@Model.WarningMessage</label>
-                    </div>
+                    <partial name="_AlertMessagePartial" model="@Model.Alert"></partial>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
@@ -126,10 +124,10 @@
 
 <div class="container pt-3">
 
-    @if (Model.HasWarning())
+    @if (Model.HasMessage())
     {
         <div class="mb-3">
-            <label class="form-label text-warning">@Model.WarningMessage</label>
+            <partial name="_AlertMessagePartial" model="@Model.Alert"></partial>
         </div>
     }
 
