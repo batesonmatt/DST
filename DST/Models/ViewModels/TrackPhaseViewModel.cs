@@ -17,7 +17,7 @@ namespace DST.Models.ViewModels
         public IEnumerable<SelectListItem> Phases { get; set; }
         public TrackPhaseModel TrackForm { get; set; }
         public TrackResults Results { get; set; }
-        public string WarningMessage { get; set; }
+        public AlertMessage Alert { get; set; }
 
         #endregion
 
@@ -33,9 +33,9 @@ namespace DST.Models.ViewModels
             return Phases?.Any() ?? false;
         }
 
-        public bool HasWarning()
+        public bool HasMessage()
         {
-            return !string.IsNullOrWhiteSpace(WarningMessage);
+            return Alert is not null && !string.IsNullOrWhiteSpace(Alert.Message);
         }
 
         #endregion
