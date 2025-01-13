@@ -8,8 +8,7 @@ Icons
 ---------------------------------------------------------------------------
 
 Phase and Period views                                                                              ...IN PROGRESS
-- Revise warning message verbiage
-- Revise results layout
+- Add option to switch between the different coordinate formats (Decimal, Component, Compact)
 
 
 Details OffCanvas
@@ -26,14 +25,8 @@ Tooltips (Do not use the Tooltip nor Popover components, which rely on the Poppe
 
 Revise all id tags as camelCase
 
-Use text-truncate class everywhere.
-Use user-select-none class everywhere.
-- Hint: Ctrl+Shift+F
-
 Consider using .stretched-link to the search results card details link 
 - need to revise the layout so the Track button is still clickable.
-
-Consider class="display-#" for certain headings (like the banners)
 
 Users might disable JavaScript.
 - Consider a message stating JavaScript must be enabled on this browser to run scripts.
@@ -87,6 +80,9 @@ Text Interactions (Text selection)
 - https://getbootstrap.com/docs/5.0/utilities/interactions/
 
 Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text)
+Use Bootstrap class .user-select-none where necessary (prevents text selection)
+
+Consider class="display-#" for certain headings (like the banners)
 
 ---------------------------------------------------------------------------
 
@@ -128,10 +124,6 @@ Localization
 Create powershell script(s) to remove/update the database, rebuild the migrations, etc.
 - Run from PMC in visual studio
 - Keep commented out when not running, then uncomment when ready.
-
-Period
-- Consider hiding the Aggregate option by default, then only show it when the user
-  selects Months/Years and Fixed tracking.
 
 Consider a builder for ILocalObserver, IObserverBuilder => LocalObserverBuilder.
 - Takes DsoModel, GeolocationModel, and Algorithm
