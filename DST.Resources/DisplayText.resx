@@ -630,15 +630,15 @@
     <comment>The display text warning that a particular object will always have a negative observable altitude due to its trajectory being never visible to the observer.</comment>
   </data>
   <data name="TrackPhaseWarningCircumpolar" xml:space="preserve">
-    <value>This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no variation in altitude.</value>
+    <value>This object has no trackable phases because it is circumpolar from your location with no variation in altitude.</value>
     <comment>The display text warning that a particular object does not support any phase tracking due to its trajectory being circumpolar to the observer.</comment>
   </data>
   <data name="TrackPhaseWarningCircumpolarOffset" xml:space="preserve">
-    <value>This object supports limited phase tracking for apex positions only, with no trackable rise nor set positions because it is circumpolar from your location with variation in altitude.</value>
+    <value>This object supports limited phase tracking for apex positions only because it is circumpolar from your location with variation in altitude.</value>
     <comment>The display text warning that a particular object does not support rise nor set phase tracking due to its trajectory being circumpolar to the observer with variation in altitude.</comment>
   </data>
   <data name="TrackPhaseWarningNeverRise" xml:space="preserve">
-    <value>This object has no trackable rise, set, nor apex positions because it is never visible from your location.</value>
+    <value>This object has no trackable phases because it is never visible from your location.</value>
     <comment>The display text warning that a particular object does not support any phase tracking due to its trajectory being never visible to the observer.</comment>
   </data>
   <data name="TrackValidationCycles" xml:space="preserve">

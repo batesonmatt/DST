@@ -1213,7 +1213,7 @@ namespace DST.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This object has no trackable rise, set, nor apex positions because it is circumpolar from your location with no variation in altitude..
+        ///   Looks up a localized string similar to This object has no trackable phases because it is circumpolar from your location with no variation in altitude..
         /// </summary>
         public static string TrackPhaseWarningCircumpolar {
             get {
@@ -1222,7 +1222,7 @@ namespace DST.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This object supports limited phase tracking for apex positions only, with no trackable rise nor set positions because it is circumpolar from your location with variation in altitude..
+        ///   Looks up a localized string similar to This object supports limited phase tracking for apex positions only because it is circumpolar from your location with variation in altitude..
         /// </summary>
         public static string TrackPhaseWarningCircumpolarOffset {
             get {
@@ -1231,7 +1231,7 @@ namespace DST.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This object has no trackable rise, set, nor apex positions because it is never visible from your location..
+        ///   Looks up a localized string similar to This object has no trackable phases because it is never visible from your location..
         /// </summary>
         public static string TrackPhaseWarningNeverRise {
             get {
