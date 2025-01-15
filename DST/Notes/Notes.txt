@@ -7,9 +7,35 @@ Icons
 
 ---------------------------------------------------------------------------
 
-Phase and Period views                                                                              ...IN PROGRESS
+Phase and Period views                                                                                                                          ...IN PROGRESS
 - Add option to switch between the different coordinate formats (Decimal, Component, Compact)
-
+  1. Add route segment "format-{coordinateformat}" after algorithm to trackperiod and trackphase routes
+  2. Add CoordinateFormat* resource strings to DisplayText for "Decimal", "Component", and "Compact"
+  3. Add new class, BusinessLogic.CoordinateFormatName, using the resource strings (See other similar classes)
+  4. Add string property TrackModel.CoordinateFormat, defaulting to the default format (Component)
+  5. Add string property TrackPhaseRoute.CoordinateFormat and TrackPeriodRoute.CoordinateFormat, defaulting to the default format (Component)
+  6. Add method TrackPhaseRoute.SetCoordinateFormat(string) and TrackPeriodRoute.SetCoordinateFormat(string)
+     See TrackSummaryRoute.SetAlgorithm(string) for similar setup.
+  7. Update the ToDictionary() and Validate() methods in both route classes.
+  8. Add property IEnumerable<SelectListItem> TrackPhaseViewModel.CoordinateFormats and TrackPeriodViewModel.CoordinateFormats
+  9. Update TrackController.SubmitPhase and TrackController.SubmitPeriod, calling SetCoordinateFormat(string) on the route object
+  10. Add method Utilities.GetCoordinateFormat(values.CoordinateFormat) ... (See Utilities.GetAlgorithm)
+  11. Update TrackController.GetPhaseViewModel and .GetPeriodViewModel:
+        DST.Core.Coordinate.FormatType format = Utilities.GetCoordinateFormat(values.CoordinateFormat);
+        ...
+        IEnumerable<SelectListItem> formats = CoordinateFormatName.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.CoordinateFormat));
+        ...
+        results = Utilities.GetPhaseResults(localObserver, format, phaseBuilder.Current);
+        results = Utilities.GetPeriodResults(localObserver, algorithm, format, periodBuilder.Current);
+        ...
+        Set the CoordinateFormats collection property in the viewmodel.
+        Set the CoordinateFormat property in the TrackForm object to the CoordinateFormat value in the route.
+  12. Update Utilities.GetPhaseResults() and .GetPeriodResults() to take additional argument, FormatType format.
+      return new(results.OfType<ILocalVector>().Select(result => new TrackResult(result, format)), timeScale);
+      ...
+  13. Update TrackResult() constructor to take additional argument, FormatType format, and assign new field _format.
+  14. Update TrackResult.GetAltitudeText(), .GetAzimuthText(), and .GetCoordinateText() to use new _format field.
 
 Details OffCanvas
 - Use a Modal instead of the OffCanvas
