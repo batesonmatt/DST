@@ -7,7 +7,6 @@ using DST.Core.Observer;
 using DST.Core.Trajectory;
 using System;
 using DST.Models.Extensions;
-using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using DST.Core.Vector;
@@ -21,6 +20,30 @@ namespace DST.Models.BusinessLogic
 {
     public class Utilities
     {
+        public static FormatType GetCoordinateFormat(string name)
+        {
+            FormatType format;
+
+            if (name.EqualsSeo(CoordinateFormatName.Component))
+            {
+                format = FormatType.Component;
+            }
+            else if (name.EqualsSeo(CoordinateFormatName.Decimal))
+            {
+                format = FormatType.Decimal;
+            }
+            else if (name.EqualsSeo(CoordinateFormatName.Compact))
+            {
+                format = FormatType.Compact;
+            }
+            else
+            {
+                format = FormatType.Default;
+            }
+
+            return format;
+        }
+
         public static Algorithm GetAlgorithm(string name)
         {
             Algorithm algorithm;
@@ -601,7 +624,7 @@ namespace DST.Models.BusinessLogic
             return info;
         }
 
-        public static TrackResults GetPhaseResults(ILocalObserver localObserver, TrackPhaseModel phaseModel)
+        public static TrackResults GetPhaseResults(ILocalObserver localObserver, FormatType format, TrackPhaseModel phaseModel)
         {
             IVector[] results = Array.Empty<IVector>();
             TimeScale timeScale = TimeScale.Default;
@@ -645,10 +668,10 @@ namespace DST.Models.BusinessLogic
                 timeScale = TimeScale.Default;
             }
 
-            return new(results.OfType<ILocalVector>().Select(result => new TrackResult(result)), timeScale);
+            return new(results.OfType<ILocalVector>().Select(result => new TrackResult(result, format)), timeScale);
         }
 
-        public static TrackResults GetPeriodResults(ILocalObserver localObserver, Algorithm algorithm, TrackPeriodModel periodModel)
+        public static TrackResults GetPeriodResults(ILocalObserver localObserver, Algorithm algorithm, FormatType format, TrackPeriodModel periodModel)
         {
             IVector[] results = Array.Empty<IVector>();
             TimeScale timeScale = TimeScale.Default;
@@ -696,7 +719,7 @@ namespace DST.Models.BusinessLogic
                 timeScale = TimeScale.Default;
             }
 
-            return new(results.OfType<ILocalVector>().Select(result => new TrackResult(result)), timeScale);
+            return new(results.OfType<ILocalVector>().Select(result => new TrackResult(result, format)), timeScale);
         }
 
         // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation during the current season.
