@@ -14,6 +14,7 @@ namespace DST.Models.ViewModels
         public DsoModel Dso { get; set; }
         public TrackPeriodRoute CurrentRoute { get; set; }
         public IEnumerable<SelectListItem> Algorithms { get; set; }
+        public IEnumerable<SelectListItem> CoordinateFormats { get; set; }
         public IEnumerable<SelectListItem> TimeUnits { get; set; }
         public TrackPeriodModel TrackForm { get; set; }
         public TrackResults Results { get; set; }
