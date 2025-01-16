@@ -5,6 +5,8 @@
     {
         Decimal,
         Component,
-        Compact
+        Compact,
+
+        Default = Component
     }
 }
