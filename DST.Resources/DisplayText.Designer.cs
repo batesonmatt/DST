@@ -295,6 +295,33 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compact.
+        /// </summary>
+        public static string CoordinateFormatCompact {
+            get {
+                return ResourceManager.GetString("CoordinateFormatCompact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Component.
+        /// </summary>
+        public static string CoordinateFormatComponent {
+            get {
+                return ResourceManager.GetString("CoordinateFormatComponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decimal.
+        /// </summary>
+        public static string CoordinateFormatDecimal {
+            get {
+                return ResourceManager.GetString("CoordinateFormatDecimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0:n} kly.
         /// </summary>
         public static string DistanceFormatDecimalKly {

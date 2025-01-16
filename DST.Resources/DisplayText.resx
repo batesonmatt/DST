@@ -221,6 +221,18 @@
     <value>Apparent Magnitude: {0:0.0#}</value>
     <comment>Formats the apparent magnitude of a particular deep-sky object as a decimal value, up to two decimal places, or a single zero decimal digit if there is no fractional part.</comment>
   </data>
+  <data name="CoordinateFormatCompact" xml:space="preserve">
+    <value>Compact</value>
+    <comment>The display text for the option to format the angles of a spherical coordinate rounded to the nearest integer.</comment>
+  </data>
+  <data name="CoordinateFormatComponent" xml:space="preserve">
+    <value>Component</value>
+    <comment>The display text for the option to format the angles of a spherical coordinate in full component form (Degrees or hours, minutes, and seconds, including fractional seconds).</comment>
+  </data>
+  <data name="CoordinateFormatDecimal" xml:space="preserve">
+    <value>Decimal</value>
+    <comment>The display text for the option to format the angles of a spherical coordinate in decimal degrees.</comment>
+  </data>
   <data name="DistanceFormatDecimalKly" xml:space="preserve">
     <value>{0:n} kly</value>
     <comment>Formats the distance of a deep-sky object as a floating-point value to two decimal places, with group separators, measured in kilolight-years.</comment>
