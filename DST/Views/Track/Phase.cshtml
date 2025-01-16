@@ -55,6 +55,10 @@
                                 <span asp-validation-for="TrackForm.Cycles" class="text-danger"></span>
                             </div>
                         </div>
+                        <div class="form-floating mb-3">
+                            <select id="select-phase-format" class="form-select text-truncate" asp-for="TrackForm.CoordinateFormat" asp-items="@Model.CoordinateFormats"></select>
+                            <label class="form-label user-select-none" for="select-phase-format">Results Format</label>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button id="form-phase-submit" class="btn btn-primary" type="submit">Track</button>
