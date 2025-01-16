@@ -160,12 +160,12 @@ namespace DST
                 // Track Period route
                 endpoints.MapControllerRoute(
                     name: "trackperiod",
-                    pattern: "{controller}/{action}/{catalog}/{id}/{algorithm}/{start}/track-once-{trackonce}/fixed-tracking-{fixed}/aggregate-{aggregate}/{timeunit}/{period}/interval/{interval}");
+                    pattern: "{controller}/{action}/{catalog}/{id}/{algorithm}/format-{coordinateformat}/{start}/track-once-{trackonce}/fixed-tracking-{fixed}/aggregate-{aggregate}/{timeunit}/{period}/interval/{interval}");
 
                 // Track Phase route
                 endpoints.MapControllerRoute(
                     name: "trackphase",
-                    pattern: "{controller}/{action}/{catalog}/{id}/{algorithm}/{start}/{phase}/track-once-{trackonce}/cycles/{cycles}");
+                    pattern: "{controller}/{action}/{catalog}/{id}/{algorithm}/format-{coordinateformat}/{start}/{phase}/track-once-{trackonce}/cycles/{cycles}");
 
                 // Track Summary route
                 endpoints.MapControllerRoute(
