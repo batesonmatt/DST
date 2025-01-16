@@ -11,6 +11,7 @@ namespace DST.Models.Routes
     {
         #region Properties
 
+        public string CoordinateFormat { get; set; } = CoordinateFormatName.Default;
         public long Start { get; set; }
         public string Phase { get; set; } = PhaseName.Default;
         public string TrackOnce { get; set; } = Filter.Off;
@@ -38,6 +39,26 @@ namespace DST.Models.Routes
         #endregion
 
         #region Methods
+
+        public void SetCoordinateFormat(string format)
+        {
+            if (format.EqualsSeo(CoordinateFormatName.Component))
+            {
+                CoordinateFormat = CoordinateFormatName.Component.ToKebabCase();
+            }
+            else if (format.EqualsSeo(CoordinateFormatName.Decimal))
+            {
+                CoordinateFormat = CoordinateFormatName.Decimal.ToKebabCase();
+            }
+            else if (format.EqualsSeo(CoordinateFormatName.Compact))
+            {
+                CoordinateFormat = CoordinateFormatName.Compact.ToKebabCase();
+            }
+            else
+            {
+                CoordinateFormat = CoordinateFormatName.Default.ToKebabCase();
+            }
+        }
 
         public void SetPhase(string phase)
         {
@@ -83,6 +104,7 @@ namespace DST.Models.Routes
         {
             Dictionary<string, string> route = new()
             {
+                { nameof(CoordinateFormat), CoordinateFormat.ToKebabCase() },
                 { nameof(Start), Start.ToString().ToKebabCase() },
                 { nameof(Phase), Phase.ToKebabCase() },
                 { nameof(TrackOnce), TrackOnce.ToKebabCase() },
@@ -99,6 +121,8 @@ namespace DST.Models.Routes
         public new void Validate()
         {
             base.Validate();
+
+            SetCoordinateFormat(CoordinateFormat);
             SetStart(Start);
             SetPhase(Phase);
             SetTrackOnce(IsTrackOnce);

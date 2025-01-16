@@ -11,6 +11,7 @@ namespace DST.Models.Routes
     {
         #region Properties
 
+        public string CoordinateFormat { get; set; } = CoordinateFormatName.Default;
         public long Start { get; set; }
         public string TrackOnce { get; set; } = Filter.Off;
         public string Fixed { get; set; } = Filter.Off;
@@ -59,6 +60,26 @@ namespace DST.Models.Routes
         public bool SupportsAggregatedIntervals()
         {
             return IsFixed && !IsTrackOnce && Utilities.SupportsAggregatedIntervals(Utilities.GetTimeUnit(TimeUnit));
+        }
+
+        public void SetCoordinateFormat(string format)
+        {
+            if (format.EqualsSeo(CoordinateFormatName.Component))
+            {
+                CoordinateFormat = CoordinateFormatName.Component.ToKebabCase();
+            }
+            else if (format.EqualsSeo(CoordinateFormatName.Decimal))
+            {
+                CoordinateFormat = CoordinateFormatName.Decimal.ToKebabCase();
+            }
+            else if (format.EqualsSeo(CoordinateFormatName.Compact))
+            {
+                CoordinateFormat = CoordinateFormatName.Compact.ToKebabCase();
+            }
+            else
+            {
+                CoordinateFormat = CoordinateFormatName.Default.ToKebabCase();
+            }
         }
 
         public void SetStart(long start)
@@ -144,6 +165,7 @@ namespace DST.Models.Routes
         {
             Dictionary<string, string> route = new()
             {
+                { nameof(CoordinateFormat), CoordinateFormat.ToKebabCase() },
                 { nameof(Start), Start.ToString().ToKebabCase() },
                 { nameof(TrackOnce), TrackOnce.ToKebabCase() },
                 { nameof(Fixed), Fixed.ToKebabCase() },
@@ -164,6 +186,7 @@ namespace DST.Models.Routes
         {
             base.Validate();
 
+            SetCoordinateFormat(CoordinateFormat);
             SetStart(Start);
             SetTrackOnce(IsTrackOnce);
             SetTimeUnit(TimeUnit);
