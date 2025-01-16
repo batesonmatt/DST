@@ -1,9 +1,16 @@
-﻿using DST.Core.Vector;
+﻿using DST.Core.Coordinate;
+using DST.Core.Vector;
 
 namespace DST.Models.BusinessLogic
 {
     public class TrackResult
     {
+        #region Fields
+
+        private FormatType _format;
+
+        #endregion
+
         #region Properties
 
         public ILocalVector Vector { get; }
@@ -12,9 +19,10 @@ namespace DST.Models.BusinessLogic
 
         #region Constructors
 
-        public TrackResult(ILocalVector vector)
+        public TrackResult(ILocalVector vector, FormatType format)
         {
             Vector = vector;
+            _format = format;
         }
 
         #endregion
@@ -33,17 +41,17 @@ namespace DST.Models.BusinessLogic
 
         public string GetAltitudeText()
         {
-            return Vector.Position.Format(Core.Coordinate.FormatType.Component, Core.Components.ComponentType.Inclination);
+            return Vector.Position.Format(_format, Core.Components.ComponentType.Inclination);
         }
 
         public string GetAzimuthText()
         {
-            return Vector.Position.Format(Core.Coordinate.FormatType.Component, Core.Components.ComponentType.Rotation);
+            return Vector.Position.Format(_format, Core.Components.ComponentType.Rotation);
         }
 
         public string GetCoordinateText()
         {
-            return Vector.Coordinate.Format(Core.Coordinate.FormatType.Component);
+            return Vector.Coordinate.Format(_format);
         }
 
         #endregion
