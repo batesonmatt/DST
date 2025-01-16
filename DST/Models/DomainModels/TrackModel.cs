@@ -12,6 +12,8 @@ namespace DST.Models.DomainModels
 
         public string Algorithm { get; set; } = AlgorithmName.Default;
 
+        public string CoordinateFormat { get; set; } = CoordinateFormatName.Default;
+
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resources.DisplayText), ErrorMessageResourceName = "TrackValidationStartDate")]
         [Remote("ValidateStartDate", "Validation")]
         [EpochDateRange]
