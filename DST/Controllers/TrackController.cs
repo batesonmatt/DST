@@ -12,6 +12,7 @@ using DST.Core.TimeKeeper;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
+using DST.Core.Coordinate;
 
 namespace DST.Controllers
 {
@@ -181,6 +182,7 @@ namespace DST.Controllers
 
             DsoModel dso = data.DsoItems.Get(values.Catalog, values.Id);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
+            FormatType format = Utilities.GetCoordinateFormat(values.CoordinateFormat);
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
@@ -225,7 +227,7 @@ namespace DST.Controllers
                 // Calculate the phase tracking results if an entry was submitted.
                 if (phaseBuilder.Current.IsReady)
                 {
-                    results = Utilities.GetPhaseResults(localObserver, phaseBuilder.Current);
+                    results = Utilities.GetPhaseResults(localObserver, format, phaseBuilder.Current);
 
                     // Force the client to resubmit the form.
                     phaseBuilder.Current.IsReady = false;
@@ -236,16 +238,21 @@ namespace DST.Controllers
             IEnumerable<SelectListItem> algorithms = AlgorithmName.GetTextValuePairs().Select(
                 i => new SelectListItem(i.Text, i.Value, i.Value == values.Algorithm));
 
+            IEnumerable<SelectListItem> formats = CoordinateFormatName.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.CoordinateFormat));
+
             TrackPhaseViewModel viewModel = new()
             {
                 Dso = dso,
                 CurrentRoute = values,
                 Algorithms = algorithms,
+                CoordinateFormats = formats,
                 Phases = phases,
 
                 TrackForm = new TrackPhaseModel()
                 {
                     Algorithm = values.Algorithm,
+                    CoordinateFormat = values.CoordinateFormat,
                     Start = Utilities.GetClientDateTime(geoBuilder.CurrentGeolocation, values.Start),
                     Phase = selectedPhase,
                     IsTrackOnce = values.IsTrackOnce,
@@ -274,6 +281,8 @@ namespace DST.Controllers
                 return View("Phase", GetPhaseViewModel(data, geoBuilder, phaseBuilder, values, buildResults: false));
             }
 
+            // The ordering is important here.
+            values.SetCoordinateFormat(trackForm.CoordinateFormat);
             values.SetAlgorithm(trackForm.Algorithm);
             values.SetStart(trackForm.GetTicks());
             values.SetPhase(trackForm.Phase);
@@ -318,6 +327,7 @@ namespace DST.Controllers
 
             DsoModel dso = data.DsoItems.Get(values.Catalog, values.Id);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
+            FormatType format = Utilities.GetCoordinateFormat(values.CoordinateFormat);
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
@@ -344,7 +354,7 @@ namespace DST.Controllers
                 // Calculate the period tracking results if an entry was submitted.
                 if (periodBuilder.Current.IsReady)
                 {
-                    results = Utilities.GetPeriodResults(localObserver, algorithm, periodBuilder.Current);
+                    results = Utilities.GetPeriodResults(localObserver, algorithm, format, periodBuilder.Current);
 
                     // Force the client to resubmit the form.
                     periodBuilder.Current.IsReady = false;
@@ -355,6 +365,9 @@ namespace DST.Controllers
             IEnumerable<SelectListItem> algorithms = AlgorithmName.GetTextValuePairs().Select(
                 i => new SelectListItem(i.Text, i.Value, i.Value == values.Algorithm));
 
+            IEnumerable<SelectListItem> formats = CoordinateFormatName.GetTextValuePairs().Select(
+                i => new SelectListItem(i.Text, i.Value, i.Value == values.CoordinateFormat));
+
             IEnumerable<SelectListItem> timeUnits = TimeUnitName.GetTextValuePairs().Select(
                 i => new SelectListItem(i.Text, i.Value, i.Value == values.TimeUnit));
 
@@ -363,11 +376,13 @@ namespace DST.Controllers
                 Dso = dso,
                 CurrentRoute = values,
                 Algorithms = algorithms,
+                CoordinateFormats = formats,
                 TimeUnits = timeUnits,
 
                 TrackForm = new TrackPeriodModel()
                 {
                     Algorithm = values.Algorithm,
+                    CoordinateFormat = values.CoordinateFormat,
                     Start = Utilities.GetClientDateTime(geoBuilder.CurrentGeolocation, values.Start),
                     IsTrackOnce = values.IsTrackOnce,
                     IsFixed = values.IsFixed,
@@ -400,6 +415,7 @@ namespace DST.Controllers
             }
 
             // The ordering is important here.
+            values.SetCoordinateFormat(trackForm.CoordinateFormat);
             values.SetAlgorithm(trackForm.Algorithm);
             values.SetStart(trackForm.GetTicks());
             values.SetTrackOnce(trackForm.IsTrackOnce);
