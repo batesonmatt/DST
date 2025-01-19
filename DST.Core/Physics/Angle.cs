@@ -10,6 +10,9 @@
         private static readonly double[] _millisecondsPerUnitComponent
             = { 3.6E+6, 6E+4, 1E+3, 1.0 };
 
+        // The number of fractional digits to round when formatting as a decimal value.
+        private static readonly int _displayPrecision = 4;
+
         // Gets a new Angle with a value of 0°.
         public static Angle Zero => new();
 
@@ -359,19 +362,46 @@
         public string ToString(FormatType format, FormatModifierType modifier)
         {
             string result;
+            double rounded;
+
+            // Note that these formats passed into string.Format will always round away from zero.
 
             switch (format)
             {
                 case FormatType.DecimalDegrees:
                 default:
                     {
-                        result = string.Format(Resources.AngleFormats.DecimalFormatDegrees, Math.Abs(TotalDegrees));
+                        // Round to the nearest 4 digits, away from zero.
+                        rounded = Math.Round(TotalDegrees, _displayPrecision, MidpointRounding.AwayFromZero);
+
+                        // The underlying total degrees will always be on (-360°, 360°),
+                        // So theoretically, rounding will always be on [-360°, 360°].
+                        // If the rounded angle is on (-∞, -360°]U[360°, ∞) set it to 0°.
+                        if (Math.Abs(rounded) >= 360.0)
+                        {
+                            rounded = 0.0;
+                        }
+
+                        result = string.Format(Resources.AngleFormats.DecimalFormatDegrees, Math.Abs(rounded));
+
                         break;
                     }
 
                 case FormatType.DecimalHours:
                     {
-                        result = string.Format(Resources.AngleFormats.DecimalFormatHours, Math.Abs(ToTime().TotalHours));
+                        // Round to the nearest 4 digits, away from zero.
+                        rounded = Math.Round(ToTime().TotalHours, _displayPrecision, MidpointRounding.AwayFromZero);
+
+                        // The underlying total hours will always be on (-24h, 24h),
+                        // So theoretically, rounding will always be on [-24h, 24h].
+                        // If the rounded angle is on (-∞, -24h]U[24h, ∞) set it to 0h.
+                        if (Math.Abs(rounded) >= 24.0)
+                        {
+                            rounded = 0.0;
+                        }
+
+                        result = string.Format(Resources.AngleFormats.DecimalFormatHours, Math.Abs(rounded));
+
                         break;
                     }
 
@@ -383,6 +413,10 @@
                         // Decimal seconds = Seconds + (Milliseconds / 1000.0)
                         double remainingSeconds = components.ElementAtOrDefault(2) + components.ElementAtOrDefault(3) / 1000.0;
 
+                        // If all components of this angle are zero, the rounded angle should also be zero.
+                        // Otherwise, just use the total degrees.
+                        rounded = components.All(x => x == 0) ? 0.0 : TotalDegrees;
+
                         result = string.Format(Resources.AngleFormats.ComponentFormatDegrees,
                             Math.Abs(components.ElementAtOrDefault(0)),
                             Math.Abs(components.ElementAtOrDefault(1)),
@@ -393,13 +427,21 @@
 
                 case FormatType.ComponentHours:
                     {
-                        TimeSpan value = ToTime();
+                        TimeSpan time = ToTime();
+                        
+                        int[] components = { time.Hours, time.Minutes, time.Seconds, time.Milliseconds };
 
-                        double remainingSeconds = value.Seconds + value.Milliseconds / 1000.0;
+                        // Combine the whole seconds with fractional seconds as a single decimal value.
+                        // Decimal seconds = Seconds + (Milliseconds / 1000.0)
+                        double remainingSeconds = time.Seconds + time.Milliseconds / 1000.0;
+
+                        // If all components of this angle are zero, the rounded angle should also be zero.
+                        // Otherwise, just use the total hours.
+                        rounded = components.All(x => x == 0) ? 0.0 : TotalHours;
 
                         result = string.Format(Resources.AngleFormats.ComponentFormatHours,
-                            Math.Abs(value.Hours),
-                            Math.Abs(value.Minutes),
+                            Math.Abs(time.Hours),
+                            Math.Abs(time.Minutes),
                             Math.Abs(remainingSeconds));
 
                         break;
@@ -407,13 +449,37 @@
 
                 case FormatType.CompactDegrees:
                     {
-                        result = string.Format(Resources.AngleFormats.CompactFormatDegrees, Math.Abs(TotalDegrees));
+                        // Round to the nearest integral value, away from zero.
+                        rounded = Math.Round(TotalDegrees, MidpointRounding.AwayFromZero);
+
+                        // The underlying total degrees will always be on (-360°, 360°),
+                        // So theoretically, rounding will always be on [-360°, 360°].
+                        // If the rounded angle is on (-∞, -360°]U[360°, ∞) set it to 0°.
+                        if (Math.Abs(rounded) >= 360.0)
+                        {
+                            rounded = 0.0;
+                        }
+
+                        result = string.Format(Resources.AngleFormats.CompactFormatDegrees, Math.Abs(rounded));
+                        
                         break;
                     }
 
                 case FormatType.CompactHours:
                     {
-                        result = string.Format(Resources.AngleFormats.CompactFormatHours, Math.Abs(ToTime().TotalHours));
+                        // Round to the nearest integral value, away from zero.
+                        rounded = Math.Round(ToTime().TotalHours, MidpointRounding.AwayFromZero);
+
+                        // The underlying total hours will always be on (-24h, 24h),
+                        // So theoretically, rounding will always be on [-24h, 24h].
+                        // If the rounded angle is on (-∞, -24h]U[24h, ∞) set it to 0h.
+                        if (Math.Abs(rounded) >= 24.0)
+                        {
+                            rounded = 0.0;
+                        }
+
+                        result = string.Format(Resources.AngleFormats.CompactFormatHours, Math.Abs(rounded));
+                        
                         break;
                     }
             }
@@ -424,7 +490,7 @@
                 default:
                     {
                         // Include only the negative sign if the angle is negative.
-                        if (TotalDegrees < 0.0)
+                        if (rounded < 0.0)
                         {
                             result = string.Format(Resources.AngleFormats.SignedFormatNegativeValue, result);
                         }
@@ -435,7 +501,7 @@
                 case FormatModifierType.Signed:
                     {
                         // Include a negative sign if the angle is negative, or a positive sign if the angle is positive or zero.
-                        if (TotalDegrees < 0.0)
+                        if (rounded < 0.0)
                         {
                             result = string.Format(Resources.AngleFormats.SignedFormatNegativeValue, result);
                         }
@@ -457,7 +523,7 @@
                     {
                         // Include a South bearing indicator if the angle is negative, 
                         // or a North bearing indicator if the angle is positive or zero.
-                        if (TotalDegrees < 0.0)
+                        if (rounded < 0.0)
                         {
                             result = string.Format(Resources.AngleFormats.BearingFormatSouth, result);
                         }
@@ -473,7 +539,7 @@
                     {
                         // Include a West bearing indicator if the angle is negative, 
                         // or an East bearing indicator if the angle is positive or zero.
-                        if (TotalDegrees < 0.0)
+                        if (rounded < 0.0)
                         {
                             result = string.Format(Resources.AngleFormats.BearingFormatWest, result);
                         }
