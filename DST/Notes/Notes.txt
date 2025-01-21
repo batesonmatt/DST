@@ -10,13 +10,54 @@ Icons
 Phase and Period views                                                                                                                          ...IN PROGRESS
 - Add labels along with the TimeScale for the selected Phase, algorithm, start, cycles, time unit, period, interval, etc.
 
+Period tracking:
+..............................................................................
+Timekeeper      Earth Rotation Angle (ERA)
+Time scale      Stellar Time
+Start           January 1, 2000 19:20:55
+Time unit       Days
+Period          10
+Interval        2
+Results         # results
+                
+Fixed tracking is enabled.
+Aggregated intervals is enabled.
+..............................................................................
+
+
+Phase tracking:
+..............................................................................
+Timekeeper      Greenwich Apparent Sideral Time (GAST)
+Time scale      Sideral Time
+Start           January 1, 2000 19:20:55
+Phase           Apex
+Cycles          10
+Results         # results
+..............................................................................
+
+1. Revise TrackModel.GetFormattedStart() as .GetSortableStart() => Start.ToString("s");
+2. Add method TrackModel.GetFullStart() => Start.ToString("F")
+3. Revise TrackResults constructor to take ITimeScalable and ITimeKeeper arguments.
+4. Revise TrackResults default constructor to just empty initialize the collection.
+5. Revise TrackResults.TimeScaleName => _timeScale?.ToString() ?? string.Empty;
+6. Add ITimeKeeper field TrackResults._timeKeeper, and string property TimeKeeperName => _timeKeeper?.ToString() ?? string.Empty;
+7. Revise Utilities.GetPeriodResults and .GetPhaseResults to set the ITimeScalable object, and default to TimeScalableFactory.Create(TimeScale.Default);
+8. Revise Utilities.GetPeriodResults and .GetPhaseResults return to pass the ITimeScalable and ITimeKeeper objects into the TrackResults constructor.
+9. Add a horizontal form inside an Accordian to the Period and Phase views above the results section, and show if there are any results.
+
+---------------------------------------------------------------------------
+
+Quick Track
+- Consider a 'Quick Track' feature for Phase and Period tracking that uses the current datetime
+  and default settings for a single track.
+
 Details OffCanvas
 - Use a Modal instead of the OffCanvas
 - Use a single Modal
 - Implement support for varying data in the modal to avoid creating a modal per object in the loop.
 
 Tooltips (Do not use the Tooltip nor Popover components, which rely on the Popper library)
-- Consider hover over hint icon (?) at the end of the text.
+- Consider hover over hint icon (?) at the end of the text, and use the Title attribute for the hover tooltip.
 - Consider Collapse control for tooltips
 - Use .form-text for tooltips
   Consider pt-1 and mt-0 on the form-text
@@ -30,15 +71,15 @@ Consider using .stretched-link to the search results card details link
 Users might disable JavaScript.
 - Consider a message stating JavaScript must be enabled on this browser to run scripts.
 
----------------------------------------------------------------------------
-
-REDESIGN VIEWS
-
 Get images
 - Use Wikimedia Commons
 - Add new linking table, DsoImages
   Add DsoImageID field to DsoItems
   Contains fields for ImageID, file path in hosting directory (include in solution ?), thumbnail path (?), credits
+
+---------------------------------------------------------------------------
+
+REDESIGN VIEWS
 
 List
 
