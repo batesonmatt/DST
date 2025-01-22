@@ -38,5 +38,11 @@ namespace DST.Core.DateTimeAdder
             // The final date/time value.
             return start.AddTicks(uniformTicks);
         }
+
+        // Returns the string representation of this MonthsAdder instance.
+        public override string ToString()
+        {
+            return Resources.DisplayText.TimeUnitMonths;
+        }
     }
 }
