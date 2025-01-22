@@ -31,5 +31,8 @@ namespace DST.Core.DateTimeAdder
             if (value > Max) return Max;
             return value;
         }
+
+        // Returns the string representation of this BaseDateTimeAdder instance.
+        public abstract override string ToString();
     }
 }
