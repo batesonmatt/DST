@@ -17,7 +17,7 @@ namespace DST.Models.ViewModels
         public IEnumerable<SelectListItem> CoordinateFormats { get; set; }
         public IEnumerable<SelectListItem> Phases { get; set; }
         public TrackPhaseModel TrackForm { get; set; }
-        public TrackResults Results { get; set; }
+        public PhaseResultsViewModel ResultsModel { get; set; }
         public AlertMessage Alert { get; set; }
 
         #endregion
@@ -26,7 +26,15 @@ namespace DST.Models.ViewModels
 
         public bool HasResults()
         {
-            return Results?.Any() ?? false;
+            if (ResultsModel is not null && ResultsModel.Results is not null)
+            {
+                if (ResultsModel.Results.Any())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool IsTrackingSupported()
