@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AggregatedIntervalsDisabled" xml:space="preserve">
+    <value>Aggregated intervals is disabled.</value>
+    <comment>The display text to be used when aggregated intervals for period tracking is disabled.</comment>
+  </data>
+  <data name="AggregatedIntervalsEnabled" xml:space="preserve">
+    <value>Aggregated intervals is enabled.</value>
+    <comment>The display text to be used when aggregated intervals for period tracking is enabled.</comment>
+  </data>
   <data name="AlgorithmERAFull" xml:space="preserve">
     <value>Earth Rotation Angle (ERA)</value>
     <comment>The full display text for the ERA algorithm.</comment>
@@ -308,6 +316,14 @@
   <data name="FilterVisibleDescription" xml:space="preserve">
     <value>Above the horizon</value>
     <comment>The alternative display text for a Visible filter.</comment>
+  </data>
+  <data name="FixedTrackingDisabled" xml:space="preserve">
+    <value>Fixed tracking is disabled.</value>
+    <comment>The display text to be used when fixed period tracking is disabled.</comment>
+  </data>
+  <data name="FixedTrackingEnabled" xml:space="preserve">
+    <value>Fixed tracking is enabled.</value>
+    <comment>The display text to be used when fixed period tracking is enabled.</comment>
   </data>
   <data name="LatitudeValidationMessage" xml:space="preserve">
     <value>Latitude must be in the range from -90.0 to 90.0</value>

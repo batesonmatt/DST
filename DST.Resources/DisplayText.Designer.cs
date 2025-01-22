@@ -61,6 +61,24 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aggregated intervals is disabled..
+        /// </summary>
+        public static string AggregatedIntervalsDisabled {
+            get {
+                return ResourceManager.GetString("AggregatedIntervalsDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aggregated intervals is enabled..
+        /// </summary>
+        public static string AggregatedIntervalsEnabled {
+            get {
+                return ResourceManager.GetString("AggregatedIntervalsEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Earth Rotation Angle (ERA).
         /// </summary>
         public static string AlgorithmERAFull {
@@ -489,6 +507,24 @@ namespace DST.Resources {
         public static string FilterVisibleDescription {
             get {
                 return ResourceManager.GetString("FilterVisibleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed tracking is disabled..
+        /// </summary>
+        public static string FixedTrackingDisabled {
+            get {
+                return ResourceManager.GetString("FixedTrackingDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed tracking is enabled..
+        /// </summary>
+        public static string FixedTrackingEnabled {
+            get {
+                return ResourceManager.GetString("FixedTrackingEnabled", resourceCulture);
             }
         }
         
