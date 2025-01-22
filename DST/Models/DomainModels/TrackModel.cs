@@ -32,9 +32,14 @@ namespace DST.Models.DomainModels
             return Start.Ticks;
         }
 
-        public string GetFormattedStart()
+        public string GetSortableStart()
         {
-            return Start.ToString("yyyy-MM-ddTHH:mm:ss");
+            return Start.ToString("s");
+        }
+
+        public string GetFullStart()
+        {
+            return Start.ToString("F");
         }
 
         #endregion
