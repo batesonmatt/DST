@@ -18,7 +18,6 @@ Start           January 1, 2000 19:20:55
 Time unit       Days
 Period          10
 Interval        2
-Results         # results
                 
 Fixed tracking is enabled.
 Aggregated intervals is enabled.
@@ -32,18 +31,40 @@ Time scale      Sideral Time
 Start           January 1, 2000 19:20:55
 Phase           Apex
 Cycles          10
-Results         # results
 ..............................................................................
 
-1. Revise TrackModel.GetFormattedStart() as .GetSortableStart() => Start.ToString("s");
-2. Add method TrackModel.GetFullStart() => Start.ToString("F")
-3. Revise TrackResults constructor to take ITimeScalable and ITimeKeeper arguments.
-4. Revise TrackResults default constructor to just empty initialize the collection.
-5. Revise TrackResults.TimeScaleName => _timeScale?.ToString() ?? string.Empty;
-6. Add ITimeKeeper field TrackResults._timeKeeper, and string property TimeKeeperName => _timeKeeper?.ToString() ?? string.Empty;
-7. Revise Utilities.GetPeriodResults and .GetPhaseResults to set the ITimeScalable object, and default to TimeScalableFactory.Create(TimeScale.Default);
-8. Revise Utilities.GetPeriodResults and .GetPhaseResults return to pass the ITimeScalable and ITimeKeeper objects into the TrackResults constructor.
-9. Add a horizontal form inside an Accordian to the Period and Phase views above the results section, and show if there are any results.
+Need to add all displayable info as members of the TrackResults class.
+- Use IDateTimeAdder.ToString() for the TimeUnit
+- Use PhaseName class for the Phase
+
+1. Create TrackResultsViewModel
+    string TimeKeeper
+    string TimeScale
+    string Start
+    IEnumerable<TrackResult> Results
+2. Create PeriodResultsViewModel : TrackResultsViewModel
+    string TimeUnit
+    string Period
+    string Interval
+    string Fixed
+    string Aggregated
+3. Create PhaseResultsViewModel : TrackResultsViewModel
+    string Phase
+    string Cycles
+4. Remove the TrackResults class
+5. Add resource display strings
+    "Fixed tracking is enabled."
+    "Fixed tracking is disabled."
+    "Aggregated intervals is enabled."
+    "Aggregated intervals is disabled."
+6. Revise Utilities.GetPhaseResults() to return PhaseResultsViewModel
+7. Revise Utilities.GetPeriodResults() to return PeriodResultsViewModel
+8. Replace TrackPhaseViewModel.Results with PhaseResultsViewModel property ResultsModel
+9. Replace TrackPeriodViewModel.Results with PeriodResultsViewModel property ResultsModel
+10. Revise TrackController.GetPhaseViewModel()
+11. Revise TrackController.GetPeriodViewModel()
+12. Revise Phase view
+13. Revise Period view
 
 ---------------------------------------------------------------------------
 
