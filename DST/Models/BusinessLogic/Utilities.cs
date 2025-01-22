@@ -15,6 +15,7 @@ using DST.Core.TimeScalable;
 using DST.Core.DateTimesBuilder;
 using DST.Core.Tracker;
 using DST.Core.Components;
+using DST.Models.ViewModels;
 
 namespace DST.Models.BusinessLogic
 {
@@ -624,10 +625,12 @@ namespace DST.Models.BusinessLogic
             return info;
         }
 
-        public static TrackResults GetPhaseResults(ILocalObserver localObserver, FormatType format, TrackPhaseModel phaseModel)
+        public static PhaseResultsViewModel GetPhaseResults(ILocalObserver localObserver, FormatType format, TrackPhaseModel phaseModel)
         {
-            IVector[] results = Array.Empty<IVector>();
-            TimeScale timeScale = TimeScale.Default;
+            PhaseResultsViewModel resultsModel = new();
+            IVector[] results;
+            ITimeKeeper timeKeeper;
+            ITimeScalable timeScale;
             ITrajectory trajectory;
             Phase phase;
             IAstronomicalDateTime start;
@@ -636,45 +639,60 @@ namespace DST.Models.BusinessLogic
             {
                 if (phaseModel is not null && localObserver is not null)
                 {
+                    timeKeeper = localObserver.TimeKeeper;
                     trajectory = TrajectoryCalculator.Calculate(localObserver);
-                    timeScale = trajectory.GetTimeScale();
 
                     if (trajectory is not null and IVariableTrajectory variableTrajectory)
                     {
+                        timeScale = TimeScalableFactory.Create(trajectory.GetTimeScale());
                         phase = GetPhase(phaseModel.Phase);
                         start = DateTimeFactory.CreateAstronomical(phaseModel.Start, localObserver.DateTimeInfo);
 
+                        resultsModel.TimeKeeper = timeKeeper.ToString();
+                        resultsModel.TimeScale = timeScale.ToString();
+                        resultsModel.Start = phaseModel.GetFullStart();
+                        resultsModel.Cycles = phaseModel.Cycles.ToString();
+
+                        results = Array.Empty<IVector>();
+
                         if (phase == Phase.Apex)
                         {
+                            resultsModel.Phase = PhaseName.Apex;
                             results = variableTrajectory.GetApex(start, phaseModel.Cycles);
                         }
                         else if (trajectory is IRiseSetTrajectory riseSetTrajectory)
                         {
                             if (phase == Phase.Rise)
                             {
+                                resultsModel.Phase = PhaseName.Rise;
                                 results = riseSetTrajectory.GetRise(start, phaseModel.Cycles);
                             }
                             else if (phase == Phase.Set)
                             {
+                                resultsModel.Phase = PhaseName.Set;
                                 results = riseSetTrajectory.GetSet(start, phaseModel.Cycles);
                             }
                         }
+
+                        resultsModel.Results = results
+                            .OfType<ILocalVector>()
+                            .Select(
+                            result => new TrackResult(result, format));
                     }
                 }
             }
-            catch
-            {
-                results = Array.Empty<IVector>();
-                timeScale = TimeScale.Default;
-            }
+            catch { }
 
-            return new(results.OfType<ILocalVector>().Select(result => new TrackResult(result, format)), timeScale);
+            return resultsModel;
         }
 
-        public static TrackResults GetPeriodResults(ILocalObserver localObserver, Algorithm algorithm, FormatType format, TrackPeriodModel periodModel)
+        public static PeriodResultsViewModel GetPeriodResults(ILocalObserver localObserver, Algorithm algorithm, FormatType format, TrackPeriodModel periodModel)
         {
-            IVector[] results = Array.Empty<IVector>();
-            TimeScale timeScale = TimeScale.Default;
+            PeriodResultsViewModel resultsModel = new();
+            IVector[] results;
+            ITimeKeeper timeKeeper;
+            ITimeScalable timeScale;
+            TimeScale timeScaleType;
             TimeUnit timeUnit;
             IDateTimeAdder dateTimeAdder;
             IDateTimesBuilder dateTimesBuilder;
@@ -685,20 +703,31 @@ namespace DST.Models.BusinessLogic
             ICoordinate[] positions;
             IMutableDateTime mutableDateTime;
             int count;
-
+            
             try
             {
                 if (periodModel is not null && localObserver is not null)
                 {
-                    timeScale = GetTimeScale(algorithm, periodModel.IsFixed);
+                    timeKeeper = localObserver.TimeKeeper;
+                    timeScaleType = GetTimeScale(algorithm, periodModel.IsFixed);
+                    timeScale = TimeScalableFactory.Create(timeScaleType);
                     timeUnit = GetTimeUnit(periodModel.TimeUnit);
-                    dateTimeAdder = GetDateTimeAdder(timeScale, timeUnit);
+                    dateTimeAdder = GetDateTimeAdder(timeScaleType, timeUnit);
                     dateTimesBuilder = DateTimesBuilderFactory.Create(dateTimeAdder, aggregate: periodModel.IsAggregated);
                     start = DateTimeFactory.CreateAstronomical(periodModel.Start, localObserver.DateTimeInfo);
                     baseDateTimes = dateTimesBuilder.Build(start, periodModel.Period, periodModel.Interval);
                     dateTimes = DateTimeFactory.ConvertToAstronomical(baseDateTimes);
                     tracker = TrackerFactory.Create(localObserver);
                     positions = tracker.Track(dateTimes);
+
+                    resultsModel.TimeKeeper = timeKeeper.ToString();
+                    resultsModel.TimeScale = timeScale.ToString();
+                    resultsModel.Start = periodModel.GetFullStart();
+                    resultsModel.TimeUnit = dateTimeAdder.ToString();
+                    resultsModel.Period = periodModel.Period.ToString();
+                    resultsModel.Interval = periodModel.Interval.ToString();
+                    resultsModel.Fixed = periodModel.IsFixed ? Resources.DisplayText.FixedTrackingEnabled : Resources.DisplayText.FixedTrackingDisabled;
+                    resultsModel.Aggregated = periodModel.IsAggregated ? Resources.DisplayText.AggregatedIntervalsEnabled : Resources.DisplayText.AggregatedIntervalsDisabled;
 
                     count = int.Min(positions.Length, dateTimes.Length);
                     results = new IVector[count];
@@ -711,15 +740,16 @@ namespace DST.Models.BusinessLogic
                             results[i] = VectorFactory.Create(mutableDateTime, positions[i]);
                         }
                     }
+
+                    resultsModel.Results = results
+                        .OfType<ILocalVector>()
+                        .Select(
+                        result => new TrackResult(result, format));
                 }
             }
-            catch
-            {
-                results = Array.Empty<IVector>();
-                timeScale = TimeScale.Default;
-            }
+            catch { }
 
-            return new(results.OfType<ILocalVector>().Select(result => new TrackResult(result, format)), timeScale);
+            return resultsModel;
         }
 
         // Returns a value indicating whether the specified deep-sky object may be seen from the specified geolocation during the current season.
