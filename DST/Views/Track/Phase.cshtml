@@ -32,7 +32,7 @@
                             <label class="form-label user-select-none" for="select-phase-algorithm">Timekeeping Algorithm</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input id="input-phase-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetFormattedStart()" />
+                            <input id="input-phase-start" class="form-control" asp-for="TrackForm.Start" type="datetime-local" value="@Model.TrackForm.GetSortableStart()" />
                             <label class="form-label user-select-none" for="input-phase-start">Start</label>
                             <span asp-validation-for="TrackForm.Start" class="text-danger"></span>
                         </div>
@@ -138,8 +138,32 @@
     <div class="mb-5">
         @if (Model.HasResults())
         {
-            <div class="mb-3">
-                <i>@Model.Results.TimeScaleName</i>
+            <div id="phaseInfoAccordion" class="accordion mb-3">
+                <div class="accordion-item">
+                    <h2 id="phaseInfoAccordionHeading" class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#phaseInfoAccordionCollapse"
+                                aria-expanded="true" aria-controls="phaseInfoAccordionCollapse">
+                            Track Information
+                        </button>
+                    </h2>
+                    <div id="phaseInfoAccordionCollapse" class="accordion-collapse collapse show"
+                            aria-labelledby="phaseInfoAccordionHeading" data-bs-parent="#phaseInfoAccordion">
+                        <div class="accordion-body">
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Timekeeper</label>
+                                <div class="col-sm-8">@Model.ResultsModel.TimeKeeper</div>
+                                <label class="col-sm-4 col-form-label">Time scale</label>
+                                <div class="col-sm-8">@Model.ResultsModel.TimeScale</div>
+                                <label class="col-sm-4 col-form-label">Start</label>
+                                <div class="col-sm-8">@Model.ResultsModel.Start</div>
+                                <label class="col-sm-4 col-form-label">Phase</label>
+                                <div class="col-sm-8">@Model.ResultsModel.Phase</div>
+                                <label class="col-sm-4 col-form-label">Cycles</label>
+                                <div class="col-sm-8">@Model.ResultsModel.Cycles</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="table-responsive">
@@ -156,7 +180,7 @@
                     <tbody>
                         @{
                             int resultNumber = 1;
-                            foreach (var result in Model.Results)
+                            foreach (var result in Model.ResultsModel.Results)
                             {
                                 if (result is not null)
                                 {
@@ -177,7 +201,7 @@
                     <caption>Track results</caption>
                     <tbody>
                         @{
-                            foreach (var result in Model.Results)
+                            foreach (var result in Model.ResultsModel.Results)
                             {
                                 if (result is not null)
                                 {
@@ -198,7 +222,7 @@
         }
         else
         {
-            <div class="d-flex flex-column align-items-center bg-light" style="padding-top:120px;padding-bottom:120px;">
+            <div class="text-center bg-light" style="padding-top:120px;padding-bottom:120px;">
                 @if (Model.IsTrackingSupported())
                 {
                     <p>Click the button below to begin tracking.</p>
