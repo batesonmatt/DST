@@ -186,7 +186,7 @@ namespace DST.Controllers
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-            TrackResults results = new();
+            PhaseResultsViewModel resultsModel = new();
             IEnumerable<SelectListItem> phases = System.Array.Empty<SelectListItem>();
             string selectedPhase = string.Empty;
             string message = string.Empty;
@@ -227,7 +227,7 @@ namespace DST.Controllers
                 // Calculate the phase tracking results if an entry was submitted.
                 if (phaseBuilder.Current.IsReady)
                 {
-                    results = Utilities.GetPhaseResults(localObserver, format, phaseBuilder.Current);
+                    resultsModel = Utilities.GetPhaseResults(localObserver, format, phaseBuilder.Current);
 
                     // Force the client to resubmit the form.
                     phaseBuilder.Current.IsReady = false;
@@ -259,7 +259,7 @@ namespace DST.Controllers
                     Cycles = values.Cycles
                 },
 
-                Results = results,
+                ResultsModel = resultsModel,
                 Alert = new(message, messageType)
             };
 
@@ -331,7 +331,7 @@ namespace DST.Controllers
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, geoBuilder.CurrentGeolocation, algorithm);
             ITrajectory trajectory = TrajectoryCalculator.Calculate(localObserver);
 
-            TrackResults results = new();
+            PeriodResultsViewModel resultsModel = new();
             string message = string.Empty;
             AlertType messageType = AlertType.Default;
 
@@ -354,7 +354,7 @@ namespace DST.Controllers
                 // Calculate the period tracking results if an entry was submitted.
                 if (periodBuilder.Current.IsReady)
                 {
-                    results = Utilities.GetPeriodResults(localObserver, algorithm, format, periodBuilder.Current);
+                    resultsModel = Utilities.GetPeriodResults(localObserver, algorithm, format, periodBuilder.Current);
 
                     // Force the client to resubmit the form.
                     periodBuilder.Current.IsReady = false;
@@ -392,7 +392,7 @@ namespace DST.Controllers
                     Interval = values.Interval
                 },
 
-                Results = results,
+                ResultsModel = resultsModel,
                 Alert = new(message, messageType)
             };
 
