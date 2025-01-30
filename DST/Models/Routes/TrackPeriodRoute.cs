@@ -15,7 +15,7 @@ namespace DST.Models.Routes
         public long Start { get; set; }
         public string TrackOnce { get; set; } = Filter.Off;
         public string Fixed { get; set; } = Filter.Off;
-        public string Aggregate { get; set; } = Filter.On;
+        public string Aggregate { get; set; } = Filter.Off;
         public string TimeUnit { get; set; } = TimeUnitName.Default;
         public int Period { get; set; }
         public int Interval { get; set; }
@@ -59,7 +59,7 @@ namespace DST.Models.Routes
 
         public bool SupportsAggregatedIntervals()
         {
-            return IsFixed && !IsTrackOnce && Utilities.SupportsAggregatedIntervals(Utilities.GetTimeUnit(TimeUnit));
+            return SupportsFixedTracking() && IsFixed && Utilities.SupportsAggregatedIntervals(Utilities.GetTimeUnit(TimeUnit));
         }
 
         public void SetCoordinateFormat(string format)
@@ -99,9 +99,7 @@ namespace DST.Models.Routes
 
         public void SetAggregate(bool isAggregated)
         {
-            // Default to On.
-            // Only set to Off if Aggregated is supported and the client explicitly disables the option.
-            Aggregate = !isAggregated && SupportsAggregatedIntervals() ? Filter.Off : Filter.On;
+            Aggregate = isAggregated && SupportsAggregatedIntervals() ? Filter.On : Filter.Off;
         }
 
         public void SetTimeUnit(string timeUnit)
