@@ -21,7 +21,7 @@ namespace DST.Models.DomainModels
         // whole days of the time scale for the selected timekeeping algorithm.
         // This more accurately depicts the length of each interval in the underlying time scale,
         // but might be less intuitive for some people.
-        public bool IsAggregated { get; set; } = true;
+        public bool IsAggregated { get; set; } = false;
 
         public string TimeUnit { get; set; } = TimeUnitName.Default;
 
