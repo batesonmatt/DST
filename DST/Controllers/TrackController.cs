@@ -281,6 +281,7 @@ namespace DST.Controllers
                 return View("Phase", GetPhaseViewModel(data, geoBuilder, phaseBuilder, values, buildResults: false));
             }
 
+            // Set the route values.
             // The ordering is important here.
             values.SetCoordinateFormat(trackForm.CoordinateFormat);
             values.SetAlgorithm(trackForm.Algorithm);
@@ -414,6 +415,57 @@ namespace DST.Controllers
                 return View("Period", GetPeriodViewModel(data, geoBuilder, periodBuilder, values, buildResults: false));
             }
 
+            // Set the route values.
+            // The ordering is important here.
+            values.SetCoordinateFormat(trackForm.CoordinateFormat);
+            values.SetAlgorithm(trackForm.Algorithm);
+            values.SetStart(trackForm.GetTicks());
+            values.SetTrackOnce(trackForm.IsTrackOnce);
+            values.SetTimeUnit(trackForm.TimeUnit);
+            values.SetFixed(trackForm.IsFixed);
+            values.SetAggregate(trackForm.IsAggregated);
+            values.SetPeriod(trackForm.Period);
+            values.SetInterval(trackForm.Interval);
+
+            // Mark the entry as ready so we can calculate the results.
+            trackForm.IsReady = true;
+
+            // Set the current period entry.
+            periodBuilder.Current = trackForm;
+
+            // Save the period entry to session state.
+            periodBuilder.Save();
+
+            // Redirect the action to calculate the results.
+            return RedirectToAction("Period", values.ToDictionary());
+        }
+
+        [HttpGet]
+        public IActionResult QuickPeriod(
+            [FromServices] ITrackUnitOfWork data,
+            [FromServices] IGeolocationBuilder geoBuilder,
+            [FromServices] ITrackPeriodBuilder periodBuilder,
+            TrackPeriodRoute values)
+        {
+            // Check server-side validation state.
+            if (!ModelState.IsValid)
+            {
+                // Re-render the view so that server-side validation messages are displayed.
+                return View("Period", GetPeriodViewModel(data, geoBuilder, periodBuilder, values, buildResults: false));
+            }
+
+            // Load the client geolocation, if any.
+            geoBuilder.Load();
+
+            // Build the period track form with default settings, using the client's current local date/time,
+            // and for a single track record.
+            TrackPeriodModel trackForm = new()
+            {
+                Start = Utilities.GetClientDateTime(geoBuilder.CurrentGeolocation),
+                IsTrackOnce = true
+            };
+
+            // Set the route values.
             // The ordering is important here.
             values.SetCoordinateFormat(trackForm.CoordinateFormat);
             values.SetAlgorithm(trackForm.Algorithm);
