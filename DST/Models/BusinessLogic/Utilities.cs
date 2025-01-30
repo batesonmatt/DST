@@ -560,10 +560,6 @@ namespace DST.Models.BusinessLogic
                 {
                     visibility = Resources.DisplayText.TargetVisibilityNeverRise;
                 }
-                else if (trajectory is ICircumpolarTrajectory)
-                {
-                    visibility = Resources.DisplayText.TargetVisibilityCircumpolar;
-                }
                 else if (localObserver.Location.Latitude > constellation.NorthernLatitude ||
                          localObserver.Location.Latitude < -constellation.SouthernLatitude)
                 {
@@ -572,6 +568,10 @@ namespace DST.Models.BusinessLogic
                 else if (!season.ContainsDate(clientLocalTime))
                 {
                     visibility = Resources.DisplayText.TargetVisibilityOutOfSeason;
+                }
+                else if (trajectory is ICircumpolarTrajectory)
+                {
+                    visibility = Resources.DisplayText.TargetVisibilityCircumpolar;
                 }
                 else
                 {
