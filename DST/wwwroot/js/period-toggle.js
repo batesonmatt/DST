@@ -38,13 +38,13 @@ function updateAggregateToggle() {
             }
             else
             {
-                a.checked = true;
+                a.checked = false;
                 a.setAttribute("disabled", "disabled");
                 w.hidden = false;
             }
             break;
         default:
-            a.checked = true;
+            a.checked = false;
             a.setAttribute("disabled", "disabled");
             w.hidden = false;
             break;
