@@ -235,16 +235,7 @@
                                     </p>
                                 </div>
 
-                                <div class="card-footer d-flex justify-content-between align-items-center">
-                                    @{
-                                        offcanvasId = $"details-offcanvas-{dso.CompoundId}";
-                                    }
-                                    <a class="card-link link-primary text-decoration-underline" data-bs-toggle="offcanvas" href="#@offcanvasId" role="button">Details</a>
-
-                                    <div id="@offcanvasId" class="offcanvas offcanvas-end" tabindex="-1" aria-labelledby="details-title">
-                                        <vc:dso-details dso="@dso"></vc:dso-details>
-                                    </div>
-
+                                <div class="card-footer d-flex justify-content-center align-items-center">
                                     <a class="btn btn-primary" asp-controller="Track" asp-action="Summary" asp-route-catalog="@dso.CatalogName"
                                        asp-route-id="@dso.Id" asp-route-algorithm="@AlgorithmName.Default">Track</a>
                                 </div>
