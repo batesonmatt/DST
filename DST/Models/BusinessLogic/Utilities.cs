@@ -497,6 +497,7 @@ namespace DST.Models.BusinessLogic
             return result;
         }
 
+        [Obsolete]
         public static DsoDetailsInfo GetDetailsInfo(DsoModel dso)
         {
             DsoDetailsInfo info;
