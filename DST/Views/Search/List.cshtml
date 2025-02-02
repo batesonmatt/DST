@@ -198,7 +198,6 @@
         @if (Model.DsoItems is not null && Model.DsoItems.Any())
         {
             int nameCount = 0;
-            string offcanvasId = string.Empty;
 
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
                 @foreach (DsoModel dso in Model.DsoItems)
@@ -236,7 +235,7 @@
                                 </div>
 
                                 <div class="card-footer d-flex justify-content-center align-items-center">
-                                    <a class="btn btn-primary" asp-controller="Track" asp-action="Summary" asp-route-catalog="@dso.CatalogName"
+                                    <a class="btn btn-primary stretched-link" asp-controller="Track" asp-action="Summary" asp-route-catalog="@dso.CatalogName"
                                        asp-route-id="@dso.Id" asp-route-algorithm="@AlgorithmName.Default">Track</a>
                                 </div>
                             </div>
