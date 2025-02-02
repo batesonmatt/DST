@@ -2,9 +2,11 @@
 using DST.Models.DomainModels;
 using DST.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace DST.Components
 {
+    [Obsolete]
     public class DsoDetailsViewComponent : ViewComponent
     {
         #region Constructors

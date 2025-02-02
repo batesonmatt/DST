@@ -1,5 +1,8 @@
-﻿namespace DST.Models.BusinessLogic
+﻿using System;
+
+namespace DST.Models.BusinessLogic
 {
+    [Obsolete]
     public enum DsoDetailsItem
     {
         OtherNames,
