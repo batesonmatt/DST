@@ -7,19 +7,6 @@ Icons
 
 ---------------------------------------------------------------------------
 
-Details OffCanvas
-- Use a Modal instead of the OffCanvas
-- Use a single Modal
-- Implement support for varying data in the modal to avoid creating a modal per object in the loop.
-1. Delete OffCanvas creation in List view       ...DONE
-2. Mark classes as obsolete                     ...DONE
-   DsoDetailsViewModel                          ...DONE
-   DsoDetailsInfo                               ...DONE
-   DsoDetailsItem                               ...DONE
-   DsoDetailsViewComponent                      ...DONE
-3. Comment out markup for _DsoDetailsPartial    ...DONE
-4. Mark Utilities methods as obsolete           ...DONE
-
 Tooltips (Do not use the Tooltip nor Popover components, which rely on the Popper library)
 - Consider hover over hint icon (?) at the end of the text, and use the Title attribute for the hover tooltip.
 - Consider Collapse control for tooltips
@@ -29,9 +16,6 @@ Tooltips (Do not use the Tooltip nor Popover components, which rely on the Poppe
 - Period => Use the comments from TrackPeriodModel regarding aggregated intervals
 
 Revise all id tags as camelCase
-
-Consider using .stretched-link to the search results card details link 
-- need to revise the layout so the Track button is still clickable.
 
 Users might disable JavaScript.
 - Consider a message stating JavaScript must be enabled on this browser to run scripts.
