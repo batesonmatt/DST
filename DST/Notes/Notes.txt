@@ -7,32 +7,22 @@ Icons
 
 ---------------------------------------------------------------------------
 
-Tooltips (Do not use the Tooltip nor Popover components, which rely on the Popper library)
-- Consider hover over hint icon (?) at the end of the text, and use the Title attribute for the hover tooltip.
-- Consider Collapse control for tooltips
-- Use .form-text for tooltips
-  Consider pt-1 and mt-0 on the form-text
-  OR, consider pb-1 and mb-0 on the control.
-- Period => Use the comments from TrackPeriodModel regarding aggregated intervals
-
-Revise all id tags as camelCase
-
-Users might disable JavaScript.
-- Consider a message stating JavaScript must be enabled on this browser to run scripts.
-
 Get images
 - Use Wikimedia Commons
+- Store small (128px or 200px), medium (256px), and large (512px) sizes
+  Ex: ../images/catalogs/messier/small/m13_200x200.jpg
 - Add new linking table, DsoImages
   Add DsoImageID field to DsoItems
-  Contains fields for ImageID, file path in hosting directory (include in solution ?), thumbnail path (?), credits
+  Contains fields for ImageID, file path, thumb path, attribution, Title
+- Add feature to hide/show images for search page (load images toggle switch)
+- Use carousel for home page with 5 random objects
+  https://getbootstrap.com/docs/5.0/components/carousel/#with-captions
 
 ---------------------------------------------------------------------------
 
 REDESIGN VIEWS
 
 List
-
-Details
 
 Summary
 
@@ -67,6 +57,14 @@ Consider Bootstrap input groups for tracking forms:
 
 Text Interactions (Text selection)
 - https://getbootstrap.com/docs/5.0/utilities/interactions/
+
+Tooltips (Do not use the Tooltip nor Popover components, which rely on the Popper library)
+- Consider hover over hint icon (?) at the end of the text, and use the Title attribute for the hover tooltip.
+- Consider Collapse control for tooltips
+- Use .form-text for tooltips
+  Consider pt-1 and mt-0 on the form-text
+  OR, consider pb-1 and mb-0 on the control.
+- Period => Use the comments from TrackPeriodModel regarding aggregated intervals
 
 Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text)
 Use Bootstrap class .user-select-none where necessary (prevents text selection)
@@ -111,6 +109,11 @@ Localization
 ---------------------------------------------------------------------------
 
 [Misc]
+
+Revise all id tags as camelCase
+
+Users might disable JavaScript.
+- Consider a message stating JavaScript must be enabled on this browser to run scripts.
 
 Create powershell script(s) to remove/update the database, rebuild the migrations, etc.
 - Run from PMC in visual studio
