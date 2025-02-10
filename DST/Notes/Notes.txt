@@ -7,16 +7,40 @@ Icons
 
 ---------------------------------------------------------------------------
 
+* Updating values in DB                                                         ...IN PROGRESS
+- Get changes on locals
+  C25 - Intergalactic Wanderer
+  C26 - Silver Needle Galaxy
+  C43 - Little Sombrero Galaxy
+  C42 - NULL                    *****
+  C44 - Propeller Galaxy
+  C62 - Needle's Eye Galaxy
+  C74 - Southern Ring Nebula
+  C103 - Tarantula Nebula,30 Doradus
+
+
 Get images
 - Use Wikimedia Commons
+  Gather sources for Messier objects                                            ...DONE
+  Gather sources for Caldwell objects                                           ...DONE
+  Organize information for table in spreadsheet                                 ...
+  Create image sizes                                                            ...
+  Plan table design and relationship                                            ...
 - Store small (128px or 200px), medium (256px), and large (512px) sizes
   Ex: ../images/catalogs/messier/small/m13_200x200.jpg
 - Add new linking table, DsoImages
+  1-to-1 relationship (pg. 460)
   Add DsoImageID field to DsoItems
   Contains fields for ImageID, file path, thumb path, attribution, Title
 - Add feature to hide/show images for search page (load images toggle switch)
 - Use carousel for home page with 5 random objects
   https://getbootstrap.com/docs/5.0/components/carousel/#with-captions
+
+
+Remove Caldwell 110
+- Use the brighter magnitude of the two, and closest distance.
+  Use the center equatorial coords, or choose the coords of the closest.
+
 
 ---------------------------------------------------------------------------
 
