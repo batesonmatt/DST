@@ -7,41 +7,42 @@ Icons
 
 ---------------------------------------------------------------------------
 
-* Updating values in DB                                                         ...DONE
-- Update names
-  C25 - Intergalactic Wanderer
-  C26 - Silver Needle Galaxy
-  C43 - Little Sombrero Galaxy
-  C42 - NULL
-  C44 - Propeller Galaxy
-  C62 - Needle's Eye Galaxy
-  C74 - Southern Ring Nebula
-  C103 - Tarantula Nebula,30 Doradus
-
-Remove Caldwell 110                                                             ...DONE
-- Use the brighter magnitude of the two, and closest distance.
-  Use the center equatorial coords, or choose the coords of the closest.
-
-Create new migration, "RenameCaldwellObjects"                                   ...DONE
-
-Update database on all locals                                                   ...IN PROGRESS
-
 Get images
 - Use Wikimedia Commons
   Gather sources for Messier objects                                            ...DONE
   Gather sources for Caldwell objects                                           ...DONE
   Organize information for table in spreadsheet                                 ...
-  Create image sizes                                                            ...
-  Plan table design and relationship                                            ...
-- Store small (128px or 200px), medium (256px), and large (512px) sizes
-  Ex: ../images/catalogs/messier/small/m13_200x200.jpg
-- Add new linking table, DsoImages
+  1. Id
+  2. Title
+  3. ImageSource
+  4. Author (If anonymous, then User:Username)
+  5. License
+  6. LicenseSource
+  7. IsWikimedia
+  8. DisplayPath
+  9. ThumbPath
+
+  Example credit line (verify all use same format):
+  <a href="ImageSource">Author</a>, <a href="LicenseSource">License</a>, via Wikimedia Commons
+
+  https://commons.wikimedia.org/wiki/Commons:Credit_line
+
+- Create image sizes
+  Store thumb (256x256) and display (512x512) sizes
+  Ex: images/catalogs/messier/thumb/m13_256.jpg
+- Plan table design and relationship
+  DsoImages (DsoImageModel)
   1-to-1 relationship (pg. 460)
   Add DsoImageID field to DsoItems
-  Contains fields for ImageID, file path, thumb path, attribution, Title
+  Consider NotMapped helper methods/properties (RelativeDisplayPath, etc.)
 - Create new migration, "AddDsoImages"
   Update database on all locals.
-- Add feature to hide/show images for search page (load images toggle switch)
+- Use object-fit: cover; width: 100%; height: ~128px; max-width: ...; max-height: ...;
+  Sizing should be mostly square on md to lg screen sizes, then smaller height on sm screens.
+  Center the image.
+- Credit the image on the connected, Track pages.
+  Consider also adding the credit line to the carousel images.
+- Consider feature to hide/show images for search page (load images toggle switch)
 - Use carousel for home page with 5 random objects
   https://getbootstrap.com/docs/5.0/components/carousel/#with-captions
 
