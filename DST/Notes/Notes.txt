@@ -7,6 +7,34 @@ Icons
 
 ---------------------------------------------------------------------------
 
+Update names
+- m4 - Spider Globular Cluster
+- m15 - Great Pegasus Cluster
+- m18 - Black Swan Cluster
+- m21 - Webb's Cross
+- m30 - Jellyfish Cluster
+- m33 - Triangulum Galaxy (remove Pinwheel Galaxy)
+- m34 - Spiral Cluster
+- m35 - Shoe-Buckle Cluster
+- m36 - Pinwheel Cluster
+- m37 - Salt and Pepper Cluster
+- m39 - Pyramid Cluster
+- m41 - Little Beehive Cluster
+- m50 - Heart-shaped Cluster
+- m52 - Scorpion Cluster
+- m55 - Specter Cluster,Summer Rose Star
+- m61 - Swelling Spiral Galaxy
+- m62 - Flickering Globular Cluster
+- m67 - King Cobra Cluster,Golden Eye Cluster
+- m71 - Angelfish Cluster
+- m93 - Critter Cluster
+- m99 - St. Catherine's Wheel,Coma Pinwheel Galaxy,Virgo Cluster Pinwheel
+- m100 - Mirror Galaxy
+- m107 - Crucifix Cluster
+- m108 - Surfboard Galaxy
+- m109 - Vacuum Cleaner Galaxy
+- Check all NULL values.
+
 Get images
 - Use Wikimedia Commons
   Gather sources for Messier objects                                            ...DONE
@@ -18,12 +46,12 @@ Get images
   4. Author (If anonymous, then User:Username)
   5. License
   6. LicenseSource
-  7. IsWikimedia
+  7. Provider (e.g., Wikimedia Commons)
   8. DisplayPath
   9. ThumbPath
 
   Example credit line (verify all use same format):
-  <a href="ImageSource">Author</a>, <a href="LicenseSource">License</a>, via Wikimedia Commons
+  <a href="ImageSource">Author</a>, <a href="LicenseSource">License</a>, via Provider
 
   https://commons.wikimedia.org/wiki/Commons:Credit_line
 
