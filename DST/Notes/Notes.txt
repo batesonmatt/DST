@@ -7,7 +7,7 @@ Icons
 
 ---------------------------------------------------------------------------
 
-Update names
+Update names                                                        ...DONE
 - m4 - Spider Globular Cluster
 - m15 - Great Pegasus Cluster
 - m18 - Black Swan Cluster
@@ -33,13 +33,23 @@ Update names
 - m107 - Crucifix Cluster
 - m108 - Surfboard Galaxy
 - m109 - Vacuum Cleaner Galaxy
-- Check all NULL values.
+- c1 - Polarissima Cluster
+- c8 - Ghost's Goblet
+- c70 - Sculptor Pinwheel Galaxy
+- c71 - Termite Hole Cluster
+- c72 - String of Pearls Galaxy
+- c76 - Baby Scorpion Cluster
+- c101 - Pavo Galaxy
+
+
+Update Database on all machines.                                    ...IN PROGRESS
+
 
 Get images
 - Use Wikimedia Commons
-  Gather sources for Messier objects                                            ...DONE
-  Gather sources for Caldwell objects                                           ...DONE
-  Organize information for table in spreadsheet                                 ...
+  Gather sources for Messier objects                                ...DONE
+  Gather sources for Caldwell objects                               ...DONE
+  Organize information for table in spreadsheet                     ...IN PROGRESS
   1. Id
   2. Title
   3. ImageSource
