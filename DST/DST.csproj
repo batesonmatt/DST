@@ -25,10 +25,6 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="Models\Services\" />
-    <Folder Include="wwwroot\images\catalogs\caldwell\display\" />
-    <Folder Include="wwwroot\images\catalogs\caldwell\thumbs\" />
-    <Folder Include="wwwroot\images\catalogs\messier\display\" />
-    <Folder Include="wwwroot\images\catalogs\messier\thumbs\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
