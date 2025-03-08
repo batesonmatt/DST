@@ -1,4 +1,5 @@
 ﻿using DST.Models.DomainModels;
+using DST.Models.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -38,6 +39,36 @@ namespace DST.Models.DataLayer.Repositories
         #endregion
 
         #region Methods
+
+        public DsoModel GetDso(string catalog, int id)
+        {
+            if (string.IsNullOrWhiteSpace(catalog))
+            {
+                return null;
+            }
+
+            if (id < 1 || id >= int.MaxValue)
+            {
+                return null;
+            }
+
+            DsoModel dso;
+
+            try
+            {
+                dso = _context.DsoItems
+                    .ToList()
+                    .AsQueryable()
+                    .Where(d => d.CatalogName.EqualsSeo(catalog) && d.Id == id)
+                    .FirstOrDefault();
+            }
+            catch
+            {
+                dso = null;
+            }
+
+            return dso;
+        }
 
         public SeasonModel GetSeason(DsoModel dso)
         {
