@@ -6,7 +6,8 @@ namespace DST.Models.DataLayer.Repositories
     {
         Repository<DsoModel> DsoItems { get; }
 
-        ConstellationModel GetConstellation(DsoModel dso);
+        DsoModel GetDso(string catalog, int id);
         SeasonModel GetSeason(DsoModel dso);
+        ConstellationModel GetConstellation(DsoModel dso);
     }
 }
