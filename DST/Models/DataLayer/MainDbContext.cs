@@ -12,6 +12,7 @@ namespace DST.Models.DataLayer
         public DbSet<SeasonModel> Seasons { get; set; } = null!;
         public DbSet<DsoTypeModel> DsoTypes { get; set; } = null!;
         public DbSet<CatalogModel> Catalogs { get; set; } = null!;
+        public DbSet<DsoImageModel> DsoImages { get; set; } = null!;
 
         #endregion
 
@@ -27,10 +28,6 @@ namespace DST.Models.DataLayer
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // DsoModel: Set composite primary key.
-            modelBuilder.Entity<DsoModel>()
-                .HasKey(dso => new { dso.CatalogName, dso.Id });
-
             // DsoModel: Set Catalog foreign key and remove cascading delete with Catalog.
             modelBuilder.Entity<DsoModel>()
                 .HasOne(dso => dso.Catalog)
@@ -57,6 +54,13 @@ namespace DST.Models.DataLayer
                 .WithMany(type => type.Children)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasForeignKey(dso => dso.Type);
+
+            // DsoModel: Set DsoImage foreign key and remove cascading delete with DsoImage.
+            modelBuilder.Entity<DsoModel>()
+                .HasOne(dso => dso.DsoImage)
+                .WithOne(img => img.Dso)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasForeignKey<DsoImageModel>(img => img.DsoId);
 
             // ConstellationModel: Set Season foreign key and remove cascading delete with Season.
             modelBuilder.Entity<ConstellationModel>()
