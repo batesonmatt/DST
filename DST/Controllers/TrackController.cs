@@ -148,7 +148,7 @@ namespace DST.Controllers
             // Load the client geolocation, if any.
             geoBuilder.Load();
 
-            DsoModel dso = data.DsoItems.Get(values.Catalog, values.Id);
+            DsoModel dso = data.GetDso(values.Catalog, values.Id);
             SeasonModel season = data.GetSeason(dso);
             ConstellationModel constellation = data.GetConstellation(dso);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
@@ -180,7 +180,7 @@ namespace DST.Controllers
             // Load the client geolocation, if any.
             geoBuilder.Load();
 
-            DsoModel dso = data.DsoItems.Get(values.Catalog, values.Id);
+            DsoModel dso = data.GetDso(values.Catalog, values.Id);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
             FormatType format = Utilities.GetCoordinateFormat(values.CoordinateFormat);
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, geoBuilder.CurrentGeolocation, algorithm);
@@ -326,7 +326,7 @@ namespace DST.Controllers
             // Load the client geolocation, if any.
             geoBuilder.Load();
 
-            DsoModel dso = data.DsoItems.Get(values.Catalog, values.Id);
+            DsoModel dso = data.GetDso(values.Catalog, values.Id);
             Algorithm algorithm = Utilities.GetAlgorithm(values.Algorithm);
             FormatType format = Utilities.GetCoordinateFormat(values.CoordinateFormat);
             ILocalObserver localObserver = Utilities.GetLocalObserver(dso, geoBuilder.CurrentGeolocation, algorithm);
