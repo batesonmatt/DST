@@ -11,15 +11,19 @@ namespace DST.Models.DomainModels
     {
         #region Properties
 
+        /// <summary>The unique identity of this <c>DsoModel</c> instance.</summary>
+        /// <remarks>This property is a primary key for a table.</remarks>
+        [Key]
+        public int DsoId { get; set; }
+
         /// <summary>The astronomical catalog of deep-sky objects, to which this object belongs.</summary>
-        /// <remarks>This property is part of a composite primary key and foreign key for a table.</remarks>
+        /// <remarks>This property is a foreign key for a table.</remarks>
         /// <value>The name of the catalog or founder.</value>
         [Required]
         public string CatalogName { get; set; } = string.Empty;
         public CatalogModel Catalog { get; set; } = null!;
 
         /// <summary>The identification number of this object as it appears in its catalog.</summary>
-        /// <remarks>This property is part of a composite primary key for a table.</remarks>
         /// <value>A positive integer greater than <c>0</c>.</value>
         [Required]
         [Range(1, int.MaxValue)]
@@ -104,6 +108,8 @@ namespace DST.Models.DomainModels
         [Required]
         public string ConstellationName { get; set; } = string.Empty;
         public ConstellationModel Constellation { get; set; } = null!;
+
+        public DsoImageModel DsoImage { get; set; } = null!;
 
         #endregion
 
