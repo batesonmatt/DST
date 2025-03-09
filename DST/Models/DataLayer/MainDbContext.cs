@@ -80,6 +80,7 @@ namespace DST.Models.DataLayer
             modelBuilder.ApplyConfiguration(new DataStore.DsoTypeStore());
             modelBuilder.ApplyConfiguration(new DataStore.SeasonStore());
             modelBuilder.ApplyConfiguration(new DataStore.ConstellationStore());
+            modelBuilder.ApplyConfiguration(new DataStore.DsoImageStore());
             modelBuilder.ApplyConfiguration(new DataStore.DsoStore());
         }
 
