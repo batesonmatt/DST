@@ -7,8 +7,6 @@ Icons
 
 ---------------------------------------------------------------------------
 
-Update Database on all machines.                                    ...IN PROGRESS
-
 
 Get images
 - Use Wikimedia Commons
@@ -22,19 +20,14 @@ Get images
 - Update DsoStore with DsoImageID field                                                                         ...IGNORE
 - Consider NotMapped helper methods/properties (RelativeDisplayPath, etc.)                                      ...DONE
 - Add (DsoModel) DsoId foreign key in DsoImageModel                                                             ...DONE
-- Update DsoImageStore with DsoId foreign key                                                                   ...
-- Add DataStore.DsoImageStore                                                                                   ...
-- Update DsoImageStore with the DsoId field                                                                     ...
+- Update DsoImageStore with DsoId foreign key                                                                   ...DONE
+- Add DataStore.DsoImageStore                                                                                   ...DONE
+- Update DsoImageStore with the DsoId field                                                                     ...DONE
 - Add MainDbContext => DbSet<DsoImageModel> DsoImages property                                                  ...DONE
 - In MainDbContext.OnModelCreating, setup a 1-to-1 relationship (pg. 460) for DsoModel and DsoImageModel        ...DONE
-        modelBuilder.Entity<DsoModel>()
-                .HasOne(dso => dso.DsoImage)
-                .WithOne(img => img.Dso)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasForeignKey<DsoImageModel>(img => img.DsoId);
-- In MainDbContext.OnModelCreating, seed initial data for DsoImageStore                                         ...
-- Add-Migration <AddDsoImages>                                                                                  ...
-- Update-Database on all locals.                                                                                ...
+- In MainDbContext.OnModelCreating, seed initial data for DsoImageStore                                         ...DONE
+- Add-Migration <AddDsoImages>                                                                                  ...DONE
+- Update-Database on all locals.                                                                                ...IN PROGRESS
 
 Images
 - Use object-fit: cover; width: 100%; height: ~128px; max-width: ...; max-height: ...;
