@@ -682,7 +682,7 @@
     <comment>The validation message for a required tracking interval length in a form.</comment>
   </data>
   <data name="TrackValidationIntervalRange" xml:space="preserve">
-    <value>The interval length must be between {0} and the specified period length ({1}).</value>
+    <value>The interval length must be between {0} and the duration of the specified period length ({1}).</value>
     <comment>The formattable validation message for the tracking interval range in a form.</comment>
   </data>
   <data name="TrackValidationPeriod" xml:space="preserve">

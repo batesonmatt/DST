@@ -1330,7 +1330,7 @@ namespace DST.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The interval length must be between {0} and the specified period length ({1})..
+        ///   Looks up a localized string similar to The interval length must be between {0} and the duration of the specified period length ({1})..
         /// </summary>
         public static string TrackValidationIntervalRange {
             get {
