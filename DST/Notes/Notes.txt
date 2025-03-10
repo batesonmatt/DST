@@ -7,28 +7,6 @@ Icons
 
 ---------------------------------------------------------------------------
 
-
-Get images
-- Use Wikimedia Commons
-- Gather sources for Messier objects                                                                            ...DONE
-- Gather sources for Caldwell objects                                                                           ...DONE
-- Organize information for table in spreadsheet                                                                 ...DONE
-- Create image sizes                                                                                            ...DONE
-- Add DsoImageModel                                                                                             ...DONE
-- Add DsoImageID int property (foreign key) to DsoModel                                                         ...IGNORE
-- Add DsoImageModel DsoImage navigation property to DsoModel                                                    ...DONE
-- Update DsoStore with DsoImageID field                                                                         ...IGNORE
-- Consider NotMapped helper methods/properties (RelativeDisplayPath, etc.)                                      ...DONE
-- Add (DsoModel) DsoId foreign key in DsoImageModel                                                             ...DONE
-- Update DsoImageStore with DsoId foreign key                                                                   ...DONE
-- Add DataStore.DsoImageStore                                                                                   ...DONE
-- Update DsoImageStore with the DsoId field                                                                     ...DONE
-- Add MainDbContext => DbSet<DsoImageModel> DsoImages property                                                  ...DONE
-- In MainDbContext.OnModelCreating, setup a 1-to-1 relationship (pg. 460) for DsoModel and DsoImageModel        ...DONE
-- In MainDbContext.OnModelCreating, seed initial data for DsoImageStore                                         ...DONE
-- Add-Migration <AddDsoImages>                                                                                  ...DONE
-- Update-Database on all locals.                                                                                ...IN PROGRESS
-
 Images
 - Use object-fit: cover; width: 100%; height: ~128px; max-width: ...; max-height: ...;
   Sizing should be mostly square on md to lg screen sizes, then smaller height on sm screens.
@@ -60,23 +38,18 @@ Shared
 
 Home
 - Include short summary
-Consider selecting 3 random objects and display its info, image, etc.
-- Consider a random object, random track or vector calculation, random location and time, etc.
-- Consider option to allow the user to set their own geolocation
-- Use a bootstrap carousel
+- Consider selecting 5 random objects and display its info, image, etc.
+  Consider a random object, random track or vector calculation, random location and time, etc.
+  Consider option to allow the user to set their own geolocation
+  Use a bootstrap carousel
   https://getbootstrap.com/docs/5.0/components/carousel/
 
 About
 
 Navbar
-- Consider redesigning styles for navbar-toggler and navbar-dark.
-  _HeaderFooterLayout
+- Consider redesigning styles for navbar-toggler and navbar-dark. (_HeaderFooterLayout)
 
 Footer
-
-Consider Bootstrap input groups for tracking forms:
-- https://getbootstrap.com/docs/5.0/forms/input-group/
-  | #    | Days     |  for every  | #    | Days
 
 Text Interactions (Text selection)
 - https://getbootstrap.com/docs/5.0/utilities/interactions/
