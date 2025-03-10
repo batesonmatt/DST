@@ -245,10 +245,15 @@ namespace DST.Models.BusinessLogic
 
         public static string ValidateClientInterval(int interval, int period)
         {
-            // Assumes the period length has already been validated.
-            if (interval < 0 || interval > period)
+            // The period length may be positive for future calculations, or negative for historical calculations,
+            // from some defined moment in time.
+            int periodDuration = Math.Abs(period);
+
+            // The interval length must be a positive integer between 0 and the duration of the specified period length.
+            // This assumes the period length has already been validated.
+            if (interval < 0 || interval > periodDuration)
             {
-                return string.Format(Resources.DisplayText.TrackValidationIntervalRange, 0, period);
+                return string.Format(Resources.DisplayText.TrackValidationIntervalRange, 0, periodDuration);
             }
 
             return string.Empty;

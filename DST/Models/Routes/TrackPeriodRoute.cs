@@ -1,6 +1,7 @@
 ﻿using DST.Models.BusinessLogic;
 using DST.Models.DataLayer.Query;
 using DST.Models.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -150,8 +151,9 @@ namespace DST.Models.Routes
 
         public void SetInterval(int interval)
         {
+            // The interval length must be between 0 and the duration of the period length.
             // Period should already be validated here.
-            Interval = IsTrackOnce ? 0 : int.Clamp(interval, 0, Period);
+            Interval = IsTrackOnce ? 0 : int.Clamp(interval, 0, Math.Abs(Period));
         }
 
         public new TrackPeriodRoute Clone()
