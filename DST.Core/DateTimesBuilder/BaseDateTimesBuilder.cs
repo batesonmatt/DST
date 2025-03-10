@@ -30,10 +30,10 @@ namespace DST.Core.DateTimesBuilder
                 return false;
             }
 
-            // Stop if the total elapsed time has reached the minimum or maximum allowable time.
-            if (timeElapsed <= _dateTimeAdder.Min || timeElapsed >= _dateTimeAdder.Max) return false;
+            // Stop if the total elapsed time has surpassed the minimum or maximum allowable time.
+            if (timeElapsed < _dateTimeAdder.Min || timeElapsed > _dateTimeAdder.Max) return false;
 
-            // Stop if the total elapsed time has reached the period length.
+            // Stop if the total elapsed time has surpassed the period length.
             if (Math.Abs(timeElapsed) > Math.Abs(period)) return false;
 
             return true;
