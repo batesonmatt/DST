@@ -1,14 +1,7 @@
 ﻿@model DsoModel
 
 <div class="container-md pt-5 mb-5">
-    @if (Model.HasName)
-    {
-        <h1 class="display-5">@Model.CompoundId - @Model.Name</h1>
-    }
-    else
-    {
-        <h1 class="display-5">@Model.CompoundId</h1>
-    }
+    <h1 class="display-5">@Model.NameHeading</h1>
 
     @if (Model.HasMultipleNames)
     {
