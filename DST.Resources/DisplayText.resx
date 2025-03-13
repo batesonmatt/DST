@@ -245,6 +245,10 @@
     <value>{0:n} kly</value>
     <comment>Formats the distance of a deep-sky object as a floating-point value to two decimal places, with group separators, measured in kilolight-years.</comment>
   </data>
+  <data name="DsoNameHeadingFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+    <comment>The formattable, fully defined catalog identification of a particular deep-sky object, composed of the object's identification number and common name, if any.</comment>
+  </data>
   <data name="FilterAll" xml:space="preserve">
     <value>All</value>
     <comment>The display text for enabling all options in a filter.</comment>

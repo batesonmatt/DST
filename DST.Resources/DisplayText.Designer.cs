@@ -349,6 +349,15 @@ namespace DST.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} - {1}.
+        /// </summary>
+        public static string DsoNameHeadingFormat {
+            get {
+                return ResourceManager.GetString("DsoNameHeadingFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string FilterAll {
