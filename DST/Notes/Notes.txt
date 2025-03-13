@@ -7,6 +7,34 @@ Icons
 
 ---------------------------------------------------------------------------
 
+.carousel-control-prev,
+  .carousel-control-next{
+    text-shadow: 2px 2px 4px #000000;
+    font-size: 30px;
+  }
+
+Home
+- Select 5 random objects and display its info, image, etc.                                                         ...DONE
+  Consider a random object, random track or vector calculation, random location and time, etc.
+  Consider option to allow the user to set their own geolocation
+  Use a bootstrap carousel
+  https://getbootstrap.com/docs/5.0/components/carousel/#with-captions
+
+1. Add IHomeUnitOfWork interface                                                                                    ...DONE
+2. Add HomeUnitOfWork implementation                                                                                ...DONE
+3. Set up DI for IHomeUnitOfWork                                                                                    ...DONE
+4. Add HomeUnitOfWork.GetRandomDsoList(int count)                                                                   ...DONE
+5. Add HomeViewModel                                                                                                ...DONE
+6. Add HomeViewModel property, public IEnumerable<DsoModel> DsoItems { get; set; }                                  ...DONE
+7. Inject IHomeUnitOfWork into HomeController.Index                                                                 ...DONE
+8. Create new HomeViewModel and define HomeViewModel.DsoItems collection                                            ...DONE
+9. Pass the HomeViewModel object to View() on return from Index                                                     ...DONE
+10. Add @model HomeViewModel to Home.Index view                                                                     ...DONE
+11. Debug                                                                                                           ...DONE
+12. Might need to add .Include(dso => dso.DsoImage).                                                                ...DONE
+13. Add carousel component to Home.Index view and display the DSO info and images                                   ...DONE
+
+
 Images
 - Use object-fit: cover; width: 100%; height: ~128px; max-width: ...; max-height: ...;
   Sizing should be mostly square on md to lg screen sizes, then smaller height on sm screens.
@@ -15,13 +43,18 @@ Images
   Consider also adding the credit line to the carousel images.
   <a href="ImageSource">Author</a>, <a href="LicenseSource">License</a>, via Provider
 - Consider feature to hide/show images for search page (load images toggle switch)
-- Use carousel for home page with 5 random objects
-  https://getbootstrap.com/docs/5.0/components/carousel/#with-captions
+
+Repository types
+- Consider new QueryOptions<T> classes to replace the LINQ queries in the unit of work methods.
+- The reason is to view the resultant SQL query in SQL Server Profiler.
 
 
 ---------------------------------------------------------------------------
 
 REDESIGN VIEWS
+
+CSS
+- Add global style variables for colors, etc.
 
 List
 
@@ -38,16 +71,18 @@ Shared
 
 Home
 - Include short summary
-- Consider selecting 5 random objects and display its info, image, etc.
-  Consider a random object, random track or vector calculation, random location and time, etc.
-  Consider option to allow the user to set their own geolocation
-  Use a bootstrap carousel
-  https://getbootstrap.com/docs/5.0/components/carousel/
+- Be concise!
+- Special note, Happy tracking.
 
 About
+- Revise info.
+- Be concise!
+- Consider left/right aligning block sections with gradient backgrounds.
+- Consider image/snippet examples.
 
 Navbar
 - Consider redesigning styles for navbar-toggler and navbar-dark. (_HeaderFooterLayout)
+- Consider gradient animation on hover
 
 Footer
 
@@ -61,6 +96,10 @@ Tooltips (Do not use the Tooltip nor Popover components, which rely on the Poppe
   Consider pt-1 and mt-0 on the form-text
   OR, consider pb-1 and mb-0 on the control.
 - Period => Use the comments from TrackPeriodModel regarding aggregated intervals
+
+Site icon (Displays in browser tab)
+- See wwwroot.favicon.ico (default)
+- Replace with custom .ico file
 
 Use Bootstrap class .text-truncate where necessary (adds an ellipsis at the end of text)
 Use Bootstrap class .user-select-none where necessary (prevents text selection)
