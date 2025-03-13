@@ -1,6 +1,60 @@
-﻿@{
+﻿@model HomeViewModel
+
+@{
     ViewBag.Title = "Home";
-    Layout = "_HeroLayout";
+    Layout = "_BannerLayout";
 }
 
-<div class="container"></div>
+@section scripts {
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<div class="container-sm px-0">
+
+    @if (Model.DsoCount > 0)
+    {
+        int dsoIndex = 0;
+        string slide;
+
+        <div id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                @for (int index = 0; index < Model.DsoCount; index++)
+                {
+                    slide = $"Slide {index + 1}";
+
+                    <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="@index" class="@index.Active(0)"
+                            aria-current="@index.Current(0)" aria-label="@slide">
+                    </button>
+                }
+            </div>
+
+            <div class="carousel-inner">
+                @foreach (DsoModel dso in Model.DsoItems)
+                {
+                    <div class="carousel-item @dsoIndex.Active(0)">
+                        <img src="@dso.DsoImage.RelativeDisplayPath" class="d-block w-100"
+                             alt="Image of @dso.DsoImage.Title" title="@dso.DsoImage.Title" style="object-fit:cover;max-height:512px;">
+                        <div class="carousel-caption d-block">
+                            <h5>@dso.NameHeading</h5>
+                            <p>@dso.Description</p>
+                        </div>
+                    </div>
+
+                    dsoIndex++;
+                }
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    }
+    
+</div>
