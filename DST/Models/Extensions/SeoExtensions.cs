@@ -66,6 +66,11 @@ namespace DST.Models.Extensions
             return a.ToKebabCase().EqualsExact(b.ToKebabCase());
         }
 
+        public static string Current(this int a, int b)
+        {
+            return a == b ? "true" : "false";
+        }
+
         public static string Active(this string a, string b)
         {
             return a.EqualsSeo(b) ? "active" : string.Empty;
