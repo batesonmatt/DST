@@ -76,6 +76,7 @@ namespace DST
             services.AddHttpContextAccessor();
 
             // Enable dependency injection for miscellaneous objects.
+            services.AddTransient<IHomeUnitOfWork, HomeUnitOfWork>();
             services.AddTransient<ISearchUnitOfWork, SearchUnitOfWork>();
             services.AddTransient<ITrackUnitOfWork, TrackUnitOfWork>();
             services.AddTransient<ISearchRouteBuilder, SearchRouteBuilder>();
