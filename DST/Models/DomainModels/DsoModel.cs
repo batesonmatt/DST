@@ -29,8 +29,10 @@ namespace DST.Models.DomainModels
         [Range(1, int.MaxValue)]
         public int Id { get; set; }
 
+        /// <summary>The fully defined catalog identification number of this object.</summary>
+        /// <value>The first letter of the catalog name, followed by the identification number.</value>
         [NotMapped]
-        public string CompoundId => $"{CatalogName[0]}{Id}";
+        public string CompoundId => string.Concat(CatalogName[0], Id);
 
         /// <summary>The common name(s) of this object, if any.</summary>
         /// <value>A list of one or more names, delimited by commas.</value>
@@ -69,6 +71,12 @@ namespace DST.Models.DomainModels
         /// <value><c>True</c> if this object has more than <c>1</c> name, otherwise <c>False</c>.</value>
         [NotMapped]
         public bool HasMultipleNames => NameCount > 1;
+
+        /// <summary>The formatted name of this object.</summary>
+        /// <value>A concatenation of the fully defined identification number and the common name, if any.</value>
+        [NotMapped]
+        public string NameHeading
+            => HasName ? string.Format(Resources.DisplayText.DsoNameHeadingFormat, CompoundId, Name) : CompoundId;
 
         /// <summary>The description for this object, if any.</summary>
         /// <value>Supplementary information regarding the specific type of deep-sky object.</value>
