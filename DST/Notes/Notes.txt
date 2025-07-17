@@ -7,47 +7,32 @@ Icons
 
 ---------------------------------------------------------------------------
 
-.carousel-control-prev,
-  .carousel-control-next{
-    text-shadow: 2px 2px 4px #000000;
-    font-size: 30px;
-  }
-
-Home
-- Select 5 random objects and display its info, image, etc.                                                         ...DONE
-  Consider a random object, random track or vector calculation, random location and time, etc.
-  Consider option to allow the user to set their own geolocation
-  Use a bootstrap carousel
-  https://getbootstrap.com/docs/5.0/components/carousel/#with-captions
-
-1. Add IHomeUnitOfWork interface                                                                                    ...DONE
-2. Add HomeUnitOfWork implementation                                                                                ...DONE
-3. Set up DI for IHomeUnitOfWork                                                                                    ...DONE
-4. Add HomeUnitOfWork.GetRandomDsoList(int count)                                                                   ...DONE
-5. Add HomeViewModel                                                                                                ...DONE
-6. Add HomeViewModel property, public IEnumerable<DsoModel> DsoItems { get; set; }                                  ...DONE
-7. Inject IHomeUnitOfWork into HomeController.Index                                                                 ...DONE
-8. Create new HomeViewModel and define HomeViewModel.DsoItems collection                                            ...DONE
-9. Pass the HomeViewModel object to View() on return from Index                                                     ...DONE
-10. Add @model HomeViewModel to Home.Index view                                                                     ...DONE
-11. Debug                                                                                                           ...DONE
-12. Might need to add .Include(dso => dso.DsoImage).                                                                ...DONE
-13. Add carousel component to Home.Index view and display the DSO info and images                                   ...DONE
+Search list
+- Add images to cards
+- Use thumbnails
+- Consider image in card background, and dark caption overlay with white text and text-shadow.
+- Sort tags should appear in the card footer/header
+- No track button is necessary, unless on hover
+- Consider Layout:
+  ----------------------------
+  |                Sort tag...
+  |
+  |
+  |
+  |
+  |
+  |__________________________
+  | ID
+  | Name
+  | Description
+  ----------------------------
 
 
 Images
-- Use object-fit: cover; width: 100%; height: ~128px; max-width: ...; max-height: ...;
-  Sizing should be mostly square on md to lg screen sizes, then smaller height on sm screens.
-  Center the image.
-- Credit the image on the connected, Track pages.
+- Credit the image on Period and Phase views.
   Consider also adding the credit line to the carousel images.
   <a href="ImageSource">Author</a>, <a href="LicenseSource">License</a>, via Provider
-- Consider feature to hide/show images for search page (load images toggle switch)
-
-Repository types
-- Consider new QueryOptions<T> classes to replace the LINQ queries in the unit of work methods.
-- The reason is to view the resultant SQL query in SQL Server Profiler.
-
+- Consider feature to hide/show images for search page (show images toggle switch)
 
 ---------------------------------------------------------------------------
 
@@ -70,9 +55,16 @@ Shared
   See "Back to search" markup in the Track views.
 
 Home
+.carousel-control-prev,
+  .carousel-control-next{
+    text-shadow: 2px 2px 4px #000000;
+    font-size: 30px;
+  }
+- Consider Track button on hover of carousel image
+- Dark opacity for carousel caption, and side buttons on hover (gradient?)
 - Include short summary
 - Be concise!
-- Special note, Happy tracking.
+- Special note: "Happy tracking!"
 
 About
 - Revise info.
@@ -182,6 +174,9 @@ Might need a routebuilder class for TrackPhase and TrackPeriod (TrackPhaseRouteB
 - Would need to add any properties not already included in the routes.
 
 Query & Database update
+- Repository types
+  Consider new QueryOptions<T> classes to replace the LINQ queries in the unit of work methods.
+  The reason is to view the resultant SQL query in SQL Server Profiler.
 - Consider integer IDs for all tables.
 - Revise all queries (SearchQueryOptions, QueryOptions, Repository) to avoid Linq to Objects
     so that they may be converted to valid SQL.
