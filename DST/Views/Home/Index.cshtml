@@ -32,14 +32,17 @@
             <div class="carousel-inner">
                 @foreach (DsoModel dso in Model.DsoItems)
                 {
-                    <div class="carousel-item @dsoIndex.Active(0)">
-                        <img src="@dso.DsoImage.RelativeDisplayPath" class="d-block w-100"
-                             alt="Image of @dso.DsoImage.Title" title="@dso.DsoImage.Title" style="object-fit:cover;max-height:512px;">
-                        <div class="carousel-caption d-block">
-                            <h5>@dso.NameHeading</h5>
-                            <p>@dso.Description</p>
+                    <a asp-controller="Track" asp-action="Summary" asp-route-catalog="@dso.CatalogName"
+                            asp-route-id="@dso.Id" asp-route-algorithm="@AlgorithmName.Default">
+                        <div class="carousel-item @dsoIndex.Active(0)">
+                            <img src="@dso.DsoImage.RelativeDisplayPath" class="d-block w-100"
+                                 alt="Image of @dso.DsoImage.Title" title="@dso.DsoImage.Title" style="object-fit:cover;max-height:768px;">
+                            <div class="carousel-caption d-block w-100 position-absolute start-0 bottom-0 bg-black opacity-75 pb-4">
+                                <h5>@dso.NameHeading</h5>
+                                <p>@dso.Description</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
 
                     dsoIndex++;
                 }
